@@ -8,6 +8,7 @@ services:
     volumes:
       - ..:/workspaces
       - node_modules:/workspaces/node_modules
+      - vendor:/workspaces/vendor
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
     # cap_add:
@@ -20,3 +21,4 @@ services:
 
 volumes:
   node_modules:
+  vendor:
