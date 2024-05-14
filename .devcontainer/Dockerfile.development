@@ -1,13 +1,15 @@
-# nodejsでの開発環境
+# nodejs + php
 #
 # - Ubuntu
-# - Node.js
 # - git + lazygit
+# - Node.js
+# - php
+# - composer
 #
-# 更新日時: 2024-05-13 19:42:00
+# 更新日時: 2024-05-14 18:31:00
 #
 # メモ:
-# - hardhat 2.22.3がnodejs 22.x系で動作しないため、20.x系を指定
+# - 別リポジトリにおいて、hardhat 2.22.3がnodejs 22.x系で動作しないため、20.x系を指定
 FROM ubuntu:24.04
 
 RUN ln -sf /usr/share/zoneinfo/${TIMEZONE:-Asia/Tokyo} /etc/localtime
@@ -25,3 +27,24 @@ RUN apt update && \
     rm -rf lazygit* && \
     \
     apt clean && rm -rf /var/lib/apt/lists/*
+
+# PHPのoldestはlatestよりも更新頻度が低い(と思われる)ため、先にレイヤーを作成
+ENV PHP_OLDEST_VERSION 7.3
+
+RUN apt update && \
+    apt install software-properties-common -y && \
+    add-apt-repository ppa:ondrej/php -y && \
+    apt update && \
+    apt install unzip -y && \
+    \
+    apt install php${PHP_OLDEST_VERSION} php${PHP_OLDEST_VERSION}-curl php${PHP_OLDEST_VERSION}-dom php${PHP_OLDEST_VERSION}-zip -y && \
+    \
+    apt clean && rm -rf /var/lib/apt/lists/*
+
+# Composerをインストール
+RUN php -r "copy('https://getcomposer.org/download/latest-2.2.x/composer.phar', '/usr/local/bin/composer');" && \
+    chmod +x /usr/local/bin/composer
+
+
+# ENV PHP_LATEST_VERSION 8.3
+# PHPの最新版が必要な場合はここでインストール
