@@ -1,0 +1,22 @@
+version: '3'
+services:
+  # Update this to the name of the service you want to work with in your docker-compose.yml file
+  development:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    volumes:
+      - ..:/workspaces
+      - node_modules:/workspaces/node_modules
+
+    # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
+    # cap_add:
+    #   - SYS_PTRACE
+    # security_opt:
+    #   - seccomp:unconfined
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+volumes:
+  node_modules:
