@@ -12,6 +12,7 @@
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
+		"prepare": "composer install",
 		"start": "wp-scripts start"
 	},
 	"devDependencies": {
