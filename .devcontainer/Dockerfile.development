@@ -15,8 +15,9 @@ FROM ubuntu:24.04
 
 RUN ln -sf /usr/share/zoneinfo/${TIMEZONE:-Asia/Tokyo} /etc/localtime
 
+# sudo: `wp-env`を`root`以外のユーザーで実行するため
 RUN apt update && \
-    apt install git curl -y && \
+    apt install git curl sudo -y && \
     \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install nodejs -y && \
