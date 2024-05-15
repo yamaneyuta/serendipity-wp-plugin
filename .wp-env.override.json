@@ -1,0 +1,11 @@
+{
+	"core": "WordPress/WordPress#5.4",
+	"phpVersion": "7.3",
+	"config": {
+		"FS_METHOD": "direct",
+		"ALTERNATE_WP_CRON": true
+	},
+	"plugins": [
+		"."
+	]
+}
