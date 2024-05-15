@@ -9,7 +9,10 @@
 		"docker-compose.yml",
 		"docker-compose.devcontainer.yml"
 	],
-	"postCreateCommand": "npm install",
+
+	// `ubuntu`を`wp-env`コマンド実行ユーザーとして指定するために`docker`グループに追加。
+	// ※ `wp-env`コマンドは`root`ユーザーでコンテナを起動できないようになっているため。
+	"postCreateCommand": "gpasswd -a ubuntu docker && npm install",
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
@@ -26,10 +29,12 @@
 				"bmewburn.vscode-intelephense-client"
 			]
 		}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+	}
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
