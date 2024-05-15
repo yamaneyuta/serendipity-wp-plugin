@@ -12,7 +12,9 @@
 
 	// `ubuntu`を`wp-env`コマンド実行ユーザーとして指定するために`docker`グループに追加。
 	// ※ `wp-env`コマンドは`root`ユーザーでコンテナを起動できないようになっているため。
-	"postCreateCommand": "gpasswd -a ubuntu docker && npm install && npm run env:start",
+	"postCreateCommand": "gpasswd -a ubuntu docker && npm install",
+	// コンテナ起動のたびに開発用WordPress環境を立ち上げる
+	"postStartCommand": "npm run env:start",
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
