@@ -29,7 +29,7 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # PHPのoldestはlatestよりも更新頻度が低い(と思われる)ため、先にレイヤーを作成
-ENV PHP_OLDEST_VERSION 7.3
+ARG PHP_OLDEST_VERSION=7.3
 
 RUN apt update && \
     apt install software-properties-common -y && \
@@ -47,19 +47,19 @@ RUN php -r "copy('https://getcomposer.org/download/latest-2.2.x/composer.phar', 
 
 # `~/.config/composer/vendor/bin`は、`composer global require`でインストールされるディレクトリ
 # (`composer global about`で確認可能)
-ENV COMPOSER_GLOBAL_BIN_DIR ~/.config/composer/vendor/bin
+ARG COMPOSER_GLOBAL_BIN_DIR=~/.config/composer/vendor/bin
 
 # PHPCSをグローバルにインストール
-ENV PHPCS_VERSION 3.9.2
+ARG PHPCS_VERSION=3.9.2
 RUN composer global require squizlabs/php_codesniffer="${PHPCS_VERSION}"
 # ログイン時にPATHを通すため、`~/.bashrc`に追記
 RUN echo "export PATH=\$PATH:${COMPOSER_GLOBAL_BIN_DIR}" >> ~/.bashrc
 
 # wpcsをグローバルにインストール
-ENV WPCS_VERSION 3.1.0
+ARG WPCS_VERSION=3.1.0
 RUN composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
 RUN composer global require --dev wp-coding-standards/wpcs:"${WPCS_VERSION}"
 
 
-# ENV PHP_LATEST_VERSION 8.3
+# ARG PHP_LATEST_VERSION=8.3
 # PHPの最新版が必要な場合はここでインストール
