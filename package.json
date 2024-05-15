@@ -7,6 +7,9 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build",
+		"env:start": "npm run wp-env start -- --xdebug=develop,coverage",
+		"env:reset": "npm run wp-env clean all && npm run wp-env start",
+		"env:destroy": "npm run wp-env destroy",
 		"preformat:js": "cp -f .gitignore .prettierignore && echo /\\\\.*/* >> .prettierignore",
 		"format:js": "wp-scripts format",
 		"postformat:js": "rm -f .prettierignore",
@@ -17,9 +20,14 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"prepare": "composer install",
-		"start": "wp-scripts start"
+		"start": "wp-scripts start",
+		"wp-env": "sudo -u ubuntu node_modules/@wordpress/env/bin/wp-env",
+		"// tsets-cliコンテナに`phpunit`がインストールされていないため`tests-wordpress`コンテナを使用":"",
+		"// @see https://github.com/WordPress/gutenberg/issues/42286#issuecomment-1722362561 <- https://github.com/WordPress/gutenberg/issues/51686":"",
+		"test:env": "sudo -u ubuntu npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-wordpress vendor/bin/phpunit -- -c phpunit.xml --testdox"
 	},
 	"devDependencies": {
+		"@wordpress/env": "^9.9.0",
 		"@wordpress/scripts": "^27.8.0"
 	}
 }
