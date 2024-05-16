@@ -1,3 +1,5 @@
+/.devcontainer/development-internal/docker-compose.network.yml
+
 # Logs
 logs
 *.log
