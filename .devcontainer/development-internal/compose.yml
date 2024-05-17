@@ -1,4 +1,3 @@
-version: '3'
 # 開発コンテナから起動するコンテナを定義
 services:
   nginx-proxy:
