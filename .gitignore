@@ -1,4 +1,4 @@
-/.devcontainer/development-internal/docker-compose.network.yml
+/.devcontainer/development-internal/compose.network.yml
 
 # Logs
 logs

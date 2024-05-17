@@ -1,5 +1,5 @@
 version: '3'
-# 開発コンテナで起動するためのdocker-compose
+# 開発コンテナから起動するコンテナを定義
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy:1.5.2
