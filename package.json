@@ -7,8 +7,8 @@
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build",
-		"premy-docker:start": "./.devcontainer/development-internal/update-compose-network.sh",
-		"my-docker:start": "docker compose -f .devcontainer/development-internal/compose.yml -f .devcontainer/development-internal/compose.network.yml up -d --force-recreate",
+		"premy-docker:start": "bash ./.devcontainer/development-internal/update-compose-network.sh",
+		"my-docker:start": "bash ./.devcontainer/development-internal/start.sh",
 		"env:start": "npm run wp-env start -- --xdebug=develop,coverage",
 		"env:reset": "npm run wp-env clean all && npm run wp-env start",
 		"env:destroy": "npm run wp-env destroy",
