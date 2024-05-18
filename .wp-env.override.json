@@ -5,7 +5,5 @@
 		"FS_METHOD": "direct",
 		"ALTERNATE_WP_CRON": true
 	},
-	"plugins": [
-		"."
-	]
+	"plugins": [ "." ]
 }

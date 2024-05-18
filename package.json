@@ -25,8 +25,8 @@
 		"prepare": "composer install && cd includes && composer install && cd -",
 		"start": "wp-scripts start",
 		"wp-env": "sudo -u ubuntu node_modules/@wordpress/env/bin/wp-env",
-		"// tsets-cliコンテナに`phpunit`がインストールされていないため`tests-wordpress`コンテナを使用":"",
-		"// @see https://github.com/WordPress/gutenberg/issues/42286#issuecomment-1722362561 <- https://github.com/WordPress/gutenberg/issues/51686":"",
+		"// tsets-cliコンテナに`phpunit`がインストールされていないため`tests-wordpress`コンテナを使用": "",
+		"// @see https://github.com/WordPress/gutenberg/issues/42286#issuecomment-1722362561 <- https://github.com/WordPress/gutenberg/issues/51686": "",
 		"test:env": "sudo -u ubuntu npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-wordpress vendor/bin/phpunit -- -c phpunit.xml --testdox"
 	},
 	"devDependencies": {
