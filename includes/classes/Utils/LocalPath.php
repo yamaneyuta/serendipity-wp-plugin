@@ -38,7 +38,7 @@ class LocalPath {
 	public static function getUserAssetsDir(): string {
 		$dir_name = Constants::get( 'dirName.userAssets' );
 		if ( Env::isDevelopmentMode() ) {
-			return self::get( '.work/' . $dir_name );
+			return self::get( '.work-www/' . $dir_name );
 		} else {
 			return self::get( '../' . $dir_name );
 		}

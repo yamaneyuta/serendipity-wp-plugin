@@ -1,4 +1,6 @@
 /.devcontainer/development-internal/compose.network.yml
+# プラグイン作業ディレクトリ
+/.work-www
 
 # Logs
 logs
@@ -17,6 +19,7 @@ build/*
 # Dependency directories
 node_modules/
 /vendor/
+/includes/vendor/
 
 # Optional npm cache directory
 .npm
