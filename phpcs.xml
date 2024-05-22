@@ -10,7 +10,6 @@
 	<exclude-pattern>./.vscode/*</exclude-pattern>
 	<exclude-pattern>./.work-www/*</exclude-pattern>
 	<exclude-pattern>./public/*</exclude-pattern>
-	<exclude-pattern>./public-dev/*</exclude-pattern>
 	<exclude-pattern>./build/*</exclude-pattern>
 	<exclude-pattern>./includes/assets/*</exclude-pattern>
 
