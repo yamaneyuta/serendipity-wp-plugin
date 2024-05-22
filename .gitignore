@@ -22,7 +22,7 @@ build/*
 
 # Dependency directories
 node_modules/
-/vendor/
+/.phpunit/vendor/
 /includes/vendor/
 
 # Optional npm cache directory

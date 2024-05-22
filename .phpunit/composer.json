@@ -1,8 +1,4 @@
 {
-	"scripts": {
-		"lint": "phpcs -s .",
-		"format": "phpcbf ."
-	},
 	"require-dev": {
 		"yoast/phpunit-polyfills": "*",
 		"yoast/wp-test-utils": "*",

@@ -7,7 +7,7 @@ services:
     volumes:
       - ..:/workspaces
       - node_modules:/workspaces/node_modules
-      - vendor:/workspaces/vendor
+      - phpunit_vendor:/workspaces/.phpunit/vendor
       - includes_vendor:/workspaces/includes/vendor
       - dot_work_www:/workspaces/.work-www
 
@@ -22,6 +22,6 @@ services:
 
 volumes:
   node_modules:
-  vendor:
+  phpunit_vendor:
   includes_vendor:
   dot_work_www:
