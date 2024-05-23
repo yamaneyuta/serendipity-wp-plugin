@@ -11,8 +11,6 @@
 # - 別リポジトリにおいて、hardhat 2.22.3がnodejs 22.x系で動作しないため、20.x系を指定
 FROM ubuntu:24.04
 
-RUN ln -sf /usr/share/zoneinfo/${TIMEZONE:-Asia/Tokyo} /etc/localtime
-
 # sudo: `wp-env`を`root`以外のユーザーで実行するため
 RUN apt update && \
     apt install git curl sudo -y && \
