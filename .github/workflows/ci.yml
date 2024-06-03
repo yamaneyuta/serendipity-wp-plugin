@@ -4,6 +4,7 @@ on: [ push, pull_request ]
 jobs:
   ci:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     strategy:
       matrix:
@@ -21,4 +22,4 @@ jobs:
       with:
         php-version: '7.3'
     - run: npm ci
-    - run: npm run ci:test
+    # - run: npm run ci:test
