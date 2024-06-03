@@ -21,5 +21,11 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.3'
+    - name: Install phpcs
+      run: composer global require squizlabs/php_codesniffer="3.9.2"
+    - name: Install wpcs
+      run: |
+        composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true &&
+        composer global require --dev wp-coding-standards/wpcs:"3.1.0"
     - run: npm ci
     # - run: npm run ci:test
