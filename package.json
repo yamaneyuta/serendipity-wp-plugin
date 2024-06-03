@@ -10,7 +10,6 @@
 		"ci:test": "npm run env:start && npx wait-on tcp:8888 && npm run test:phpunit",
 		"premy-docker:start": "bash ./.devcontainer/development-internal/update-compose-network.sh",
 		"my-docker:start": "bash ./.devcontainer/development-internal/start.sh",
-		"preenv:start": "chown -R ubuntu:ubuntu .work-www",
 		"env:start": "npm run wp-env start -- --xdebug=develop,coverage",
 		"env:reset": "npm run wp-env clean all && npm run wp-env start",
 		"env:destroy": "npm run wp-env destroy",

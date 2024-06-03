@@ -14,7 +14,7 @@
 	// ※ `wp-env`コマンドは`root`ユーザーでコンテナを起動できないようになっているため。
 	"postCreateCommand": "gpasswd -a ubuntu docker && npm install",
 	// コンテナ起動のたびに開発用WordPress環境及びphpMyAdminを含むコンテナを立ち上げる
-	"postStartCommand": "npm run env:start && npm run my-docker:start",
+	"postStartCommand": "chown -R ubuntu:ubuntu .work-www && npm run env:start && npm run my-docker:start",
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/compose.yml to the real service name.
