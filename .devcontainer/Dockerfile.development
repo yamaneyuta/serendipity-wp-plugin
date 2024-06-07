@@ -43,6 +43,12 @@ RUN apt update && \
 RUN php -r "copy('https://getcomposer.org/download/latest-2.2.x/composer.phar', '/usr/local/bin/composer');" && \
     chmod +x /usr/local/bin/composer
 
+# ubuntuはパスワード無しでsudoが実行できるようにする
+RUN echo "ubuntu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/ubuntu
+
+# ここからubuntuユーザーで操作
+USER ubuntu
+
 # `~/.config/composer/vendor/bin`は、`composer global require`でインストールされるディレクトリ
 # (`composer global about`で確認可能)
 ARG COMPOSER_GLOBAL_BIN_DIR=~/.config/composer/vendor/bin

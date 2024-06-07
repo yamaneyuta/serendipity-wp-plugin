@@ -12,9 +12,9 @@
 
 	// `ubuntu`を`wp-env`コマンド実行ユーザーとして指定するために`docker`グループに追加。
 	// ※ `wp-env`コマンドは`root`ユーザーでコンテナを起動できないようになっているため。
-	"postCreateCommand": "gpasswd -a ubuntu docker && npm install",
+	"postCreateCommand": "sudo gpasswd -a ubuntu docker && sudo chown -R ubuntu:ubuntu /workspaces && npm install",
 	// コンテナ起動のたびに開発用WordPress環境及びphpMyAdminを含むコンテナを立ち上げる
-	"postStartCommand": "chown -R ubuntu:ubuntu .work-www && npm run env:start && npm run my-docker:start",
+	"postStartCommand": "npm run env:start && npm run my-docker:start",
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/compose.yml to the real service name.
@@ -36,7 +36,7 @@
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
-	}
+	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
@@ -54,5 +54,5 @@
 	// "customizations": {},
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "devcontainer"
+	"remoteUser": "ubuntu"
 }
