@@ -6,6 +6,7 @@
 	"license": "Split License",
 	"main": "build/index.js",
 	"scripts": {
+		"_update:devcontainer": "dev-update devcontainer",
 		"build": "wp-scripts build",
 		"ci:test": "node_modules/@wordpress/env/bin/wp-env start -- --xdebug=develop,coverage && npx wait-on tcp:8888 && npm run test:phpunit",
 		"premy-docker:start": "bash ./.devcontainer/development-internal/update-compose-network.sh",
