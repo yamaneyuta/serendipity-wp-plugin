@@ -29,4 +29,4 @@ jobs:
         composer global require --dev wp-coding-standards/wpcs:"3.1.0"
     - run: npm ci
     - run: npm run env:start
-    # - run: npm run ci:test
+    - run: npm run test
