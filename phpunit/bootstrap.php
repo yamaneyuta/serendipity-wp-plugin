@@ -1,7 +1,7 @@
 <?php
 
 // このファイルは`WordPressコンテナ(test-cli)`の中で実行されます。
-//   - __DIR__: /var/www/html/wp-content/plugins/workspaces/phpunit
+// - __DIR__: /var/www/html/wp-content/plugins/workspaces/phpunit
 
 // `yoast/wp-test-utils`に記載の実装例を参考に以下内容を記載。
 // https://github.com/Yoast/wp-test-utils#using-the-bootstrap-utilities
@@ -17,7 +17,7 @@ require_once WPIntegration\get_path_to_wp_test_dir() . 'includes/functions.php';
 
 // 手動でプラグインをロードするコールバック
 function _manually_load_plugin() {
-    require_once dirname( __DIR__ ) . '/todo-list.php';
+	require_once dirname( __DIR__ ) . '/todo-list.php';
 }
 
 /** @disregard P1010 */
