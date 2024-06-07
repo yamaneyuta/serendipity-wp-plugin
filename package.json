@@ -31,5 +31,8 @@
 		"@wordpress/env": "^10.0.0",
 		"@wordpress/scripts": "^28.0.0",
 		"@yamaneyuta/serendipity-dev-conf": "github:yamaneyuta/serendipity-dev-conf"
+	},
+	"dependencies": {
+		"@wordpress/block-editor": "^13.0.0"
 	}
 }
