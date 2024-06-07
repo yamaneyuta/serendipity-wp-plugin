@@ -9,4 +9,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file .devcontainer/Dockerfile.development --tag my/development:latest
+      run: docker build . --file .devcontainer/Dockerfile.wp-plugin --tag my/development:latest
