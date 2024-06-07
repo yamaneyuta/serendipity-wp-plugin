@@ -28,7 +28,7 @@
 		"test:phpunit": "npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli .phpunit/vendor/bin/phpunit -- -c phpunit.xml --testdox"
 	},
 	"devDependencies": {
-		"@wordpress/env": "^9.10.0",
+		"@wordpress/env": "^10.0.0",
 		"@wordpress/scripts": "^27.9.0",
 		"@yamaneyuta/serendipity-dev-conf": "github:yamaneyuta/serendipity-dev-conf"
 	}
