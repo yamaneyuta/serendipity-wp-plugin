@@ -40,7 +40,7 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # Composerをインストール
-RUN php -r "copy('https://getcomposer.org/download/latest-2.2.x/composer.phar', '/usr/local/bin/composer');" && \
+RUN php -r "copy('https://getcomposer.org/download/2.7.6/composer.phar', '/usr/local/bin/composer');" && \
     chmod +x /usr/local/bin/composer
 
 # ubuntuはパスワード無しでsudoが実行できるようにする
