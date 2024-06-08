@@ -19,7 +19,7 @@ class HandleNameTest extends TestCase {
 	 * @test
 	 * @testdox [DD13FF05] ブロックエディタのウィジェット用jsのハンドル名のチェック
 	 */
-	public function example() {
+	public function blockScript() {
 		$handle = HandleName::blockScript();
 
 		// ハンドル名は文字列かつ空文字でないこと

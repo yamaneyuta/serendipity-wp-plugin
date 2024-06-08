@@ -19,7 +19,7 @@ class LocalPathTest extends TestCase {
 	 * @test
 	 * @testdox [4222BB71] 本プラグインがインストールされているディレクトリパス
 	 */
-	public function example() {
+	public function get() {
 		$package_json_path = LocalPath::get( 'package.json' );
 		$work_dir          = explode( '/', plugin_basename( __FILE__ ) )[0];
 
