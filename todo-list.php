@@ -19,4 +19,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 // ライブラリ読み込み
 require_once __DIR__ . '/includes/vendor/autoload.php';
 
-// new Cornix\Serendipity\Core\EntryPoint( __FILE__ );
+new Cornix\Serendipity\Core\Hooks\EntryPoint( __FILE__ );
