@@ -26,7 +26,8 @@
 		"wp-env": "node_modules/@wordpress/env/bin/wp-env",
 		"test": "npm run test:phpunit",
 		"coverage:phpunit": "npm run test:phpunit -- --coverage-html coverage",
-		"test:phpunit": "npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli .phpunit/vendor/bin/phpunit -- -c phpunit.xml --testdox"
+		"// php v7.3でインストールされるphpunit(v4.8.36)では、 --testdoxオプションを付与するとエラー時に詳細が見えないため--testdoxオプション無し":"",
+		"test:phpunit": "npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli .phpunit/vendor/bin/phpunit -- -c phpunit.xml"
 	},
 	"devDependencies": {
 		"@types/wordpress__block-editor": "^11.5.14",
