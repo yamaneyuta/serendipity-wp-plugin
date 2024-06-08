@@ -25,6 +25,7 @@
 		"start": "wp-scripts start",
 		"wp-env": "node_modules/@wordpress/env/bin/wp-env",
 		"test": "npm run test:phpunit",
+		"coverage:phpunit": "npm run test:phpunit -- --coverage-html coverage",
 		"test:phpunit": "npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli .phpunit/vendor/bin/phpunit -- -c phpunit.xml --testdox"
 	},
 	"devDependencies": {

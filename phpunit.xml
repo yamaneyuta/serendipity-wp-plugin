@@ -8,6 +8,13 @@
 	convertWarningsToExceptions="true"
 	>
 
+	<!-- includes/classes以下のphpファイルのみを対象とする -->
+	<filter>
+		<whitelist>
+			<directory suffix=".php">./includes/classes</directory>
+		</whitelist>
+	</filter>
+
 	<testsuites>
 		<testsuite name="testing">
 			<directory suffix="-test.php">./phpunit/</directory>
