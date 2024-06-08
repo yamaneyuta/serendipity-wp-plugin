@@ -25,5 +25,16 @@ class LocalPathTest extends TestCase {
 
 		// テスト環境では`/var/www/html/wp-content/plugins`ディレクトリ以下に配置される
 		$this->assertEquals( "/var/www/html/wp-content/plugins/{$work_dir}/package.json", $package_json_path );
+		$this->assertTrue( file_exists( $package_json_path ) );
+
+		// 相対パスで指定した場合は、`./`がパスの途中に現れる
+		$package_json_path = LocalPath::get( './package.json' );
+		$this->assertEquals( "/var/www/html/wp-content/plugins/{$work_dir}/./package.json", $package_json_path );
+		$this->assertTrue( file_exists( $package_json_path ) ); // 問題なくパスの解決ができる
+
+		// `/`から開始した場合
+		$package_json_path = LocalPath::get( '/package.json' );
+		$this->assertEquals( "/var/www/html/wp-content/plugins/{$work_dir}//package.json", $package_json_path );
+		$this->assertTrue( file_exists( $package_json_path ) ); // 問題なくパスの解決ができる
 	}
 }
