@@ -35,7 +35,13 @@ RUN apt update && \
     apt update && \
     apt install unzip -y && \
     \
-    apt install php${PHP_OLDEST_VERSION} php${PHP_OLDEST_VERSION}-curl php${PHP_OLDEST_VERSION}-dom php${PHP_OLDEST_VERSION}-zip -y && \
+    apt install \
+		php${PHP_OLDEST_VERSION} \
+		php${PHP_OLDEST_VERSION}-curl \
+		php${PHP_OLDEST_VERSION}-dom \
+		php${PHP_OLDEST_VERSION}-zip \
+		php${PHP_OLDEST_VERSION}-mbstring \
+		-y && \
     \
     apt clean && rm -rf /var/lib/apt/lists/*
 
