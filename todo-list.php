@@ -3,7 +3,7 @@
  * Plugin Name:       Todo List
  * Description:       Example static block scaffolded with Create Block tool.
  * Requires at least: 5.4
- * Requires PHP:      7.3
+ * Requires PHP:      7.4
  * Version:           1.0.0
  * Author:            The WordPress Contributors
  * License:           Split License
