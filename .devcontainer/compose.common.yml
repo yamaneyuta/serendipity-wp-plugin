@@ -4,3 +4,4 @@ services:
       CHOKIDAR_USEPOLLING: ${CHOKIDAR_USEPOLLING:-true} # WSL2用(default: false)
       CHOKIDAR_INTERVAL: ${CHOKIDAR_INTERVAL:-300} # WSL2用(default: 100)
       LESSCHARSET: ${LESSCHARSET:-utf-8} # git logで日本語が化ける問題対策
+      GIT_EDITOR: ${GIT_EDITOR:-code --wait}
