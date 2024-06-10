@@ -20,7 +20,7 @@ jobs:
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.3'
+        php-version: '7.4'
     - name: Install phpcs
       run: composer global require squizlabs/php_codesniffer="3.9.2"
     - name: Install wpcs
