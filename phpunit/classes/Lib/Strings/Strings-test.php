@@ -1,9 +1,8 @@
 <?php
 
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
-use Yoast\WPTestUtils\BrainMonkey\TestCase;
 
-class StringsTest extends TestCase {
+class StringsTest extends WP_UnitTestCase {
 
 	protected function set_up() {
 		parent::set_up();

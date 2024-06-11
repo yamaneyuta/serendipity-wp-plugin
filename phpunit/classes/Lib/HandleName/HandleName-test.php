@@ -1,9 +1,8 @@
 <?php
 
 use Cornix\Serendipity\Core\Lib\HandleName\HandleName;
-use Yoast\WPTestUtils\BrainMonkey\TestCase;
 
-class HandleNameTest extends TestCase {
+class HandleNameTest extends WP_UnitTestCase {
 
 	protected function set_up() {
 		parent::set_up();
