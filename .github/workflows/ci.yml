@@ -31,4 +31,5 @@ jobs:
     - run: npm run format:php
     - run: npm run build
     - run: npm run env:start
+    - run: npm run my-docker:start
     - run: npm run test
