@@ -3,5 +3,8 @@
 		"psr-4": {
 			"Cornix\\Serendipity\\Core\\": "classes"
 		}
+	},
+	"require": {
+		"webonyx/graphql-php": "^15.11"
 	}
 }
