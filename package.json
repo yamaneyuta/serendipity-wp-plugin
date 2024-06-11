@@ -8,10 +8,10 @@
 	"scripts": {
 		"_update:devcontainer": "dev-update devcontainer",
 		"build": "wp-scripts build",
-		"ci:test": "node_modules/@wordpress/env/bin/wp-env start -- --xdebug=develop,coverage && npx wait-on tcp:8888 && npm run test:phpunit",
+		"ci:test": "node_modules/@wordpress/env/bin/wp-env start -- --xdebug=develop,coverage,debug && npx wait-on tcp:8888 && npm run test:phpunit",
 		"premy-docker:start": "bash ./.devcontainer/development-internal/update-compose-network.sh",
 		"my-docker:start": "bash ./.devcontainer/development-internal/start.sh",
-		"env:start": "npm run wp-env start -- --xdebug=develop,coverage",
+		"env:start": "npm run wp-env start -- --xdebug=develop,coverage,debug",
 		"env:reset": "npm run wp-env clean all && npm run wp-env start",
 		"env:destroy": "npm run wp-env destroy",
 		"format:js": "bash .bin/format-js.sh",

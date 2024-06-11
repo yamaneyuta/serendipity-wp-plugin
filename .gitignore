@@ -5,9 +5,6 @@
 
 .devcontainer/.intelephense-includes
 
-# 開発中作業ディレクトリ
-/.work-www
-
 # Logs
 logs
 *.log

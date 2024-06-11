@@ -9,7 +9,6 @@ services:
       - node_modules:/workspaces/node_modules
       - phpunit_vendor:/workspaces/.phpunit/vendor
       - includes_vendor:/workspaces/includes/vendor
-      - dot_work_www:/workspaces/.work-www
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
     # cap_add:
@@ -24,4 +23,3 @@ volumes:
   node_modules:
   phpunit_vendor:
   includes_vendor:
-  dot_work_www:
