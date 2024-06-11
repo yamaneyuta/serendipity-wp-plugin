@@ -24,7 +24,7 @@ import './editor.scss';
 // import { GutenbergPostEdit } from './components/GutenbergPostEdit';
 import { BlockEditProps } from '@wordpress/blocks';
 
-import { GutenbergPostEdit } from "./features/GutenbergPostEdit";
+import { GutenbergPostEdit } from './features/GutenbergPostEdit';
 
 type BlockAttributes = {
 	dummy: string;
@@ -34,13 +34,11 @@ type BlockAttributes = {
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
+ * @param root0
+ * @param root0.setAttributes
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
- * @return {WPElement} Element to render.
  */
-const Edit: React.FC< BlockEditProps< BlockAttributes > > = ( {
-	setAttributes,
-} ) => {
+const Edit: React.FC< BlockEditProps< BlockAttributes > > = ( { setAttributes } ) => {
 	const blockProps = useBlockProps?.() ?? {};
 
 	// ユーザーの入力によって画面上のデータが更新された時に呼び出す関数。
@@ -53,11 +51,11 @@ const Edit: React.FC< BlockEditProps< BlockAttributes > > = ( {
 
 	return (
 		<div { ...blockProps }>
-			{/* <QueryClientProvider client={ client }>
-				<BlockProvider onDataChanged={ onDataChanged }> */}
-					<GutenbergPostEdit />
-				{/* </BlockProvider>
-			</QueryClientProvider> */}
+			{ /* <QueryClientProvider client={ client }>
+				<BlockProvider onDataChanged={ onDataChanged }> */ }
+			<GutenbergPostEdit />
+			{ /* </BlockProvider>
+			</QueryClientProvider> */ }
 		</div>
 	);
 };

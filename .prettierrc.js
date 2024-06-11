@@ -1,8 +1,1 @@
-const config = require( '@wordpress/scripts/config/.prettierrc.js' );
-
-const newConfig = {
-	...config,
-	printWidth: 120,
-};
-// console.log( newConfig );
-module.exports = newConfig;
+module.exports = require( '@yamaneyuta/serendipity-dev-conf/prettier/.prettierrc.js' );
