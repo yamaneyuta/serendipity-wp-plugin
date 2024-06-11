@@ -10,6 +10,7 @@ updates:
    directory: "/"
    schedule:
      interval: weekly
+
  - package-ecosystem: "npm"
    directory: "/"
    schedule:
@@ -17,8 +18,17 @@ updates:
    ignore:
      - dependency-name: "*"
        update-types: [ "version-update:semver-major" ]
+
  - package-ecosystem: "composer"
    directory: "/includes"
+   schedule:
+     interval: weekly
+   ignore:
+     - dependency-name: "*"
+       update-types: [ "version-update:semver-major" ]
+
+ - package-ecosystem: "composer"
+   directory: "/.phpunit"
    schedule:
      interval: weekly
    ignore:
