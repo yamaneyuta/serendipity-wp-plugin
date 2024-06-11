@@ -1,10 +1,8 @@
 <?php
 
 use Cornix\Serendipity\Core\Lib\Env\Env;
-use Cornix\Serendipity\Core\Lib\Path\LocalPath;
-use Yoast\WPTestUtils\BrainMonkey\TestCase;
 
-class EnvTest extends TestCase {
+class EnvTest extends WP_UnitTestCase {
 
 	protected function set_up() {
 		parent::set_up();

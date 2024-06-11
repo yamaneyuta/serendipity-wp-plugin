@@ -1,9 +1,8 @@
 <?php
 
 use Cornix\Serendipity\Core\Lib\Path\Url;
-use Yoast\WPTestUtils\BrainMonkey\TestCase;
 
-class UrlTest extends TestCase {
+class UrlTest extends WP_UnitTestCase {
 
 	protected function set_up() {
 		parent::set_up();

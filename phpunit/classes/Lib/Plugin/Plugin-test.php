@@ -1,9 +1,8 @@
 <?php
 
 use Cornix\Serendipity\Core\Lib\Plugin\Plugin;
-use Yoast\WPTestUtils\BrainMonkey\TestCase;
 
-class PluginTest extends TestCase {
+class PluginTest extends WP_UnitTestCase {
 
 	protected function set_up() {
 		parent::set_up();

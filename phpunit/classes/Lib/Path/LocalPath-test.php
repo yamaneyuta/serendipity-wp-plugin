@@ -1,9 +1,8 @@
 <?php
 
 use Cornix\Serendipity\Core\Lib\Path\LocalPath;
-use Yoast\WPTestUtils\BrainMonkey\TestCase;
 
-class LocalPathTest extends TestCase {
+class LocalPathTest extends WP_UnitTestCase {
 
 	protected function set_up() {
 		parent::set_up();

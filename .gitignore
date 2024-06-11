@@ -3,6 +3,8 @@
 # publicディレクトリはリリースファイル(zip)に含めるが、Git管理は行わない
 /public
 
+.devcontainer/.intelephense-includes
+
 # 開発中作業ディレクトリ
 /.work-www
 
