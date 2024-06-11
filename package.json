@@ -1,6 +1,6 @@
 {
 	"name": "example-static",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Example block scaffolded with Create Block tool.",
 	"author": "The WordPress Contributors",
 	"license": "Split License",
