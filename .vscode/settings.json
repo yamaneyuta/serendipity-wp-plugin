@@ -1,3 +1,7 @@
 {
-	"git.autorefresh": true
+	"git.autorefresh": true,
+	"intelephense.environment.phpVersion": "7.4",
+	"intelephense.environment.includePaths": [
+		".devcontainer/.intelephense-includes/wordpress-develop-5.4.15/tests/phpunit/includes/includes"
+	]
 }
