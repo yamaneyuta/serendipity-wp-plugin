@@ -43,3 +43,5 @@ node_modules/
 # prettierの対象外ディレクトリを追加する処理を行っている
 # 動的に生成されるため、Gitの管理対象外とする
 .prettierignore
+
+*storybook.log
