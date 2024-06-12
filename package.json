@@ -27,6 +27,8 @@
 		"coverage:phpunit": "npm run test:phpunit -- --coverage-html coverage",
 		"// php v7.4でインストールされるphpunit(v4.8.36)では、 --testdoxオプションを付与するとエラー時に詳細が見えないため--testdoxオプション無し": "",
 		"test:phpunit": "npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli .phpunit/vendor/bin/phpunit -- -c phpunit.xml",
+		"test:storybook": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:6006 && npm run test-storybook\"",
+		"test-storybook": "test-storybook --url http://localhost:6006 --coverage",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build"
 	},
