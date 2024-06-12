@@ -1,1 +1,2 @@
-export * from './BlockButton';
+export { BlockButton } from './BlockButton';
+export { BlockInput } from './BlockInput';
