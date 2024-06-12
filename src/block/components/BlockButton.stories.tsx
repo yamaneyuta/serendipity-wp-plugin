@@ -1,9 +1,10 @@
-import { fn, expect } from '@storybook/test';
+import type { Meta, StoryObj } from '@storybook/react';
+import { fn, expect, within } from '@storybook/test';
 import { BlockButton } from './BlockButton';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
-export default {
-	title: 'Block/Button',
+const meta: Meta = {
+	title: 'Components/BlockButton',
 	component: BlockButton,
 	parameters: {
 		// Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
@@ -23,29 +24,40 @@ export default {
 		onClick: fn(),
 	},
 };
+export default meta;
+type Story = StoryObj< typeof BlockButton >;
 
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
-export const Default = {
+export const Default: Story = {
 	args: {},
-	play: async () => {
-		expect( true ).toBe( true );
+	play: async ( { args, canvasElement } ) => {
+		const canvas = within( canvasElement );
+		canvas.getByRole( 'button' ).click();
+		// ボタンがクリックされたことを確認
+		expect( args.onClick ).toHaveBeenCalled();
 	},
 };
 
-export const IsBusy = {
+export const IsBusy: Story = {
 	args: {
 		isBusy: true,
 	},
-	play: async () => {
-		expect( true ).toBe( true );
+	play: async ( { args, canvasElement } ) => {
+		const canvas = within( canvasElement );
+		canvas.getByRole( 'button' ).click();
+		// ボタンがクリックされていないことを確認
+		expect( args.onClick ).not.toHaveBeenCalled();
 	},
 };
 
-export const Disabled = {
+export const Disabled: Story = {
 	args: {
 		disabled: true,
 	},
-	play: async () => {
-		expect( true ).toBe( true );
+	play: async ( { args, canvasElement } ) => {
+		const canvas = within( canvasElement );
+		canvas.getByRole( 'button' ).click();
+		// ボタンがクリックされていないことを確認
+		expect( args.onClick ).not.toHaveBeenCalled();
 	},
 };

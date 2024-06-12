@@ -26,6 +26,7 @@ export const BlockButton: React.FC< BlockButtonProps > = ( {
 	return (
 		<button
 			{ ...props }
+			disabled={ disabled || isBusy }
 			aria-disabled={ disabled }
 			// class="components-button editor-post-publish-button editor-post-publish-button__button is-primary"
 			className={ newClassName }
