@@ -1,24 +1,33 @@
 
-# dockerコンテナの一覧を取得
-docker_output=$(docker ps -a)
+# # dockerコンテナの一覧を取得
+# docker_output=$(docker network ls)
 
-# `docker ps -a`の出力から、wp-cliコンテナのハッシュ値にあたる部分を抽出するスクリプト
-# [hash]_default
-awk_script='
-/[0-9a-f]{32}-cli/ {
-    match($0, /[0-9a-f]{32}-cli/)
-    if (RSTART != 0) {
-        print substr($0, RSTART, 32)
-        exit
-    }
-}'
+# # `docker ps -a`の出力から、wp-cliコンテナのハッシュ値にあたる部分を抽出するスクリプト
+# # [hash]_default
+# awk_script='
+# /[0-9a-f]{32}_default/ {
+#     match($0, /[0-9a-f]{32}_default/)
+#     if (RSTART != 0) {
+#         print substr($0, RSTART, 32)
+#         exit
+#     }
+# }'
 
-# dockerコンテナからハッシュ値を取得
-hash=$(echo "$docker_output" | awk "$awk_script")
+# # dockerコンテナからハッシュ値を取得
+# hash=$(echo "$docker_output" | awk "$awk_script")
+
+
+# ~/.wp-envディレクトリに
+# ls ~/.wp-env の結果が2件以上の場合はエラー
+hash=$(ls ~/.wp-env)
+if [[ $(echo "$hash" | wc -l) -gt 1 ]]; then
+	echo "Error: multiple wp-env directories found."
+	exit 1
+fi
 
 # hashが32桁の16進数であることを確認
 if [[ ! $hash =~ ^[0-9a-f]{32}$ ]]; then
-	echo "Error: hash is not 32 hex digits"
+	echo "Error: hash is not 32 hex digits. (hash: $hash)"
 	exit 1
 fi
 
