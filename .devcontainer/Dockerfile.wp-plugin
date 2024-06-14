@@ -1,15 +1,9 @@
-# nodejs + php
-#
-# - Ubuntu
-# - git + lazygit
-# - Node.js
-# - php
-# - composer
-# - phpcs
-#
-# メモ:
-# - 別リポジトリにおいて、hardhat 2.22.3がnodejs 22.x系で動作しないため、20.x系を指定
-FROM ubuntu:24.04
+# 2024-06-12時点で`npx playwright install --with-deps`コマンドがUbuntu24.04に対応していないためUbuntu22.04を使用
+# https://github.com/microsoft/playwright/issues/30368
+
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
 
 # sudo: `wp-env`を`root`以外のユーザーで実行するため
 RUN apt update && \
@@ -49,11 +43,15 @@ RUN apt update && \
 RUN php -r "copy('https://getcomposer.org/download/2.7.6/composer.phar', '/usr/local/bin/composer');" && \
     chmod +x /usr/local/bin/composer
 
+# ubuntuユーザーが存在しない場合は追加
+RUN id ubuntu > /dev/null 2>&1 || useradd -m -s /bin/bash ubuntu
+
 # ubuntuはパスワード無しでsudoが実行できるようにする
 RUN echo "ubuntu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/ubuntu
 
 # ここからubuntuユーザーで操作
 USER ubuntu
+WORKDIR /home/ubuntu
 
 # `~/.config/composer/vendor/bin`は、`composer global require`でインストールされるディレクトリ
 # (`composer global about`で確認可能)
@@ -71,5 +69,6 @@ RUN composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-in
 RUN composer global require --dev wp-coding-standards/wpcs:"${WPCS_VERSION}"
 
 
-# ARG PHP_LATEST_VERSION=8.3
-# PHPの最新版が必要な場合はここでインストール
+# storybookテスト用にplaywrightをインストール
+RUN yes | npx playwright install --with-deps
+

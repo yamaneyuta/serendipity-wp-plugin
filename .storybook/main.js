@@ -2,6 +2,7 @@
 const config = {
 	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
 	addons: [
+		'@storybook/addon-coverage',
 		'@storybook/addon-webpack5-compiler-swc',
 		'@storybook/addon-onboarding',
 		'@storybook/addon-links',
@@ -32,6 +33,20 @@ const config = {
 				poll,
 				aggregateTimeout: 500, // 変更があってから再ビルドするまでの待ち時間
 			};
+		}
+
+		// 以下のエラー対応。swc-loader が使われている場合、.inputSourceMap が必要(@storybook/addon-coverage@1.0.4 で発生)
+		// Error: .inputSourceMap must be a boolean, object, or undefined
+		// 以下は手抜き判定。最後の`rule`が`swc-loader`である時にparseMapを追加する。
+		if(config.module.rules.slice(-1)[0].use[0].loader.includes("swc-loader")) {
+			config.module.rules.slice(-1)[0].use[0].options = {
+				...config.module.rules.slice(-1)[0].use[0].options,
+				parseMap: true,
+			}
+		}
+		else {
+			// ここを通るときは上記手抜き判定を見直すこと。
+			throw new Error("{E73A0746-7A05-425B-A806-52BD61F92851}");
 		}
 
 		// do mutate the config

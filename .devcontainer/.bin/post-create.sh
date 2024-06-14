@@ -17,6 +17,9 @@ function main() {
 
 	# intelephense用のインクルードファイルをインストール
 	install_intelephense_includes
+
+	# npmパッケージのインストール
+	npm install
 }
 
 function join_docker_group() {
