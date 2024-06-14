@@ -1,6 +1,10 @@
 name: CI
 on: [ push, pull_request ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -12,15 +16,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '7.4'
+
     - name: Install phpcs
       run: composer global require squizlabs/php_codesniffer="3.9.2"
     - name: Install wpcs
@@ -50,3 +57,12 @@ jobs:
     # ※ カバレッジレポートが出力されているかどうかのチェック処理は`postcoverage:phpunit`に記述。
     - run: npm run coverage:phpunit
     - run: npm run test:storybook
+
+
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file .devcontainer/Dockerfile.wp-plugin --tag my/development:latest
