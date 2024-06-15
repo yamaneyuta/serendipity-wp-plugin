@@ -15,6 +15,9 @@ function main() {
 	# 現在のディレクトリのパーミッションを変更
 	set_permissions
 
+	# 使用するphpのバージョンをdocker-compose.ymlで指定したものに変更
+	sudo update-alternatives --set php /usr/bin/php${PHP_VERSION}
+
 	# intelephense用のインクルードファイルをインストール
 	install_intelephense_includes
 
