@@ -21,8 +21,7 @@ coverage
 
 # Dependency directories
 node_modules/
-/.phpunit/vendor/
-/.phpunit/composer.lock
+/.phpunit
 .phpunit.result.cache
 /includes/vendor/
 
