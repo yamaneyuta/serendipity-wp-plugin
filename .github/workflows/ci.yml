@@ -7,26 +7,29 @@ concurrency:
 
 jobs:
   ci:
+    name: CI (PHP ${{ matrix.env.php-version }} / WP ${{ matrix.env.wordpress-version }})
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     strategy:
       matrix:
-        node-version: [ 20.x ]
+        env: [
+          { node-version: 20.x, php-version: 7.4, wordpress-version: 5.4 }
+        ]
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js ${{ matrix.env.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: ${{ matrix.env.node-version }}
         cache: 'npm'
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '7.4'
+        php-version: ${{ matrix.env.php-version }}
 
     - name: Install phpcs
       run: composer global require squizlabs/php_codesniffer="3.9.2"
@@ -46,8 +49,8 @@ jobs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
 
-    - run: echo "PHP_VERSION=7.4" >> $GITHUB_ENV
-    - run: echo "WP_VERSION=5.4" >> $GITHUB_ENV
+    - run: echo "PHP_VERSION=${{ matrix.env.php-version }}" >> $GITHUB_ENV
+    - run: echo "WP_VERSION=${{ matrix.env.wordpress-version }}" >> $GITHUB_ENV
 
     - name: Install packages
       run: |
