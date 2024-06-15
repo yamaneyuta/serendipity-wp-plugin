@@ -23,6 +23,7 @@ coverage
 node_modules/
 /.phpunit/vendor/
 /.phpunit/composer.lock
+.phpunit.result.cache
 /includes/vendor/
 
 # Optional npm cache directory
