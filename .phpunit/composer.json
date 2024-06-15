@@ -1,7 +1,0 @@
-{
-	"require-dev": {
-		"yoast/phpunit-polyfills": "*",
-		"yoast/wp-test-utils": "*",
-		"phpunit/phpunit": "*"
-	}
-}
