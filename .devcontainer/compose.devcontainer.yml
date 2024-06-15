@@ -15,7 +15,7 @@ services:
     volumes:
       - ..:/workspaces
       - node_modules:/workspaces/node_modules
-      - phpunit_vendor:/workspaces/.phpunit/vendor
+      - dot_phpunit:/workspaces/.phpunit
       - includes_vendor:/workspaces/includes/vendor
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
@@ -29,5 +29,5 @@ services:
 
 volumes:
   node_modules:
-  phpunit_vendor:
+  dot_phpunit:
   includes_vendor:
