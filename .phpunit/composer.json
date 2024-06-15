@@ -1,7 +1,4 @@
 {
-	"require": {
-		"php-64bit": "~7.4"
-	},
 	"require-dev": {
 		"yoast/phpunit-polyfills": "*",
 		"yoast/wp-test-utils": "*",
