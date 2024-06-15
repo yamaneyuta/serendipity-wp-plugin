@@ -4,6 +4,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.wp-plugin
+      args:
+        PHP_OLDEST_VERSION: ${PHP_OLDEST_VERSION:-7.4}
+        PHP_LATEST_VERSION: ${PHP_LATEST_VERSION:-8.3}
+    environment:
+      # 開発環境で使用するPHP及びWordPressのバージョン
+      # ※PHPのバージョンは上記Dockerイメージ作成時のバージョンのいずれかを指定すること
+      - PHP_VERSION=${PHP_VERSION:-7.4} # PHPのバージョン(マイナーバージョンまで指定)
+      - WP_VERSION=${WP_VERSION:-5.5} # WordPressのバージョン(https://ja.wordpress.org/download/releases/ に記載のタグ)
     volumes:
       - ..:/workspaces
       - node_modules:/workspaces/node_modules

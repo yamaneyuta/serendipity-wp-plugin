@@ -20,8 +20,10 @@ RUN apt update && \
     \
     apt clean && rm -rf /var/lib/apt/lists/*
 
-# PHPのoldestはlatestよりも更新頻度が低い(と思われる)ため、先にレイヤーを作成
-ARG PHP_OLDEST_VERSION=7.4
+# PHP及び拡張モジュールをインストール
+ARG PHP_OLDEST_VERSION
+ARG PHP_LATEST_VERSION
+
 
 RUN apt update && \
     apt install software-properties-common -y && \
@@ -31,10 +33,15 @@ RUN apt update && \
     \
     apt install \
 		php${PHP_OLDEST_VERSION} \
+		php${PHP_LATEST_VERSION} \
 		php${PHP_OLDEST_VERSION}-curl \
+		php${PHP_LATEST_VERSION}-curl \
 		php${PHP_OLDEST_VERSION}-dom \
+		php${PHP_LATEST_VERSION}-dom \
 		php${PHP_OLDEST_VERSION}-zip \
+		php${PHP_LATEST_VERSION}-zip \
 		php${PHP_OLDEST_VERSION}-mbstring \
+		php${PHP_LATEST_VERSION}-mbstring \
 		-y && \
     \
     apt clean && rm -rf /var/lib/apt/lists/*
