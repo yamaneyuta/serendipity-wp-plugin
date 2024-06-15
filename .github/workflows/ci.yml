@@ -46,7 +46,11 @@ jobs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
 
-    - run: npm ci
+    - name: Install packages
+      run: |
+        source .bin/install-php-packages.sh &&
+        npm ci
+
     - run: npm run lint:js
     - run: npm run format
     - run: npm run build
