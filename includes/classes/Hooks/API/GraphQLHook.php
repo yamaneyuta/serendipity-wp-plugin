@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\API;
 
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Lib\Plugin\Plugin;
+use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
 use GraphQL\GraphQL;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -23,7 +23,7 @@ class GraphQLHook {
 		register_rest_route(
 			// 名前空間はプラグインのテキストドメインを使用
 			// 外部サイトなど、第三者からのアクセスは想定していないためバージョニングは行わない
-			Plugin::textDomain(),
+			( new Config() )->getPluginInfo( 'TextDomain' ),
 			'/graphql',
 			array(
 				'methods'             => 'POST',
