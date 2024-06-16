@@ -54,7 +54,7 @@
 		"eslint-plugin-storybook": "^0.8.0",
 		"prettier": "npm:wp-prettier@^3.0.3",
 		"prop-types": "^15.8.1",
-		"storybook": "^8.1.6"
+		"storybook": "^8.1.9"
 	},
 	"dependencies": {
 		"@wordpress/block-editor": "^13.1.0",
