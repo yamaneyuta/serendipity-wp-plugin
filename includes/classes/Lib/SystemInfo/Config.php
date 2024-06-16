@@ -11,6 +11,31 @@ namespace Cornix\Serendipity\Core\Lib\SystemInfo;
  * 例えば、jsonファイルから取得するような場合は、この`Config`クラスを使用します。
  */
 class Config {
+	public function getPluginInfo( string $property ): string {
+		return ( new PluginInfo() )->get( $property );
+	}
+
+	public function getHandleName( string $name ): string {
+		return ( new HandleName() )->get( $name );
+	}
+}
+
+
+/**
+ * WordPressのhookに登録する際に使用するハンドル名を取得するクラス。
+ *
+ * @internal
+ */
+class HandleName {
+	private $_handle_names = array(
+		// 『src/block/index.js』(文字列)のMD5ハッシュ値。
+		'block_script' => '6e7ba80738b3f81da8c4f83d13e6a344',
+	);
+
+	public function get( string $name ): string {
+		assert( array_key_exists( $name, $this->_handle_names ) );
+		return $this->_handle_names[ $name ];
+	}
 }
 
 
@@ -33,9 +58,8 @@ class PluginInfo {
 	private $_plugin_data;
 
 	public function get( string $property ): string {
-		$data = $this->_plugin_data[ $property ];
-		assert( is_string( $data ) && $data !== '' );
-		return $data;
+		assert( array_key_exists( $property, $this->_plugin_data ) );
+		return $this->_plugin_data[ $property ];
 	}
 
 	/**
