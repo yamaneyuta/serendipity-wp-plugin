@@ -42,7 +42,7 @@
 		"@storybook/addon-webpack5-compiler-swc": "^1.0.3",
 		"@storybook/blocks": "^8.1.6",
 		"@storybook/react": "^8.1.6",
-		"@storybook/react-webpack5": "^8.1.6",
+		"@storybook/react-webpack5": "^8.1.9",
 		"@storybook/test": "^8.1.6",
 		"@storybook/test-runner": "^0.18.2",
 		"@types/wordpress__block-editor": "^11.5.14",
