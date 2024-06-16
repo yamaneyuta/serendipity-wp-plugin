@@ -4,12 +4,12 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class StringsTest extends WP_UnitTestCase {
 
-	protected function set_up() {
+	public function set_up() {
 		parent::set_up();
 		// Your own additional setup.
 	}
 
-	protected function tear_down() {
+	public function tear_down() {
 		$this->setMbstringEnabled( null ); // cleanup
 		// Your own additional tear down.
 		parent::tear_down();

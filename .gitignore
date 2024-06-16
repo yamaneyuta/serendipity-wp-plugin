@@ -21,7 +21,8 @@ coverage
 
 # Dependency directories
 node_modules/
-/.phpunit/vendor/
+/.phpunit
+.phpunit.result.cache
 /includes/vendor/
 
 # Optional npm cache directory

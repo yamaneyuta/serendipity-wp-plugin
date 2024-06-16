@@ -4,16 +4,6 @@ use Cornix\Serendipity\Core\Lib\Path\LocalPath;
 
 class LocalPathTest extends WP_UnitTestCase {
 
-	protected function set_up() {
-		parent::set_up();
-		// Your own additional setup.
-	}
-
-	protected function tear_down() {
-		// Your own additional tear down.
-		parent::tear_down();
-	}
-
 	/**
 	 * @test
 	 * @testdox [4222BB71] 本プラグインがインストールされているディレクトリパス

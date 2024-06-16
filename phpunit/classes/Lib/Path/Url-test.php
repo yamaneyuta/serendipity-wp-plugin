@@ -4,16 +4,6 @@ use Cornix\Serendipity\Core\Lib\Path\Url;
 
 class UrlTest extends WP_UnitTestCase {
 
-	protected function set_up() {
-		parent::set_up();
-		// Your own additional setup.
-	}
-
-	protected function tear_down() {
-		// Your own additional tear down.
-		parent::tear_down();
-	}
-
 	/**
 	 * @test
 	 * @testdox [6CDBF060] 本プラグインがインストールされているディレクトリ内に存在するファイルのURL
