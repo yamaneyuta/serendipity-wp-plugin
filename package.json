@@ -42,7 +42,7 @@
 		"@storybook/blocks": "^8.1.10",
 		"@storybook/react": "^8.1.9",
 		"@storybook/react-webpack5": "^8.1.9",
-		"@storybook/test": "^8.1.9",
+		"@storybook/test": "^8.1.10",
 		"@storybook/test-runner": "^0.18.2",
 		"@types/wordpress__block-editor": "^11.5.14",
 		"@types/wordpress__blocks": "^12.5.14",
