@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\Page;
 
-use Cornix\Serendipity\Core\Lib\Path\LocalPath;
-use Cornix\Serendipity\Core\Lib\Path\Url;
+use Cornix\Serendipity\Core\Features\InlineScript\PhpVer;
+use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
 
 /**
@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
  */
 class PostEditHook {
 	// ブロックスクリプトの出力先ディレクトリ
-	const DIST_DIR = 'build/block';
+	private const DIST_DIR = 'build/block';
 
 	public function register(): void {
 		add_action( 'enqueue_block_assets', array( $this, 'addActionEnqueueBlockAssets' ) );
@@ -28,15 +28,19 @@ class PostEditHook {
 		$handle = ( new Config() )->getHandleName( 'block_script' );
 
 		// アセットファイルを読み込む。
-		$asset_file = include LocalPath::get( trailingslashit( self::DIST_DIR ) . 'index.asset.php' );
+		$asset_file_path = ( new ProjectFile( self::DIST_DIR . '/index.asset.php' ) )->toLocalPath();
+		$asset_file      = include $asset_file_path;
 
 		// ブロックスクリプトを登録
 		wp_enqueue_script(
 			$handle,
-			Url::get( trailingslashit( self::DIST_DIR ) . 'index.js' ),
+			( new ProjectFile( self::DIST_DIR . '/index.js' ) )->toUrl(),
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true,   // フッターに出力。
 		);
+
+		// インラインスクリプトを追加
+		( new PhpVer() )->add( $handle );
 	}
 }

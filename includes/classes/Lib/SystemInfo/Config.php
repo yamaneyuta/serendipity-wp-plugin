@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\SystemInfo;
 
-use Cornix\Serendipity\Core\Lib\Path\LocalPath;
+use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 
 /**
  * 本プラグインで使用する構成情報等を取得するクラス。
@@ -39,7 +39,7 @@ class Config {
 	 */
 	public function getConstant( string $path ) {
 		if ( is_null( $this->json_loader ) ) {
-			$this->json_loader = new JsonLoader( LocalPath::get( '/includes/assets/constants.json' ) );
+			$this->json_loader = new JsonLoader( ( new ProjectFile( '/includes/assets/constants.json' ) )->toLocalPath() );
 		}
 		return $this->json_loader->get( $path );
 	}
