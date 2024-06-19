@@ -3,6 +3,9 @@
 # publicディレクトリはリリースファイル(zip)に含めるが、Git管理は行わない
 /public
 
+# graphql-codegenの生成ファイル
+/src/types/gql
+
 .devcontainer/.intelephense-includes
 
 # Logs
