@@ -1,0 +1,21 @@
+# aaa
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+	me: User
+	echo(message: String!): String
+}
+
+type User {
+	id: ID!
+}
+
+
+type Mutation {
+	login(email: String!, password: String!): Boolean
+}
+

@@ -2,12 +2,10 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\API;
 
+use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
 use GraphQL\GraphQL;
-use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\Type;
-use GraphQL\Type\Schema;
 
 /**
  * GraphQLのAPI登録
@@ -43,34 +41,20 @@ class GraphQLHook {
 
 	public function callback( $request ) {
 
-		// GraphQLサンプル
-		$queryType = new ObjectType(
-			array(
-				'name'   => 'Query',
-				'fields' => array(
-					'echo' => array(
-						'type'    => Type::string(),
-						'args'    => array(
-							'message' => Type::nonNull( Type::string() ),
-						),
-						'resolve' => fn ( $rootValue, array $args ): string => $rootValue['prefix'] . $args['message'],
-					),
-				),
-			)
-		);
-		$schema    = new Schema(
-			array(
-				'query' => $queryType,
-			)
-		);
+		$schema = ( new PluginSchema() )->get();
 
 		// リクエストボディをデコード
-		$input          = json_decode( $request->get_body(), true );
-		$query          = $input['query'];
-		$variableValues = isset( $input['variables'] ) ? $input['variables'] : null;
+		$input           = json_decode( $request->get_body(), true );
+		$query           = $input['query'];
+		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
-		$rootValue = array( 'prefix' => 'You said: ' );
-		$result    = GraphQL::executeQuery( $schema, $query, $rootValue, null, $variableValues );
+		$root_value = array(
+			'echo'   => function ( array $root_value, array $args ): string {
+				return $root_value['prefix'] . $args['message'];
+			},
+			'prefix' => 'You said: ',
+		);
+		$result    = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values );
 		$output    = $result->toArray();
 
 		return $output;
