@@ -23,7 +23,7 @@ class GraphQLHook {
 		$route     = '/graphql';
 
 		// GraphQLのエンドポイントを登録
-		register_rest_route(
+		$success = register_rest_route(
 			$namespace,
 			$route,
 			array(
@@ -32,6 +32,8 @@ class GraphQLHook {
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		assert( $success );
 	}
 
 	public function callback( $request ) {
