@@ -4,7 +4,6 @@ namespace Cornix\Serendipity\Core\Hooks\API;
 
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
 use Cornix\Serendipity\Core\Lib\GraphQL\RootValue;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
 use GraphQL\GraphQL;
 
@@ -18,23 +17,18 @@ class GraphQLHook {
 	}
 
 	public function addActionRestApiInit(): void {
+		// 名前空間はプラグインのテキストドメインを使用
+		// 外部サイトなど、第三者からのアクセスは想定していないためバージョニングは行わない
+		$namespace = ( new Config() )->getPluginInfo( 'TextDomain' );
+		$route     = '/graphql';
 
+		// GraphQLのエンドポイントを登録
 		register_rest_route(
-			// 名前空間はプラグインのテキストドメインを使用
-			// 外部サイトなど、第三者からのアクセスは想定していないためバージョニングは行わない
-			( new Config() )->getPluginInfo( 'TextDomain' ),
-			'/graphql',
+			$namespace,
+			$route,
 			array(
 				'methods'             => 'POST',
-				'callback'            => function ( $request ) {
-					try {
-						return $this->callback( $request );
-					} catch ( \Exception $e ) {
-						Logger::error( $e );
-						// クライアント側で詳細なエラーが表示されないように汎用的なエラーメッセージを返す。
-						return new \WP_Error( 'internal_server_error', 'Internal Server Error', array( 'status' => 500 ) );
-					}
-				},
+				'callback'            => fn ( $request ) => $this->callback( $request ),
 				'permission_callback' => '__return_true',
 			)
 		);
