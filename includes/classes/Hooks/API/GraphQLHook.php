@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\API;
 
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
+use Cornix\Serendipity\Core\Lib\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
 use GraphQL\GraphQL;
@@ -40,22 +41,16 @@ class GraphQLHook {
 	}
 
 	public function callback( $request ) {
-
-		$schema = ( new PluginSchema() )->get();
-
 		// リクエストボディをデコード
 		$input           = json_decode( $request->get_body(), true );
 		$query           = $input['query'];
 		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
-		$root_value = array(
-			'echo'   => function ( array $root_value, array $args ): string {
-				return $root_value['prefix'] . $args['message'];
-			},
-			'prefix' => 'You said: ',
-		);
-		$result    = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values );
-		$output    = $result->toArray();
+		$schema     = ( new PluginSchema() )->get();
+		$root_value = ( new RootValue() )->get();
+
+		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values );
+		$output = $result->toArray();
 
 		return $output;
 	}
