@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\API;
 
+use Cornix\Serendipity\Core\Features\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
-use Cornix\Serendipity\Core\Lib\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
 use GraphQL\GraphQL;
 
