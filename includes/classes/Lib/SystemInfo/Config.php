@@ -16,9 +16,6 @@ class Config {
 
 	public function __construct( JsonLoader $json_loader = null ) {
 		$this->json_loader = $json_loader;
-		if ( is_null( $this->json_loader ) ) {
-			$this->json_loader = new JsonLoader( LocalPath::get( '/includes/assets/constants.json' ) );
-		}
 	}
 	/** @var JsonLoader */
 	private $json_loader;
@@ -41,6 +38,9 @@ class Config {
 	 * @return string|int|array
 	 */
 	public function getConstant( string $path ) {
+		if ( is_null( $this->json_loader ) ) {
+			$this->json_loader = new JsonLoader( LocalPath::get( '/includes/assets/constants.json' ) );
+		}
 		return $this->json_loader->get( $path );
 	}
 
