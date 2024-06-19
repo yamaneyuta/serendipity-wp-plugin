@@ -1,0 +1,11 @@
+{
+	"logLevels": [
+		"debug",
+		"info",
+		"warn",
+		"error"
+	],
+	"phpVarName": {
+		"common": "php_common_var_5f455b05"
+	}
+}
