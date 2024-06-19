@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Hooks\API;
 
 use Cornix\Serendipity\Core\Features\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
-use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
+use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use GraphQL\GraphQL;
 
 /**
@@ -17,15 +17,13 @@ class GraphQLHook {
 	}
 
 	public function addActionRestApiInit(): void {
-		// 名前空間はプラグインのテキストドメインを使用
-		// 外部サイトなど、第三者からのアクセスは想定していないためバージョニングは行わない
-		$namespace = ( new Config() )->getPluginInfo( 'TextDomain' );
-		$route     = '/graphql';
+
+		$rest_property = new RestProperty();
 
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
-			$namespace,
-			$route,
+			$rest_property->namespace(),
+			$rest_property->graphQLRoute(),
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( $request ) => $this->callback( $request ),
