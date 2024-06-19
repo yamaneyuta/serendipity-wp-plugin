@@ -20,6 +20,7 @@
 		"lint:js": "eslint src && prettier --check src",
 		"lint:php": "phpcs -s .",
 		"packages-update": "wp-scripts packages-update",
+		"prepare": "graphql-codegen",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start",
 		"test": "npm run test:phpunit",
@@ -29,12 +30,15 @@
 		"test:storybook": "npm run build-storybook && concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:6006 && npm run test-storybook\"",
 		"test-storybook": "test-storybook --url http://localhost:6006 --coverage --browsers firefox chromium",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build"
+		"build-storybook": "storybook build",
+		"watch": "npm run watch:graphql",
+		"watch:graphql": "graphql-codegen --watch"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^1.5.0",
 		"@graphql-codegen/cli": "^5.0.2",
 		"@graphql-codegen/client-preset": "^4.3.0",
+		"@graphql-codegen/typescript-react-query": "^6.1.0",
 		"@parcel/watcher": "^2.4.1",
 		"@storybook/addon-coverage": "^1.0.4",
 		"@storybook/addon-essentials": "^8.1.10",
