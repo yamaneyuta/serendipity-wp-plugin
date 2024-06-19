@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Hooks\Page\PostEditHook;
  */
 class EntryPoint {
 	public function __construct() {
-		// GraphQL
+		// GraphQLのAPI登録
 		( new GraphQLHook() )->register();
 
 		// 投稿(新規/編集)画面
