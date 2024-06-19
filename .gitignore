@@ -25,6 +25,9 @@ node_modules/
 .phpunit.result.cache
 /includes/vendor/
 
+/includes/cache/
+!/includes/cache/.gitkeep
+
 # Optional npm cache directory
 .npm
 
