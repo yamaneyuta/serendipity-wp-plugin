@@ -26,7 +26,7 @@ class GraphQLHook {
 			$rest_property->graphQLRoute(),
 			array(
 				'methods'             => 'POST',
-				'callback'            => fn ( $request ) => $this->callback( $request ),
+				'callback'            => fn ( \WP_REST_Request $request ) => $this->callback( $request ),
 				'permission_callback' => '__return_true',
 			)
 		);
@@ -34,7 +34,7 @@ class GraphQLHook {
 		assert( $success );
 	}
 
-	public function callback( $request ) {
+	public function callback( \WP_REST_Request $request ) {
 		// リクエストボディをデコード
 		$input           = json_decode( $request->get_body(), true );
 		$query           = $input['query'];
