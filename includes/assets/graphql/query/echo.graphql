@@ -1,3 +1,0 @@
-query echo($message: String!) {
-	echo(message: $message)
-}
