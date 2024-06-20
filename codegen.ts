@@ -13,7 +13,7 @@ const config: CodegenConfig = {
 				'typescript-react-query',
 			],
 			config: {
-				fetcher: '../../lib-frontend/features/graphql/useFetcher#useFetcher', // 生成されるファイルからのパス
+				fetcher: '@yamaneyuta/serendipity-lib-frontend#useFetcher', // 相対パスの場合は、生成されるファイルからのパス
 				isReactHook: true,
 				// exposeQueryKeys: true,
 			},
