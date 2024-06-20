@@ -12,11 +12,11 @@ const config: CodegenConfig = {
 				'typescript-operations',
 				'typescript-react-query',
 			],
-			// config: {
-			// 	fetcher: './fetcher.ts',
-			// isReactHook: true,
-			// exposeQueryKeys: true,
-			// },
+			config: {
+				fetcher: '../../lib-frontend/features/graphql/useFetcher#useFetcher', // 生成されるファイルからのパス
+				isReactHook: true,
+				// exposeQueryKeys: true,
+			},
 		}
 	},
 }

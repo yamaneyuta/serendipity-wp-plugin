@@ -11,12 +11,9 @@ export const GutenbergPostEdit: React.FC = () => {
 	);
 };
 const GutenbergPostEditApp: React.FC = () => {
-	const { data } = useEchoQuery(
-		{
-			endpoint: 'http://localhost:8888/index.php?rest_route=/todo-list/graphql',
-		},
-		{ message: 'hello typescript client' }
-	);
+	const { data } = useEchoQuery( { message: 'hello typescript client' } );
+
+	console.warn( data );
 
 	return <div>GutenbergPostEdit</div>;
 };
