@@ -27,6 +27,7 @@ node_modules/
 /.phpunit
 .phpunit.result.cache
 /includes/vendor/
+/includes/assets/constants.json
 
 /includes/cache/
 !/includes/cache/.gitkeep
