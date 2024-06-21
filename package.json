@@ -7,9 +7,11 @@
 	"main": "build/index.js",
 	"scripts": {
 		"_update:devcontainer": "dev-update devcontainer",
+		"prebuild": "npm run clean:php-cache",
 		"build": "npm run build:graphql-types && npm run build:block",
 		"build:block": "wp-scripts build",
 		"build:graphql-types": "graphql-codegen",
+		"clean:php-cache": "rm -rf includes/cache/*.php",
 		"premy-docker:start": "bash ./.devcontainer/development-internal/update-compose-network.sh",
 		"my-docker:start": "bash ./.devcontainer/development-internal/start.sh",
 		"env:start": "WP_ENV_PHP_VERSION=${PHP_VERSION} WP_ENV_CORE=WordPress/WordPress#${WP_VERSION} wp-env start --xdebug=develop,coverage,debug",
