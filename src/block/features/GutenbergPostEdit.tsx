@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEchoQuery } from '../../types/gql/generated';
+import { useEchoQuery, usePostSellingInfoQuery } from '../../types/gql/generated';
+import { usePostIDFromDom } from '../lib/postID/usePostIDFromDom';
 
 const client = new QueryClient();
 
@@ -12,8 +13,11 @@ export const GutenbergPostEdit: React.FC = () => {
 };
 const GutenbergPostEditApp: React.FC = () => {
 	const { data } = useEchoQuery( { message: 'hello typescript client' } );
+	const postID = usePostIDFromDom();
+	const { data: postSellingInfo } = usePostSellingInfoQuery( { postID: postID ?? 0 } );
 
-	console.warn( data );
+	// console.log( data );
+	// console.log( JSON.stringify( postSellingInfo, null, 2 ) );
 
 	return <div>GutenbergPostEdit</div>;
 };
