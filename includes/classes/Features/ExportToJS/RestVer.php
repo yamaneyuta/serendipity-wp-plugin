@@ -35,7 +35,7 @@ class RestVarData {
 		$wp_rest_nonce = wp_create_nonce( 'wp_rest' );
 
 		// GraphQL APIのURL
-		$graphql_url = ( new Environment() )->restRootUrl() . ( new RestProperty() )->graphQLRoute();
+		$graphql_url = ( new RestProperty() )->graphQLURL();
 
 		return array(
 			'wpRestNonce' => $wp_rest_nonce,
