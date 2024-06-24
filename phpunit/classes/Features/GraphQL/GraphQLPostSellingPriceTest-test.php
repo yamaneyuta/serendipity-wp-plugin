@@ -43,7 +43,7 @@ class GraphQLPostSellingPriceTest extends GraphQLTestBase {
 
 	/**
 	 * @test
-	 * @testdox [] 公開状況やユーザーによって販売価格の取得可否が異なる
+	 * @testdox [48447663] 公開状況やユーザーによって販売価格の取得可否が異なる
 	 * @dataProvider accessDataProvider
 	 */
 	public function access( string $post_status, string $user_type, bool $expected ) {
