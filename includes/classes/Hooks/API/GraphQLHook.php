@@ -12,18 +12,27 @@ use GraphQL\GraphQL;
  */
 class GraphQLHook {
 
+	public function __construct( RestProperty $rest_property, RootValue $root_value ) {
+		$this->rest_property = $rest_property;
+		$this->root_value    = $root_value;
+	}
+
+	/** @var RestProperty */
+	private $rest_property;
+
+	/** @var RootValue */
+	private $root_value;
+
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );
 	}
 
 	public function addActionRestApiInit(): void {
 
-		$rest_property = new RestProperty();
-
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
-			$rest_property->namespace(),
-			$rest_property->graphQLRoute(),
+			$this->rest_property->namespace(),
+			$this->rest_property->graphQLRoute(),
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->callback( $request ),
@@ -41,7 +50,7 @@ class GraphQLHook {
 		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
 		$schema     = ( new PluginSchema() )->get();
-		$root_value = ( new RootValue() )->get();
+		$root_value = $this->root_value->get();
 
 		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values );
 		$output = $result->toArray();

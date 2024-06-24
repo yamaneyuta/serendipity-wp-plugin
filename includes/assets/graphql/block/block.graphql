@@ -1,31 +1,3 @@
 query echo($message: String!) {
 	echo(message: $message)
 }
-
-# query price($postID: ID) {
-# 	price(postID: $postID) {
-# 		amountHex
-# 		decimals
-# 		symbol
-# 	}
-# }
-
-
-query price {
-	price {
-		amountHex
-		decimals
-		symbol
-	}
-}
-
-query PostSalesInfo {
-	postSalesInfo {
-		price {
-			amountHex
-			decimals
-			symbol
-		}
-	}
-}
-

@@ -8,15 +8,24 @@ schema {
 type Query {
 	me: User
 	echo(message: String!): String
+	postSellingPrice(postID: Int!): Price
+}
+
+type Mutation {
+	login(email: String!, password: String!): Boolean
+}
+
+type Post {
+	id: ID
 }
 
 type User {
 	id: ID!
-	userName: String!
 }
 
-
-type Mutation {
-	login(email: String!, password: String!): Boolean
+type Price {
+	amountHex: String!
+	decimals: Int!
+	symbol: String! # 記号不可
 }
 
