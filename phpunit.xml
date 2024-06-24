@@ -12,10 +12,6 @@
 	<filter>
 		<whitelist>
 			<directory suffix=".php">./includes/classes</directory>
-			<!-- ただし、classes/Hooks以下は対象外とする(E2Eで確認) -->
-			<exclude>
-				<directory suffix=".php">./includes/classes/Hooks</directory>
-			</exclude>
 		</whitelist>
 	</filter>
 

@@ -3,6 +3,9 @@
 # publicディレクトリはリリースファイル(zip)に含めるが、Git管理は行わない
 /public
 
+# graphql-codegenの生成ファイル
+/src/types/gql
+
 .devcontainer/.intelephense-includes
 
 # Logs
@@ -24,6 +27,10 @@ node_modules/
 /.phpunit
 .phpunit.result.cache
 /includes/vendor/
+/includes/assets/constants.json
+
+/includes/cache/
+!/includes/cache/.gitkeep
 
 # Optional npm cache directory
 .npm

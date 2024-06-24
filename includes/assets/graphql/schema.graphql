@@ -1,0 +1,31 @@
+# aaa
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+	me: User
+	echo(message: String!): String
+	postSellingPrice(postID: Int!): Price
+}
+
+type Mutation {
+	login(email: String!, password: String!): Boolean
+}
+
+type Post {
+	id: ID
+}
+
+type User {
+	id: ID!
+}
+
+type Price {
+	amountHex: String!
+	decimals: Int!
+	symbol: String! # 記号不可
+}
+

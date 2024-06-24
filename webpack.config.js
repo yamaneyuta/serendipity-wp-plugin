@@ -1,7 +1,14 @@
-const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const config = require( '@wordpress/scripts/config/webpack.config' );
+
+if( [ 'true', '1' ].includes( process.env.CHOKIDAR_USEPOLLING ) ) {
+	config.watchOptions = {
+		poll: Number( process.env.CHOKIDAR_INTERVAL ),
+		ignored: [ 'node_modules' ]
+	};
+}
 
 module.exports = {
-	...defaultConfig,
+	...config,
 
 	// 各エントリポイントを定義
 	entry: {
