@@ -28,7 +28,8 @@
 			"extensions": [
 				"EditorConfig.EditorConfig",
 				"bmewburn.vscode-intelephense-client",
-				"xdebug.php-debug"
+				"xdebug.php-debug",
+				"github.vscode-github-actions"
 			]
 		}
 	},
