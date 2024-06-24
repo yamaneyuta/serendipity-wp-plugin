@@ -1,13 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Features\Settings;
+namespace Cornix\Serendipity\Core\Lib\SystemInfo;
 
-/**
- * 投稿に関する設定を取得するクラス。
- */
-class PostSettings {
-
+class WPSettings {
 	/**
 	 * 指定したIDの投稿が公開されているかどうかを返します。
 	 *
