@@ -31,7 +31,7 @@
 		"test": "npm run test:phpunit",
 		"coverage:phpunit": "npm run test:phpunit -- --coverage-html coverage/phpunit",
 		"postcoverage:phpunit": "test -f coverage/phpunit/index.html || exit 1",
-		"test:phpunit": "npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli .phpunit/vendor/bin/phpunit -- -c phpunit.xml --testdox",
+		"test:phpunit": "npm run clean:php-cache && npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli .phpunit/vendor/bin/phpunit -- -c phpunit.xml --testdox",
 		"test:storybook": "npm run build-storybook && concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:6006 && npm run test-storybook\"",
 		"test-storybook": "test-storybook --url http://localhost:6006 --coverage --browsers firefox chromium",
 		"storybook": "storybook dev -p 6006",
