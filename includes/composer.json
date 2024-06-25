@@ -5,6 +5,7 @@
 		}
 	},
 	"require": {
-		"webonyx/graphql-php": "^15.11"
+		"webonyx/graphql-php": "^15.11",
+		"robmorgan/phinx": "^0.14.0"
 	}
 }
