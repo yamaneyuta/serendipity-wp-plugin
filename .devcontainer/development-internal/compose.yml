@@ -24,6 +24,7 @@ services:
     image: mysql:5.7.13
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
     networks:
       - wpnetwork
 
@@ -31,6 +32,7 @@ services:
     image: mysql:8.4.0
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
     networks:
       - wpnetwork
 
@@ -38,6 +40,7 @@ services:
     image: mysql:5.6
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
     networks:
       - wpnetwork
 
@@ -45,6 +48,7 @@ services:
     image: mariadb:10.3.0
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
     networks:
       - wpnetwork
 
@@ -52,6 +56,7 @@ services:
     image: mariadb:11.4.2
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
     networks:
       - wpnetwork
 
@@ -59,5 +64,6 @@ services:
     image: mariadb:10.2
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
     networks:
       - wpnetwork
