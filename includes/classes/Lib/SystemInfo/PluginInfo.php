@@ -26,6 +26,13 @@ class PluginInfo {
 	}
 
 	/**
+	 * プラグインのバージョンを取得します。
+	 */
+	public function version(): string {
+		return ( new PluginMainFile() )->get( 'Version' );
+	}
+
+	/**
 	 * プラグインのテキストドメインを取得します。
 	 */
 	public function textDomain(): string {
