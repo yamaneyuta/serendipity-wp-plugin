@@ -26,13 +26,15 @@ class ProjectFile {
 	/**
 	 * マシンのルートを起点とした、ファイルまたはディレクトリへのパスを取得します。
 	 * <code>
-	 * ( new ProjectFile( '/src/block/index.js' ) )->toFullPath(); // => '/var/www/html/wp-content/plugins/workspaces/src/block/index.js'
+	 * ( new ProjectFile( 'src/block/index.js' ) )->toFullPath(); // => '/var/www/html/wp-content/plugins/workspaces/src/block/index.js'
 	 * </code>
 	 *
 	 * @return string
 	 */
 	public function toLocalPath(): string {
-		return trailingslashit( $this->getThisPluginDir() ) . $this->path;
+		$path = trailingslashit( $this->getThisPluginDir() ) . $this->path;
+		assert( strpos( $path, '//' ) === false );
+		return $path;
 	}
 
 

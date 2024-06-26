@@ -39,7 +39,7 @@ class Config {
 	 */
 	public function getConstant( string $path ) {
 		if ( is_null( $this->json_loader ) ) {
-			$this->json_loader = new JsonLoader( ( new ProjectFile( '/includes/assets/constants.json' ) )->toLocalPath() );
+			$this->json_loader = new JsonLoader( ( new ProjectFile( 'includes/assets/constants.json' ) )->toLocalPath() );
 		}
 		return $this->json_loader->get( $path );
 	}
