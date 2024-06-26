@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+namespace Cornix\Serendipity\Core\Lib\Database;
+
 use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
 
 class PluginOption {
