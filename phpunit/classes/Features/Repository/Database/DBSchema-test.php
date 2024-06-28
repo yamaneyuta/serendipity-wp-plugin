@@ -101,6 +101,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 		$wpdb = new wpdb( 'root', 'password', 'wordpress', $host ); // phpcs:ignore
 		assert( strpos( $host, 'mysql' ) !== false || strpos( $host, 'mariadb' ) !== false );
 		$wpdb->is_mysql = true;
+		$wpdb->charset  = 'utf8mb4';
 
 		return $wpdb;
 	}
