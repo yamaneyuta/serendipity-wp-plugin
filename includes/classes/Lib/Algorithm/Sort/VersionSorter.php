@@ -17,7 +17,7 @@ class VersionSorter {
 		// version_compare を用いて比較を行う
 		usort(
 			$result,
-			function ( $a, $b ) {
+			function ( string $a, string $b ): int {
 				return version_compare( $a, $b );
 			}
 		);
