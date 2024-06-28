@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Features\Repository\Database\MigrationBase;
 use Cornix\Serendipity\Core\Lib\Algorithm\Sort\VersionSorter;
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
+use mysqli;
 use wpdb;
 
 class DBSchema {
@@ -64,7 +65,8 @@ class DBSchema {
 		$drop_tables = implode( ',', array_map( fn( $table_name ) => "`$table_name`", $drop_table_names ) ); // 削除対象のテーブル名をカンマで連結
 
 		// テーブルを削除(mysqliを使用)
-		$this->wpdb->dbh->query( "DROP TABLE IF EXISTS $drop_tables;" );
+		$mysqli = new mysqli( $this->wpdb->dbhost, $this->wpdb->dbuser, $this->wpdb->dbpassword, $this->wpdb->dbname );
+		$mysqli->query( "DROP TABLE IF EXISTS $drop_tables;" );
 	}
 
 	private function stepMigrate( string $current_version ): string {
