@@ -15,6 +15,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 		parent::setUp();
 		// Your own additional setup.
 
+		( new Option() )->uninstall();
 		$current_version = ( new Option() )->getDBSchemaVersion();
 		$this->assertEquals( '0.0.0', $current_version );   // 毎回初期化されていることを確認
 	}
@@ -51,29 +52,29 @@ class DBSchemaTest extends WP_UnitTestCase {
 		$this->assertNotCount( 0, $this->pluginTablesRemained( $wpdb ) );
 	}
 
-	// /**
-	// * @test
-	// * @testdox [EE372BF5] DBSchema::uninstall()
-	// * @dataProvider supportedWpdbProvider
-	// */
-	// public function uninstall( wpdb $wpdb ) {
-	// $sut = new DBSchema( $wpdb );
-	// $sut->uninstall();
-	// $sut->migrate();
-	// $this->assertNotCount( 0, $this->pluginTablesRemained( $wpdb ) );
+	/**
+	 * @test
+	 * @testdox [EE372BF5] DBSchema::uninstall()
+	 * @dataProvider supportedWpdbProvider
+	 */
+	public function uninstall( wpdb $wpdb ) {
+		$sut = new DBSchema( $wpdb );
+		$sut->uninstall();
+		$sut->migrate();
+		$this->assertNotCount( 0, $this->pluginTablesRemained( $wpdb ) );
 
-	// $err = null;
-	// try {
-	// $sut->uninstall();
-	// } catch ( Exception $e ) {
-	// $err = $e;
-	// }
+		$err = null;
+		try {
+			$sut->uninstall();
+		} catch ( Exception $e ) {
+			$err = $e;
+		}
 
-	// アンインストールで例外が発生していないこと
-	// $this->assertNull( $err );
-	// 本プラグイン用のテーブルが0個になっていること
-	// $this->assertCount( 0, $this->pluginTablesRemained( $wpdb ) );
-	// }
+		// アンインストールで例外が発生していないこと
+		$this->assertNull( $err );
+		// 本プラグイン用のテーブルが0個になっていること
+		$this->assertCount( 0, $this->pluginTablesRemained( $wpdb ) );
+	}
 
 
 	/**

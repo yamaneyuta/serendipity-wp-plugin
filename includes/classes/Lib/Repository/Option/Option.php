@@ -36,6 +36,18 @@ class Option {
 		return get_option( $this->prefix . $option_name, $default );
 	}
 
+	public function uninstall() {
+		$all_options = wp_load_alloptions();
+
+		// $all_options のキーがプレフィックスで始まるものを削除
+		assert( strlen( $this->prefix ) > 0 );
+		foreach ( array_keys( $all_options ) as $option_name ) {
+			if ( 0 === strpos( $option_name, $this->prefix ) ) {
+				delete_option( $option_name );
+			}
+		}
+	}
+
 	/**
 	 * データベーススキーマバージョンを取得します。
 	 */
