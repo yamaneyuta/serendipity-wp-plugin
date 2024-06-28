@@ -36,6 +36,9 @@ class DBSchema {
 				// マイグレーション成功時はスキーマのバージョンを更新
 				$version = MigrationClasses::classNameToVersion( $migrate_class );
 				$option->setDBSchemaVersion( $version );
+
+				assert( $option->getDBSchemaVersion() === $version );
+
 			} catch ( \Exception $e ) {
 				// マイグレーションに失敗した場合はロールバックを試みて例外を再スロー
 				$migrator->down();

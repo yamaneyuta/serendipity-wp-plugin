@@ -77,17 +77,17 @@ class DBSchemaTest extends WP_UnitTestCase {
 
 
 	/**
-	 * @return wpdb[]
+	 * @return array<array<wpdb>>
 	 */
 	public function supportedWpdbProvider(): array {
 		return array(
 			array( $this->getWpdb() ),
-			// array( $this->getWpdb( 'mysql-phpunit-oldest' ) ),
-			// array( $this->getWpdb( 'mysql-phpunit-latest' ) ),
-			// array( $this->getWpdb( 'mysql-phpunit-not-support' ) ),
-			// array( $this->getWpdb( 'mariadb-phpunit-oldest' ) ),
-			// array( $this->getWpdb( 'mariadb-phpunit-latest' ) ),
-			// array( $this->getWpdb( 'mariadb-phpunit-not-support' ) ),
+			array( $this->getWpdb( 'mysql-phpunit-oldest' ) ),
+			array( $this->getWpdb( 'mysql-phpunit-latest' ) ),
+			array( $this->getWpdb( 'mysql-phpunit-not-support' ) ),
+			array( $this->getWpdb( 'mariadb-phpunit-oldest' ) ),
+			array( $this->getWpdb( 'mariadb-phpunit-latest' ) ),
+			array( $this->getWpdb( 'mariadb-phpunit-not-support' ) ),
 		);
 	}
 
@@ -96,7 +96,8 @@ class DBSchemaTest extends WP_UnitTestCase {
 			return $GLOBALS['wpdb'];
 		}
 
-		$wpdb = new wpdb( 'root', 'password', 'WordPress', $host );
+		// phpcsでフォーマットを行うと'WordPress'が'WordPress'に変換されるためphpcs:ignoreを指定
+		$wpdb = new wpdb( 'root', 'password', 'wordpress', $host ); // phpcs:ignore
 		assert( strpos( $host, 'mysql' ) !== false || strpos( $host, 'mariadb' ) !== false );
 		$wpdb->is_mysql = true;
 

@@ -14,7 +14,7 @@ abstract class MigrationBase {
 		// ※ dbDelta()は接続先を切り替えることができないため、複数のMySQLに対してクエリが通るかどうかのテストができないため使用しない。
 		// ※ `CRATE TABLE`を小文字で記述することで`TEMPORARY`が付与されることを回避できるが、仕様変更で動作しなくなる可能性があるため、mysqliを使用する。
 		assert( $wpdb->is_mysql );
-		$this->mysqli = new mysqli( $wpdb->dbhost, $wpdb->dbuser, $wpdb->dbpassword, $wpdb->dbname ); // $wpdb->dbh;
+		$this->mysqli = $wpdb->dbh;// new mysqli( $wpdb->dbhost, $wpdb->dbuser, $wpdb->dbpassword, $wpdb->dbname ); // $wpdb->dbh;
 	}
 
 	private wpdb $wpdb;
