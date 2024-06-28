@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\SystemInfo\PluginSettings;
 use Cornix\Serendipity\Core\Lib\SystemInfo\WPSettings;
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\Types\PriceType;
 
 class PostSellingPriceResolver extends ResolverBase {
 
@@ -20,7 +20,7 @@ class PostSellingPriceResolver extends ResolverBase {
 	/**
 	 * #[\Override]
 	 *
-	 * @return Price|null
+	 * @return PriceType|null
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */

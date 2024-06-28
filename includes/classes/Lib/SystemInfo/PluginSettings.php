@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\SystemInfo;
 
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\Types\PriceType;
 
 /**
  * 本プラグイン用の値を取得するクラス。
@@ -11,8 +11,8 @@ use Cornix\Serendipity\Core\Types\Price;
  */
 class PluginSettings {
 
-	public function getPostSellingPrice( int $post_ID ): Price {
+	public function getPostSellingPrice( int $post_ID ): PriceType {
 		// TODO
-		return new Price( '0x1853', get_current_user_id(), 'USD' );
+		return new PriceType( '0x1853', get_current_user_id(), 'USD' );
 	}
 }

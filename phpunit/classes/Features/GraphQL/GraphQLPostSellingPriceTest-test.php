@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Features\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Lib\SystemInfo\PluginSettings;
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\Types\PriceType;
 
 require_once __DIR__ . '/GraphQLTestBase.php';
 
@@ -20,7 +20,7 @@ class GraphQLPostSellingPriceTest extends GraphQLTestBase {
 		// Your own additional setup.
 
 		$plugin_settings_stub = $this->createMock( PluginSettings::class );
-		$plugin_settings_stub->method( 'getPostSellingPrice' )->willReturn( new Price( '0x1903', get_current_user_id(), 'USD' ) );
+		$plugin_settings_stub->method( 'getPostSellingPrice' )->willReturn( new PriceType( '0x1903', get_current_user_id(), 'USD' ) );
 
 		parent::registerGraphQLRoute( new RootValue( $plugin_settings_stub ) );
 
