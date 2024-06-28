@@ -65,7 +65,7 @@ class DBSchema {
 		$drop_tables = implode( ',', array_map( fn( $table_name ) => "`$table_name`", $drop_table_names ) ); // 削除対象のテーブル名をカンマで連結
 
 		// テーブルを削除(mysqliを使用)
-		$mysqli = new mysqli( $this->wpdb->dbhost, $this->wpdb->dbuser, $this->wpdb->dbpassword, $this->wpdb->dbname );
+		$mysqli = ( new MySQLiFactory() )->create( $this->wpdb );
 		$mysqli->query( "DROP TABLE IF EXISTS $drop_tables;" );
 	}
 

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Repository\Database\Migrations;
 
+use Cornix\Serendipity\Core\Features\Repository\Database\MySQLiFactory;
 use mysqli;
 use wpdb;
 
@@ -14,7 +15,7 @@ abstract class MigrationBase {
 		// ※ dbDelta()は接続先を切り替えることができないため、複数のMySQLに対してクエリが通るかどうかのテストができないため使用しない。
 		// ※ `CRATE TABLE`を小文字で記述することで`TEMPORARY`が付与されることを回避できるが、仕様変更で動作しなくなる可能性があるため、mysqliを使用する。
 		assert( $wpdb->is_mysql );
-		$this->mysqli = $wpdb->dbh;// new mysqli( $wpdb->dbhost, $wpdb->dbuser, $wpdb->dbpassword, $wpdb->dbname );
+		$this->mysqli = ( new MySQLiFactory() )->create( $wpdb );
 	}
 
 	private wpdb $wpdb;
