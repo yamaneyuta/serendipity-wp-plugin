@@ -7,7 +7,6 @@ use Cornix\Serendipity\Core\Features\Repository\Database\MigrationBase;
 use Cornix\Serendipity\Core\Lib\Algorithm\Sort\VersionSorter;
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
-use mysqli;
 use wpdb;
 
 class DBSchema {
@@ -26,7 +25,7 @@ class DBSchema {
 		$current_version = $option->getDBSchemaVersion();
 
 		// 現在のデータベースバージョンよりも大きいマイグレーションクラス名一覧を取得(`vX_X_X`形式)
-		$migrate_classes = ( new MigrationClasses( $current_version ) )->get();
+		$migrate_classes = ( new MigrationClasses() )->get( '>', $current_version );
 
 		foreach ( $migrate_classes as $migrate_class ) {
 			/** @var MigrationBase $migrator */
@@ -76,17 +75,10 @@ class DBSchema {
 
 
 class MigrationClasses {
-	public function __construct( string $currentVersion ) {
-		// $currentVersionは`X.X.X`の形式
-		assert( strpos( $currentVersion, '.' ) !== false );
-		assert( strpos( $currentVersion, '_' ) === false );
 
-		$this->currentVersion = $currentVersion;
-	}
-
-	private string $currentVersion;
-
-	public function get(): array {
+	public function get( string $operator, string $version ): array {
+		// $versionは`X.X.X`の形式
+		assert( strpos( $version, '.' ) !== false && strpos( $version, '_' ) === false );
 
 		// Migrationsディレクトリ内のファイル名からバージョンを取得
 		$files       = glob( __DIR__ . '/Migrations/v*_*.php' );
@@ -94,7 +86,8 @@ class MigrationClasses {
 		$versions    = array_map( fn( $base_name ) => self::classNameToVersion( $base_name ), $class_names );
 
 		// 現在のバージョンよりも大きいバージョンを取得
-		$versions = array_filter( $versions, fn( $version ) => version_compare( $version, $this->currentVersion, '>' ) );
+		$versions = array_filter( $versions, fn( $ver ) => version_compare( $ver, $version, $operator ) );
+
 		// 小さい順にソート
 		$versions = ( new VersionSorter() )->sort( $versions );
 
