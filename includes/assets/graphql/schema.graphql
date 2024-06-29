@@ -1,12 +1,9 @@
 schema {
-  query: Query
-  mutation: Mutation
+	query: Query
+	mutation: Mutation
 }
 
 type Query {
-	me: User								# TODO: 削除
-	echo(message: String!): String			# TODO: 削除
-	postSellingPrice(postID: Int!): Price 	# TODO: 削除
 	postSetting(postID: Int!): PostSetting
 }
 
@@ -14,10 +11,6 @@ type Mutation {
 	login(email: String!, password: String!): Boolean	# TODO: 削除
 }
 
-
-type User {
-	id: ID!
-}
 
 type Price {
 	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
