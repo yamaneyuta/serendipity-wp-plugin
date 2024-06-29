@@ -86,17 +86,17 @@ jobs:
         path: ~/wp-env
         key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
 
+
     - run: npm run lint:js
     - run: npm run format
     - run: npm run build
     - run: npm run env:start
     - run: npm run my-docker:start
+    - run: npm run test:storybook
     # wp-envの起動設定(--xdebug=)によってphpunitのテストは問題なく終了するが
     # カバレッジレポートが出力されない、という状況になるため、phpunitはcoverage出力オプションありをテスト実施項目とする。
     # ※ カバレッジレポートが出力されているかどうかのチェック処理は`postcoverage:phpunit`に記述。
     - run: npm run coverage:phpunit
-    - run: npm run test:storybook
-
 
   docker-build:
     runs-on: ubuntu-latest
