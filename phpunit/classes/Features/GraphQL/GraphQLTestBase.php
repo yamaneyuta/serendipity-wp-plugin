@@ -112,5 +112,5 @@ abstract class GraphQLTestBase extends WP_UnitTestCase {
 	}
 
 	/** @var WP_REST_Server */
-	protected $server;
+	private $server;
 }
