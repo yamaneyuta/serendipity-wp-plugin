@@ -76,13 +76,15 @@ class PostSetting {
 			);
 		SQL;
 
+		$selling_price = $postSetting->sellingPrice;
+
 		$query  = $this->wpdb->prepare(
 			$sql,
 			$id,
 			$post_id,
-			$postSetting->price->amountHex,
-			$postSetting->price->decimals,
-			$postSetting->price->symbol
+			$selling_price->amountHex,
+			$selling_price->decimals,
+			$selling_price->symbol
 		);
 		$result = $this->wpdb->query( $query );
 		assert( 1 === $result );

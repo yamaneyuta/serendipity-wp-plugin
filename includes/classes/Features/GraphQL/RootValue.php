@@ -2,24 +2,18 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostSellingPriceResolver;
-use Cornix\Serendipity\Core\Lib\SystemInfo\PluginSettings;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostSettingResolver;
 
 class RootValue {
-
-	public function __construct( PluginSettings $plugin_settings ) {
-		$this->plugin_settings = $plugin_settings;
-	}
-
-	private PluginSettings $plugin_settings;
 
 	/**
 	 * @return array<string, mixed>
 	 */
 	public function get() {
+		global $wpdb;
 
 		$resolvers = array(
-			new PostSellingPriceResolver( $this->plugin_settings ),
+			new PostSettingResolver( $wpdb ),
 		);
 
 		$result = array();

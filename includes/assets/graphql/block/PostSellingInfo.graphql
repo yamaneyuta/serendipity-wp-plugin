@@ -1,3 +1,4 @@
+# TODO: 削除
 query PostSellingInfo($postID: Int!) {
 	postSellingPrice(postID: $postID) {
 		amountHex

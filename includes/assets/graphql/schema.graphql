@@ -1,31 +1,30 @@
-# aaa
-
 schema {
   query: Query
   mutation: Mutation
 }
 
 type Query {
-	me: User
-	echo(message: String!): String
-	postSellingPrice(postID: Int!): Price
+	me: User								# TODO: 削除
+	echo(message: String!): String			# TODO: 削除
+	postSellingPrice(postID: Int!): Price 	# TODO: 削除
+	postSetting(postID: Int!): PostSetting
 }
 
 type Mutation {
-	login(email: String!, password: String!): Boolean
+	login(email: String!, password: String!): Boolean	# TODO: 削除
 }
 
-type Post {
-	id: ID
-}
 
 type User {
 	id: ID!
 }
 
 type Price {
-	amountHex: String!
-	decimals: Int!
-	symbol: String! # 記号不可
+	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
+	decimals: Int!  	# 小数点以下の桁数
+	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
 }
 
+type PostSetting {
+	sellingPrice: Price # 販売価格(未設定の場合はnull)
+}

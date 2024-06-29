@@ -5,8 +5,8 @@ namespace Cornix\Serendipity\Core\Types;
 
 class PostSettingType {
 	public function __construct( PriceType $price ) {
-		$this->price = $price;
+		$this->sellingPrice = $price;
 	}
 
-	public PriceType $price;
+	public PriceType $sellingPrice; // GraphQLで使用するためcamelCase
 }

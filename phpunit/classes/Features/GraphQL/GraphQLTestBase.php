@@ -1,14 +1,26 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Features\GraphQL\RootValue;
+use Cornix\Serendipity\Core\Features\Repository\Database\DBSchema;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
+use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
 abstract class GraphQLTestBase extends WP_UnitTestCase {
 
 	// #[\Override]
 	public function setUp(): void {
+		// DB関連の初期化だけ親クラスのsetUpよりも先に行う
+		// プラグイン用テーブルを削除
+		global $wpdb;
+		$dbSchema = new DBSchema( $wpdb );
+		$dbSchema->uninstall();
+		// プラグイン用Optionを削除
+		$option = new Option();
+		$option->uninstall();
+		// プラグイン用テーブルを作成
+		$dbSchema->migrate();
+
 		parent::setUp();
 		// Your own additional setup.
 
@@ -32,6 +44,9 @@ abstract class GraphQLTestBase extends WP_UnitTestCase {
 
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new WP_REST_Server();
+
+		( new GraphQLHook( $this->crateRestPropertyStub() ) )->register();
+		do_action( 'rest_api_init' );
 	}
 
 	// #[\Override]
@@ -52,13 +67,6 @@ abstract class GraphQLTestBase extends WP_UnitTestCase {
 
 	/** @var array<string,int> */
 	private $user_mapping;
-
-	protected function registerGraphQLRoute( RootValue $root_value ) {
-		$rest_property = $this->crateRestPropertyStub();
-		( new GraphQLHook( $rest_property, $root_value ) )->register();
-
-		do_action( 'rest_api_init' );
-	}
 
 	private function crateRestPropertyStub(): RestProperty {
 		$rest_property_stub = $this->createMock( RestProperty::class );
