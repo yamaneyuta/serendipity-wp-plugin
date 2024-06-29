@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe27b2fcec3edbc132ef2aac5af983ed",
+    "content-hash": "fd7eec9d43c3a8f30921f7c4631af658",
     "packages": [
         {
             "name": "webonyx/graphql-php",
@@ -79,6 +79,47 @@
                 }
             ],
             "time": "2024-06-17T09:32:30+00:00"
+        },
+        {
+            "name": "yamaneyuta/ulid",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yamaneyuta/php-ulid.git",
+                "reference": "5c606dfaedf34356890e19f8723c25052207a6ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yamaneyuta/php-ulid/zipball/5c606dfaedf34356890e19f8723c25052207a6ec",
+                "reference": "5c606dfaedf34356890e19f8723c25052207a6ec",
+                "shasum": ""
+            },
+            "require": {
+                "php-64bit": "^7.0|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions/ulid.php"
+                ],
+                "psr-4": {
+                    "yamaneyuta\\": "src/classes"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "ULID library",
+            "support": {
+                "issues": "https://github.com/yamaneyuta/php-ulid/issues",
+                "source": "https://github.com/yamaneyuta/php-ulid/tree/v1.0.0"
+            },
+            "time": "2024-04-26T07:59:24+00:00"
         }
     ],
     "packages-dev": [],

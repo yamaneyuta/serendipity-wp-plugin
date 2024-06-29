@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository\Database;
 use Cornix\Serendipity\Core\Types\PostSettingType;
 use Cornix\Serendipity\Core\Types\PriceType;
 use wpdb;
+use yamaneyuta\Ulid;
 
 class PostSetting {
 	public function __construct( wpdb $wpdb ) {
@@ -58,7 +59,7 @@ class PostSetting {
 	}
 
 	public function set( int $post_id, PostSettingType $postSetting ) {
-		$id  = '5F885744-98C9-4E9B-A921-7C7A1D2269A4';// TODO: ULID
+		$id  = ( new Ulid() )->toUuid();
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}` (
 				id,
