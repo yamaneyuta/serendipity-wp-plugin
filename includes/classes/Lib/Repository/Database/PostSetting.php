@@ -26,16 +26,16 @@ class PostSetting {
 		// idが最大のレコードが現在の設定
 		$sql = <<<SQL
 			SELECT
-				id,
-				post_id,
-				selling_amount_hex,
-				selling_decimals,
-				selling_symbol
+				`id`,
+				`post_id`,
+				`selling_amount_hex`,
+				`selling_decimals`,
+				`selling_symbol`
 			FROM `{$this->table_name}`
-			WHERE id = (
-					SELECT MAX(id)
+			WHERE `id` = (
+					SELECT MAX(`id`)
 					FROM `{$this->table_name}`
-					WHERE post_id = %d
+					WHERE `post_id` = %d
 				)
 		SQL;
 
