@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Features\Repository\Database\DBSchema;
+use Cornix\Serendipity\Core\Features\Repository\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
 use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
 
@@ -35,7 +36,6 @@ class DBSchemaTest extends WP_UnitTestCase {
 	public function migrate( wpdb $wpdb ) {
 		$sut = new DBSchema( $wpdb );
 		$sut->uninstall();
-		error_log( '[debug] before: ' . json_encode( $this->pluginTablesRemained( $wpdb ) ) );
 		$this->assertCount( 0, $this->pluginTablesRemained( $wpdb ) );
 
 		$err = null;
@@ -48,7 +48,6 @@ class DBSchemaTest extends WP_UnitTestCase {
 		// マイグレーションで例外が発生していないこと
 		$this->assertNull( $err );
 		// 本プラグイン用のテーブルが1つ以上作成されていること
-		error_log( '[debug] after: ' . json_encode( $this->pluginTablesRemained( $wpdb ) ) );
 		$this->assertNotCount( 0, $this->pluginTablesRemained( $wpdb ) );
 	}
 
@@ -106,21 +105,6 @@ class DBSchemaTest extends WP_UnitTestCase {
 		return $wpdb;
 	}
 
-
-	private function hoge() {
-
-		// ★TODO テストコード側で確認のために使用する
-		// $prefix = (new PluginInfo())->tableNamePrefix();
-
-		// // ※ `%%`を使用してprepareを使用すると、`%`が`{e28fd42a5fa0b200f044426652734b453a63fc47f4006531b79da2a25051ee2e}`のような文字に
-		// // 置き換えられ正常に検索できないため、prepareを使用せずにクエリを作成する。(`$prefix`はユーザーによる入力に影響しないため許容)
-		// $results = $this->wpdb->get_results( "SHOW TABLES LIKE '{$prefix}%';", ARRAY_N );
-		// if(isEmpty($results)) {
-		// return;
-		// }
-		// $drop_tables = implode( ',', array_map( fn( $result ) => "`$result[0]`", $results ));    // 削除対象のテーブル名をカンマで連結
-	}
-
 	/**
 	 * 現在のデータベースに存在している、本プラグインで使用するテーブル一覧を取得します。
 	 *
@@ -128,10 +112,17 @@ class DBSchemaTest extends WP_UnitTestCase {
 	 */
 	private function pluginTablesRemained( wpdb $wpdb ) {
 		// プレフィックスで開始するテーブル一覧を取得
-		$prefix  = ( new PluginInfo() )->tableNamePrefix();
-		$results = $wpdb->get_results( "SHOW TABLES LIKE '{$prefix}%';", ARRAY_N );
-		$tables  = array_map( fn( $result ) => $result[0], $results ); // SQLの戻り値から、テーブル名の配列(array<string>)に変換
+		$prefix = ( new PluginInfo() )->tableNamePrefix();
 
-		return $tables;
+		$mysqli  = ( new MySQLiFactory() )->create( $wpdb );
+		$results = $mysqli->query( "SHOW TABLES LIKE '{$prefix}%';" )->fetch_all();
+
+		$ret = array();
+		foreach ( $results as $row ) {
+			assert( is_array( $row ) );
+			$ret[] = $row[0];
+		}
+
+		return $ret;
 	}
 }
