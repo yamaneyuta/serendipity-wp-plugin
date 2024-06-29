@@ -14,7 +14,7 @@ class Option {
 		assert( strlen( $this->prefix ) > 0 );
 	}
 
-	private const DB_SCHEMA_VERSION = 'db_schema_version';
+	private const KEY_DB_SCHEMA_VERSION = 'db_schema_version';
 
 	/**
 	 * オプションに付与するプレフィックス
@@ -58,7 +58,7 @@ class Option {
 	 * データベーススキーマバージョンを取得します。
 	 */
 	public function getDBSchemaVersion( $default = '0.0.0' ): ?string {
-		return $this->get( self::DB_SCHEMA_VERSION, $default );
+		return $this->get( self::KEY_DB_SCHEMA_VERSION, $default );
 	}
 
 	/**
@@ -66,6 +66,6 @@ class Option {
 	 */
 	public function setDBSchemaVersion( string $version ) {
 		// インストール時やアップデート時など、利用頻度が限定されるため、`autoload`は`false`を指定
-		return $this->set( self::DB_SCHEMA_VERSION, $version, false );
+		return $this->set( self::KEY_DB_SCHEMA_VERSION, $version, false );
 	}
 }
