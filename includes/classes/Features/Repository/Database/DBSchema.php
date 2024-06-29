@@ -67,10 +67,6 @@ class DBSchema {
 		$mysqli = ( new MySQLiFactory() )->create( $this->wpdb );
 		$mysqli->query( "DROP TABLE IF EXISTS $drop_tables;" );
 	}
-
-	private function stepMigrate( string $current_version ): string {
-		throw new \Exception( 'TODO' );
-	}
 }
 
 
