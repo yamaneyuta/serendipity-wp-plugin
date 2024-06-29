@@ -7,7 +7,6 @@ use Cornix\Serendipity\Core\Features\Repository\Database\MigrationBase;
 use Cornix\Serendipity\Core\Lib\Algorithm\Sort\VersionSorter;
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
-use mysqli;
 use wpdb;
 
 class DBSchema {
@@ -25,8 +24,8 @@ class DBSchema {
 		$option          = new Option();
 		$current_version = $option->getDBSchemaVersion();
 
-		// 現在のデータベースバージョンよりも大きいマイグレーションクラス名一覧を取得(`vX_X_X`形式)
-		$migrate_classes = ( new MigrationClasses( $current_version ) )->get();
+		// 現在のデータベースバージョンよりも大きいマイグレーションクラス名一覧をバージョンの小さい順に取得(`vX_X_X`形式)
+		$migrate_classes = ( new MigrationClasses() )->get( '>', $current_version, 'ASC' );
 
 		foreach ( $migrate_classes as $migrate_class ) {
 			/** @var MigrationBase $migrator */
@@ -49,10 +48,35 @@ class DBSchema {
 	}
 
 	public function rollback(): void {
+
+		// 現時点では特定のバージョンに戻す機能は未実装。
+		// ひとまず、各マイグレーションクラスのdownメソッドを呼び出してエラーが発生しないことを確認するためだけの実装。
+
 		// MySQL(MariaDB)のサポートなのでROLLBACKはできない。よってBEGIN TRANSACTIONは不要。
 		assert( $this->wpdb->is_mysql );
 
-		// Your own implementation.
+		$option          = new Option();
+		$current_version = $option->getDBSchemaVersion();
+
+		// 現在のデータベースバージョン以下のマイグレーションクラス名一覧をバージョンの大きい順に取得(`vX_X_X`形式)
+		$rollback_classes = ( new MigrationClasses() )->get( '<=', $current_version, 'DESC' );
+
+		foreach ( $rollback_classes as $i => $rollback_class ) {
+			/** @var MigrationBase $migrator */
+			$migrator = new $rollback_class( $this->wpdb );
+			// ロールバックを実行
+			$migrator->down();
+
+			// ロールバック成功時はスキーマのバージョンを更新
+			if ( $i === count( $rollback_classes ) - 1 ) {
+				// 配列の最後の要素の場合、次にロールバックするクラスがないためバージョンを0.0.0に戻す
+				$version = '0.0.0';
+			} else {
+				$version = MigrationClasses::classNameToVersion( $rollback_class[ $i + 1 ] );
+			}
+			$option->setDBSchemaVersion( $version );
+			assert( $option->getDBSchemaVersion() === $version );
+		}
 	}
 
 	public function uninstall(): void {
@@ -68,25 +92,14 @@ class DBSchema {
 		$mysqli = ( new MySQLiFactory() )->create( $this->wpdb );
 		$mysqli->query( "DROP TABLE IF EXISTS $drop_tables;" );
 	}
-
-	private function stepMigrate( string $current_version ): string {
-		throw new \Exception( 'TODO' );
-	}
 }
 
 
 class MigrationClasses {
-	public function __construct( string $currentVersion ) {
-		// $currentVersionは`X.X.X`の形式
-		assert( strpos( $currentVersion, '.' ) !== false );
-		assert( strpos( $currentVersion, '_' ) === false );
 
-		$this->currentVersion = $currentVersion;
-	}
-
-	private string $currentVersion;
-
-	public function get(): array {
+	public function get( string $operator, string $version, string $order = 'ASC' ): array {
+		// $versionは`X.X.X`の形式
+		assert( strpos( $version, '.' ) !== false && strpos( $version, '_' ) === false );
 
 		// Migrationsディレクトリ内のファイル名からバージョンを取得
 		$files       = glob( __DIR__ . '/Migrations/v*_*.php' );
@@ -94,9 +107,10 @@ class MigrationClasses {
 		$versions    = array_map( fn( $base_name ) => self::classNameToVersion( $base_name ), $class_names );
 
 		// 現在のバージョンよりも大きいバージョンを取得
-		$versions = array_filter( $versions, fn( $version ) => version_compare( $version, $this->currentVersion, '>' ) );
-		// 小さい順にソート
-		$versions = ( new VersionSorter() )->sort( $versions );
+		$versions = array_filter( $versions, fn( $ver ) => version_compare( $ver, $version, $operator ) );
+
+		// 指定された並び順にソート
+		$versions = ( new VersionSorter() )->sort( $versions, $order );
 
 		// 名前空間を含むクラス名に変換して返す
 		return array_map( fn( $version ) => $this->versionToClass( $version ), $versions );

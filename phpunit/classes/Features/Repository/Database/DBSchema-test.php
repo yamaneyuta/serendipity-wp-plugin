@@ -53,6 +53,30 @@ class DBSchemaTest extends WP_UnitTestCase {
 
 	/**
 	 * @test
+	 * @testdox [FE9AEE90] DBSchema::rollback()
+	 * @dataProvider supportedWpdbProvider
+	 */
+	public function rollback( wpdb $wpdb ) {
+		$sut = new DBSchema( $wpdb );
+		$sut->uninstall();
+		$sut->migrate();
+		$this->assertNotCount( 0, $this->pluginTablesRemained( $wpdb ) );
+
+		$err = null;
+		try {
+			$sut->rollback();
+		} catch ( Exception $e ) {
+			$err = $e;
+		}
+
+		// ロールバックで例外が発生していないこと
+		$this->assertNull( $err );
+		// 本プラグイン用のテーブルが0個になっていること
+		$this->assertCount( 0, $this->pluginTablesRemained( $wpdb ) );
+	}
+
+	/**
+	 * @test
 	 * @testdox [EE372BF5] DBSchema::uninstall()
 	 * @dataProvider supportedWpdbProvider
 	 */
