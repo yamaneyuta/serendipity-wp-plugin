@@ -33,15 +33,15 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		$contrubuter_id = wp_create_user( 'contributor', 'password', '' );
 		( new WP_User( $contrubuter_id ) )->set_role( 'contributor' );
 
-		$read_only_contrubuter_id = wp_create_user( 'read_only_contributor', 'password', '' );
-		( new WP_User( $read_only_contrubuter_id ) )->set_role( 'contributor' );
+		$another_contrubuter_id = wp_create_user( 'another_contributor', 'password', '' );
+		( new WP_User( $another_contrubuter_id ) )->set_role( 'contributor' );
 
 		// フィールドに保持
 		$this->user_mapping = array(
-			self::ADMINISTRATOR         => 1,
-			self::CONTRIBUTOR           => $contrubuter_id,
-			self::READ_ONLY_CONTRIBUTOR => $read_only_contrubuter_id,
-			self::VISITOR               => 0,
+			self::ADMINISTRATOR       => 1,
+			self::CONTRIBUTOR         => $contrubuter_id,
+			self::ANOTHER_CONTRIBUTOR => $another_contrubuter_id,
+			self::VISITOR             => 0,
 		);
 
 		global $wp_rest_server;
@@ -62,10 +62,10 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 	// dataProviderでフィールドの値が取得できない(setUp前に呼ばれる)ため、マッピング用の定数を定義
 	// これらの定数をユーザー種別(user_type)として扱う。値は重複しなければ何でも(数値等でも)良いが、ここでは文字列を使用する。
-	protected const ADMINISTRATOR         = 'ADMINISTRATOR';
-	protected const CONTRIBUTOR           = 'CONTRIBUTOR';
-	protected const READ_ONLY_CONTRIBUTOR = 'READ_ONLY_CONTRIBUTOR';
-	protected const VISITOR               = 'VISITOR';
+	protected const ADMINISTRATOR       = 'ADMINISTRATOR';
+	protected const CONTRIBUTOR         = 'CONTRIBUTOR';
+	protected const ANOTHER_CONTRIBUTOR = 'ANOTHER_CONTRIBUTOR';
+	protected const VISITOR             = 'VISITOR';
 
 	/** @var array<string,int> */
 	private $user_mapping;
@@ -95,7 +95,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	/**
 	 * ユーザー種別からユーザーIDを取得します。
 	 *
-	 * @param string $user_type ユーザー種別 (self::ADMINISTRATOR, self::CONTRIBUTOR, self::READ_ONLY_CONTRIBUTOR, self::VISITOR)
+	 * @param string $user_type ユーザー種別 (self::ADMINISTRATOR, self::CONTRIBUTOR, self::ANOTHER_CONTRIBUTOR, self::VISITOR)
 	 * @return int ユーザーID
 	 */
 	protected function getUserId( string $user_type ): int {
@@ -105,7 +105,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	/**
 	 * GraphQLをリクエストするユーザーを切り替えます。
 	 *
-	 * @param string $user_type ユーザー種別 (self::ADMINISTRATOR, self::CONTRIBUTOR, self::READ_ONLY_CONTRIBUTOR, self::VISITOR)
+	 * @param string $user_type ユーザー種別 (self::ADMINISTRATOR, self::CONTRIBUTOR, self::ANOTHER_CONTRIBUTOR, self::VISITOR)
 	 */
 	protected function setCurrentUser( string $user_type ): void {
 		// 引数`0`で`wp_set_current_user`を呼び出しても、IDが`0`のユーザーオブジェクトが返ってくるため、

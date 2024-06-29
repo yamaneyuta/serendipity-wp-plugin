@@ -109,13 +109,13 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 			// 公開状態の投稿の販売価格は誰でも閲覧可能
 			array( 'publish', self::ADMINISTRATOR, true ),
 			array( 'publish', self::CONTRIBUTOR, true ),
-			array( 'publish', self::READ_ONLY_CONTRIBUTOR, true ),
+			array( 'publish', self::ANOTHER_CONTRIBUTOR, true ),
 			array( 'publish', self::VISITOR, true ),
 
 			// 下書き(非公開状態)の投稿の販売価格は、投稿の作成者と管理者のみ閲覧可能
 			array( 'draft', self::ADMINISTRATOR, true ),            // 管理者は非公開の投稿の販売価格を閲覧可能
 			array( 'draft', self::CONTRIBUTOR, true ),              // 寄稿者は自身が作成した非公開の投稿の販売価格を閲覧可能
-			array( 'draft', self::READ_ONLY_CONTRIBUTOR, false ),   // 読み取り専用寄稿者は自身が作成していない非公開の投稿の販売価格を閲覧不可
+			array( 'draft', self::ANOTHER_CONTRIBUTOR, false ),   // 他の寄稿者は自身が作成していない非公開の投稿の販売価格を閲覧不可
 			array( 'draft', self::VISITOR, false ),                 // 訪問者は非公開の投稿の販売価格を閲覧不可
 		);
 	}
