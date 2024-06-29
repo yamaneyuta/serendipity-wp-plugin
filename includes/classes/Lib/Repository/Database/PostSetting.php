@@ -59,34 +59,19 @@ class PostSetting {
 	}
 
 	public function set( int $post_id, PostSettingType $postSetting ) {
-		$id  = ( new Ulid() )->toUuid();
-		$sql = <<<SQL
-			INSERT INTO `{$this->table_name}` (
-				id,
-				post_id,
-				selling_amount_hex,
-				selling_decimals,
-				selling_symbol
-			) VALUES (
-				%s, /* id */
-				%d, /* post_id */
-				%s, /* selling_amount_hex */
-				%d, /* selling_decimals */
-				%s  /* selling_symbol */
-			);
-		SQL;
-
 		$selling_price = $postSetting->sellingPrice;
 
-		$query  = $this->wpdb->prepare(
-			$sql,
-			$id,
-			$post_id,
-			$selling_price->amountHex,
-			$selling_price->decimals,
-			$selling_price->symbol
+		$result = $this->wpdb->insert(
+			$this->table_name,
+			array(
+				'id'                 => ( new Ulid() )->toUuid(),
+				'post_id'            => $post_id,
+				'selling_amount_hex' => $selling_price->amountHex,
+				'selling_decimals'   => $selling_price->decimals,
+				'selling_symbol'     => $selling_price->symbol,
+			),
 		);
-		$result = $this->wpdb->query( $query );
+
 		assert( 1 === $result );
 
 		return $result;
