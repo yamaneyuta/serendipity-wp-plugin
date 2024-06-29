@@ -79,6 +79,13 @@ jobs:
           npm ci
         fi
 
+    - name: Cache wp-env directory
+      id: wp-env-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/wp-env
+        key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
+
     - run: npm run lint:js
     - run: npm run format
     - run: npm run build
