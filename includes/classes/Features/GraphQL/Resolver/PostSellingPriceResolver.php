@@ -31,6 +31,6 @@ class PostSellingPriceResolver extends ResolverBase {
 			return $this->plugin_settings->getPostSellingPrice( $post_ID );
 		}
 
-		throw new \LogicException( 'You do not have permission to access this post.' );
+		throw new \LogicException( '[FB5A5BB1] You do not have permission to access this post.' );
 	}
 }
