@@ -11,6 +11,7 @@ class Option {
 
 		// オプション名に付与するプレフィックスを取得
 		$this->prefix = ( new PluginInfo() )->optionNamePrefix();
+		assert( strlen( $this->prefix ) > 0 );
 	}
 
 	private const DB_SCHEMA_VERSION = 'db_schema_version';
@@ -37,14 +38,19 @@ class Option {
 	}
 
 	public function uninstall() {
-		$all_options = wp_load_alloptions();
+		// `wp_load_alloptions`は`autoload`が`yes`のオプションのみ取得する。
+		// `autoload`が`no`のオプションも取得したいので、直接SQLを実行する。
 
-		// $all_options のキーがプレフィックスで始まるものを削除
-		assert( strlen( $this->prefix ) > 0 );
-		foreach ( array_keys( $all_options ) as $option_name ) {
-			if ( 0 === strpos( $option_name, $this->prefix ) ) {
-				delete_option( $option_name );
-			}
+		global $wpdb;
+		$query        = <<<SQL
+			SELECT `option_name`
+			FROM {$wpdb->options}
+			WHERE `option_name` LIKE '{$this->prefix}%'
+		SQL;
+		$option_names = $wpdb->get_col( $query );
+
+		foreach ( $option_names as $option_name ) {
+			delete_option( $option_name );
 		}
 	}
 
@@ -59,6 +65,7 @@ class Option {
 	 * データベーススキーマバージョンを設定します。
 	 */
 	public function setDBSchemaVersion( string $version ) {
-		return $this->set( self::DB_SCHEMA_VERSION, $version );
+		// インストール時やアップデート時など、利用頻度が限定されるため、`autoload`は`false`を指定
+		return $this->set( self::DB_SCHEMA_VERSION, $version, false );
 	}
 }
