@@ -6,7 +6,10 @@ use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
-abstract class GraphQLTestBase extends WP_UnitTestCase {
+/**
+ * 結合テストの基底クラス
+ */
+abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 	// #[\Override]
 	public function setUp(): void {
@@ -16,8 +19,7 @@ abstract class GraphQLTestBase extends WP_UnitTestCase {
 		$dbSchema = new DBSchema( $wpdb );
 		$dbSchema->uninstall();
 		// プラグイン用Optionを削除
-		$option = new Option();
-		$option->uninstall();
+		( new Option() )->uninstall();
 		// プラグイン用テーブルを作成
 		$dbSchema->migrate();
 
