@@ -149,6 +149,10 @@ class TestUser {
 		}
 
 		// パラメータ: https://miya0001.github.io/wp-unit-docs/factory.html#parameters
-		return ( new WP_UnitTestCase() )->factory->post->create( array( 'post_author' => $this->id ) );
+		return ( new class() extends WP_UnitTestCase {
+			public function createPost( array $args ) {
+				return $this->factory()->post->create( $args );
+			}
+		} )->createPost( array( 'post_author' => $this->id ) );
 	}
 }
