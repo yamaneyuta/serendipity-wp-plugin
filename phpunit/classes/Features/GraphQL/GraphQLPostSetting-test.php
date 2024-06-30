@@ -5,9 +5,6 @@ use Cornix\Serendipity\Core\Lib\Repository\Database\PostSetting;
 use Cornix\Serendipity\Core\Types\PostSettingType;
 use Cornix\Serendipity\Core\Types\PriceType;
 
-require_once __DIR__ . '/../../IntegrationTestBase.php';
-
-
 /**
  * PostSettingを取得するGraphQLのテスト
  */

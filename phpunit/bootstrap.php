@@ -28,3 +28,6 @@ tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
  * and the custom autoloader for the TestCase and the mock object classes.
  */
 WPIntegration\bootstrap_it();
+
+// テスト用のライブラリを読み込む
+require_once __DIR__ . '/_lib/includes.php';

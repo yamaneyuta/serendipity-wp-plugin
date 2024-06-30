@@ -16,6 +16,10 @@ class DBSchemaTest extends WP_UnitTestCase {
 		parent::setUp();
 		// Your own additional setup.
 
+		// 他のDBに接続してマイグレーションのテストを実施するような場合でも、
+		// optionsテーブルは`wp-env`が起動した`tests-mysql`を参照している点に注意。
+		// - テーブル操作: 対象のDB
+		// - スキーマバージョン操作: `tests-mysql`固定
 		( new Option() )->uninstall();
 		$current_version = ( new Option() )->getDBSchemaVersion();
 		$this->assertEquals( '0.0.0', $current_version );   // 毎回初期化されていることを確認
@@ -31,7 +35,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 	/**
 	 * @test
 	 * @testdox [AC325463] DBSchema::migrage()
-	 * @dataProvider supportedWpdbProvider
+	 * @dataProvider wpdbListProvider
 	 */
 	public function migrate( wpdb $wpdb ) {
 		$sut = new DBSchema( $wpdb );
@@ -54,7 +58,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 	/**
 	 * @test
 	 * @testdox [FE9AEE90] DBSchema::rollback()
-	 * @dataProvider supportedWpdbProvider
+	 * @dataProvider wpdbListProvider
 	 */
 	public function rollback( wpdb $wpdb ) {
 		$sut = new DBSchema( $wpdb );
@@ -78,7 +82,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 	/**
 	 * @test
 	 * @testdox [EE372BF5] DBSchema::uninstall()
-	 * @dataProvider supportedWpdbProvider
+	 * @dataProvider wpdbListProvider
 	 */
 	public function uninstall( wpdb $wpdb ) {
 		$sut = new DBSchema( $wpdb );
@@ -103,22 +107,43 @@ class DBSchemaTest extends WP_UnitTestCase {
 	/**
 	 * @return array<array<wpdb>>
 	 */
-	public function supportedWpdbProvider(): array {
+	public function wpdbListProvider(): array {
+		$wp_list = $this->wpdbList();
+		return array_map( fn( wpdb $wpdb ) => array( $wpdb ), $wp_list );
+	}
+
+	/**
+	 *
+	 * @return wpdb[]
+	 */
+	protected function wpdbList(): array {
+		/** @var wpdb[] $ret */
+		$ret = array();
+
+		// `wp-env`が起動した`tests-mysql`に接続するwpdb
+		$ret[] = $GLOBALS['wpdb'];
+
+		// 別途立ち上げたデータベースに接続するwpdb
+		foreach ( $this->extDatabaseHosts() as $host ) {
+			$ret[] = $this->createWpdb( $host );
+		}
+
+		return $ret;
+	}
+
+	private function extDatabaseHosts(): array {
+		// SQL発行テスト用に立ち上げたデータベースのホスト名一覧
+		// ※ `wp-env`が立ち上げた`tests-mysql`は含まない
 		return array(
-			array( $this->getWpdb() ),
-			array( $this->getWpdb( 'mysql-phpunit-oldest' ) ),
-			array( $this->getWpdb( 'mysql-phpunit-latest' ) ),
-			array( $this->getWpdb( 'mysql-phpunit-not-support' ) ),
-			array( $this->getWpdb( 'mariadb-phpunit-oldest' ) ),
-			array( $this->getWpdb( 'mariadb-phpunit-latest' ) ),
-			array( $this->getWpdb( 'mariadb-phpunit-not-support' ) ),
+			'mysql-phpunit-oldest',
+			'mysql-phpunit-latest',
+			'mariadb-phpunit-oldest',
+			'mariadb-phpunit-latest',
 		);
 	}
 
-	private function getWpdb( string $host = null ): wpdb {
-		if ( $host === null ) {
-			return $GLOBALS['wpdb'];
-		}
+	private function createWpdb( string $host ): wpdb {
+		assert( $host !== $GLOBALS['wpdb']->dbhost );
 
 		// phpcsでフォーマットを行うと'WordPress'が'WordPress'に変換されるためphpcs:ignoreを指定
 		$wpdb = new wpdb( 'root', 'password', 'wordpress', $host ); // phpcs:ignore
