@@ -34,11 +34,12 @@ class DBSchemaTest extends WP_UnitTestCase {
 
 	/**
 	 * @test
-	 * @testdox [AC325463] DBSchema::migrage()
+	 * @testdox [AC325463] DBSchema::migrage() - host: $host
 	 * @dataProvider wpdbListProvider
 	 */
-	public function migrate( wpdb $wpdb ) {
-		$sut = new DBSchema( $wpdb );
+	public function migrate( string $host ) {
+		$wpdb = ( new WpdbFactory() )->create( $host );
+		$sut  = new DBSchema( $wpdb );
 		$sut->uninstall();
 		$this->assertCount( 0, $this->pluginTablesRemained( $wpdb ) );
 
@@ -57,11 +58,12 @@ class DBSchemaTest extends WP_UnitTestCase {
 
 	/**
 	 * @test
-	 * @testdox [FE9AEE90] DBSchema::rollback()
+	 * @testdox [FE9AEE90] DBSchema::rollback() - host: $host
 	 * @dataProvider wpdbListProvider
 	 */
-	public function rollback( wpdb $wpdb ) {
-		$sut = new DBSchema( $wpdb );
+	public function rollback( string $host ) {
+		$wpdb = ( new WpdbFactory() )->create( $host );
+		$sut  = new DBSchema( $wpdb );
 		$sut->uninstall();
 		$sut->migrate();
 		$this->assertNotCount( 0, $this->pluginTablesRemained( $wpdb ) );
@@ -81,11 +83,12 @@ class DBSchemaTest extends WP_UnitTestCase {
 
 	/**
 	 * @test
-	 * @testdox [EE372BF5] DBSchema::uninstall()
+	 * @testdox [EE372BF5] DBSchema::uninstall() - host: $host
 	 * @dataProvider wpdbListProvider
 	 */
-	public function uninstall( wpdb $wpdb ) {
-		$sut = new DBSchema( $wpdb );
+	public function uninstall( string $host ) {
+		$wpdb = ( new WpdbFactory() )->create( $host );
+		$sut  = new DBSchema( $wpdb );
 		$sut->uninstall();
 		$sut->migrate();
 		$this->assertNotCount( 0, $this->pluginTablesRemained( $wpdb ) );
@@ -105,11 +108,10 @@ class DBSchemaTest extends WP_UnitTestCase {
 
 
 	/**
-	 * @return array<array<wpdb>>
+	 * @return array<array<string>>
 	 */
 	public function wpdbListProvider(): array {
-		$wp_list = ( new TestWpdbList() )->get();
-		return array_map( fn( wpdb $wpdb ) => array( $wpdb ), $wp_list );
+		return ( new TestPattern() )->createDBHostMatrix();
 	}
 
 
