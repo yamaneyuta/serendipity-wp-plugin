@@ -27,6 +27,7 @@ class v1_0_0 extends MigrationBase {
 		// 投稿を作成することができるユーザーによる画面操作のため、何十万レコードも作成されることは一般的にないと考えられる。
 		// そのため、正規化は行わない。
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
+		// TODO: post_idに対してインデックスを張る
 		$sql = <<<SQL
 			CREATE TABLE `${table_name}` (
 				`created_at`                   datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP,
