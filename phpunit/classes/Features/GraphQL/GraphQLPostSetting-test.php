@@ -35,10 +35,9 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 	 * @testdox [48447663] 公開状況やユーザーによって販売価格の取得可否が異なる
 	 * @dataProvider accessDataProvider
 	 */
-	public function access( string $post_status, string $user_type, bool $expected ) {
+	public function access( string $post_status, TestUser $user, bool $expected ) {
 		// 寄稿者が投稿を作成
-		// パラメータ: https://miya0001.github.io/wp-unit-docs/factory.html#parameters
-		$this->post_ID = $this->factory->post->create( array( 'post_author' => $this->getUserId( self::CONTRIBUTOR ) ) );
+		$this->post_ID = $this->contributor()->createPost();
 		// 投稿の設定を保存
 		global $wpdb;
 		$postSetting = new PostSettingType( new PriceType( '0x123456', 18, 'ETH' ) );
@@ -67,7 +66,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		GRAPHQL;
 
 		// リクエストを送信するユーザーを設定
-		$this->setCurrentUser( $user_type );
+		$user->setCurrentUser();
 
 		// GraphQLリクエストを送信
 		$data = $this->requestGraphQL(
@@ -103,20 +102,21 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 	}
 
 	public function accessDataProvider(): array {
+
 		return array(
-			// post_status, user_type, expected(visible or not)
+			// post_status, user, expected(visible or not)
 
 			// 公開状態の投稿の販売価格は誰でも閲覧可能
-			array( 'publish', self::ADMINISTRATOR, true ),
-			array( 'publish', self::CONTRIBUTOR, true ),
-			array( 'publish', self::ANOTHER_CONTRIBUTOR, true ),
-			array( 'publish', self::VISITOR, true ),
+			array( 'publish', $this->administator(), true ),
+			array( 'publish', $this->contributor(), true ),
+			array( 'publish', $this->another_contributor(), true ),
+			array( 'publish', $this->visitor(), true ),
 
 			// 下書き(非公開状態)の投稿の販売価格は、投稿の作成者と管理者のみ閲覧可能
-			array( 'draft', self::ADMINISTRATOR, true ),            // 管理者は非公開の投稿の販売価格を閲覧可能
-			array( 'draft', self::CONTRIBUTOR, true ),              // 寄稿者は自身が作成した非公開の投稿の販売価格を閲覧可能
-			array( 'draft', self::ANOTHER_CONTRIBUTOR, false ),   // 他の寄稿者は自身が作成していない非公開の投稿の販売価格を閲覧不可
-			array( 'draft', self::VISITOR, false ),                 // 訪問者は非公開の投稿の販売価格を閲覧不可
+			array( 'draft', $this->administator(), true ),          // 管理者は非公開の投稿の販売価格を閲覧可能
+			array( 'draft', $this->contributor(), true ),           // 寄稿者は自身が作成した非公開の投稿の販売価格を閲覧可能
+			array( 'draft', $this->another_contributor(), false ),  // 他の寄稿者は自身が作成していない非公開の投稿の販売価格を閲覧不可
+			array( 'draft', $this->visitor(), false ),              // 訪問者は非公開の投稿の販売価格を閲覧不可
 		);
 	}
 }

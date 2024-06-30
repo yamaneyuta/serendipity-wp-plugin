@@ -16,24 +16,6 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		parent::setUp();
 		// Your own additional setup.
 
-		// 寄稿者を作成
-		// 作成したユーザーIDはデータベースのAuto Incrementの影響で毎回変更されるが、
-		// tearDownで毎回削除される。
-		// そのため、contributerの存在チェックは不要。
-		$contrubuter_id = wp_create_user( 'contributor', 'password', '' );
-		( new WP_User( $contrubuter_id ) )->set_role( 'contributor' );
-
-		$another_contrubuter_id = wp_create_user( 'another_contributor', 'password', '' );
-		( new WP_User( $another_contrubuter_id ) )->set_role( 'contributor' );
-
-		// フィールドに保持
-		$this->user_mapping = array(
-			self::ADMINISTRATOR       => 1,
-			self::CONTRIBUTOR         => $contrubuter_id,
-			self::ANOTHER_CONTRIBUTOR => $another_contrubuter_id,
-			self::VISITOR             => 0,
-		);
-
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new WP_REST_Server();
 
@@ -73,16 +55,21 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		$dbSchema->migrate();
 	}
 
+	protected function administator() {
+		return TestUserFactory::craeteAdministrator();
+	}
 
-	// dataProviderでフィールドの値が取得できない(setUp前に呼ばれる)ため、マッピング用の定数を定義
-	// これらの定数をユーザー種別(user_type)として扱う。値は重複しなければ何でも(数値等でも)良いが、ここでは文字列を使用する。
-	protected const ADMINISTRATOR       = 'ADMINISTRATOR';
-	protected const CONTRIBUTOR         = 'CONTRIBUTOR';
-	protected const ANOTHER_CONTRIBUTOR = 'ANOTHER_CONTRIBUTOR';
-	protected const VISITOR             = 'VISITOR';
+	protected function contributor() {
+		return TestUserFactory::createContributor();
+	}
 
-	/** @var array<string,int> */
-	private $user_mapping;
+	protected function another_contributor() {
+		return TestUserFactory::createAnotherContributor();
+	}
+
+	protected function visitor() {
+		return TestUserFactory::createVisitor();
+	}
 
 	private function crateRestPropertyStub(): RestProperty {
 		$rest_property_stub = $this->createMock( RestProperty::class );
@@ -106,27 +93,60 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		return $response;
 	}
 
-	/**
-	 * ユーザー種別からユーザーIDを取得します。
-	 *
-	 * @param string $user_type ユーザー種別 (self::ADMINISTRATOR, self::CONTRIBUTOR, self::ANOTHER_CONTRIBUTOR, self::VISITOR)
-	 * @return int ユーザーID
-	 */
-	protected function getUserId( string $user_type ): int {
-		return $this->user_mapping[ $user_type ];
-	}
-
-	/**
-	 * GraphQLをリクエストするユーザーを切り替えます。
-	 *
-	 * @param string $user_type ユーザー種別 (self::ADMINISTRATOR, self::CONTRIBUTOR, self::ANOTHER_CONTRIBUTOR, self::VISITOR)
-	 */
-	protected function setCurrentUser( string $user_type ): void {
-		// 引数`0`で`wp_set_current_user`を呼び出しても、IDが`0`のユーザーオブジェクトが返ってくるため、
-		// `wp_set_current_user`の戻り値チェックは行わない。
-		wp_set_current_user( $this->getUserId( $user_type ) );
-	}
-
 	/** @var WP_REST_Server */
 	private $server;
+}
+
+
+class TestUserFactory {
+	public static function craeteAdministrator(): TestUser {
+		return new TestUser( 1 );
+	}
+
+	public static function createContributor(): TestUser {
+		return new TestUser( self::createContributorIfNotExists( 'contributor' ) );
+	}
+
+	public static function createAnotherContributor(): TestUser {
+		return new TestUser( self::createContributorIfNotExists( 'another_contributor' ) );
+	}
+
+	public static function createVisitor(): TestUser {
+		return new TestUser( 0 );
+	}
+
+	private static function createContributorIfNotExists( string $name ): int {
+		$user = get_user_by( 'login', $name );
+		if ( $user ) {
+			return $user->ID;
+		} else {
+			// ユーザーを作成し、権限に`contributor`を設定
+			$id = wp_create_user( $name, 'password' );
+			( new WP_User( $id ) )->set_role( 'contributor' );
+			return $id;
+		}
+	}
+}
+
+class TestUser {
+	public function __construct( int $id ) {
+		$this->id = $id;
+	}
+	private int $id;
+
+	public function setCurrentUser(): void {
+		// 引数`0`で`wp_set_current_user`を呼び出しても、IDが`0`のユーザーオブジェクトが返ってくるため、
+		// `wp_set_current_user`の戻り値チェックは行わない。
+		wp_set_current_user( $this->id );
+	}
+
+	public function createPost(): int {
+		if ( ! user_can( $this->id, 'edit_posts' ) ) {
+			// 投稿を作成する権限がないエラー
+			throw new Exception( '[2DD19278] You do not have permission to create a post. id: ' . $this->id );
+		}
+
+		// パラメータ: https://miya0001.github.io/wp-unit-docs/factory.html#parameters
+		return ( new WP_UnitTestCase() )->factory->post->create( array( 'post_author' => $this->id ) );
+	}
 }
