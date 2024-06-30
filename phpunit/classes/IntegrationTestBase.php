@@ -13,16 +13,6 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 	// #[\Override]
 	public function setUp(): void {
-		// DB関連の初期化だけ親クラスのsetUpよりも先に行う
-		// プラグイン用テーブルを削除
-		global $wpdb;
-		$dbSchema = new DBSchema( $wpdb );
-		$dbSchema->uninstall();
-		// プラグイン用Optionを削除
-		( new Option() )->uninstall();
-		// プラグイン用テーブルを作成
-		$dbSchema->migrate();
-
 		parent::setUp();
 		// Your own additional setup.
 
@@ -59,6 +49,30 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		// Your own additional tear down.
 		parent::tearDown();
 	}
+
+	/**
+	 * 本プラグイン用のテーブル及びOptionを初期化します。
+	 *
+	 * - 通常の結合テストの場合: setUpメソッド内で引数無しで呼び出す
+	 * - 各データベースに対してクエリのテストを行うような場合: 各テストメソッド内で引数を指定して呼び出す
+	 */
+	protected function initializeDatabase( wpdb $wpdb = null ): void {
+		// 引数がnullの場合は、$wpdbをグローバル変数から取得
+		$wpdb = $wpdb ?? $GLOBALS['wpdb'];
+
+		// wp-envが準備したmysqlに接続する場合は、プラグイン用のOptionを削除
+		// (それ以外のDBの場合、delete_option呼び出しが機能しないため、処理が不要)
+		if ( $wpdb->dbhost === $GLOBALS['wpdb']->dbhost ) {
+			// プラグイン用Optionを削除
+			( new Option() )->uninstall();
+		}
+
+		// 本プラグイン用のテーブルを再作成
+		$dbSchema = new DBSchema( $wpdb );
+		$dbSchema->uninstall();
+		$dbSchema->migrate();
+	}
+
 
 	// dataProviderでフィールドの値が取得できない(setUp前に呼ばれる)ため、マッピング用の定数を定義
 	// これらの定数をユーザー種別(user_type)として扱う。値は重複しなければ何でも(数値等でも)良いが、ここでは文字列を使用する。

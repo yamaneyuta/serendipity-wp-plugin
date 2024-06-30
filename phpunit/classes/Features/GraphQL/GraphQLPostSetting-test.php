@@ -15,6 +15,9 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 
 	// #[\Override]
 	public function setUp(): void {
+		// DB関連の初期化だけ親クラスのsetUpよりも先に行う
+		$this->initializeDatabase();
+
 		parent::setUp();
 		// Your own additional setup.
 	}
