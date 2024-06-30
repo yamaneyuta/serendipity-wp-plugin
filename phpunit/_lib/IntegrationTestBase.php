@@ -42,17 +42,17 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		// 引数がnullの場合は、$wpdbをグローバル変数から取得
 		$wpdb = $wpdb ?? $GLOBALS['wpdb'];
 
-		// wp-envが準備したmysqlに接続する場合は、プラグイン用のOptionを削除
-		// (それ以外のDBの場合、delete_option呼び出しが機能しないため、処理が不要)
-		if ( $wpdb->dbhost === $GLOBALS['wpdb']->dbhost ) {
-			// プラグイン用Optionを削除
-			( new Option() )->uninstall();
-		}
+		// プラグイン用Optionを削除
+		// ※ $wpdbの参照先が`tests-mysql`以外であっても、スキーマバージョンは`tests-mysql`の
+		// optionsを参照しているのでOptionテーブルの初期化も必要
+		( new Option() )->uninstall();
 
 		// 本プラグイン用のテーブルを再作成
 		$dbSchema = new DBSchema( $wpdb );
 		$dbSchema->uninstall();
 		$dbSchema->migrate();
+
+		$wpdb->query( 'COMMIT;' );
 	}
 
 	protected function administator() {
@@ -97,7 +97,9 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	private $server;
 }
 
-
+/**
+ * @internal
+ */
 class TestUserFactory {
 	public static function craeteAdministrator(): TestUser {
 		return new TestUser( 1 );
