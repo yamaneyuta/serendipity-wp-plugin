@@ -8,7 +8,7 @@ class WpdbFactory {
 	 * @param string $host
 	 * @return wpdb
 	 */
-	public function create( string $host ): wpdb {
+	public static function create( string $host ): wpdb {
 		if ( $host === $GLOBALS['wpdb']->dbhost ) {
 			return $GLOBALS['wpdb'];
 		}

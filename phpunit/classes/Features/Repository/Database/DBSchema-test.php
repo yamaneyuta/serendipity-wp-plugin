@@ -38,7 +38,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 	 * @dataProvider wpdbListProvider
 	 */
 	public function migrate( string $host ) {
-		$wpdb = ( new WpdbFactory() )->create( $host );
+		$wpdb = WpdbFactory::create( $host );
 		$sut  = new DBSchema( $wpdb );
 		$sut->uninstall();
 		$this->assertCount( 0, $this->pluginTablesRemained( $wpdb ) );
@@ -62,7 +62,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 	 * @dataProvider wpdbListProvider
 	 */
 	public function rollback( string $host ) {
-		$wpdb = ( new WpdbFactory() )->create( $host );
+		$wpdb = WpdbFactory::create( $host );
 		$sut  = new DBSchema( $wpdb );
 		$sut->uninstall();
 		$sut->migrate();
@@ -87,7 +87,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 	 * @dataProvider wpdbListProvider
 	 */
 	public function uninstall( string $host ) {
-		$wpdb = ( new WpdbFactory() )->create( $host );
+		$wpdb = WpdbFactory::create( $host );
 		$sut  = new DBSchema( $wpdb );
 		$sut->uninstall();
 		$sut->migrate();
