@@ -155,4 +155,11 @@ class TestUser {
 			}
 		} )->createPost( array( 'post_author' => $this->id ) );
 	}
+
+	public function __toString() {
+		if ( 0 === $this->id ) {
+			return 'visitor';
+		}
+		return get_user_by( 'ID', $this->id )->user_login;
+	}
 }

@@ -31,7 +31,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 
 	/**
 	 * @test
-	 * @testdox [48447663] 公開状況やユーザーによって販売価格の取得可否が異なる
+	 * @testdox [48447663][GraphQL] postSetting - post_status: $post_status, user: $user, expected: $expected
 	 * @dataProvider accessDataProvider
 	 */
 	public function access( string $post_status, TestUser $user, bool $expected ) {
