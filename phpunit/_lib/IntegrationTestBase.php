@@ -78,14 +78,22 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		return $rest_property_stub;
 	}
 
-	protected function requestGraphQL( string $json ): WP_REST_Response {
+	protected function requestGraphQL( string $query, array $variables = null ): WP_REST_Response {
+
+		$request_data = array(
+			'query' => $query,
+		);
+		if ( $variables ) {
+			$request_data['variables'] = $variables;
+		}
+
 		$rest_property = $this->crateRestPropertyStub();
 		$namespace     = $rest_property->namespace();
 		$graphQLRoute  = $rest_property->graphQLRoute();
 		$request       = new WP_REST_Request( 'POST', "/${namespace}${graphQLRoute}" );
 
 		$request->set_header( 'content-type', 'application/json' );
-		$request->set_body( $json );
+		$request->set_body( json_encode( $request_data ) );
 
 		/** @var WP_REST_Response */
 		$response = $this->server->dispatch( $request );

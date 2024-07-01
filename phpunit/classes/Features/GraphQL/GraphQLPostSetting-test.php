@@ -35,6 +35,9 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 	 * @dataProvider accessDataProvider
 	 */
 	public function access( string $post_status, TestUser $user, bool $expected ) {
+		// リクエストを送信するユーザーを設定
+		$user->setCurrentUser();
+
 		// 寄稿者が投稿を作成
 		$this->post_ID = $this->contributor()->createPost();
 		// 投稿の設定を保存
@@ -52,7 +55,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		);
 		$this->assertEquals( $ret, $this->post_ID );
 
-		$query = <<<GRAPHQL
+		$query     = <<<GRAPHQL
 			query PostSetting(\$postID: Int!) {
 				postSetting(postID: \$postID) {
 					sellingPrice {
@@ -63,21 +66,12 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 				}
 			}
 		GRAPHQL;
-
-		// リクエストを送信するユーザーを設定
-		$user->setCurrentUser();
+		$variables = array(
+			'postID' => $this->post_ID,
+		);
 
 		// GraphQLリクエストを送信
-		$data = $this->requestGraphQL(
-			json_encode(
-				array(
-					'query'     => $query,
-					'variables' => array(
-						'postID' => $this->post_ID,
-					),
-				)
-			)
-		)->get_data();
+		$data = $this->requestGraphQL( $query, $variables )->get_data();
 
 		// 正常に取得できることを期待している条件の時
 		if ( $expected ) {
