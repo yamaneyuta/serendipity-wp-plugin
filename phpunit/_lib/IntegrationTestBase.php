@@ -55,21 +55,10 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		$wpdb->query( 'COMMIT;' );
 	}
 
-	protected function administator() {
-		return TestUserFactory::craeteAdministrator();
+	public function getUser( string $user_type ): TestUser {
+		return new TestUser( $user_type );
 	}
 
-	protected function contributor() {
-		return TestUserFactory::createContributor();
-	}
-
-	protected function another_contributor() {
-		return TestUserFactory::createAnotherContributor();
-	}
-
-	protected function visitor() {
-		return TestUserFactory::createVisitor();
-	}
 
 	private function crateRestPropertyStub(): RestProperty {
 		$rest_property_stub = $this->createMock( RestProperty::class );
@@ -78,14 +67,22 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		return $rest_property_stub;
 	}
 
-	protected function requestGraphQL( string $json ): WP_REST_Response {
+	protected function requestGraphQL( string $query, array $variables = null ): WP_REST_Response {
+
+		$request_data = array(
+			'query' => $query,
+		);
+		if ( $variables ) {
+			$request_data['variables'] = $variables;
+		}
+
 		$rest_property = $this->crateRestPropertyStub();
 		$namespace     = $rest_property->namespace();
 		$graphQLRoute  = $rest_property->graphQLRoute();
 		$request       = new WP_REST_Request( 'POST', "/${namespace}${graphQLRoute}" );
 
 		$request->set_header( 'content-type', 'application/json' );
-		$request->set_body( $json );
+		$request->set_body( json_encode( $request_data ) );
 
 		/** @var WP_REST_Response */
 		$response = $this->server->dispatch( $request );
@@ -97,44 +94,63 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	private $server;
 }
 
-/**
- * @internal
- */
-class TestUserFactory {
-	public static function craeteAdministrator(): TestUser {
-		return new TestUser( 1 );
-	}
 
-	public static function createContributor(): TestUser {
-		return new TestUser( self::createContributorIfNotExists( 'contributor' ) );
-	}
-
-	public static function createAnotherContributor(): TestUser {
-		return new TestUser( self::createContributorIfNotExists( 'another_contributor' ) );
-	}
-
-	public static function createVisitor(): TestUser {
-		return new TestUser( 0 );
-	}
-
-	private static function createContributorIfNotExists( string $name ): int {
-		$user = get_user_by( 'login', $name );
-		if ( $user ) {
-			return $user->ID;
-		} else {
-			// ユーザーを作成し、権限に`contributor`を設定
-			$id = wp_create_user( $name, 'password' );
-			( new WP_User( $id ) )->set_role( 'contributor' );
-			return $id;
-		}
-	}
+class UserType {
+	public const ADMINISTRATOR       = 'admin';  // ユーザー名は`admin`
+	public const CONTRIBUTOR         = 'contributor';
+	public const ANOTHER_CONTRIBUTOR = 'another_contributor';
+	public const VISITOR             = 'visitor';
 }
 
 class TestUser {
-	public function __construct( int $id ) {
-		$this->id = $id;
+
+	public function __construct( string $user_type ) {
+		// テスト用のメソッド内(setUpが終わって)から呼び出されるようにしてください。
+		// dataProvider(setUpの前に呼び出される)の中では呼び出せません。
+		// (`wp_users`テーブルとの整合性が取れなくなります。)
+		assert( false !== get_user_by( 'ID', 1 ), '[3291193C] administrator user not found' );
+
+		// $user_typeはUserTypeのプロパティであること
+		$properties = ( new ReflectionClass( UserType::class ) )->getConstants();
+		assert( in_array( $user_type, array_values( $properties ) ), '[AAF3AE09] invalid user_type: ' . $user_type );
+
+		$this->initialize( $user_type );
 	}
+
+	private string $username;
 	private int $id;
+
+	public function id(): int {
+		return $this->id;
+	}
+
+	private function initialize( string $user_type ) {
+		if ( $user_type === UserType::VISITOR ) {
+			$this->id = 0;
+			return;
+		}
+
+		$this->username = $user_type;   // ユーザー名はユーザー種別
+		$user           = get_user_by( 'login', $this->username );
+
+		if ( false === $user ) {
+			switch ( $user_type ) {
+				case UserType::CONTRIBUTOR:
+				case UserType::ANOTHER_CONTRIBUTOR:
+					// 投稿権限を持つユーザーを作成
+					$this->id = wp_create_user( $this->username, 'password' );
+					( new WP_User( $this->id ) )->set_role( 'contributor' );
+					break;
+
+				default:
+					throw new Exception( '[E19F2AED] invalid user_type: ' . $user_type );
+			}
+			return;
+		} else {
+			$this->id = $user->ID;
+			return;
+		}
+	}
 
 	public function setCurrentUser(): void {
 		// 引数`0`で`wp_set_current_user`を呼び出しても、IDが`0`のユーザーオブジェクトが返ってくるため、
@@ -156,10 +172,7 @@ class TestUser {
 		} )->createPost( array( 'post_author' => $this->id ) );
 	}
 
-	public function __toString() {
-		if ( 0 === $this->id ) {
-			return 'visitor';
-		}
-		return get_user_by( 'ID', $this->id )->user_login;
+	public function __toString(): string {
+		return $this->username;
 	}
 }

@@ -34,7 +34,7 @@ class PostSettingTest extends IntegrationTestBase {
 	public function setAndGet( string $host ) {
 		$wpdb = WpdbFactory::create( $host );
 		$this->initializeDatabase( $wpdb ); // データベース初期化
-		$post_ID = $this->contributor()->createPost();  // 投稿を作成
+		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();  // 投稿を作成
 
 		// 投稿に対する設定を登録
 		$sut = new PostSetting( $wpdb );
@@ -58,7 +58,7 @@ class PostSettingTest extends IntegrationTestBase {
 	public function getWhenNoData( string $host ) {
 		$wpdb = WpdbFactory::create( $host );
 		$this->initializeDatabase( $wpdb ); // データベース初期化
-		$post_ID = $this->contributor()->createPost();  // 投稿を作成
+		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();  // 投稿を作成
 
 		// 今作成した投稿に対する設定は作成せず、他の投稿に対する設定を作成する(誤って他のデータを取得していないことを確認)
 		$sut           = new PostSetting( $wpdb );
@@ -81,7 +81,7 @@ class PostSettingTest extends IntegrationTestBase {
 	public function getWhenMultipleData( string $host ) {
 		$wpdb = WpdbFactory::create( $host );
 		$this->initializeDatabase( $wpdb ); // データベース初期化
-		$post_ID = $this->contributor()->createPost();  // 投稿を作成
+		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();  // 投稿を作成
 
 		$sut = new PostSetting( $wpdb );
 		$sut->set( $post_ID, new PostSettingType( new PriceType( '0x20240629', 18, 'ETH' ) ) );
