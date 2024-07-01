@@ -74,8 +74,8 @@ jobs:
       uses: actions/cache@v4
       with:
         path: /home/runner/.cache
-        key: ${{ runner.os }}-playwright-cache-${{ hashFiles('**/.storybook/main.js') }}
-        restore-keys: ${{ runner.os }}-playwright-cache-
+        key: ${{ runner.os }}-playwright-cache-${{ hashFiles('**/package-lock.json') }}
+        # restore-keys: ${{ runner.os }}-playwright-cache-
     - name: Install Playwright
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
