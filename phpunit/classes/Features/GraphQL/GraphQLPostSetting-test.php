@@ -24,36 +24,31 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		parent::tearDown();
 	}
 
-
-	/** @var int 寄稿者(contributor)が作成した投稿のID */
-	private $post_ID;
-
-
 	/**
 	 * @test
 	 * @testdox [48447663][GraphQL] postSetting - post_status: $post_status, user: $user, expected: $expected
 	 * @dataProvider accessDataProvider
 	 */
-	public function access( string $post_status, TestUser $user, bool $expected ) {
+	public function access( string $post_status, string $user_type, bool $expected ) {
 		// リクエストを送信するユーザーを設定
-		$user->setCurrentUser();
+		$this->getUser( $user_type )->setCurrentUser();
 
 		// 寄稿者が投稿を作成
-		$this->post_ID = $this->contributor()->createPost();
+		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();
 		// 投稿の設定を保存
 		global $wpdb;
 		$postSetting = new PostSettingType( new PriceType( '0x123456', 18, 'ETH' ) );
-		( new PostSetting( $wpdb ) )->set( $this->post_ID, $postSetting );
+		( new PostSetting( $wpdb ) )->set( $post_ID, $postSetting );
 
 		// 投稿のステータスを変更(公開、下書き、等)
 		// https://developer.wordpress.org/reference/functions/wp_update_post/#user-contributed-notes
 		$ret = wp_update_post(
 			array(
-				'ID'          => $this->post_ID,
+				'ID'          => $post_ID,
 				'post_status' => $post_status,
 			)
 		);
-		$this->assertEquals( $ret, $this->post_ID );
+		$this->assertEquals( $ret, $post_ID );
 
 		$query     = <<<GRAPHQL
 			query PostSetting(\$postID: Int!) {
@@ -67,7 +62,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 			}
 		GRAPHQL;
 		$variables = array(
-			'postID' => $this->post_ID,
+			'postID' => $post_ID,
 		);
 
 		// GraphQLリクエストを送信
@@ -100,16 +95,16 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 			// post_status, user, expected(visible or not)
 
 			// 公開状態の投稿の販売価格は誰でも閲覧可能
-			array( 'publish', $this->administator(), true ),
-			array( 'publish', $this->contributor(), true ),
-			array( 'publish', $this->another_contributor(), true ),
-			array( 'publish', $this->visitor(), true ),
+			array( 'publish', UserType::ADMINISTRATOR, true ),
+			array( 'publish', UserType::CONTRIBUTOR, true ),
+			array( 'publish', UserType::ANOTHER_CONTRIBUTOR, true ),
+			array( 'publish', UserType::VISITOR, true ),
 
 			// 下書き(非公開状態)の投稿の販売価格は、投稿の作成者と管理者のみ閲覧可能
-			array( 'draft', $this->administator(), true ),          // 管理者は非公開の投稿の販売価格を閲覧可能
-			array( 'draft', $this->contributor(), true ),           // 寄稿者は自身が作成した非公開の投稿の販売価格を閲覧可能
-			array( 'draft', $this->another_contributor(), false ),  // 他の寄稿者は自身が作成していない非公開の投稿の販売価格を閲覧不可
-			array( 'draft', $this->visitor(), false ),              // 訪問者は非公開の投稿の販売価格を閲覧不可
+			array( 'draft', UserType::ADMINISTRATOR, true ),          // 管理者は非公開の投稿の販売価格を閲覧可能
+			array( 'draft', UserType::CONTRIBUTOR, true ),           // 寄稿者は自身が作成した非公開の投稿の販売価格を閲覧可能
+			array( 'draft', UserType::ANOTHER_CONTRIBUTOR, false ),  // 他の寄稿者は自身が作成していない非公開の投稿の販売価格を閲覧不可
+			array( 'draft', UserType::VISITOR, false ),              // 訪問者は非公開の投稿の販売価格を閲覧不可
 		);
 	}
 }
