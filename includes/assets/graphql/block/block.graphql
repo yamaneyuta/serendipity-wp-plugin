@@ -8,3 +8,7 @@ query PostSetting($postID: Int!) {
 		}
 	}
 }
+
+mutation SetPostSetting($postID: Int!, $postSetting: PostSettingInput!) {
+	setPostSetting(postID: $postID, postSetting: $postSetting)
+}

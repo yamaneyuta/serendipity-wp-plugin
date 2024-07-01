@@ -8,6 +8,7 @@ type Query {
 }
 
 type Mutation {
+	setPostSetting(postID: Int!, postSetting: PostSettingInput!): Boolean
 	login(email: String!, password: String!): Boolean	# TODO: 削除
 }
 
@@ -17,7 +18,16 @@ type Price {
 	decimals: Int!  	# 小数点以下の桁数
 	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
 }
+input PriceInput {
+	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
+	decimals: Int!  	# 小数点以下の桁数
+	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
+}
 
 type PostSetting {
 	sellingPrice: Price # 販売価格(未設定の場合はnull)
+}
+
+input PostSettingInput {
+	sellingPrice: PriceInput!
 }
