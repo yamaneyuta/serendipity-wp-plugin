@@ -15,8 +15,6 @@ updates:
    directory: "/"
    schedule:
      interval: monthly
-   reviewers:
-     - "yamaneyuta"
    open-pull-requests-limit: 10
    ignore:
      - dependency-name: "*"
@@ -26,8 +24,6 @@ updates:
    directory: "/includes"
    schedule:
      interval: monthly
-   reviewers:
-     - "yamaneyuta"
    ignore:
      - dependency-name: "*"
        update-types: [ "version-update:semver-major" ]
