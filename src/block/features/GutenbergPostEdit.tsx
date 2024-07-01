@@ -1,8 +1,15 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { usePostSettingQuery } from '../../types/gql/generated';
+import { usePostSettingQuery, useSetPostSettingMutation } from '../../types/gql/generated';
 import { usePostIDFromDom } from '../lib/postID/usePostIDFromDom';
 
-const client = new QueryClient();
+// アクティブになったときは再読みしない
+const client = new QueryClient( {
+	defaultOptions: {
+		queries: {
+			staleTime: Infinity,
+		},
+	},
+} );
 
 export const GutenbergPostEdit: React.FC = () => {
 	return (
@@ -12,11 +19,37 @@ export const GutenbergPostEdit: React.FC = () => {
 	);
 };
 const GutenbergPostEditApp: React.FC = () => {
-	const postID = usePostIDFromDom();
-	const { data: postSetting } = usePostSettingQuery( { postID: postID ?? 0 } );
+	const postID = usePostIDFromDom() ?? 0;
+	const { data, refetch } = usePostSettingQuery( { postID } );
+	const { mutateAsync } = useSetPostSettingMutation( {
+		onSuccess: async () => {
+			await refetch();
+		},
+	} );
 
-	// console.log( data );
-	// console.log( JSON.stringify( postSetting, null, 2 ) );
+	const onClick = async () => {
+		await mutateAsync( {
+			postID,
+			postSetting: {
+				sellingPrice: {
+					// ダミーデータ
+					amountHex: '0x1234567890abcdef',
+					decimals: 18,
+					symbol: 'USDT',
+				},
+			},
+		} );
+	};
 
-	return <div>GutenbergPostEdit</div>;
+	return (
+		<>
+			<div>GutenbergPostEdit</div>
+
+			<div>
+				<button onClick={ onClick }>hoge</button>
+			</div>
+
+			<div>amount: { JSON.stringify( data?.postSetting ) }</div>
+		</>
+	);
 };

@@ -13,8 +13,8 @@ const config: CodegenConfig = {
 				'typescript-react-query',
 			],
 			config: {
-				fetcher: '@yamaneyuta/serendipity-lib-frontend#useFetcher', // 相対パスの場合は、生成されるファイルからのパス
-				isReactHook: true,
+				fetcher: '@yamaneyuta/serendipity-lib-frontend#fetcher', // 相対パスの場合は、生成されるファイルからのパス
+				// isReactHook: true,
 				// exposeQueryKeys: true,
 			},
 		}
