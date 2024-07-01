@@ -46,7 +46,7 @@
 		"@graphql-codegen/typescript-react-query": "^6.1.0",
 		"@parcel/watcher": "^2.4.1",
 		"@storybook/addon-coverage": "^1.0.4",
-		"@storybook/addon-essentials": "^8.1.10",
+		"@storybook/addon-essentials": "^8.1.11",
 		"@storybook/addon-interactions": "^8.1.10",
 		"@storybook/addon-links": "^8.1.10",
 		"@storybook/addon-onboarding": "^8.1.11",
