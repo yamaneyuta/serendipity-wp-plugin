@@ -75,6 +75,6 @@
 		"@tanstack/react-query": "^4.36.1",
 		"@wordpress/block-editor": "^13.1.0",
 		"@wordpress/blocks": "^13.0.0",
-		"graphql": "^16.8.2"
+		"graphql": "^16.9.0"
 	}
 }
