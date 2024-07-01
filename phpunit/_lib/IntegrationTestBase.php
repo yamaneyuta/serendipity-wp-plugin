@@ -120,6 +120,10 @@ class TestUser {
 	private string $username;
 	private int $id;
 
+	public function id(): int {
+		return $this->id;
+	}
+
 	private function initialize( string $user_type ) {
 		if ( $user_type === UserType::VISITOR ) {
 			$this->id = 0;
