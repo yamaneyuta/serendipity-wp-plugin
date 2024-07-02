@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository\Database;
 
+use Cornix\Serendipity\Core\Lib\Security\Assert;
 use Cornix\Serendipity\Core\Types\PostSettingType;
 use Cornix\Serendipity\Core\Types\PriceType;
 use wpdb;
@@ -60,6 +61,11 @@ class PostSetting {
 
 	public function set( int $post_id, PostSettingType $postSetting ) {
 		$selling_price = $postSetting->sellingPrice;
+
+		Assert::isPostID( $post_id );
+		Assert::isHex( $selling_price->amountHex );
+		Assert::isDecimals( $selling_price->decimals );
+		Assert::isSymbol( $selling_price->symbol );
 
 		$result = $this->wpdb->insert(
 			$this->table_name,
