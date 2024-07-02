@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { PostSettingInput, usePostSettingQuery, useSetPostSettingMutation } from '../../../../types/gql/generated';
+import { PostSettingInput, usePostSettingQuery, useSetPostSettingMutation } from '../../../types/gql/generated';
 import { usePostID } from '../postID/usePostID';
 
 type PostSettingType = ReturnType< typeof _usePostSetting >;

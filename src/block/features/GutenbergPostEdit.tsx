@@ -1,4 +1,4 @@
-import { usePostSetting } from './provider/postSetting/usePostSetting';
+import { usePostSetting } from '../provider/postSetting/usePostSetting';
 
 export const GutenbergPostEdit: React.FC = () => {
 	const { } = useScreenPostSetting();

@@ -25,7 +25,7 @@ import './editor.scss';
 import { BlockEditProps } from '@wordpress/blocks';
 
 import { GutenbergPostEdit } from './features/GutenbergPostEdit';
-import { GutenbergPostEditProvider } from './features/provider/GutenbergPostEditProvider';
+import { GutenbergPostEditProvider } from './provider/GutenbergPostEditProvider';
 
 type BlockAttributes = {
 	dummy: string;
