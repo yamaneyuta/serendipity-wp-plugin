@@ -61,9 +61,9 @@ class PostSettingTest extends IntegrationTestBase {
 		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();  // 投稿を作成
 
 		// 今作成した投稿に対する設定は作成せず、他の投稿に対する設定を作成する(誤って他のデータを取得していないことを確認)
-		$sut           = new PostSetting( $wpdb );
-		$dummy_post_ID = $post_ID + 1;
-		$sut->set( $dummy_post_ID, new PostSettingType( new PriceType( '0x3adc7a7e', 18, 'ETH' ) ) );
+		$sut             = new PostSetting( $wpdb );
+		$another_post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();
+		$sut->set( $another_post_ID, new PostSettingType( new PriceType( '0x3adc7a7e', 18, 'ETH' ) ) );
 
 		$data = $sut->get( $post_ID );
 
