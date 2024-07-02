@@ -3,8 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Lib\Security\Assert;
+
 class PriceType {
 	public function __construct( $amount_hex, $decimals, $symbol ) {
+		Assert::isHex( $amount_hex );
+		Assert::isDecimals( $decimals );
+		Assert::isSymbol( $symbol );
+
 		$this->amountHex = $amount_hex;
 		$this->decimals  = $decimals;
 		$this->symbol    = $symbol;

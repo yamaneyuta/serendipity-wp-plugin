@@ -23,6 +23,35 @@ class GraphQLSetPostSettingTest extends IntegrationTestBase {
 	}
 
 	/**
+	 * 本テストクラスで使用するGraphQLクエリを取得します。
+	 *
+	 * @return string
+	 */
+	private function getQuery(): string {
+		return <<<GRAPHQL
+			mutation SetPostSetting(\$postID: Int!, \$postSetting: PostSettingInput!) {
+				setPostSetting(postID: \$postID, postSetting: \$postSetting)
+			}
+		GRAPHQL;
+	}
+
+	/**
+	 * 本テストクラスで使用するGraphQLに渡す変数を取得します。
+	 */
+	private function getVariables( int $post_ID, string $amount_hex, int $decimals, string $symbol ): array {
+		return array(
+			'postID'      => $post_ID,
+			'postSetting' => array(
+				'sellingPrice' => array(
+					'amountHex' => $amount_hex,
+					'decimals'  => $decimals,
+					'symbol'    => $symbol,
+				),
+			),
+		);
+	}
+
+	/**
 	 * @test
 	 * @testdox [B1EB0D97][GraphQL] setPostSetting - post_status: $post_status, user: $user_type, expected: $expected
 	 * @dataProvider accessDataProvider
@@ -45,22 +74,9 @@ class GraphQLSetPostSettingTest extends IntegrationTestBase {
 		$this->assertEquals( $ret, $post_ID );
 
 		// ユーザーが発行するGraphQLリクエスト
-		$query = <<<GRAPHQL
-			mutation SetPostSetting(\$postID: Int!, \$postSetting: PostSettingInput!) {
-				setPostSetting(postID: \$postID, postSetting: \$postSetting)
-			}
-		GRAPHQL;
-
-		$variables = array(
-			'postID'      => $post_ID,
-			'postSetting' => array(
-				'sellingPrice' => array(
-					'amountHex' => '0xf3f77d06',
-					'decimals'  => 18,
-					'symbol'    => 'ETH',
-				),
-			),
-		);
+		$query = $this->getQuery();
+		// GraphQL発行時に渡す変数(数量、小数点以下の桁数、通貨記号は適当に指定)
+		$variables = $this->getVariables( $post_ID, '0xf3f77d06', 18, 'ETH' );
 
 		// GraphQLリクエストを送信
 		$data = $this->requestGraphQL( $query, $variables )->get_data();
@@ -82,7 +98,12 @@ class GraphQLSetPostSettingTest extends IntegrationTestBase {
 			$this->assertEquals( 'ETH', $selling_price->symbol );
 		} else {
 			$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
-			$this->assertNull( $data['data']['setPostSetting'] );   // 設定が取得できない
+			$this->assertNull( $data['data']['setPostSetting'] );   // 結果が取得できない
+
+			// 設定が保存されていないことを確認
+			global $wpdb;
+			$saved_post_setting = ( new PostSetting( $wpdb ) )->get( $post_ID );
+			$this->assertNull( $saved_post_setting );    // 設定が取得できていない
 		}
 	}
 
@@ -102,6 +123,37 @@ class GraphQLSetPostSettingTest extends IntegrationTestBase {
 			array( 'draft', UserType::CONTRIBUTOR, true ),           // 寄稿者は自身が作成した非公開の投稿の設定を設定可能(下書きの段階では投稿の編集は可能なため)
 			array( 'draft', UserType::ANOTHER_CONTRIBUTOR, false ),  // 他の寄稿者は自身が作成していない非公開の投稿の設定を設定不可
 			array( 'draft', UserType::VISITOR, false ),              // 訪問者は非公開の投稿の設定を設定不可
+		);
+	}
+
+	/**
+	 * 不正な値を設定
+	 *
+	 * @test
+	 * @testdox [B1EB0D97][GraphQL] setPostSetting - amount_hex: $amount_hex, decimals: $decimals, symbol: $symbol
+	 * @dataProvider invalidValueDataProvider
+	 * @return void
+	 */
+	public function invalidValue( string $amount_hex, int $decimals, string $symbol ): void {
+		// 管理者で投稿を作成
+		$admin = $this->getUser( UserType::ADMINISTRATOR );
+		$admin->setCurrentUser();
+		$post_ID   = $admin->createPost();
+		$query     = $this->getQuery();
+		$variables = $this->getVariables( $post_ID, $amount_hex, $decimals, $symbol );
+
+		$data = $this->requestGraphQL( $query, $variables )->get_data();
+
+		$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
+		$this->assertNull( $data['data']['setPostSetting'] );   // 結果が取得できない(trueでない)
+	}
+
+	public function invalidValueDataProvider(): array {
+		return array(
+			// amount_hex, decimals, symbol
+			array( 'foobar', 0, 'ETH' ), // amountHexが不正な値
+			array( '0x1234', -1, 'ETH' ), // decimalsが不正な値
+			array( '0x1234', 0, '$' ), // symbolが不正な値
 		);
 	}
 }
