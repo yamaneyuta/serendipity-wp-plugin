@@ -1,55 +1,29 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { usePostSettingQuery, useSetPostSettingMutation } from '../../types/gql/generated';
-import { usePostIDFromDom } from '../lib/postID/usePostIDFromDom';
-
-// アクティブになったときは再読みしない
-const client = new QueryClient( {
-	defaultOptions: {
-		queries: {
-			staleTime: Infinity,
-		},
-	},
-} );
+import { usePostSetting } from './provider/postSetting/usePostSetting';
 
 export const GutenbergPostEdit: React.FC = () => {
-	return (
-		<QueryClientProvider client={ client }>
-			<GutenbergPostEditApp />
-		</QueryClientProvider>
-	);
-};
-const GutenbergPostEditApp: React.FC = () => {
-	const postID = usePostIDFromDom() ?? 0;
-	const { data, refetch } = usePostSettingQuery( { postID } );
-	const { mutateAsync } = useSetPostSettingMutation( {
-		onSuccess: async () => {
-			await refetch();
-		},
-	} );
-
-	const onClick = async () => {
-		await mutateAsync( {
-			postID,
-			postSetting: {
-				sellingPrice: {
-					// ダミーデータ
-					amountHex: '0x1234567890abcdef',
-					decimals: 18,
-					symbol: 'USDT',
-				},
-			},
-		} );
-	};
-
+	const { } = useScreenPostSetting();
 	return (
 		<>
-			<div>GutenbergPostEdit</div>
+			<h2>GutenbergPostEdit</h2>
 
-			<div>
-				<button onClick={ onClick }>hoge</button>
-			</div>
-
-			<div>amount: { JSON.stringify( data?.postSetting ) }</div>
+			{/* <div>amount: { JSON.stringify( data?.postSetting ) }</div> */}
 		</>
 	);
+};
+
+// 画面上で保持する設定情報
+type PostSetting = {
+	sellingPrice: {
+        amountHex: string;
+        decimals: number;
+        symbol: string | undefined;
+    };
+};
+
+const useScreenPostSetting = () => {
+
+	const postSetting: PostSetting | null | undefined = usePostSetting();
+	console.log("postSetting: ", postSetting);
+
+	return {}
 };

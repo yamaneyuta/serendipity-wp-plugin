@@ -25,6 +25,7 @@ import './editor.scss';
 import { BlockEditProps } from '@wordpress/blocks';
 
 import { GutenbergPostEdit } from './features/GutenbergPostEdit';
+import { GutenbergPostEditProvider } from './features/provider/GutenbergPostEditProvider';
 
 type BlockAttributes = {
 	dummy: string;
@@ -51,11 +52,9 @@ const Edit: React.FC< BlockEditProps< BlockAttributes > > = ( { setAttributes } 
 
 	return (
 		<div { ...blockProps }>
-			{ /* <QueryClientProvider client={ client }>
-				<BlockProvider onDataChanged={ onDataChanged }> */ }
-			<GutenbergPostEdit />
-			{ /* </BlockProvider>
-			</QueryClientProvider> */ }
+			<GutenbergPostEditProvider>
+				<GutenbergPostEdit />
+			</GutenbergPostEditProvider>
 		</div>
 	);
 };
