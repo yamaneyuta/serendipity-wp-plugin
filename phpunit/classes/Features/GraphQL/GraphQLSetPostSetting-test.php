@@ -125,4 +125,35 @@ class GraphQLSetPostSettingTest extends IntegrationTestBase {
 			array( 'draft', UserType::VISITOR, false ),              // 訪問者は非公開の投稿の設定を設定不可
 		);
 	}
+
+	/**
+	 * 不正な値を設定
+	 *
+	 * @test
+	 * @testdox [B1EB0D97][GraphQL] setPostSetting - amount_hex: $amount_hex, decimals: $decimals, symbol: $symbol
+	 * @dataProvider invalidValueDataProvider
+	 * @return void
+	 */
+	public function invalidValue( string $amount_hex, int $decimals, string $symbol ): void {
+		// 管理者で投稿を作成
+		$admin = $this->getUser( UserType::ADMINISTRATOR );
+		$admin->setCurrentUser();
+		$post_ID   = $admin->createPost();
+		$query     = $this->getQuery();
+		$variables = $this->getVariables( $post_ID, $amount_hex, $decimals, $symbol );
+
+		$data = $this->requestGraphQL( $query, $variables )->get_data();
+
+		$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
+		$this->assertNull( $data['data']['setPostSetting'] );   // 結果が取得できない(trueでない)
+	}
+
+	public function invalidValueDataProvider(): array {
+		return array(
+			// amount_hex, decimals, symbol
+			array( 'foobar', 0, 'ETH' ), // amountHexが不正な値
+			array( '0x1234', -1, 'ETH' ), // decimalsが不正な値
+			array( '0x1234', 0, '$' ), // symbolが不正な値
+		);
+	}
 }
