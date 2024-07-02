@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext } from 'react';
 import { PostSettingInput, usePostSettingQuery, useSetPostSettingMutation } from '../../../../types/gql/generated';
 import { usePostID } from '../postID/usePostID';
 
@@ -15,9 +15,7 @@ const _usePostSetting = () => {
 		},
 	} );
 
-	const save = async ( postSetting: PostSettingInput ) => {
-		console.log( 'save', postSetting );
-
+	const savePostSetting = async ( postSetting: PostSettingInput ) => {
 		await mutateAsync( {
 			postID,
 			postSetting,
@@ -26,7 +24,7 @@ const _usePostSetting = () => {
 
 	return {
 		postSetting: data?.postSetting,
-		save,
+		savePostSetting,
 	};
 };
 
@@ -38,5 +36,3 @@ export const PostSettingProvider: React.FC< PostSettingProviderProps > = ( { chi
 	const value = _usePostSetting();
 	return <PostSettingContext.Provider value={ value }>{ children }</PostSettingContext.Provider>;
 };
-
-type ScreenPostSetting = {};
