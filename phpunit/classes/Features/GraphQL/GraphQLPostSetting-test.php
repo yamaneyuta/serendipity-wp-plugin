@@ -6,7 +6,10 @@ use Cornix\Serendipity\Core\Types\PostSettingType;
 use Cornix\Serendipity\Core\Types\PriceType;
 
 /**
- * PostSettingを取得するGraphQLのテスト
+ * postSettingに対してアクセスできないことを確認するテスト
+ *
+ * ※ `RootValue.php`で`postSetting`フィールドがResolverとして登録されているが、
+ *    GraphQLの定義ではQueryに登録されていないため、アクセスできないことを確認する
  */
 class GraphQLPostSettingTest extends IntegrationTestBase {
 
@@ -26,10 +29,10 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 
 	/**
 	 * @test
-	 * @testdox [48447663][GraphQL] postSetting - post_status: $post_status, user: $user_type, expected: $expected
+	 * @testdox [41FBDDF6][GraphQL] postSetting - user: $user_type, query_type: $query_type
 	 * @dataProvider accessDataProvider
 	 */
-	public function access( string $post_status, string $user_type, bool $expected ) {
+	public function access( string $user_type, int $query_type ) {
 		// リクエストを送信するユーザーを設定
 		$this->getUser( $user_type )->setCurrentUser();
 
@@ -40,71 +43,74 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		$postSetting = new PostSettingType( new PriceType( '0x123456', 18, 'ETH' ) );
 		( new PostSetting( $wpdb ) )->set( $post_ID, $postSetting );
 
-		// 投稿のステータスを変更(公開、下書き、等)
-		// https://developer.wordpress.org/reference/functions/wp_update_post/#user-contributed-notes
+		// 投稿のステータスを公開に変更
 		$ret = wp_update_post(
 			array(
 				'ID'          => $post_ID,
-				'post_status' => $post_status,
+				'post_status' => 'publish',
 			)
 		);
 		$this->assertEquals( $ret, $post_ID );
 
-		$query     = <<<GRAPHQL
-			query PostSetting(\$postID: Int!) {
-				postSetting(postID: \$postID) {
-					sellingPrice {
-						amountHex
-						decimals
-						symbol
-					}
-				}
-			}
-		GRAPHQL;
-		$variables = array(
-			'postID' => $post_ID,
-		);
+		// テスト用のクエリを取得
+		$query_args = $this->getQueryAndVariables( $query_type, $post_ID );
 
 		// GraphQLリクエストを送信
-		$data = $this->requestGraphQL( $query, $variables )->get_data();
+		$data = $this->requestGraphQL( $query_args[0], $query_args[1] )->get_data();
 
-		// 正常に取得できることを期待している条件の時
-		if ( $expected ) {
-			$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
-			$post_setting = $data['data']['postSetting'];
-			$this->assertNotNull( $post_setting );    // 設定が取得できている
-			$selling_price = $post_setting['sellingPrice'];
-			$this->assertNotNull( $selling_price );   // 販売価格が取得できている
-			$this->assertEquals(
-				array(
-					'amountHex' => '0x123456',
-					'decimals'  => 18,
-					'symbol'    => 'ETH',
-				),
-				$selling_price
-			);  // 登録した販売価格が取得できている
-		} else {
-			$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
-			$this->assertNull( $data['data']['postSetting'] );   // 設定が取得できない
+		$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
+		$this->assertFalse( isset( $data['data'] ) );   // 設定が取得できない
+		// エラーメッセージが正しいことを確認
+		$this->assertEquals( $data['errors'][0]['message'], 'Cannot query field "postSetting" on type "Query".' );
+	}
+
+	private function getQueryAndVariables( int $query_type, int $post_ID ): array {
+		switch ( $query_type ) {
+			case 1:
+				$query     = <<<GRAPHQL
+					query PostSetting(\$postID: Int!) {
+						postSetting(postID: \$postID) {
+							sellingPrice {
+								amountHex
+								decimals
+								symbol
+							}
+						}
+					}
+				GRAPHQL;
+				$variables = array(
+					'postID' => $post_ID,
+				);
+				break;
+			case 2:
+				$query     = <<<GRAPHQL
+					query {
+						postSetting
+					}
+				GRAPHQL;
+				$variables = null;
+				break;
+			default:
+				throw new Exception( "[78BEA0EC] Invalid query type. - query_type: $query_type" );
 		}
+
+		return array( $query, $variables );
 	}
 
 	public function accessDataProvider(): array {
 
 		return array(
-			// post_status, user, expected(visible or not)
+			// user, query_type
 
-			// 公開状態の投稿の販売価格は誰でも閲覧可能
-			array( 'publish', UserType::ADMINISTRATOR, true ),
-			array( 'publish', UserType::CONTRIBUTOR, true ),
-			array( 'publish', UserType::ANOTHER_CONTRIBUTOR, true ),
-			array( 'publish', UserType::VISITOR, true ),
+			array( UserType::ADMINISTRATOR, 1 ),
+			array( UserType::CONTRIBUTOR, 1 ),
+			array( UserType::ANOTHER_CONTRIBUTOR, 1 ),
+			array( UserType::VISITOR, 1 ),
 
-			// 下書き(非公開状態)の投稿の販売価格は、投稿の作成者と管理者のみ閲覧可能
-			array( 'draft', UserType::ADMINISTRATOR, true ),          // 管理者は非公開の投稿の販売価格を閲覧可能
-			array( 'draft', UserType::CONTRIBUTOR, true ),           // 寄稿者は自身が作成した非公開の投稿の販売価格を閲覧可能
-			array( 'draft', UserType::ANOTHER_CONTRIBUTOR, false ),  // 他の寄稿者は自身が作成していない非公開の投稿の販売価格を閲覧不可
-			array( 'draft', UserType::VISITOR, false ),              // 訪問者は非公開の投稿の販売価格を閲覧不可
+			array( UserType::ADMINISTRATOR, 2 ),
+			array( UserType::CONTRIBUTOR, 2 ),
+			array( UserType::ANOTHER_CONTRIBUTOR, 2 ),
+			array( UserType::VISITOR, 2 ),
 		);
 	}
 }

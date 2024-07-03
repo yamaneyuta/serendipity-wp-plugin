@@ -6,5 +6,5 @@ export type ScreenPostSetting = {
 		amountHex: string;
 		decimals: number;
 		symbol?: string;
-	};
+	} | null;
 };

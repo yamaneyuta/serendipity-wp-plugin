@@ -26,7 +26,7 @@ const _usePostSetting = () => {
 	);
 
 	return {
-		postSetting: data?.postSetting,
+		postSetting: data,
 		savePostSetting,
 	};
 };

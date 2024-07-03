@@ -72,7 +72,7 @@ const useSetPriceSymbolCallback = ( setPostSetting: React.Dispatch< React.SetSta
 	return useCallback(
 		( symbol: string ) => {
 			setPostSetting( ( s ) => {
-				if ( s.sellingPrice === undefined ) {
+				if ( ! s.sellingPrice ) {
 					throw new Error( '{0EA4F3DD-42B0-4048-8C15-3D947D2405A3}' );
 				}
 				return {

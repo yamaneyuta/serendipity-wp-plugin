@@ -26,11 +26,7 @@ class PostSettingResolver extends ResolverBase {
 		/** @var int */
 		$post_ID = $args['postID'];
 
-		// 投稿が公開済み、または編集可能な権限がある時に設定されている価格を返します。
-		if ( ( new WPSettings() )->isPublished( $post_ID ) || ( new Access() )->canCurrentUserEditPost( $post_ID ) ) {
-			return ( new PostSetting( $this->wpdb ) )->get( $post_ID );
-		}
-
-		throw new \LogicException( '[FB5A5BB1] You do not have permission to access this post.' );
+		// 投稿設定を取得します。
+		return ( new PostSetting( $this->wpdb ) )->get( $post_ID );
 	}
 }

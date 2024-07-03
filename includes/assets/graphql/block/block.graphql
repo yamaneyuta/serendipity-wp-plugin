@@ -1,12 +1,13 @@
 
 query PostSetting($postID: Int!) {
-	postSetting(postID: $postID) {
-		sellingPrice {
-			amountHex
-			decimals
-			symbol
-		}
+	# 販売価格
+	sellingPrice(postID: $postID) {
+		amountHex
+		decimals
+		symbol
 	}
+
+	# 販売価格として設定可能な通貨シンボル一覧
 	sellableSymbols
 }
 

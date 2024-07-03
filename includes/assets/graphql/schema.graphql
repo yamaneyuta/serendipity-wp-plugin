@@ -4,7 +4,9 @@ schema {
 }
 
 type Query {
-	postSetting(postID: Int!): PostSetting
+	# 販売価格を取得
+	sellingPrice(postID: Int!): Price
+
 	# 販売価格として設定可能な通貨シンボル一覧(投稿画面で販売価格を設定するときに使用)
 	sellableSymbols: [String!]!
 }
@@ -24,10 +26,6 @@ input PriceInput {
 	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
 	decimals: Int!  	# 小数点以下の桁数
 	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
-}
-
-type PostSetting {
-	sellingPrice: Price!
 }
 
 input PostSettingInput {
