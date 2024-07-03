@@ -2,8 +2,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { useScreenPostSetting } from './screenData/useScreenPostSetting';
 import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
 import { useAutoSavePostSetting } from './save/useAutoSavePostSetting';
+import { useIsScreenDataChanged } from './screenData/useIsScreenDataChanged';
 
-export const GutenbergPostEdit: React.FC = () => {
+type GutenbergPostEditProps = {
+	onDataChanged: () => void;
+};
+
+export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataChanged } ) => {
 	// 画面で保持する設定情報
 	const [ postSetting, setPostSetting ] = useState< ScreenPostSetting >( {} );
 	// サーバーから取得した設定情報
@@ -15,6 +20,14 @@ export const GutenbergPostEdit: React.FC = () => {
 	useEffect( () => {
 		setPostSetting( JSON.parse( JSON.stringify( serverPostSetting ) ) );
 	}, [ serverPostSetting ] );
+
+	// 画面上の情報が変更された時に保存ボタンが押せるようにonDataChangedを呼び出す
+	const isDataChanged = useIsScreenDataChanged( postSetting );
+	useEffect( () => {
+		if ( isDataChanged ) {
+			onDataChanged();
+		}
+	}, [ onDataChanged, isDataChanged ] );
 
 	// 画面の情報が変更された時に呼び出されるコールバック関数
 	const setPriceValue = useSetPriceValueCallback( setPostSetting );
