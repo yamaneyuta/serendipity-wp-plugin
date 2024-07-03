@@ -15,11 +15,5 @@ export const useIsScreenDataChanged = ( postSetting: ScreenPostSetting ) => {
 		return false;
 	}
 
-	// // debug
-	// if ( ! equal( serverData, postSetting ) ) {
-	// 	console.log( 'serverData: ', JSON.stringify( serverData ) );
-	// 	console.log( 'postSetting: ', JSON.stringify( postSetting ) );
-	// }
-
 	return ! equal( serverData, postSetting );
 };
