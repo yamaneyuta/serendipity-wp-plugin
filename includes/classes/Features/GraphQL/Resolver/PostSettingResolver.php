@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\Database\PostSetting;
+use Cornix\Serendipity\Core\Lib\Repository\PostSetting;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\SystemInfo\WPSettings;
 use Cornix\Serendipity\Core\Types\PostSettingType;

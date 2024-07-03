@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\Database\PostSetting;
+use Cornix\Serendipity\Core\Lib\Repository\PostSetting;
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
 use Cornix\Serendipity\Core\Types\PostSettingType;
 use Cornix\Serendipity\Core\Types\PriceType;
