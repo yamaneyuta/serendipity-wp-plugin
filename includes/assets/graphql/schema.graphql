@@ -25,7 +25,7 @@ input PriceInput {
 }
 
 type PostSetting {
-	sellingPrice: Price # 販売価格(未設定の場合はnull)
+	sellingPrice: Price!
 }
 
 input PostSettingInput {
