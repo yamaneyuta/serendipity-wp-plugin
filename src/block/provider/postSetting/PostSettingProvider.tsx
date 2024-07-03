@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useCallback } from 'react';
 import { PostSettingInput, usePostSettingQuery, useSetPostSettingMutation } from '../../../types/gql/generated';
 import { usePostID } from '../postID/usePostID';
 
@@ -15,12 +15,15 @@ const _usePostSetting = () => {
 		},
 	} );
 
-	const savePostSetting = async ( postSetting: PostSettingInput ) => {
-		await mutateAsync( {
-			postID,
-			postSetting,
-		} );
-	};
+	const savePostSetting = useCallback(
+		async ( postSetting: PostSettingInput ) => {
+			await mutateAsync( {
+				postID,
+				postSetting,
+			} );
+		},
+		[ postID, mutateAsync ]
+	);
 
 	return {
 		postSetting: data?.postSetting,

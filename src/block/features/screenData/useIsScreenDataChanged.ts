@@ -1,0 +1,25 @@
+import { ScreenPostSetting } from './ScreenPostSetting.type';
+import { useScreenPostSetting } from './useScreenPostSetting';
+// const equal = require('fast-deep-equal');
+import equal from 'fast-deep-equal';
+
+/**
+ * ユーザーが画面操作によって設定を変更したかどうかを取得します。
+ * @param postSetting
+ */
+export const useIsScreenDataChanged = ( postSetting: ScreenPostSetting ) => {
+	const serverData = useScreenPostSetting();
+
+	// サーバーからデータを取得中の場合はfalse(変更なし)として扱う
+	if ( postSetting.sellingPrice === undefined || serverData.sellingPrice === undefined ) {
+		return false;
+	}
+
+	// // debug
+	// if ( ! equal( serverData, postSetting ) ) {
+	// 	console.log( 'serverData: ', JSON.stringify( serverData ) );
+	// 	console.log( 'postSetting: ', JSON.stringify( postSetting ) );
+	// }
+
+	return ! equal( serverData, postSetting );
+};
