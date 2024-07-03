@@ -6,9 +6,9 @@ use Cornix\Serendipity\Core\Types\PostSettingType;
 use Cornix\Serendipity\Core\Types\PriceType;
 
 /**
- * PostSettingを取得するGraphQLのテスト
+ * sellingPriceを取得するGraphQLのテスト
  */
-class GraphQLPostSettingTest extends IntegrationTestBase {
+class GraphQLSellingPriceTest extends IntegrationTestBase {
 
 	// #[\Override]
 	public function setUp(): void {
@@ -26,7 +26,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 
 	/**
 	 * @test
-	 * @testdox [48447663][GraphQL] postSetting - post_status: $post_status, user: $user_type, expected: $expected
+	 * @testdox [94E323B2][GraphQL] sellingPrice - post_status: $post_status, user: $user_type, expected: $expected
 	 * @dataProvider accessDataProvider
 	 */
 	public function access( string $post_status, string $user_type, bool $expected ) {
@@ -51,13 +51,11 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		$this->assertEquals( $ret, $post_ID );
 
 		$query     = <<<GRAPHQL
-			query PostSetting(\$postID: Int!) {
-				postSetting(postID: \$postID) {
-					sellingPrice {
-						amountHex
-						decimals
-						symbol
-					}
+			query SellingPrice(\$postID: Int!) {
+				sellingPrice(postID: \$postID) {
+					amountHex
+					decimals
+					symbol
 				}
 			}
 		GRAPHQL;
@@ -71,10 +69,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		// 正常に取得できることを期待している条件の時
 		if ( $expected ) {
 			$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
-			$post_setting = $data['data']['postSetting'];
-			$this->assertNotNull( $post_setting );    // 設定が取得できている
-			$selling_price = $post_setting['sellingPrice'];
-			$this->assertNotNull( $selling_price );   // 販売価格が取得できている
+			$selling_price = $data['data']['sellingPrice'];
 			$this->assertEquals(
 				array(
 					'amountHex' => '0x123456',
@@ -85,7 +80,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 			);  // 登録した販売価格が取得できている
 		} else {
 			$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
-			$this->assertNull( $data['data']['postSetting'] );   // 設定が取得できない
+			$this->assertNull( $data['data']['sellingPrice'] );   // 設定が取得できない
 		}
 	}
 
