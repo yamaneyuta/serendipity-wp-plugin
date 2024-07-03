@@ -24,7 +24,7 @@ class GraphQLSellableSymbolsTest extends IntegrationTestBase {
 	 * 権限によってsellableSymbolsを呼び出せるかどうかをテストします。
 	 *
 	 * @test
-	 * @testdox [42FED76E][GraphQL] sellableSymbols - user_type: $user_type, expected: $expected
+	 * @testdox [42FED76E][GraphQL] sellableSymbols - user: $user_type, expected: $expected
 	 * @dataProvider accessDataProvider
 	 */
 	public function access( string $user_type, bool $expected ) {
