@@ -6,13 +6,13 @@ import type { ScreenPostSetting } from './ScreenPostSetting.type';
  * 画面上で保持する設定情報をサーバーから取得します。
  */
 export const useScreenPostSetting = (): ScreenPostSetting => {
-	const postSetting: ScreenPostSetting | null | undefined = usePostSetting();
+	const postSetting: ScreenPostSetting | undefined = usePostSetting();
 
 	return useMemo( () => {
 		if ( postSetting === undefined ) {
 			// 読み込み中
 			return {};
-		} else if ( postSetting === null ) {
+		} else if ( postSetting.sellingPrice === null ) {
 			// サーバーに登録済みデータがない
 			return {
 				sellingPrice: {
