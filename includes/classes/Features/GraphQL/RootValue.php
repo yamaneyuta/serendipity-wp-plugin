@@ -16,15 +16,15 @@ class RootValue {
 
 		$resolvers = array(
 			// Query
-			new PostSettingResolver( $wpdb ),
-			new SellableSymbolsResolver(),
+			'postSetting'     => new PostSettingResolver( $wpdb ),
+			'sellableSymbols' => new SellableSymbolsResolver(),
 			// Mutation
-			new SetPostSettingResolver( $wpdb ),
+			'setPostSetting'  => new SetPostSettingResolver( $wpdb ),
 		);
 
 		$result = array();
-		foreach ( $resolvers as $resolver ) {
-			$result[ $resolver->field() ] = function ( array $root_value, array $args ) use ( $resolver ) {
+		foreach ( $resolvers as $field => $resolver ) {
+			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver ) {
 				return $resolver->resolve( $root_value, $args );
 			};
 		}

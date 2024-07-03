@@ -12,7 +12,6 @@ use wpdb;
 class SetPostSettingResolver extends ResolverBase {
 
 	public function __construct( wpdb $wpdb ) {
-		parent::__construct( 'setPostSetting' );
 		$this->wpdb = $wpdb;
 	}
 

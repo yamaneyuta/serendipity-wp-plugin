@@ -11,10 +11,6 @@ use Cornix\Serendipity\Core\Lib\Security\Access;
  */
 class SellableSymbolsResolver extends ResolverBase {
 
-	public function __construct() {
-		parent::__construct( 'sellableSymbols' );
-	}
-
 	/**
 	 * #[\Override]
 	 *
