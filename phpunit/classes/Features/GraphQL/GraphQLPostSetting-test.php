@@ -26,7 +26,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 
 	/**
 	 * @test
-	 * @testdox [48447663][GraphQL] postSetting - post_status: $post_status, user: $user, expected: $expected
+	 * @testdox [48447663][GraphQL] postSetting - post_status: $post_status, user: $user_type, expected: $expected
 	 * @dataProvider accessDataProvider
 	 */
 	public function access( string $post_status, string $user_type, bool $expected ) {
