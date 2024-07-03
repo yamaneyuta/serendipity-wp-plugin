@@ -5,6 +5,8 @@ schema {
 
 type Query {
 	postSetting(postID: Int!): PostSetting
+	# 販売価格として設定可能な通貨シンボル一覧(投稿画面で販売価格を設定するときに使用)
+	sellableSymbols: [String!]!
 }
 
 type Mutation {

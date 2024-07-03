@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostSettingResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetPostSettingResolver;
 
 class RootValue {
@@ -14,7 +15,10 @@ class RootValue {
 		global $wpdb;
 
 		$resolvers = array(
+			// Query
 			new PostSettingResolver( $wpdb ),
+			new SellableSymbolsResolver(),
+			// Mutation
 			new SetPostSettingResolver( $wpdb ),
 		);
 
