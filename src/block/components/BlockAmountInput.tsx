@@ -4,7 +4,7 @@ import { BlockInput } from './BlockInput';
 /**
  * BlockAmountInputコンポーネントのpropsを定義
  *
- * @dev BlockInputのpropsを継承した型を作成。`type`等のプロパティは固定値を設定するため、BlockAmountInputPropsには含めない。
+ * BlockInputのpropsを継承した型を作成。`type`等のプロパティは固定値を設定するため、BlockAmountInputPropsには含めない。
  */
 export interface BlockAmountInputProps extends Omit< React.InputHTMLAttributes< HTMLInputElement >, 'type' | 'min' > {}
 

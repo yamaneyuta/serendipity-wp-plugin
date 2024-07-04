@@ -10,7 +10,12 @@ const meta: Meta< typeof BlockAmountInput > = {
 		// layout: 'centered',
 	},
 	tags: [ 'autodocs' ],
-	args: {},
+	argTypes: {
+		disabled: { type: 'boolean' },
+	},
+	args: {
+		disabled: undefined,
+	},
 };
 export default meta;
 type Story = StoryObj< typeof BlockAmountInput >;
@@ -22,11 +27,24 @@ export const Default: Story = {
 		const input = canvas.getByTestId( TEST_ID );
 		await userEvent.type( input, 'Hello, World!' );
 		// 通常の文字列は入力できていないことを確認
-		expect( input ).toHaveTextContent( '' );
+		expect( input ).toHaveValue( null );
 
 		await userEvent.type( input, '12345.6789' );
 		// 数字のみ入力できていることを確認
 		expect( input ).toHaveValue( 12345.6789 );
+
+		// 内容をクリア
+		await userEvent.clear( input );
+
+		// +, -, e は入力できないことを確認
+		await userEvent.type( input, '+' );
+		expect( input ).toHaveValue( null );
+
+		await userEvent.type( input, '-' );
+		expect( input ).toHaveValue( null );
+
+		await userEvent.type( input, 'e' );
+		expect( input ).toHaveValue( null );
 	},
 };
 
