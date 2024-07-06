@@ -5,6 +5,6 @@ export type ScreenPostSetting = {
 	sellingPrice?: {
 		amountHex: string;
 		decimals: number;
-		symbol?: string;
+		symbol?: string | null;
 	} | null;
 };

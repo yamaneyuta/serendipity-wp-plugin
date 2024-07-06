@@ -25,7 +25,7 @@ export const useAutoSavePostSetting = ( postSetting: ScreenPostSetting ) => {
 
 const convertToPostSettingInput = ( postSetting: ScreenPostSetting ): PostSettingInput => {
 	const sellingPrice = postSetting.sellingPrice;
-	if ( sellingPrice === undefined || sellingPrice?.symbol === undefined ) {
+	if ( sellingPrice === undefined || ! sellingPrice?.symbol ) {
 		console.error( 'sellingPrice: ', JSON.stringify( sellingPrice ) );
 		throw new Error( '{416A72D9-62AC-478A-8E5B-985AD6062276}' );
 	}
