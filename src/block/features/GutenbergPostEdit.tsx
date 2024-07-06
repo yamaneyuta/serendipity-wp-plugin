@@ -1,4 +1,6 @@
 import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import { Placeholder } from '@wordpress/components';
+import { widget } from '@wordpress/icons';
 import { useScreenPostSetting } from './screenData/useScreenPostSetting';
 import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
 import { useAutoSavePostSetting } from './save/useAutoSavePostSetting';
@@ -38,20 +40,12 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 	const selectSymbolProps = useSymbolSelectProps( postSetting, setPostSetting );
 
 	return (
-		<>
-			<h2>GutenbergPostEdit</h2>
-
-			{ /* <button onClick={ onClick }>set price</button> */ }
-			<div>
-				amount: { JSON.stringify( postSetting.sellingPrice?.amountHex ) } <br />
-				decimals: { JSON.stringify( postSetting.sellingPrice?.decimals ) } <br />
-				symbol: { JSON.stringify( postSetting.sellingPrice?.symbol ) } <br />
-			</div>
+		<Placeholder icon={ widget } label={ 'serendipity' }>
 			<div>
 				<BlockAmountInput { ...priceValueProps } />
 				<SymbolSelect { ...selectSymbolProps } />
 			</div>
-		</>
+		</Placeholder>
 	);
 };
 
