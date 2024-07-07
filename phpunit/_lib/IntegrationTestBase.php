@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Features\Migration\DBSchema;
+use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
-use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
 /**
@@ -45,7 +45,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		// プラグイン用Optionを削除
 		// ※ $wpdbの参照先が`tests-mysql`以外であっても、スキーマバージョンは`tests-mysql`の
 		// optionsを参照しているのでOptionテーブルの初期化も必要
-		( new Option() )->uninstall();
+		( new OptionUninstaller() )->execute();
 
 		// 本プラグイン用のテーブルを再作成
 		$dbSchema = new DBSchema( $wpdb );

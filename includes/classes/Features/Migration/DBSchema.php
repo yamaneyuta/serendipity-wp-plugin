@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\Migration;
 
 use Cornix\Serendipity\Core\Features\Migration\Version\MigrationBase;
+use Cornix\Serendipity\Core\Lib\Repository\DBSchemaVersion;
 use Cornix\Serendipity\Core\Lib\Algorithm\Sort\VersionSorter;
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
-use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
 use wpdb;
 
 class DBSchema {
@@ -21,8 +21,8 @@ class DBSchema {
 		assert( $this->wpdb->is_mysql );
 
 		// 現在のデータベースバージョンを取得(`X.X.X`形式)
-		$option          = new Option();
-		$current_version = $option->getDBSchemaVersion();
+		$db_schema_version = new DBSchemaVersion();
+		$current_version   = $db_schema_version->get();
 
 		// 現在のデータベースバージョンよりも大きいマイグレーションクラス名一覧をバージョンの小さい順に取得(`vX_X_X`形式)
 		$migrate_classes = ( new MigrationClasses() )->get( '>', $current_version, 'ASC' );
@@ -35,9 +35,9 @@ class DBSchema {
 				$migrator->up();
 				// マイグレーション成功時はスキーマのバージョンを更新
 				$version = MigrationClasses::classNameToVersion( $migrate_class );
-				$option->setDBSchemaVersion( $version );
+				$db_schema_version->set( $version );
 
-				assert( $option->getDBSchemaVersion() === $version );
+				assert( $db_schema_version->get() === $version );
 
 			} catch ( \Exception $e ) {
 				// マイグレーションに失敗した場合はロールバックを試みて例外を再スロー
@@ -55,8 +55,8 @@ class DBSchema {
 		// MySQL(MariaDB)のサポートなのでROLLBACKはできない。よってBEGIN TRANSACTIONは不要。
 		assert( $this->wpdb->is_mysql );
 
-		$option          = new Option();
-		$current_version = $option->getDBSchemaVersion();
+		$db_schema_version = new DBSchemaVersion();
+		$current_version   = $db_schema_version->get();
 
 		// 現在のデータベースバージョン以下のマイグレーションクラス名一覧をバージョンの大きい順に取得(`vX_X_X`形式)
 		$rollback_classes = ( new MigrationClasses() )->get( '<=', $current_version, 'DESC' );
@@ -74,8 +74,8 @@ class DBSchema {
 			} else {
 				$version = MigrationClasses::classNameToVersion( $rollback_class[ $i + 1 ] );
 			}
-			$option->setDBSchemaVersion( $version );
-			assert( $option->getDBSchemaVersion() === $version );
+			$db_schema_version->set( $version );
+			assert( $db_schema_version->get() === $version );
 		}
 	}
 
