@@ -17,6 +17,23 @@ class v1_0_0 extends MigrationBase {
 	 */
 	// #[\Override]
 	public function up() {
+		// テーブル作成
+		$this->createPostSettingHistoryTable();
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	// #[\Override]
+	public function down() {
+		// テーブル削除
+		$this->dropPostSettingHistoryTable();
+	}
+
+	/**
+	 * 投稿設定履歴テーブルを作成します。
+	 */
+	private function createPostSettingHistoryTable() {
 		$table_name = TableName::postSettingHistory();
 		$charset    = $this->charset();
 
@@ -48,11 +65,11 @@ class v1_0_0 extends MigrationBase {
 		assert( true === $result );
 	}
 
+
 	/**
-	 * @inheritDoc
+	 * 投稿設定履歴テーブルを削除します。
 	 */
-	// #[\Override]
-	public function down() {
+	private function dropPostSettingHistoryTable() {
 		$table_name = TableName::postSettingHistory();
 
 		// ここはupの途中で失敗してロールバックが呼ばれる可能性があるため、`IF EXISTS`を使用する。
