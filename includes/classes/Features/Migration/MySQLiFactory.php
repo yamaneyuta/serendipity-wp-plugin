@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Features\Repository\Database;
+namespace Cornix\Serendipity\Core\Features\Migration;
 
 use mysqli;
 use wpdb;

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Features\Repository\Database\DBSchema;
-use Cornix\Serendipity\Core\Features\Repository\Database\MySQLiFactory;
+use Cornix\Serendipity\Core\Features\Migration\DBSchema;
+use Cornix\Serendipity\Core\Features\Migration\MySQLiFactory;
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
 use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
 

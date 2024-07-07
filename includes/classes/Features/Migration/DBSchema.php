@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Features\Repository\Database;
+namespace Cornix\Serendipity\Core\Features\Migration;
 
-use Cornix\Serendipity\Core\Features\Repository\Database\MigrationBase;
+use Cornix\Serendipity\Core\Features\Migration\Version\MigrationBase;
 use Cornix\Serendipity\Core\Lib\Algorithm\Sort\VersionSorter;
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
@@ -102,7 +102,7 @@ class MigrationClasses {
 		assert( strpos( $version, '.' ) !== false && strpos( $version, '_' ) === false );
 
 		// Migrationsディレクトリ内のファイル名からバージョンを取得
-		$files       = glob( __DIR__ . '/Migrations/v*_*.php' );
+		$files       = glob( __DIR__ . '/Version/v*_*.php' );
 		$class_names = array_map( fn( $file ) => basename( $file, '.php' ), $files ); // ファイル名＝クラス名
 		$versions    = array_map( fn( $base_name ) => self::classNameToVersion( $base_name ), $class_names );
 
@@ -136,6 +136,6 @@ class MigrationClasses {
 
 	private function versionToClass( string $version ) {
 		$class_name = 'v' . str_replace( '.', '_', $version );
-		return __NAMESPACE__ . '\\Migrations\\' . $class_name;
+		return __NAMESPACE__ . '\\Version\\' . $class_name;
 	}
 }

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Features\Repository\Database\Migrations;
+namespace Cornix\Serendipity\Core\Features\Migration\Version;
 
-use Cornix\Serendipity\Core\Features\Repository\Database\MySQLiFactory;
+use Cornix\Serendipity\Core\Features\Migration\MySQLiFactory;
 use mysqli;
 use wpdb;
 
