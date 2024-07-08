@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Code\NetworkTypeCode;
+use Cornix\Serendipity\Core\Lib\Enum\ChainID;
+use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
 
 class OracleData {
 
@@ -12,14 +13,15 @@ class OracleData {
 	private const ADDRESS_INDEX  = 2;
 
 	public function __construct() {
+		$mainnet_chain_ID = ChainID::ETH_MAINNET;
 		$oracle_data_json = <<<JSON
 			{
 				"data": [
-					[ 1, "AUD", "0x77F9710E7d0A19669A13c055F62cd80d313dF022" ],
-					[ 1, "ETH", "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419" ],
-					[ 1, "EUR", "0xb49f677943BC038e9857d61E7d053CaA2C1734C1" ],
-					[ 1, "GBP", "0x5c0Ab2d9b5a7ed9f470386e82BB36A3613cDd4b5" ],
-					[ 1, "JPY", "0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3" ]
+					[ {$mainnet_chain_ID}, "AUD", "0x77F9710E7d0A19669A13c055F62cd80d313dF022" ],
+					[ {$mainnet_chain_ID}, "ETH", "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419" ],
+					[ {$mainnet_chain_ID}, "EUR", "0xb49f677943BC038e9857d61E7d053CaA2C1734C1" ],
+					[ {$mainnet_chain_ID}, "GBP", "0x5c0Ab2d9b5a7ed9f470386e82BB36A3613cDd4b5" ],
+					[ {$mainnet_chain_ID}, "JPY", "0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3" ]
 				]
 			}
 		JSON;
@@ -58,14 +60,17 @@ class OracleData {
 		return $symbols;
 	}
 
+	/**
+	 * 指定されたネットワーク種別における、OracleのチェーンIDを取得します。
+	 */
 	private function getChainID( string $network_type ): int {
 		switch ( $network_type ) {
-			case NetworkTypeCode::MAINNET:
-				return 1;           // Ethereum mainnet
-			case NetworkTypeCode::TESTNET:
-				return 11155111;    // Sepolia
-			case NetworkTypeCode::PRIVATENET:
-				return 31337;       // Hardhat
+			case NetworkType::MAINNET:
+				return ChainID::ETH_MAINNET;
+			case NetworkType::TESTNET:
+				return ChainID::SEPOLIA;
+			case NetworkType::PRIVATENET:
+				return ChainID::HARDHAT;
 			default:
 				throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_type: ' . $network_type );
 		}
