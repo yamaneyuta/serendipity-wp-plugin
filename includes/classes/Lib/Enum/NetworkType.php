@@ -24,4 +24,9 @@ final class NetworkType {
 	 * 例: Ganache、Hardhat
 	 */
 	public const PRIVATENET = 'PRIVATENET';
+
+	/** 全てのネットワーク種別を取得します。 */
+	public static function getAll(): array {
+		return array( self::MAINNET, self::TESTNET, self::PRIVATENET );
+	}
 }
