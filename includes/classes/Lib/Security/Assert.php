@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
+use Cornix\Serendipity\Core\Features\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
 
 class Assert {
@@ -25,9 +26,21 @@ class Assert {
 		}
 	}
 
+	/** 価格のシンボルとして有効かどうかを返します。(ネットワーク不問) */
 	public static function isSymbol( string $symbol ): void {
-		if ( ! ( new Validator() )->isSymbol( $symbol ) ) {
-			throw new \InvalidArgumentException( '[925BB232] Invalid symbol. - symbol: ' . $symbol );
+		// いずれかのネットワークの販売可能なシンボルであればOKの判定
+		foreach ( NetworkType::getAll() as $network_type ) {
+			if ( ( new Validator() )->isSellableSymbol( $network_type, $symbol ) ) {
+				return;
+			}
+		}
+		throw new \InvalidArgumentException( '[925BB232] Invalid symbol. - symbol: ' . $symbol );
+	}
+
+	/** 販売価格に使用可能なシンボルかどうかを返します。 */
+	public static function isSellableSymbol( string $network_type, string $symbol ): void {
+		if ( ! ( new Validator() )->isSellableSymbol( $network_type, $symbol ) ) {
+			throw new \InvalidArgumentException( '[CA216343] Invalid selling symbol. - network_type: ' . $network_type . ', symbol: ' . $symbol );
 		}
 	}
 
@@ -58,18 +71,16 @@ class Validator {
 		return 0 <= $decimals;
 	}
 
-	public function isSymbol( string $symbol ): bool {
-		// 一旦、大文字の3文字から5文字をシンボルとして扱う。
-		// TODO: jsonファイル等から取得して比較するように変更する。
-		return preg_match( '/^[A-Z]{3,5}$/', $symbol ) === 1;
+	/** 販売価格に使用可能なシンボルかどうかを返します。 */
+	public function isSellableSymbol( string $network_type, string $symbol ): bool {
+		// 販売可能なシンボル一覧を取得
+		$sellable_symbol = ( new SellableSymbols() )->get( $network_type );
+
+		return in_array( $symbol, $sellable_symbol, true );
 	}
 
+	/** 指定された文字列がネットワーク種別かどうかを返します。 */
 	public function isNetworkType( string $network_type ): bool {
-		$valid_network_types = array(
-			NetworkType::MAINNET,
-			NetworkType::TESTNET,
-			NetworkType::PRIVATENET,
-		);
-		return in_array( $network_type, $valid_network_types, true );
+		return in_array( $network_type, NetworkType::getAll(), true );
 	}
 }

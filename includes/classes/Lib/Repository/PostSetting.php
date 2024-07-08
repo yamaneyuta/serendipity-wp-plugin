@@ -68,7 +68,7 @@ class PostSetting {
 		Assert::isPostID( $post_id );
 		Assert::isHex( $selling_price->amountHex );
 		Assert::isDecimals( $selling_price->decimals );
-		Assert::isSymbol( $selling_price->symbol );
+		Assert::isSellableSymbol( $post_setting->sellingNetwork, $selling_price->symbol );
 		Assert::isNetworkType( $post_setting->sellingNetwork );
 
 		$result = $this->wpdb->insert(
