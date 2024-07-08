@@ -12,10 +12,7 @@ class SellableSymbols {
 	 *
 	 * @return string[]
 	 */
-	public function get(): array {
-		error_log( '{DF2EDA7F-484D-4631-8AD3-924A6BAB1D79}' );
-		$chain_ID = 1;  // TODO: 販売しようとしているネットワークに対するチェーンIDを取得する
-
+	public function get( int $chain_ID ): array {
 		// レート変換可能な通貨シンボル一覧を取得
 		$oracle_symbols = ( new OracleData() )->getSymbols( $chain_ID );
 		// USDを追加
