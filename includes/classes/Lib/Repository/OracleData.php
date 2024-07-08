@@ -30,9 +30,9 @@ class OracleData {
 	/**
 	 * 指定したチェーン、シンボルに対するOracleのコントラクトアドレスを取得します。
 	 */
-	public function getAddress( int $chain_id, string $symbol ): ?string {
+	public function getAddress( int $chain_ID, string $symbol ): ?string {
 		foreach ( $this->oracle_data as $data ) {
-			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_id && $data[ self::SYMBOL_INDEX ] === $symbol ) {
+			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID && $data[ self::SYMBOL_INDEX ] === $symbol ) {
 				return $data[ self::ADDRESS_INDEX ];
 			}
 		}
@@ -44,11 +44,11 @@ class OracleData {
 	 *
 	 * @return string[]
 	 */
-	public function getSymbols( int $chain_id ): array {
+	public function getSymbols( int $chain_ID ): array {
 		/** @var string[] */
 		$symbols = array();
 		foreach ( $this->oracle_data as $data ) {
-			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_id ) {
+			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID ) {
 				$symbols[] = $data[ self::SYMBOL_INDEX ];
 			}
 		}
