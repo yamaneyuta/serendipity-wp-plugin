@@ -54,6 +54,7 @@ class v1_0_0 extends MigrationBase {
 				`selling_amount_hex`           varchar(191)        NOT NULL,
 				`selling_decimals`             int                 NOT NULL,
 				`selling_symbol`               varchar(191)        NOT NULL,
+				`selling_network`              varchar(191)        NOT NULL,
 				PRIMARY KEY (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=${charset};
 		SQL;

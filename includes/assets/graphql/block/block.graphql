@@ -7,9 +7,14 @@ query PostSetting($postID: Int!) {
 		symbol
 	}
 
-	# 販売価格として設定可能な通貨シンボル一覧
-	sellableSymbols
+	# 販売しているネットワーク種別
+	sellingNetwork(postID: $postID)
+
+	mainnetSellableSymbols: sellableSymbols(networkType: MAINNET)
+	testnetSellableSymbols: sellableSymbols(networkType: TESTNET)
+	privatenetSellableSymbols: sellableSymbols(networkType: PRIVATENET)
 }
+
 
 mutation SetPostSetting($postID: Int!, $postSetting: PostSettingInput!) {
 	setPostSetting(postID: $postID, postSetting: $postSetting)

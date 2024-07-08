@@ -17,10 +17,12 @@ class SellableSymbolsResolver extends ResolverBase {
 	 * @return string[]
 	 */
 	public function resolve( array $root_value, array $args ) {
+		/** @var string */
+		$network_type = $args['networkType'];
 
 		// 新規に投稿を作成可能なユーザーの場合のみ販売価格として設定可能な通貨シンボル一覧を取得可能。
 		if ( ( new Access() )->canCurrentUserCreatePost() ) {
-			return ( new SellableSymbols() )->get();
+			return ( new SellableSymbols() )->get( $network_type );
 		}
 
 		throw new \LogicException( '[1AC4F136] You do not have permission.' );

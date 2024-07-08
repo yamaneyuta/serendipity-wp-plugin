@@ -30,7 +30,8 @@ class SetPostSettingResolver extends ResolverBase {
 				$args['postSetting']['sellingPrice']['amountHex'],
 				$args['postSetting']['sellingPrice']['decimals'],
 				$args['postSetting']['sellingPrice']['symbol']
-			)
+			),
+			$args['postSetting']['sellingNetwork']
 		);
 
 		// 編集可能な権限がある時に設定を反映します。

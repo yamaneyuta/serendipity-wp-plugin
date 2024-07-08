@@ -4,9 +4,13 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Types;
 
 class PostSettingType {
-	public function __construct( PriceType $price ) {
-		$this->sellingPrice = $price;
+	public function __construct( PriceType $price, string $selling_network ) {
+		$this->sellingPrice   = $price;
+		$this->sellingNetwork = $selling_network;
 	}
 
-	public PriceType $sellingPrice; // GraphQLで使用するためcamelCase
+	// プロパティはGraphQLで使用するためcamelCase
+
+	public PriceType $sellingPrice;
+	public string $sellingNetwork;
 }

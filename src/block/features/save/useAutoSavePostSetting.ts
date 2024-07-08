@@ -26,8 +26,10 @@ export const useAutoSavePostSetting = ( postSetting: ScreenPostSetting ) => {
 const convertToPostSettingInput = ( postSetting: ScreenPostSetting ): PostSettingInput => {
 	const sellingPrice = postSetting.sellingPrice;
 	if ( sellingPrice === undefined || ! sellingPrice?.symbol ) {
-		console.error( 'sellingPrice: ', JSON.stringify( sellingPrice ) );
-		throw new Error( '{416A72D9-62AC-478A-8E5B-985AD6062276}' );
+		throw new Error( '[416A72D9] sellingPrice: ' + JSON.stringify( sellingPrice ) );
+	}
+	if ( ! postSetting.sellingNetwork ) {
+		throw new Error( '[77E7B5AE] postSetting.sellingNetwork: ' + JSON.stringify( postSetting.sellingNetwork ) );
 	}
 
 	return {
@@ -36,6 +38,7 @@ const convertToPostSettingInput = ( postSetting: ScreenPostSetting ): PostSettin
 			decimals: sellingPrice.decimals,
 			symbol: sellingPrice.symbol,
 		},
+		sellingNetwork: postSetting.sellingNetwork,
 	};
 };
 

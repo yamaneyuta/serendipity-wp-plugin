@@ -59,7 +59,7 @@ const useSymbolSelectProps = (
 	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >
 ) => {
 	const value = postSetting.sellingPrice?.symbol;
-	const symbols = useSellableSymbols();
+	const symbols = useSellableSymbols( postSetting.sellingNetwork );
 	const onChange = useSetPriceSymbolCallback( setPostSetting );
 	return {
 		value,

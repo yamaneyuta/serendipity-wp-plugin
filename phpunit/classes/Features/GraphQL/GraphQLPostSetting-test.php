@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Lib\Code\NetworkTypeCode;
 use Cornix\Serendipity\Core\Lib\Repository\PostSetting;
 use Cornix\Serendipity\Core\Types\PostSettingType;
 use Cornix\Serendipity\Core\Types\PriceType;
@@ -40,7 +41,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();
 		// 投稿の設定を保存
 		global $wpdb;
-		$postSetting = new PostSettingType( new PriceType( '0x123456', 18, 'ETH' ) );
+		$postSetting = new PostSettingType( new PriceType( '0x123456', 18, 'ETH' ), NetworkTypeCode::MAINNET );
 		( new PostSetting( $wpdb ) )->set( $post_ID, $postSetting );
 
 		// 投稿のステータスを公開に変更
