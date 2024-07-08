@@ -14,8 +14,8 @@ class Assert {
 		}
 	}
 
-	public static function isHex( string $hex ): void {
-		if ( ! ( new Validator() )->isHex( $hex ) ) {
+	public static function isAmountHex( string $hex ): void {
+		if ( ! ( new Validator() )->isAmountHex( $hex ) ) {
 			throw new \InvalidArgumentException( '[9D226886] Invalid hex. - hex: ' . $hex );
 		}
 	}
@@ -61,8 +61,14 @@ class Validator {
 		return false !== get_post_status( $post_ID );
 	}
 
-	public function isHex( string $hex ): bool {
-		// 本プラグインでは、`0x`プレフィックスを含む小文字をHEXとして扱います。
+	public function isAmountHex( string $hex ): bool {
+		// 本プラグインにおいてuint256を超える値は扱わない。
+		// uint256_max: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+		return $this->isValueHex( $hex ) && strlen( $hex ) <= ( 2 + 64 );
+	}
+
+	private function isValueHex( string $hex ): bool {
+		// 本プラグインでは、`0x`プレフィックスを含む小文字を、数量を表す16進数表記とする。
 		return preg_match( '/^0x[0-9a-f]+$/', $hex ) === 1;
 	}
 

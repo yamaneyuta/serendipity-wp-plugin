@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Lib\Security\Assert;
 
 class PriceType {
 	public function __construct( $amount_hex, $decimals, $symbol ) {
-		Assert::isHex( $amount_hex );
+		Assert::isAmountHex( $amount_hex );
 		Assert::isDecimals( $decimals );
 		Assert::isSymbol( $symbol );
 
