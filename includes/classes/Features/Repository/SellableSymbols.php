@@ -12,9 +12,9 @@ class SellableSymbols {
 	 *
 	 * @return string[]
 	 */
-	public function get( int $chain_ID ): array {
+	public function get( string $network_type ): array {
 		// レート変換可能な通貨シンボル一覧を取得
-		$oracle_symbols = ( new OracleData() )->getSymbols( $chain_ID );
+		$oracle_symbols = ( new OracleData() )->getSymbols( $network_type );
 		// USDを追加
 		$oracle_symbols[] = 'USD';
 

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Lib\Code\NetworkTypeCode;
 use Cornix\Serendipity\Core\Lib\Repository\PostSetting;
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
 use Cornix\Serendipity\Core\Types\PostSettingType;
@@ -38,12 +39,12 @@ class PostSettingTest extends IntegrationTestBase {
 
 		// 投稿に対する設定を登録
 		$sut = new PostSetting( $wpdb );
-		$sut->set( $post_ID, new PostSettingType( new PriceType( '0x1e8d8197', 18, 'ETH' ) ) );
+		$sut->set( $post_ID, new PostSettingType( new PriceType( '0x1e8d8197', 18, 'ETH' ), NetworkTypeCode::MAINNET ) );
 
 		$data = $sut->get( $post_ID );
 
 		// 登録したデータが取得できること
-		$this->assertEquals( $data, new PostSettingType( new PriceType( '0x1e8d8197', 18, 'ETH' ) ) );
+		$this->assertEquals( $data, new PostSettingType( new PriceType( '0x1e8d8197', 18, 'ETH' ), NetworkTypeCode::MAINNET ) );
 		// データが1件登録されている
 		$this->assertEquals( 1, $this->recordCount( $wpdb ) );
 	}
@@ -63,7 +64,7 @@ class PostSettingTest extends IntegrationTestBase {
 		// 今作成した投稿に対する設定は作成せず、他の投稿に対する設定を作成する(誤って他のデータを取得していないことを確認)
 		$sut             = new PostSetting( $wpdb );
 		$another_post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();
-		$sut->set( $another_post_ID, new PostSettingType( new PriceType( '0x3adc7a7e', 18, 'ETH' ) ) );
+		$sut->set( $another_post_ID, new PostSettingType( new PriceType( '0x3adc7a7e', 18, 'ETH' ), NetworkTypeCode::MAINNET ) );
 
 		$data = $sut->get( $post_ID );
 
@@ -84,14 +85,14 @@ class PostSettingTest extends IntegrationTestBase {
 		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();  // 投稿を作成
 
 		$sut = new PostSetting( $wpdb );
-		$sut->set( $post_ID, new PostSettingType( new PriceType( '0x20240629', 18, 'ETH' ) ) );
+		$sut->set( $post_ID, new PostSettingType( new PriceType( '0x20240629', 18, 'ETH' ), NetworkTypeCode::MAINNET ) );
 		usleep( 1000 ); // 1ミリ秒待機(ULIDの生成時間が同じにならないようにする)
-		$sut->set( $post_ID, new PostSettingType( new PriceType( '0x20240630', 18, 'ETH' ) ) );
+		$sut->set( $post_ID, new PostSettingType( new PriceType( '0x20240630', 18, 'ETH' ), NetworkTypeCode::MAINNET ) );
 
 		$data = $sut->get( $post_ID );
 
 		// 新しく登録したデータが取得できること
-		$this->assertEquals( $data, new PostSettingType( new PriceType( '0x20240630', 18, 'ETH' ) ) );
+		$this->assertEquals( $data, new PostSettingType( new PriceType( '0x20240630', 18, 'ETH' ), NetworkTypeCode::MAINNET ) );
 		// レコードは2つ登録されている(上書きでなく、追加)
 		$this->assertEquals( 2, $this->recordCount( $wpdb ) );
 	}

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
+use Cornix\Serendipity\Core\Lib\Code\NetworkTypeCode;
+
 class OracleData {
 
 	private const CHAIN_ID_INDEX = 0;
@@ -40,11 +42,12 @@ class OracleData {
 	}
 
 	/**
-	 * 指定したチェーンに存在するOracleのシンボル(`XXX/USD`の`XXX`部分)一覧を取得します。
+	 * 指定したネットワーク種別に存在するOracleのシンボル(`XXX/USD`の`XXX`部分)一覧を取得します。
 	 *
 	 * @return string[]
 	 */
-	public function getSymbols( int $chain_ID ): array {
+	public function getSymbols( string $network_type ): array {
+		$chain_ID = $this->getChainID( $network_type );
 		/** @var string[] */
 		$symbols = array();
 		foreach ( $this->oracle_data as $data ) {
@@ -53,5 +56,18 @@ class OracleData {
 			}
 		}
 		return $symbols;
+	}
+
+	private function getChainID( string $network_type ): int {
+		switch ( $network_type ) {
+			case NetworkTypeCode::MAINNET:
+				return 1;			// Ethereum mainnet
+			case NetworkTypeCode::TESTNET:
+				return 11155111;	// Sepolia
+			case NetworkTypeCode::PRIVATENET:
+				throw new \Exception("[ED2FCD5B] Not implemented yet.");
+			default:
+				throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_type: ' . $network_type );
+		}
 	}
 }

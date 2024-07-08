@@ -33,7 +33,7 @@ class GraphQLSellableSymbolsTest extends IntegrationTestBase {
 
 		$query = <<<GRAPHQL
 			query {
-				sellableSymbols
+				sellableSymbols(networkType: MAINNET)
 			}
 		GRAPHQL;
 

@@ -19,7 +19,7 @@ class SellingPriceResolver extends ResolverBase {
 		$post_ID = $args['postID'];
 
 		// 投稿が公開済み、または編集可能な権限がある時に設定されている価格を返します。
-		if ( ( new WPSettings() )->isPublished( $post_ID ) || ( new Access() )->canCurrentUserEditPost( $post_ID ) ) {
+		if ( $this->isPublishedOrEditable( $post_ID ) ) {
 			// 投稿設定を取得
 			$post_setting = $root_value['postSetting']( $root_value, array( 'postID' => $post_ID ) );
 			return $post_setting ? $post_setting->sellingPrice : null;

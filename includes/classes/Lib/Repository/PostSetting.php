@@ -32,7 +32,8 @@ class PostSetting {
 				`post_id`,
 				`selling_amount_hex`,
 				`selling_decimals`,
-				`selling_symbol`
+				`selling_symbol`,
+				`selling_network`
 			FROM `{$this->table_name}`
 			WHERE `id` = (
 					SELECT MAX(`id`)
@@ -54,19 +55,21 @@ class PostSetting {
 			$selling_amount_hex = (string) $row['selling_amount_hex'];
 			$selling_decimals   = (int) $row['selling_decimals'];
 			$selling_symbol     = (string) $row['selling_symbol'];
+			$selling_network    = (string) $row['selling_network'];
 
 			$price = new PriceType( $selling_amount_hex, $selling_decimals, $selling_symbol );
-			return new PostSettingType( $price );
+			return new PostSettingType( $price, $selling_network );
 		}
 	}
 
-	public function set( int $post_id, PostSettingType $postSetting ) {
-		$selling_price = $postSetting->sellingPrice;
+	public function set( int $post_id, PostSettingType $post_setting ) {
+		$selling_price = $post_setting->sellingPrice;
 
 		Assert::isPostID( $post_id );
 		Assert::isHex( $selling_price->amountHex );
 		Assert::isDecimals( $selling_price->decimals );
 		Assert::isSymbol( $selling_price->symbol );
+		Assert::isNetworkType($post_setting->sellingNetwork);
 
 		$result = $this->wpdb->insert(
 			$this->table_name,
@@ -76,6 +79,7 @@ class PostSetting {
 				'selling_amount_hex' => $selling_price->amountHex,
 				'selling_decimals'   => $selling_price->decimals,
 				'selling_symbol'     => $selling_price->symbol,
+				'selling_network'    => $post_setting->sellingNetwork,
 			),
 		);
 

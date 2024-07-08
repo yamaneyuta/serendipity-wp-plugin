@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Lib\Code\NetworkTypeCode;
 use Cornix\Serendipity\Core\Lib\Repository\PostSetting;
 
 /**
@@ -47,6 +48,7 @@ class GraphQLSetPostSettingTest extends IntegrationTestBase {
 					'decimals'  => $decimals,
 					'symbol'    => $symbol,
 				),
+				'sellingNetwork' => NetworkTypeCode::MAINNET,
 			),
 		);
 	}
