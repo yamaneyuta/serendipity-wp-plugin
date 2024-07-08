@@ -61,11 +61,11 @@ class OracleData {
 	private function getChainID( string $network_type ): int {
 		switch ( $network_type ) {
 			case NetworkTypeCode::MAINNET:
-				return 1;			// Ethereum mainnet
+				return 1;           // Ethereum mainnet
 			case NetworkTypeCode::TESTNET:
-				return 11155111;	// Sepolia
+				return 11155111;    // Sepolia
 			case NetworkTypeCode::PRIVATENET:
-				throw new \Exception("[ED2FCD5B] Not implemented yet.");
+				return 31337;       // Hardhat
 			default:
 				throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_type: ' . $network_type );
 		}
