@@ -2,7 +2,7 @@ import { BlockSelect, BlockSelectOption } from '../components/BlockSelect';
 
 interface SymbolSelectProps {
 	value: string | null | undefined;
-	symbols: string[] | undefined;
+	symbols: string[] | null | undefined;
 	onChange: ( symbol: string ) => void;
 }
 export const SymbolSelect: React.FC< SymbolSelectProps > = ( { value, symbols, onChange } ) => {
