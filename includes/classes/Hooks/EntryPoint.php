@@ -4,6 +4,7 @@ namespace Cornix\Serendipity\Core\Hooks;
 
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hooks\Page\PostEditHook;
+use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
 /**
@@ -11,6 +12,8 @@ use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
  */
 class EntryPoint {
 	public function __construct() {
+
+		( new PluginUpdateHook() )->register();
 
 		// GraphQLのAPI登録
 		( new GraphQLHook( new RestProperty() ) )->register();
