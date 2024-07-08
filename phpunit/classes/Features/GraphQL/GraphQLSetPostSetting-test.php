@@ -43,7 +43,7 @@ class GraphQLSetPostSettingTest extends IntegrationTestBase {
 		return array(
 			'postID'      => $post_ID,
 			'postSetting' => array(
-				'sellingPrice' => array(
+				'sellingPrice'   => array(
 					'amountHex' => $amount_hex,
 					'decimals'  => $decimals,
 					'symbol'    => $symbol,

@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Types;
 
 class PostSettingType {
 	public function __construct( PriceType $price, string $selling_network ) {
-		$this->sellingPrice = $price;
+		$this->sellingPrice   = $price;
 		$this->sellingNetwork = $selling_network;
 	}
 
