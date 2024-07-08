@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
-use Cornix\Serendipity\Core\Lib\Code\NetworkTypeCode;
+use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
 
 class Assert {
 
@@ -66,9 +66,9 @@ class Validator {
 
 	public function isNetworkType( string $network_type ): bool {
 		$valid_network_types = array(
-			NetworkTypeCode::MAINNET,
-			NetworkTypeCode::TESTNET,
-			NetworkTypeCode::PRIVATENET,
+			NetworkType::MAINNET,
+			NetworkType::TESTNET,
+			NetworkType::PRIVATENET,
 		);
 		return in_array( $network_type, $valid_network_types, true );
 	}
