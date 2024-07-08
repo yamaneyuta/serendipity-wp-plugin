@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Features\Repository\Database\DBSchema;
-use Cornix\Serendipity\Core\Features\Repository\Database\MySQLiFactory;
-use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
+use Cornix\Serendipity\Core\Features\Migration\DBSchema;
+use Cornix\Serendipity\Core\Features\Migration\MySQLiFactory;
+use Cornix\Serendipity\Core\Lib\Repository\DBSchemaVersion;
+use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
 
 /**
@@ -20,8 +21,8 @@ class DBSchemaTest extends WP_UnitTestCase {
 		// optionsテーブルは`wp-env`が起動した`tests-mysql`を参照している点に注意。
 		// - テーブル操作: 対象のDB
 		// - スキーマバージョン操作: `tests-mysql`固定
-		( new Option() )->uninstall();
-		$current_version = ( new Option() )->getDBSchemaVersion();
+		( new OptionUninstaller() )->execute();
+		$current_version = ( new DBSchemaVersion() )->get();
 		$this->assertEquals( '0.0.0', $current_version );   // 毎回初期化されていることを確認
 	}
 
