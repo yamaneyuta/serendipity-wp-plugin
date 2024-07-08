@@ -14,6 +14,8 @@ class OracleData {
 
 	public function __construct() {
 		$mainnet_chain_ID = ChainID::ETH_MAINNET;
+		$testnet_chain_ID = ChainID::SEPOLIA;
+
 		$oracle_data_json = <<<JSON
 			{
 				"data": [
@@ -21,7 +23,13 @@ class OracleData {
 					[ {$mainnet_chain_ID}, "ETH", "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419" ],
 					[ {$mainnet_chain_ID}, "EUR", "0xb49f677943BC038e9857d61E7d053CaA2C1734C1" ],
 					[ {$mainnet_chain_ID}, "GBP", "0x5c0Ab2d9b5a7ed9f470386e82BB36A3613cDd4b5" ],
-					[ {$mainnet_chain_ID}, "JPY", "0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3" ]
+					[ {$mainnet_chain_ID}, "JPY", "0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3" ],
+
+					[ {$testnet_chain_ID}, "AUD", "0xB0C712f98daE15264c8E26132BCC91C40aD4d5F9" ],
+					[ {$testnet_chain_ID}, "ETH", "0x694AA1769357215DE4FAC081bf1f309aDC325306" ],
+					[ {$testnet_chain_ID}, "EUR", "0x1a81afB8146aeFfCFc5E50e8479e826E7D55b910" ],
+					[ {$testnet_chain_ID}, "GBP", "0x91FAB41F5f3bE955963a986366edAcff1aaeaa83" ],
+					[ {$testnet_chain_ID}, "JPY", "0x8A6af2B75F23831ADc973ce6288e5329F63D86c6" ]
 				]
 			}
 		JSON;
