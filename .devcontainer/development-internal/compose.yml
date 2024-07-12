@@ -75,3 +75,39 @@ services:
       MYSQL_DATABASE: wordpress
     networks:
       - wpnetwork
+
+  privatenet-1:
+    build:
+      context: ./privatenet
+      dockerfile: Dockerfile
+    ports:
+      - "8545:8545"
+    networks:
+      - wpnetwork
+
+  tests-privatenet-1:
+    build:
+      context: ./privatenet
+      dockerfile: Dockerfile
+    networks:
+      - wpnetwork
+
+  privatenet-2:
+    build:
+      context: ./privatenet
+      dockerfile: Dockerfile
+    environment:
+      HARDHAT_CHAIN_ID: "31338"
+    ports:
+      - "8546:8545"
+    networks:
+      - wpnetwork
+
+  tests-privatenet-2:
+    build:
+      context: ./privatenet
+      dockerfile: Dockerfile
+    environment:
+      HARDHAT_CHAIN_ID: "31338"
+    networks:
+      - wpnetwork
