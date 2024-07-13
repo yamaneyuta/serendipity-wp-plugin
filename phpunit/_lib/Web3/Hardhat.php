@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Lib\Security\Assert;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Web3\Methods\EthMethod;
 use Web3\Providers\HttpProvider;
@@ -30,6 +31,32 @@ class Hardhat {
 		);
 
 		return $is_auto_mine;
+	}
+
+
+	/**
+	 * スナップショットを作成し、そのIDを取得します。
+	 */
+	public function snapshot() {
+		$provider = new HardhatProvider( $this->rpc_url );
+
+		$id = '';
+
+		$provider->snapshot(
+			function ( $err, $res ) use ( &$id ) {
+				if ( $err ) {
+					throw $err;
+				}
+				assert( is_string( $res ), '[48861AA2] The result must be string.' );
+
+				error_log( 'res: ' . var_export( $res, true ) );
+				$id = $res; // `0xc`のようなID
+			}
+		);
+
+		Assert::isAmountHex( $id );
+
+		return $id;
 	}
 }
 
@@ -66,6 +93,8 @@ class HardhatProvider {
 		switch ( $method ) {
 			case 'getAutomine':
 				return new GetAutomine( 'hardhat_getAutomine', $arguments );
+			case 'snapshot':
+				return new Snapshot( 'evm_snapshot', $arguments );
 			default:
 				throw new \InvalidArgumentException( '[BA4B5347] Invalid method. - method: ' . $method );
 		}
@@ -77,6 +106,16 @@ class HardhatProvider {
  * @internal
  */
 class GetAutomine extends EthMethod {
+	protected $validators       = array();
+	protected $inputFormatters  = array();
+	protected $outputFormatters = array();
+	protected $defaultValues    = array();
+}
+
+/**
+ * @internal
+ */
+class Snapshot extends EthMethod {
 	protected $validators       = array();
 	protected $inputFormatters  = array();
 	protected $outputFormatters = array();
