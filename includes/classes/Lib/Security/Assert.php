@@ -26,7 +26,7 @@ class Assert {
 		}
 	}
 
-	/** 価格のシンボルとして有効かどうかを返します。(ネットワーク不問) */
+	/** 価格のシンボルとして有効な値であることを確認します。(ネットワーク不問) */
 	public static function isSymbol( string $symbol ): void {
 		// いずれかのネットワークの販売可能なシンボルであればOKの判定
 		foreach ( NetworkType::getAll() as $network_type ) {
@@ -37,7 +37,7 @@ class Assert {
 		throw new \InvalidArgumentException( '[925BB232] Invalid symbol. - symbol: ' . $symbol );
 	}
 
-	/** 販売価格に使用可能なシンボルかどうかを返します。 */
+	/** 販売価格に使用可能なシンボルであることを確認します。 */
 	public static function isSellableSymbol( string $network_type, string $symbol ): void {
 		if ( ! ( new Validator() )->isSellableSymbol( $network_type, $symbol ) ) {
 			throw new \InvalidArgumentException( '[CA216343] Invalid selling symbol. - network_type: ' . $network_type . ', symbol: ' . $symbol );
