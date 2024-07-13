@@ -16,7 +16,7 @@ class Hardhat {
 	/**
 	 * 自動マイニングが有効かどうかを取得します。
 	 */
-	public function getAutomine() {
+	public function getAutomine(): bool {
 		$provider = new HardhatProvider( $this->rpc_url );
 
 		$is_auto_mine = false;
@@ -37,7 +37,7 @@ class Hardhat {
 	/**
 	 * スナップショットを作成し、そのIDを取得します。
 	 */
-	public function snapshot() {
+	public function snapshot(): string {
 		$provider = new HardhatProvider( $this->rpc_url );
 
 		$id = '';
