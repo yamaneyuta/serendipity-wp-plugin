@@ -72,6 +72,26 @@ class Blockchain {
 
 		return $block_number_hex;
 	}
+
+	/**
+	 * アカウントの残高を取得します。
+	 */
+	public function getBalanceHex( string $address ): string {
+		$eth = new Eth( $this->rpc_url );
+
+		$balance_hex = '0x00';
+		$eth->getBalance(
+			$address,
+			function ( $err, BigInteger $res ) use ( &$balance_hex ) {
+				if ( $err ) {
+					throw $err;
+				}
+				$balance_hex = '0x' . $res->toHex();
+			}
+		);
+
+		return $balance_hex;
+	}
 }
 
 /**

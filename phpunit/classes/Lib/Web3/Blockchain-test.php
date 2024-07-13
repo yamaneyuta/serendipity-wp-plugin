@@ -51,4 +51,28 @@ class BlockchainTest extends TestCase {
 			array( ( new TestRPCUrl() )->privatenetL2() ),
 		);
 	}
+
+	/**
+	 * アカウントの残高をRPC URLにアクセスして取得するテスト
+	 *
+	 * @test
+	 * @testdox [B94DD0E4] RPC::getBalanceHex() - rpc_url: $rpc_url
+	 * @dataProvider getBalanceHexDataProvider
+	 */
+	public function getBalanceHex( string $rpc_url ) {
+		$sut             = new Blockchain( $rpc_url );
+		$hardhat_account = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';    // hardhat テストアカウント
+
+		$balance_hex = $sut->getBalanceHex( $hardhat_account );
+
+		// テスト用アカウントは残高が0以上であることを確認
+		$this->assertGreaterThanOrEqual( 0, hexdec( $balance_hex ) );
+	}
+
+	public function getBalanceHexDataProvider() {
+		return array(
+			array( ( new TestRPCUrl() )->privatenetL1() ),
+			array( ( new TestRPCUrl() )->privatenetL2() ),
+		);
+	}
 }
