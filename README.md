@@ -12,7 +12,7 @@
 |:--------------------|:---------------------------------|
 | 開発環境URL         | http://localhost:8888            |
 | 開発環境管理画面    | http://localhost:8888/wp-admin/  |
-| phpMyAdmin		  | http://phpmyadmin.dev.localhost/ |
+| phpMyAdmin		  | http://phpmyadmin.dev.local/  |
 
 
 ### テスト環境(URL)
