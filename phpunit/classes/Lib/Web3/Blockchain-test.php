@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Web3\RPC;
+use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../../../_lib/Web3/TestRPCUrl.php';
 
-class RPCTest extends TestCase {
+class BlockchainTest extends TestCase {
 
 	/**
 	 * チェーンIDをRPC URLにアクセスして取得するテスト
@@ -16,7 +16,7 @@ class RPCTest extends TestCase {
 	 * @dataProvider getChainIDHexDataProvider
 	 */
 	public function getChainIDHex( string $rpc_url, string $expected ) {
-		$sut = new RPC( $rpc_url );
+		$sut = new Blockchain( $rpc_url );
 
 		$chain_ID_hex = $sut->getChainIDHex();
 
@@ -38,7 +38,7 @@ class RPCTest extends TestCase {
 	 * @dataProvider getBlockNumberHexDataProvider
 	 */
 	public function getBlockNumberHex( string $rpc_url ) {
-		$sut = new RPC( $rpc_url );
+		$sut = new Blockchain( $rpc_url );
 
 		$block_number_hex = $sut->getBlockNumberHex();
 

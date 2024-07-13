@@ -9,7 +9,7 @@ use Web3\Eth;
 use Web3\Formatters\BigNumberFormatter;
 use Web3\Methods\EthMethod;
 
-class RPC {
+class Blockchain {
 	public function __construct( string $rpc_url ) {
 		$this->rpc_url = $rpc_url;
 	}
