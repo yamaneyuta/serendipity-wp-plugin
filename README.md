@@ -1,5 +1,5 @@
 # serendipity-wp-plugin
-[![CI](https://github.com/yamaneyuta/serendipity-wp-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/yamaneyuta/serendipity-wp-plugin/actions/workflows/ci.yml) [![Docker Image Build](https://github.com/yamaneyuta/serendipity-wp-plugin/actions/workflows/docker-image-build.yml/badge.svg)](https://github.com/yamaneyuta/serendipity-wp-plugin/actions/workflows/docker-image-build.yml)
+[![CI](https://github.com/yamaneyuta/serendipity-wp-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/yamaneyuta/serendipity-wp-plugin/actions/workflows/ci.yml)
 
 ## 開発
 [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)による開発環境を提供しています。
