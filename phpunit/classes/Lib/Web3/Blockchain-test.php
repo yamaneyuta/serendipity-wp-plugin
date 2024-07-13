@@ -2,11 +2,8 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
-use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../../../_lib/Web3/TestRPCUrl.php';
-
-class BlockchainTest extends TestCase {
+class BlockchainTest extends IntegrationTestBase {
 
 	/**
 	 * チェーンIDをRPC URLにアクセスして取得するテスト
