@@ -49,6 +49,13 @@ class Assert {
 			throw new \InvalidArgumentException( '[A6E9242D] Invalid network type. - network_type: ' . $network_type );
 		}
 	}
+
+	/** アドレスが有効な文字列であることを確認します。 */
+	public static function isAddress( string $address ): void {
+		if ( ! \Web3\Utils::isAddress( $address ) ) {
+			throw new \InvalidArgumentException( '[66BDC040] Invalid address. - address: ' . $address );
+		}
+	}
 }
 
 /**
