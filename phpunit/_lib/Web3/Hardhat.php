@@ -118,9 +118,9 @@ class HardhatProvider {
 	private function getMethodObject( string $method, array $arguments ) {
 		switch ( $method ) {
 			case 'getAutomine':
-				return new GetAutomine( 'hardhat_getAutomine', $arguments );
+				return new EthMethod( 'hardhat_getAutomine', $arguments );
 			case 'snapshot':
-				return new Snapshot( 'evm_snapshot', $arguments );
+				return new EthMethod( 'evm_snapshot', $arguments );
 			case 'revert':
 				return new Revert( 'evm_revert', $arguments );
 			default:
@@ -129,27 +129,9 @@ class HardhatProvider {
 	}
 }
 
-
 /**
  * @internal
  */
-class GetAutomine extends EthMethod {
-	protected $validators       = array();
-	protected $inputFormatters  = array();
-	protected $outputFormatters = array();
-	protected $defaultValues    = array();
-}
-
-/**
- * @internal
- */
-class Snapshot extends EthMethod {
-	protected $validators       = array();
-	protected $inputFormatters  = array();
-	protected $outputFormatters = array();
-	protected $defaultValues    = array();
-}
-
 class Revert extends EthMethod {
 	protected $validators       = array(
 		QuantityValidator::class,
