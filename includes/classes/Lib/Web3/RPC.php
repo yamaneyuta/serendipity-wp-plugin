@@ -15,6 +15,9 @@ class RPC {
 	}
 	private string $rpc_url;
 
+	/**
+	 * チェーンIDを取得します。
+	 */
 	public function getChainIDHex(): string {
 		$eth = new Eth( $this->rpc_url );
 
@@ -48,6 +51,26 @@ class RPC {
 		assert( $chain_ID_hex !== '0x00', '[1BAA2783] Failed to get chain ID.' );
 
 		return $chain_ID_hex;
+	}
+
+	/**
+	 * ブロック番号を取得します。
+	 */
+	public function getBlockNumberHex(): string {
+		$eth = new Eth( $this->rpc_url );
+
+		$block_number_hex = '0x00';
+		$eth->blockNumber(
+			function ( $err, BigInteger $res ) use ( &$block_number_hex ) {
+				if ( $err ) {
+					throw $err;
+				}
+				$block_number_hex = '0x' . $res->toHex();
+			}
+		);
+		assert( $block_number_hex !== '0x00', '[C38AC4D1] Failed to get block number.' );
+
+		return $block_number_hex;
 	}
 }
 
