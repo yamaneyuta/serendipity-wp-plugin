@@ -6,6 +6,7 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Web3\Methods\EthMethod;
 use Web3\Providers\HttpProvider;
 use Web3\Providers\Provider;
+use Web3\Validators\QuantityValidator;
 
 class Hardhat {
 	public function __construct( string $rpc_url ) {
@@ -58,6 +59,31 @@ class Hardhat {
 
 		return $id;
 	}
+
+	/**
+	 * スナップショットを復元します。
+	 *
+	 * @param string $id `snapshot()`で取得したID
+	 */
+	public function revert( string $id ): bool {
+		$provider = new HardhatProvider( $this->rpc_url );
+
+		$is_reverted = false;
+		$provider->revert(
+			$id,
+			function ( $err, $res ) use ( &$is_reverted ) {
+				if ( $err ) {
+					throw $err;
+				}
+				assert( is_bool( $res ), '[C9C26348] The result must be boolean.' );
+				$is_reverted = $res;
+			}
+		);
+
+		assert( $is_reverted, '[1A839FBF] The result must be true.' );
+
+		return $is_reverted;
+	}
 }
 
 
@@ -95,6 +121,8 @@ class HardhatProvider {
 				return new GetAutomine( 'hardhat_getAutomine', $arguments );
 			case 'snapshot':
 				return new Snapshot( 'evm_snapshot', $arguments );
+			case 'revert':
+				return new Revert( 'evm_revert', $arguments );
 			default:
 				throw new \InvalidArgumentException( '[BA4B5347] Invalid method. - method: ' . $method );
 		}
@@ -117,6 +145,15 @@ class GetAutomine extends EthMethod {
  */
 class Snapshot extends EthMethod {
 	protected $validators       = array();
+	protected $inputFormatters  = array();
+	protected $outputFormatters = array();
+	protected $defaultValues    = array();
+}
+
+class Revert extends EthMethod {
+	protected $validators       = array(
+		QuantityValidator::class,
+	);
 	protected $inputFormatters  = array();
 	protected $outputFormatters = array();
 	protected $defaultValues    = array();
