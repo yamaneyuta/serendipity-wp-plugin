@@ -1,40 +1,24 @@
+# wp-envで起動される、いずれかのコンテナが立ち上がるまで待機し、そのコンテナ名に使用されているハッシュ値(ディレクトリ名)を取得する。
+# ※ `[hash]_default`がネットワーク名になる。
+loop_count=60
+for i in $(seq $loop_count); do
+	# 起動中のコンテナ名に32桁のハッシュ値が含まれる場合は、そのハッシュ値を取得
+	# ※ `docker network ls`では、wp-env起動前に取得できるパータンがあるため、`docker ps`を使用
+	hash=$(docker ps | grep -oE '[0-9a-f]{32}')
 
-# # dockerコンテナの一覧を取得
-# docker_output=$(docker network ls)
+	if [[ -n $hash ]]; then
+		# ハッシュ値が取得できた場合はループを抜ける
+		break
+	elif [[ $i -eq $loop_count ]]; then
+		# ループ回数が上限に達した場合はエラーを出力して終了
+		echo "[F8E1A99C] Error: hash not found."
+		exit 1
+	fi
 
-# # `docker ps -a`の出力から、wp-cliコンテナのハッシュ値にあたる部分を抽出するスクリプト
-# # [hash]_default
-# awk_script='
-# /[0-9a-f]{32}_default/ {
-#     match($0, /[0-9a-f]{32}_default/)
-#     if (RSTART != 0) {
-#         print substr($0, RSTART, 32)
-#         exit
-#     }
-# }'
-
-# # dockerコンテナからハッシュ値を取得
-# hash=$(echo "$docker_output" | awk "$awk_script")
-
-# wp-envのキャッシュディレクトリは、`~/.wp-env`または`~/wp-env`のどちらか(WP=_ENV_HOMEを指定していない場合)
-# https://github.com/WordPress/gutenberg/blob/2f30cddff15723ac7017fd009fc5913b7b419400/packages/env/lib/config/get-cache-directory.js#L9-L39
-if [[ -d ~/.wp-env ]]; then
-	cache_dir=~/.wp-env
-elif [[ -d ~/wp-env ]]; then
-	cache_dir=~/wp-env
-else
-	echo "Error: wp-env directory not found."
-	exit 1
-fi
-
-# ~/.wp-env(~/wp-env)ディレクトリに存在するフォルダ名(MD5ハッシュ値)を取得
-hash=$(ls $cache_dir | grep -E '^[0-9a-f]{32}$')
-
-# ハッシュ値が取得できなかった場合はエラー
-if [[ -z $hash ]]; then
-	echo "Error: hash not found."
-	exit 1
-fi
+	# ハッシュ値が取得できない場合は1秒待機して再度取得を試みる
+	echo "[2958FB68] Waiting for the hash value to be found. ($i/$loop_count)"
+	sleep 1
+done
 
 
 # `compose.network.yml`ファイルを更新
