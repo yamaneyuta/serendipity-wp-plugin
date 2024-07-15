@@ -58,7 +58,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 */
 	public function getBalanceHex( string $rpc_url ) {
 		$sut             = new Blockchain( $rpc_url );
-		$hardhat_account = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266';    // hardhat テストアカウント
+		$hardhat_account = ( new HardhatAccount() )->deployer();    // hardhat デプロイ用アカウント
 
 		$balance_hex = $sut->getBalanceHex( $hardhat_account );
 
