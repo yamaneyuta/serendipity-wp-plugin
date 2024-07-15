@@ -89,8 +89,7 @@ jobs:
         key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
 
 
-    - run: npm run env:start
-    - run: npm run my-docker:start
+    - run: npm run start:docker
     - run: npm run ci:lint
     - run: npm run ci:test
     # wp-envの起動設定(--xdebug=)によってphpunitのテストは問題なく終了するがカバレッジレポートが出力されない、という状況になるため、
