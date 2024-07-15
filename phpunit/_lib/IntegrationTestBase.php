@@ -220,7 +220,19 @@ class HardhatController {
 	private function initialize(): void {
 		// Hardhatのデプロイが完了するまで待機
 		foreach ( $this->rpc_urls as $rpc_url ) {
-			$this->waitForReady( $rpc_url );
+			// 初期化済みの場合は改めてチェックしない
+			if ( isset( self::$is_ready[ $rpc_url ] ) ) {
+				break;
+			}
+
+			// ネットワークが利用可能になるまで待機
+			$this->waitForNetworkReady( $rpc_url );
+
+			// コントラクトが利用可能になるまで待機
+			$this->waitForContractReady( $rpc_url );
+
+			// 初期化済みであることをマーク
+			self::$is_ready[ $rpc_url ] = true;
 		}
 	}
 
@@ -243,21 +255,29 @@ class HardhatController {
 		}
 	}
 
-	private function waitForReady( string $rpc_url ) {
-		// 初期化済みの場合は改めてチェックしない
-		if ( isset( self::$is_ready[ $rpc_url ] ) ) {
-			return;
+	private function waitForNetworkReady( string $rpc_url ) {
+		// cURLでステータス200が取得できるまで最大60秒待機
+		for ( $i = 0; $i < 60; $i++ ) {
+			$response = wp_remote_get( $rpc_url );
+			$code     = wp_remote_retrieve_response_code( $response );
+			if ( 200 === $code ) {
+				return;
+			}
+			error_log( "[78AC2176] Wait for ready(network). $rpc_url, code: $code" );
+			sleep( 1 );
 		}
+		throw new Exception( "[A9AA734C] Hardhat is not ready. $rpc_url" );
+	}
 
+	private function waitForContractReady( string $rpc_url ) {
+		// コントラクトデプロイ後、特定のアドレスの残高が増えるので、それを確認するまで待機
 		$blockchain = new Blockchain( $rpc_url );
 		for ( $i = 0; $i < 60; $i++ ) {
 			$balance_hex = $blockchain->getBalanceHex( ( new HardhatAccount() )->marker() );
 			if ( hexdec( $balance_hex ) > 0 ) {
-				// 初期化済みであることをマーク
-				self::$is_ready[ $rpc_url ] = true;
 				return;
 			}
-			error_log( "[CC842103] Wait for ready. $rpc_url" );
+			error_log( "[CC842103] Wait for ready(contract). $rpc_url" );
 			sleep( 1 );
 		}
 
