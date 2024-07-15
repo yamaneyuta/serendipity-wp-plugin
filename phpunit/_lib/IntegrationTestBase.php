@@ -5,6 +5,9 @@ use Cornix\Serendipity\Core\Features\Migration\DBSchema;
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
+use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
+
+require_once __DIR__ . '/Web3/TestRPCUrl.php';
 
 /**
  * 結合テストの基底クラス
@@ -21,10 +24,16 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		( new GraphQLHook( $this->crateRestPropertyStub() ) )->register();
 		do_action( 'rest_api_init' );
+
+		// Hardhatの初期化
+		( new HardhatController() )->setUp();
 	}
 
 	// #[\Override]
 	public function tearDown(): void {
+		// hardhatのリセット
+		( new HardhatController() )->tearDown();
+
 		global $wp_rest_server;
 		$wp_rest_server = null;
 
@@ -174,5 +183,84 @@ class TestUser {
 
 	public function __toString(): string {
 		return $this->username;
+	}
+}
+
+
+/**
+ * Hardhatを操作するためのクラス
+ *
+ * @internal
+ */
+class HardhatController {
+	public function __construct() {
+		$testRPCUrl     = new TestRPCUrl();
+		$this->rpc_urls = array(
+			$testRPCUrl->privatenetL1(),
+			$testRPCUrl->privatenetL2(),
+		);
+
+		$this->initialize();
+	}
+
+	private static array $is_ready  = array();
+	private static array $snapshots = array();
+
+	/** @var string[] */
+	private array $rpc_urls;
+
+	public function setUp(): void {
+		$this->snapshot();
+	}
+
+	public function tearDown(): void {
+		$this->restoreSnapshot();
+	}
+
+	private function initialize(): void {
+		// Hardhatのデプロイが完了するまで待機
+		foreach ( $this->rpc_urls as $rpc_url ) {
+			$this->waitForReady( $rpc_url );
+		}
+	}
+
+	private function snapshot(): void {
+		foreach ( $this->rpc_urls as $rpc_url ) {
+			$id                          = ( new Hardhat( $rpc_url ) )->snapshot();
+			self::$snapshots[ $rpc_url ] = $id;
+		}
+	}
+	private function restoreSnapshot(): void {
+		foreach ( $this->rpc_urls as $rpc_url ) {
+			// スナップショットIDを取得
+			$id = self::$snapshots[ $rpc_url ];
+			assert( is_string( $id ), '583B6FD4' );
+			// スナップショットを復元
+			$success = ( new Hardhat( $rpc_url ) )->revert( $id );
+
+			assert( $success );
+			unset( self::$snapshots[ $rpc_url ] );  // 使用済みのスナップショットIDを破棄
+		}
+	}
+
+	private function waitForReady( string $rpc_url ) {
+		// 初期化済みの場合は改めてチェックしない
+		if ( isset( self::$is_ready[ $rpc_url ] ) ) {
+			return;
+		}
+
+		$blockchain = new Blockchain( $rpc_url );
+		for ( $i = 0; $i < 60; $i++ ) {
+			$balance_hex = $blockchain->getBalanceHex( ( new HardhatAccount() )->marker() );
+			if ( hexdec( $balance_hex ) > 0 ) {
+				// 初期化済みであることをマーク
+				self::$is_ready[ $rpc_url ] = true;
+				return;
+			}
+			error_log( "[CC842103] Wait for ready. $rpc_url" );
+			sleep( 1 );
+		}
+
+		throw new Exception( "[44663EC9] Hardhat is not ready. $rpc_url" );
 	}
 }
