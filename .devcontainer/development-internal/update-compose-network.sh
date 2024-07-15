@@ -16,6 +16,27 @@
 # # dockerコンテナからハッシュ値を取得
 # hash=$(echo "$docker_output" | awk "$awk_script")
 
+loop_count=120
+for i in $(seq $loop_count); do
+	# docker network ls の出力結果のテキストを取得
+	docker_output=$(docker network ls)
+	# docker_outputに32桁のハッシュ値が含まれる場合は、そのハッシュ値を取得
+	hash=$(echo "$docker_output" | grep -oE '[0-9a-f]{32}_default' | grep -oE '[0-9a-f]{32}')
+
+	if [[ -n $hash ]]; then
+		break
+	fi
+
+	if [[ $i -eq $loop_count ]]; then
+		echo "[F8E1A99C] Error: hash not found."
+		exit 1
+	fi
+
+	echo "[2958FB68] Waiting for the hash value to be found. ($i/$loop_count)"
+	sleep 1
+done
+
+
 # wp-envのキャッシュディレクトリは、`~/.wp-env`または`~/wp-env`のどちらか(WP=_ENV_HOMEを指定していない場合)
 # https://github.com/WordPress/gutenberg/blob/2f30cddff15723ac7017fd009fc5913b7b419400/packages/env/lib/config/get-cache-directory.js#L9-L39
 if [[ -d ~/.wp-env ]]; then
