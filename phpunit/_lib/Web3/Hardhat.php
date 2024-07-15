@@ -50,7 +50,6 @@ class Hardhat {
 				}
 				assert( is_string( $res ), '[48861AA2] The result must be string.' );
 
-				error_log( 'res: ' . var_export( $res, true ) );
 				$id = $res; // `0xc`のようなID
 			}
 		);
