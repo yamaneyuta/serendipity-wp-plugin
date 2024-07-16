@@ -28,6 +28,20 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Cache wp-env directory
+      id: wp-env-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/wp-env
+        key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
+    - name: Docker build if wp-env cache is not hit
+      run: |
+        if [ "${{ steps.wp-env-cache.outputs.cache-hit }}" = "true" ]; then
+          cd ~/wp-env/8fac1173ea7f01aaea6fc9a6d834c8d0 && \
+          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 WP_ENV_MYSQL_PORT=3306 WP_ENV_TESTS_MYSQL_PORT=3307 \
+          docker-compose build --parallel &
+        fi
+
     - name: Use Node.js ${{ env.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -79,15 +93,6 @@ jobs:
     - name: Install Playwright
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
-
-
-    - name: Cache wp-env directory
-      id: wp-env-cache
-      uses: actions/cache@v4
-      with:
-        path: ~/wp-env
-        key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
-
 
     - run: npm run start:docker
     - run: npm run ci:lint
