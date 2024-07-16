@@ -82,6 +82,9 @@ jobs:
           npm ci
         fi
 
+    # Playwrightをインストールする時間の間、コンテナの初期化処理が行われるようにここで実施
+    - run: npm run start:docker
+
     # Playwrightのインストールはnpm install後に実施する
     - name: Setup Playwright cache
       id: playwright-cache
@@ -94,7 +97,6 @@ jobs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
 
-    - run: npm run start:docker
     - run: npm run ci:lint
     - run: npm run ci:test
     # wp-envの起動設定(--xdebug=)によってphpunitのテストは問題なく終了するがカバレッジレポートが出力されない、という状況になるため、
