@@ -28,6 +28,22 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Cache wp-env directory
+      id: wp-env-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/wp-env
+        key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
+    - name: Docker build if wp-env cache is not hit
+      # キャッシュからwp-envディレクトリを復元した場合はwp-envが使用するdocker-compose.ymlファイルが存在するため、
+      # バックグラウンドでビルドを行っておく
+      run: |
+        if [ "${{ steps.wp-env-cache.outputs.cache-hit }}" = "true" ]; then
+          cd ~/wp-env/8fac1173ea7f01aaea6fc9a6d834c8d0 && \
+          COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 WP_ENV_MYSQL_PORT=3306 WP_ENV_TESTS_MYSQL_PORT=3307 \
+          docker-compose build --parallel &
+        fi
+
     - name: Use Node.js ${{ env.node-version }}
       uses: actions/setup-node@v4
       with:
@@ -68,7 +84,16 @@ jobs:
           npm ci
         fi
 
-    # Playwrightのインストールはnpm install後に実施する
+
+    # プロセス名に`docker`が含まれるプロセスがすべて終了するまで待機する
+    # (wp-envのビルドが完了するまで待機する)
+    - name: Wait for build wp-env images
+      run: for i in $(seq 60); do if [ -z "$(ps | grep docker)" ]; then break; fi; sleep 1; echo "waiting($i)..."; done
+    # Playwrightをインストールする時間の間、コンテナの初期化処理が行われるようにここでコンテナを起動する
+    - run: npm run start:docker
+
+
+    # Playwrightのインストールはnpm install後に実施すること。
     - name: Setup Playwright cache
       id: playwright-cache
       uses: actions/cache@v4
@@ -80,16 +105,6 @@ jobs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
 
-
-    - name: Cache wp-env directory
-      id: wp-env-cache
-      uses: actions/cache@v4
-      with:
-        path: ~/wp-env
-        key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
-
-
-    - run: npm run start:docker
     - run: npm run ci:lint
     - run: npm run ci:test
     # wp-envの起動設定(--xdebug=)によってphpunitのテストは問題なく終了するがカバレッジレポートが出力されない、という状況になるため、
