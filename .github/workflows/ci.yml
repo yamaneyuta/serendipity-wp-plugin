@@ -35,6 +35,8 @@ jobs:
         path: ~/wp-env
         key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
     - name: Docker build if wp-env cache is not hit
+      # キャッシュからwp-envディレクトリを復元した場合はwp-envが使用するdocker-compose.ymlファイルが存在するため、
+      # バックグラウンドでビルドを行っておく
       run: |
         if [ "${{ steps.wp-env-cache.outputs.cache-hit }}" = "true" ]; then
           cd ~/wp-env/8fac1173ea7f01aaea6fc9a6d834c8d0 && \
@@ -87,10 +89,11 @@ jobs:
     # (wp-envのビルドが完了するまで待機する)
     - name: Wait for build wp-env images
       run: for i in $(seq 60); do if [ -z "$(ps | grep docker)" ]; then break; fi; sleep 1; echo "waiting($i)..."; done
-    # Playwrightをインストールする時間の間、コンテナの初期化処理が行われるようにここで実施
+    # Playwrightをインストールする時間の間、コンテナの初期化処理が行われるようにここでコンテナを起動する
     - run: npm run start:docker
 
-    # Playwrightのインストールはnpm install後に実施する
+
+    # Playwrightのインストールはnpm install後に実施すること。
     - name: Setup Playwright cache
       id: playwright-cache
       uses: actions/cache@v4
