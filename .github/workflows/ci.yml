@@ -82,6 +82,11 @@ jobs:
           npm ci
         fi
 
+
+    # プロセス名に`docker`が含まれるプロセスがすべて終了するまで待機する
+    # (wp-envのビルドが完了するまで待機する)
+    - name: Wait for build wp-env images
+      run: for i in $(seq 60); do if [ -z "$(ps | grep docker)" ]; then break; fi; sleep 1; echo "waiting($i)..."; done
     # Playwrightをインストールする時間の間、コンテナの初期化処理が行われるようにここで実施
     - run: npm run start:docker
 
