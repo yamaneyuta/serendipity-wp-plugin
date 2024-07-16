@@ -1,0 +1,47 @@
+# 開発中のみ使用する1コンテナを定義
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy:1.5.2
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - wpnetwork
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.1.1
+    environment:
+      VIRTUAL_HOST: "phpmyadmin.local"
+      VIRTUAL_PORT: "80"
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: password
+    networks:
+      - wpnetwork
+
+  privatenet-1:
+    build:
+      context: ./privatenet
+      dockerfile: Dockerfile
+    hostname: privatenet-1.local
+    environment:
+      VIRTUAL_HOST: "privatenet-1.local"
+      VIRTUAL_PORT: "80"
+      HARDHAT_CHAIN_ID: "31337"
+      HARDHAT_PORT: "80"
+    networks:
+      - wpnetwork
+
+  privatenet-2:
+    build:
+      context: ./privatenet
+      dockerfile: Dockerfile
+    hostname: privatenet-2.local
+    environment:
+      VIRTUAL_HOST: "privatenet-2.local"
+      VIRTUAL_PORT: "80"
+      HARDHAT_CHAIN_ID: "31338"
+      HARDHAT_PORT: "80"
+    networks:
+      - wpnetwork
