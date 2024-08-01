@@ -73,7 +73,7 @@
 		"@yamaneyuta/serendipity-constants": "github:yamaneyuta/serendipity-constants#0.8.2",
 		"@yamaneyuta/serendipity-dev-conf": "github:yamaneyuta/serendipity-dev-conf#0.8.1",
 		"@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.2",
-		"@yamaneyuta/serendipity-lib-js-price-format": "github:yamaneyuta/serendipity-lib-js-price-format#0.8.1",
+		"@yamaneyuta/serendipity-lib-js-price-format": "github:yamaneyuta/serendipity-lib-js-price-format#0.8.2",
 		"concurrently": "^8.2.2",
 		"eslint-plugin-storybook": "^0.8.0",
 		"npm-run-all": "^4.1.5",
