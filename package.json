@@ -28,6 +28,7 @@
 		"prepare": "npm run prepare:copy-constants && npm run build",
 		"prepare:copy-constants": "cp -f node_modules/@yamaneyuta/serendipity-constants/dist/backend/constants.json includes/assets/",
 		"plugin-zip": "wp-scripts plugin-zip",
+		"release": "npx release-it",
 		"start": "wp-scripts start",
 		"start:docker": "run-p env:start my-docker:start",
 		"test": "npm run test:phpunit",
