@@ -42,6 +42,11 @@
 		"watch": "npm run watch:graphql",
 		"watch:graphql": "graphql-codegen --watch"
 	},
+	"# note": {
+		"// - devDependencies: ": "",
+		"//   - @wordpress/scripts": "",
+		"//     - WordPress6.5以前を対象とする場合、はv27を使う必要がある ": "https://github.com/WordPress/gutenberg/blob/HEAD/packages/scripts/CHANGELOG.md#breaking-changes"
+	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^1.6.0",
 		"@graphql-codegen/cli": "^5.0.2",
