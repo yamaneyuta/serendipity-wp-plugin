@@ -6,7 +6,6 @@
 	"license": "Split License",
 	"main": "build/index.js",
 	"scripts": {
-		"_update:devcontainer": "dev-update devcontainer",
 		"prebuild": "npm run clean:php-cache",
 		"build": "npm run build:graphql-types && tsc --noEmit && npm run build:block",
 		"build:block": "wp-scripts build",
