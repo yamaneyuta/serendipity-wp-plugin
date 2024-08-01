@@ -1,6 +1,6 @@
 {
 	"name": "@yamaneyuta/serendipity-wp-plugin",
-	"version": "1.0.0",
+	"version": "0.8.0",
 	"description": "Example block scaffolded with Create Block tool.",
 	"author": "The WordPress Contributors",
 	"license": "Split License",
