@@ -38,6 +38,7 @@
 		"test-storybook": "test-storybook --url http://localhost:6006 --coverage --browsers firefox chromium",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build",
+		"update:package": "npx npm-check-updates -u --target minor",
 		"watch": "npm run watch:graphql",
 		"watch:graphql": "graphql-codegen --watch"
 	},
