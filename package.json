@@ -43,7 +43,7 @@
 		"watch:graphql": "graphql-codegen --watch"
 	},
 	"devDependencies": {
-		"@chromatic-com/storybook": "^1.6.0",
+		"@chromatic-com/storybook": "^1.6.1",
 		"@graphql-codegen/cli": "^5.0.2",
 		"@graphql-codegen/client-preset": "^4.3.1",
 		"@graphql-codegen/typescript-react-query": "^6.1.0",
