@@ -91,7 +91,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		$request       = new WP_REST_Request( 'POST', "/${namespace}${graphQLRoute}" );
 
 		$request->set_header( 'content-type', 'application/json' );
-		$request->set_body( json_encode( $request_data ) );
+		$request->set_body( wp_json_encode( $request_data ) );
 
 		/** @var WP_REST_Response */
 		$response = $this->server->dispatch( $request );
