@@ -41,7 +41,7 @@ services:
     environment:
       VIRTUAL_HOST: "privatenet-2.local"
       VIRTUAL_PORT: "80"
-      HARDHAT_CHAIN_ID: "31338"
+      HARDHAT_CHAIN_ID: "1337"
       HARDHAT_PORT: "80"
     networks:
       - wpnetwork

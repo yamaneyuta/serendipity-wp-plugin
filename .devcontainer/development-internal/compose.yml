@@ -71,7 +71,7 @@ services:
       dockerfile: Dockerfile
     hostname: tests-privatenet-2.local
     environment:
-      HARDHAT_CHAIN_ID: "31338"
+      HARDHAT_CHAIN_ID: "1337"
       HARDHAT_PORT: "80"
     networks:
       - wpnetwork

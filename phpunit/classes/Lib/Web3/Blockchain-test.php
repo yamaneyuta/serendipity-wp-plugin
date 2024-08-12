@@ -23,7 +23,7 @@ class BlockchainTest extends IntegrationTestBase {
 	public function getChainIDHexDataProvider() {
 		return array(
 			array( ( new TestRPCUrl() )->privatenetL1(), '0x7a69' ),    // 31337
-			array( ( new TestRPCUrl() )->privatenetL2(), '0x7a6a' ),    // 31338
+			array( ( new TestRPCUrl() )->privatenetL2(), '0x0539' ),    // 1337
 		);
 	}
 
