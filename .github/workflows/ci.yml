@@ -111,6 +111,9 @@ jobs:
     # `ci:test`で実行するphpunitはcoverage出力オプションありをテスト実施項目とする。
     # ※ カバレッジレポートが出力されているかどうかのチェック処理は`postcoverage:phpunit`に記述。
 
+    # cleanコマンドでエラーが発生しないことを確認。
+    - run: npm run clean
+
   docker-build:
     runs-on: ubuntu-latest
 
