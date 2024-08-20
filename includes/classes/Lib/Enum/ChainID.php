@@ -4,12 +4,17 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Enum;
 
 final class ChainID {
+	// ==================== Mainnet ====================
 	/** イーサリアムメインネット */
 	public const ETH_MAINNET = 1;
 
-	/** Hardhatテスト環境 */
-	public const HARDHAT = 31337;
-
+	// ==================== Testnet ====================
 	/** イーサリアムSepoliaテストネット */
 	public const SEPOLIA = 11155111;
+
+	// ==================== Privatenet ====================
+	/** PrivatenetL1に位置付けられたチェーンID */
+	public const PRIVATENET_L1 = 31337;
+	/** PrivatenetL2に位置付けられたチェーンID */
+	public const PRIVATENET_L2 = 1337;
 }
