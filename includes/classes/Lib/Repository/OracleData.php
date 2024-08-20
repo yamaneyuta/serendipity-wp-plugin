@@ -13,8 +13,9 @@ class OracleData {
 	private const ADDRESS_INDEX  = 2;
 
 	public function __construct() {
-		$mainnet_chain_ID = ChainID::ETH_MAINNET;
-		$testnet_chain_ID = ChainID::SEPOLIA;
+		$mainnet_chain_ID      = ChainID::ETH_MAINNET;
+		$testnet_chain_ID      = ChainID::SEPOLIA;
+		$privatenetL1_chain_ID = ChainID::PRIVATENET_L1;
 
 		$oracle_data_json = <<<JSON
 			{
@@ -29,7 +30,11 @@ class OracleData {
 					[ {$testnet_chain_ID}, "ETH", "0x694AA1769357215DE4FAC081bf1f309aDC325306" ],
 					[ {$testnet_chain_ID}, "EUR", "0x1a81afB8146aeFfCFc5E50e8479e826E7D55b910" ],
 					[ {$testnet_chain_ID}, "GBP", "0x91FAB41F5f3bE955963a986366edAcff1aaeaa83" ],
-					[ {$testnet_chain_ID}, "JPY", "0x8A6af2B75F23831ADc973ce6288e5329F63D86c6" ]
+					[ {$testnet_chain_ID}, "JPY", "0x8A6af2B75F23831ADc973ce6288e5329F63D86c6" ],
+
+					[ {$privatenetL1_chain_ID}, "ETH", "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512" ],
+					[ {$privatenetL1_chain_ID}, "JPY", "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0" ],
+					[ {$privatenetL1_chain_ID}, "MATIC", "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9" ]
 				]
 			}
 		JSON;
