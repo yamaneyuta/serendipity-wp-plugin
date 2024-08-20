@@ -24,8 +24,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getChainIDHexDataProvider() {
 		return array(
-			array( ( new TestRPCUrl() )->privatenetL1(), ChainID::PRIVATENET_L1 ),
-			array( ( new TestRPCUrl() )->privatenetL2(), ChainID::PRIVATENET_L2 ),
+			array( ( new DefaultRPCURLData() )->getPrivatenetL1(), ChainID::PRIVATENET_L1 ),
+			array( ( new DefaultRPCURLData() )->getPrivatenetL2(), ChainID::PRIVATENET_L2 ),
 		);
 	}
 
@@ -46,8 +46,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBlockNumberHexDataProvider() {
 		return array(
-			array( ( new TestRPCUrl() )->privatenetL1() ),
-			array( ( new TestRPCUrl() )->privatenetL2() ),
+			array( ( new DefaultRPCURLData() )->getPrivatenetL1() ),
+			array( ( new DefaultRPCURLData() )->getPrivatenetL2() ),
 		);
 	}
 
@@ -70,8 +70,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBalanceHexDataProvider() {
 		return array(
-			array( ( new TestRPCUrl() )->privatenetL1() ),
-			array( ( new TestRPCUrl() )->privatenetL2() ),
+			array( ( new DefaultRPCURLData() )->getPrivatenetL1() ),
+			array( ( new DefaultRPCURLData() )->getPrivatenetL2() ),
 		);
 	}
 
