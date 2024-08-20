@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Lib\Enum\ChainID;
+use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 class BlockchainTest extends IntegrationTestBase {
@@ -12,18 +14,18 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @testdox [463DA15C] RPC::getChainIDHex() - rpc_url: $rpc_url -> $expected
 	 * @dataProvider getChainIDHexDataProvider
 	 */
-	public function getChainIDHex( string $rpc_url, string $expected ) {
+	public function getChainIDHex( string $rpc_url, int $expected ) {
 		$sut = new Blockchain( $rpc_url );
 
-		$chain_ID_hex = $sut->getChainIDHex();
+		$chain_ID = hexdec( $sut->getChainIDHex() );
 
-		$this->assertEquals( $expected, $chain_ID_hex );
+		$this->assertEquals( $expected, $chain_ID );
 	}
 
 	public function getChainIDHexDataProvider() {
 		return array(
-			array( ( new TestRPCUrl() )->privatenetL1(), '0x7a69' ),    // 31337
-			array( ( new TestRPCUrl() )->privatenetL2(), '0x0539' ),    // 1337
+			array( ( new TestRPCUrl() )->privatenetL1(), ChainID::PRIVATENET_L1 ),
+			array( ( new TestRPCUrl() )->privatenetL2(), ChainID::PRIVATENET_L2 ),
 		);
 	}
 
@@ -70,6 +72,27 @@ class BlockchainTest extends IntegrationTestBase {
 		return array(
 			array( ( new TestRPCUrl() )->privatenetL1() ),
 			array( ( new TestRPCUrl() )->privatenetL2() ),
+		);
+	}
+
+	/**
+	 * 指定したRPC URLに接続可能かどうかをテスト
+	 *
+	 * @test
+	 * @testdox [805E948D] Blockchain::connectable() - rpc_url: $rpc_url -> $expected
+	 * @dataProvider rpcURLDataProvider
+	 */
+	public function connectable( string $rpc_url, bool $expected ) {
+		$sut = new Blockchain( $rpc_url );
+
+		$this->assertEquals( $expected, $sut->connectable() );
+	}
+
+	public function rpcURLDataProvider() {
+		return array(
+			array( ( new DefaultRPCURLData() )->get( ChainID::PRIVATENET_L1 ), true ),
+			array( ( new DefaultRPCURLData() )->get( ChainID::PRIVATENET_L2 ), true ),
+			array( 'http://localhost', false ),
 		);
 	}
 }
