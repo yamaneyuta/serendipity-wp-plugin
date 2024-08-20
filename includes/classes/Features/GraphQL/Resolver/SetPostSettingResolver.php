@@ -24,7 +24,12 @@ class SetPostSettingResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$post_ID      = $args['postID'];
+		$post_ID = $args['postID'];
+		// 編集可能な権限がない場合は例外をスロー。
+		if ( ! ( new Access() )->canCurrentUserEditPost( $post_ID ) ) {
+			throw new \LogicException( '[5EF691C0] You do not have permission to edit this post.' );
+		}
+
 		$post_setting = new PostSettingType(
 			new PriceType(
 				$args['postSetting']['sellingPrice']['amountHex'],
@@ -34,12 +39,7 @@ class SetPostSettingResolver extends ResolverBase {
 			$args['postSetting']['sellingNetwork']
 		);
 
-		// 編集可能な権限がある時に設定を反映します。
-		if ( ( new Access() )->canCurrentUserEditPost( $post_ID ) ) {
-			( new PostSetting( $this->wpdb ) )->set( $post_ID, $post_setting );
-			return true;
-		}
-
-		throw new \LogicException( '[5EF691C0] You do not have permission to edit this post.' );
+		( new PostSetting( $this->wpdb ) )->set( $post_ID, $post_setting );
+		return true;
 	}
 }
