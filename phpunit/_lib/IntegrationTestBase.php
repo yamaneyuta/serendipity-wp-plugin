@@ -246,7 +246,7 @@ class HardhatController {
 		foreach ( $this->rpc_urls as $rpc_url ) {
 			// スナップショットIDを取得
 			$id = self::$snapshots[ $rpc_url ];
-			assert( is_string( $id ), '583B6FD4' );
+			assert( is_string( $id ), '[583B6FD4] Invalid snapshot ID' );
 			// スナップショットを復元
 			$success = ( new Hardhat( $rpc_url ) )->revert( $id );
 
