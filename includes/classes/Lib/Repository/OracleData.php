@@ -78,7 +78,7 @@ class OracleData {
 			case NetworkType::TESTNET:
 				return ChainID::SEPOLIA;
 			case NetworkType::PRIVATENET:
-				return ChainID::HARDHAT;
+				return ChainID::PRIVATENET_L1;
 			default:
 				throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_type: ' . $network_type );
 		}
