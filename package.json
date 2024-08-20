@@ -24,7 +24,7 @@
 		"env:start": "WP_ENV_PHP_VERSION=${PHP_VERSION} WP_ENV_CORE=WordPress/WordPress#${WP_VERSION} wp-env start --xdebug=develop,coverage,debug",
 		"env:reset": "wp-env clean all && wp-env start",
 		"env:destroy": "wp-env destroy",
-		"format": "npm run format:js && npm run format:php",
+		"format": "run-s format:js format:php",
 		"format:js": "eslint --fix src && prettier --write src",
 		"format:php": "phpcbf .",
 		"lint:css": "wp-scripts lint-style",
