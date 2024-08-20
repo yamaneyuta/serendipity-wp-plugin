@@ -99,6 +99,20 @@ class Blockchain {
 		Assert::isAmountHex( $balance_hex );
 		return $balance_hex;
 	}
+
+	/**
+	 * このネットワークに接続できるかどうかを取得します。
+	 *
+	 * @return bool 接続可能な場合はtrue
+	 */
+	public function connectable(): bool {
+		try {
+			$this->getBlockNumberHex();
+			return true;
+		} catch ( \Exception $e ) {
+			return false;
+		}
+	}
 }
 
 /**

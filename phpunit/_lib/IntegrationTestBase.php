@@ -4,10 +4,9 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Features\Migration\DBSchema;
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
+use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
-
-require_once __DIR__ . '/Web3/TestRPCUrl.php';
 
 /**
  * 結合テストの基底クラス
@@ -194,10 +193,9 @@ class TestUser {
  */
 class HardhatController {
 	public function __construct() {
-		$testRPCUrl     = new TestRPCUrl();
 		$this->rpc_urls = array(
-			$testRPCUrl->privatenetL1(),
-			$testRPCUrl->privatenetL2(),
+			( new DefaultRPCURLData() )->getPrivatenetL1(),
+			( new DefaultRPCURLData() )->getPrivatenetL2(),
 		);
 
 		$this->initialize();
