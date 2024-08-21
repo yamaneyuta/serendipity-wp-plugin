@@ -8,4 +8,6 @@ module.exports = {
 	},
 	// `lib-frontend`ライブラリがトランスパイルを必要とするが、`node_modules`にあるため、設定を追加
 	transformIgnorePatterns: ["node_modules/(?!.*(lib-frontend))"],
+
+	coverageDirectory: "coverage/jest",
 };
