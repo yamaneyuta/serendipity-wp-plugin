@@ -56,8 +56,6 @@
 		"//     - WordPress6.5以前を対象とする場合、はv27を使う必要がある ": "https://github.com/WordPress/gutenberg/blob/HEAD/packages/scripts/CHANGELOG.md#breaking-changes"
 	},
 	"devDependencies": {
-		"@babel/preset-env": "^7.25.3",
-		"@babel/preset-react": "^7.24.7",
 		"@chromatic-com/storybook": "^1.6.1",
 		"@graphql-codegen/cli": "^5.0.2",
 		"@graphql-codegen/client-preset": "^4.3.3",
@@ -84,7 +82,6 @@
 		"@yamaneyuta/serendipity-dev-conf": "github:yamaneyuta/serendipity-dev-conf#0.8.1",
 		"@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.2",
 		"@yamaneyuta/serendipity-lib-js-price-format": "github:yamaneyuta/serendipity-lib-js-price-format#0.8.2",
-		"babel-jest": "^29.7.0",
 		"concurrently": "^8.2.2",
 		"eslint-plugin-storybook": "^0.8.0",
 		"jest": "^29.7.0",
