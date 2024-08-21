@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IsPrivatenetEnabledResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostSettingResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkResolver;
@@ -18,14 +17,13 @@ class RootValue {
 		global $wpdb;
 
 		$resolvers = array(
-			'postSetting'         => new PostSettingResolver( $wpdb ),
+			'postSetting'     => new PostSettingResolver( $wpdb ),
 			// Query
-			'isPrivatenetEnabled' => new IsPrivatenetEnabledResolver(),
-			'sellingPrice'        => new SellingPriceResolver(),
-			'sellingNetwork'      => new SellingNetworkResolver(),
-			'sellableSymbols'     => new SellableSymbolsResolver(),
+			'sellingPrice'    => new SellingPriceResolver(),
+			'sellingNetwork'  => new SellingNetworkResolver(),
+			'sellableSymbols' => new SellableSymbolsResolver(),
 			// Mutation
-			'setPostSetting'      => new SetPostSettingResolver( $wpdb ),
+			'setPostSetting'  => new SetPostSettingResolver( $wpdb ),
 		);
 
 		$result = array();

@@ -10,9 +10,6 @@ query PostSetting($postID: Int!) {
 	# 販売しているネットワーク種別
 	sellingNetwork(postID: $postID)
 
-	# プライベートネットに接続可能かどうか
-	isPrivatenetEnabled
-
 	mainnetSellableSymbols: sellableSymbols(networkType: MAINNET)
 	testnetSellableSymbols: sellableSymbols(networkType: TESTNET)
 	privatenetSellableSymbols: sellableSymbols(networkType: PRIVATENET)
