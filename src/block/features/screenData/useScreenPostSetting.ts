@@ -15,8 +15,8 @@ export const useScreenPostSetting = (): ScreenPostSetting => {
 			return {};
 		} else if ( postSetting.sellingPrice === null ) {
 			// サーバーに登録済みデータがない時
-			const sellingNetwork = NetworkType.Mainnet; // TODO: 【暫定】メインネットで初期化
-			const symbol = postSetting.mainnetSellableSymbols[ 0 ]; // TODO: 【暫定】メインネットの最初の通貨で初期化
+			const sellingNetwork = null; // 販売ネットワークは未設定
+			const symbol = null; // シンボルは未設定
 
 			return {
 				sellingPrice: {
