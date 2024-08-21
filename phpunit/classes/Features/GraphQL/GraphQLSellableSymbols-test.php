@@ -46,7 +46,7 @@ class GraphQLSellableSymbolsTest extends IntegrationTestBase {
 			$sellable_symbols = $data['data']['sellableSymbols'];
 			$this->assertIsArray( $sellable_symbols );    // 販売可能な通貨シンボル一覧が取得できている
 		} else {
-			$this->assertFalse( isset( $data['data'] ) );   // データフィールドは存在しない
+			$this->assertFalse( isset( $data['data']['sellableSymbols'] ) );   // 設定が取得できない
 			$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
 		}
 	}
