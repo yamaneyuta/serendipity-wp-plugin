@@ -9,6 +9,9 @@ import { useSellableSymbols } from './screenData/useSellableSymbols';
 import { SymbolSelect } from './SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { BlockAmountInput } from '../components/BlockAmountInput';
+import { NetworkSelect } from './NetworkSelect';
+import { NetworkType } from '../../types/gql/generated';
+import { useSelectableNetworks } from './screenData/useSelectableNetworks';
 
 type GutenbergPostEditProps = {
 	onDataChanged: () => void;
@@ -36,17 +39,43 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 	}, [ onDataChanged, isDataChanged ] );
 
 	// 各種コントロールのプロパティを取得
+	const networkSelectProps = useNetworkSelectProps( postSetting, setPostSetting );
 	const priceValueProps = usePriceValueProps( postSetting, setPostSetting, serverPostSetting );
 	const selectSymbolProps = useSymbolSelectProps( postSetting, setPostSetting );
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
+			<div style={ { width: '100%' } }>
+				<NetworkSelect { ...networkSelectProps } />
+			</div>
 			<div style={ { display: 'flex', alignItems: 'flex-end' } }>
 				<BlockAmountInput { ...priceValueProps } style={ { display: 'block', maxWidth: '100px' } } />
 				<SymbolSelect { ...selectSymbolProps } />
 			</div>
 		</Placeholder>
 	);
+};
+
+const useNetworkSelectProps = (
+	postSetting: ScreenPostSetting,
+	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >
+) => {
+	const value = postSetting.sellingNetwork;
+	const networks = useSelectableNetworks();
+	const onChange = useCallback(
+		( network: NetworkType ) => {
+			setPostSetting( ( s ) => ( {
+				...s,
+				sellingNetwork: network,
+			} ) );
+		},
+		[ setPostSetting ]
+	);
+	return {
+		value,
+		networks,
+		onChange,
+	};
 };
 
 /**
