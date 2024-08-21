@@ -110,7 +110,7 @@ class Blockchain {
 		try {
 			$this->getBlockNumberHex();
 			return true;
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			return false;
 		}
 	}
