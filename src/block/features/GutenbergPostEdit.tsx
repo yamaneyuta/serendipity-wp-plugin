@@ -41,7 +41,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
-			<div>
+			<div style={ { display: 'flex', alignItems: 'flex-end' } }>
 				<BlockAmountInput { ...priceValueProps } />
 				<SymbolSelect { ...selectSymbolProps } />
 			</div>
