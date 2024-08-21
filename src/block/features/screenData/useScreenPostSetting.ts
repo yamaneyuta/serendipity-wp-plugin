@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { usePostSetting } from '../../provider/postSetting/usePostSetting';
 import type { ScreenPostSetting } from './ScreenPostSetting.type';
-import { NetworkType } from '../../../types/gql/generated';
 
 /**
  * 画面上で保持する設定情報をサーバーから取得します。
