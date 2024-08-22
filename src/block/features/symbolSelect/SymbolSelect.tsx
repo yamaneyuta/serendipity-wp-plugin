@@ -1,4 +1,4 @@
-import { BlockSelect, BlockSelectOption } from '../components/BlockSelect';
+import { BlockSelect, BlockSelectOption } from '../../components/BlockSelect';
 
 interface SymbolSelectProps {
 	value: string | null | undefined;
