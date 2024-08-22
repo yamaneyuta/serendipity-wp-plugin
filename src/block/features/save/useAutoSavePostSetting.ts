@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { PostSettingInput } from '../../../types/gql/generated';
 import { useEditorProperty } from '../../provider/editor/useEditorProperty';
-import { useSavePostSettingCallback } from '../../provider/postSetting/useSavePostSettingCallback';
+import { useSavePostSettingCallback } from '../../provider/serverData/postSetting/useSavePostSettingCallback';
 import { ScreenPostSetting } from '../screenData/ScreenPostSetting.type';
 import { useIsScreenDataChanged } from '../screenData/useIsScreenDataChanged';
 

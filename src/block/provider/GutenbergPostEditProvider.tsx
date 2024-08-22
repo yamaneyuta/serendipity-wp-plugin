@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BlockEditorPropertyProvider } from './editor/BlockEditorPropertyProvider';
-import { PostSettingProvider } from './postSetting/PostSettingProvider';
+import { PostSettingProvider } from './serverData/postSetting/PostSettingProvider';
 import { PostIDProvider } from './postID/PostIDProvider';
 
 // アクティブになったときは再読みしない

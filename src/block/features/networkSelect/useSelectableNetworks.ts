@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { usePostSetting } from '../../provider/postSetting/usePostSetting';
+import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
 import { NetworkType } from '../../../types/gql/generated';
 
 /**

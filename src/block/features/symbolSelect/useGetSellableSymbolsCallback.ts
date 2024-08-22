@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { NetworkType } from '../../../types/gql/generated';
-import { usePostSetting } from '../../provider/postSetting/usePostSetting';
+import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
 
 /**
  * 指定されたネットワークで販売可能な通貨シンボル一覧を取得するコールバックを返します。
