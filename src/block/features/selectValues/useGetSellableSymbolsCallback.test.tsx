@@ -1,4 +1,3 @@
-import assert from 'node:assert/strict';
 import { NetworkType } from '../../../types/gql/generated';
 import { useGetSellableSymbolsCallback as sut } from './useGetSellableSymbolsCallback';
 import { usePostSetting } from '../../provider/postSetting/usePostSetting';
@@ -16,7 +15,7 @@ type UsePostSettingResult = ReturnType< typeof usePostSetting >;
 /**
  * 無効なネットワーク種別が指定された場合のテスト。
  */
-it( 'useGetSellableSymbolsCallback() - invalid network', async () => {
+it( '[8F11FAF5] useGetSellableSymbolsCallback() - invalid network', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
 		mainnetSellableSymbols: [ 'JPY' ],
@@ -26,23 +25,16 @@ it( 'useGetSellableSymbolsCallback() - invalid network', async () => {
 		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
-	const { result: getMainnet } = renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) );
 
-	// ACT
-	try {
-		getMainnet.current();
-		expect( true ).toBeFalsy(); // ここには到達しない
-	} catch ( e ) {
-		// ASSERT
-		assert( e instanceof Error );
-		expect( e.message ).toContain( '[3D102039]' );
-	}
+	// ACT, ASSERT
+	const getSellableSymbols = renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ).result.current;
+	expect( getSellableSymbols ).toThrow( '[3D102039]' );
 } );
 
 /**
  * APIの戻り値が不正な場合のテスト。
  */
-it( 'useGetSellableSymbolsCallback() - invalid response', async () => {
+it( '[E0E21F73] useGetSellableSymbolsCallback() - invalid response', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
 		mainnetSellableSymbols: undefined, // 不正な値(APIの仕様上、undefinedになることはない)
@@ -53,15 +45,7 @@ it( 'useGetSellableSymbolsCallback() - invalid response', async () => {
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
-	const { result: getMainnet } = renderHook( () => sut( NetworkType.Mainnet ) );
-
-	try {
-		// ACT
-		getMainnet.current();
-		expect( true ).toBeFalsy(); // ここには到達しない
-	} catch ( e ) {
-		// ASSERT
-		assert( e instanceof Error );
-		expect( e.message ).toContain( '[519DA805]' );
-	}
+	// ACT, ASSERT
+	const getMainnet = renderHook( () => sut( NetworkType.Mainnet ) ).result.current;
+	expect( getMainnet ).toThrow( '[519DA805]' );
 } );
