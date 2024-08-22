@@ -10,11 +10,12 @@ export const SymbolSelect: React.FC< SymbolSelectProps > = ( { value, symbols, o
 		onChange( event.target.value );
 	};
 
-	value = value ?? '';
+	const disabled = value === undefined; // 読み込み中はコントロールを無効化
 
 	return (
-		<BlockSelect value={ value } onChange={ handleChange }>
-			{ value === '' ? <BlockSelectOption>{ 'Select a symbol' }</BlockSelectOption> : null }
+		<BlockSelect value={ value ?? '' } onChange={ handleChange } disabled={ disabled }>
+			{ value === null ? <BlockSelectOption>{ 'Select a symbol' }</BlockSelectOption> : null }
+			{ value === undefined ? <BlockSelectOption>{ 'Loading...' }</BlockSelectOption> : null }
 			{ symbols?.map( ( symbol ) => (
 				<BlockSelectOption key={ symbol } value={ symbol }>
 					{ symbol }
