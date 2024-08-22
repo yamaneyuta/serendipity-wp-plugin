@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { NetworkType } from '../../../types/gql/generated';
 import { useGetSellableSymbolsCallback as sut } from './useGetSellableSymbolsCallback';
 import { usePostSetting } from '../../provider/postSetting/usePostSetting';
-import { renderHook } from '@testing-library/react';
+import { renderHook } from '../../../../jest-lib/renderHook';
 
 jest.mock( '../../provider/postSetting/usePostSetting' );
 

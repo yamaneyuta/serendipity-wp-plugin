@@ -1,8 +1,7 @@
-import assert from 'node:assert/strict';
 import { NetworkType } from '../../../types/gql/generated';
 import { useSelectableSymbols as sut } from './useSelectableSymbols';
 import { usePostSetting } from '../../provider/postSetting/usePostSetting';
-import { renderHook } from '@testing-library/react';
+import { renderHook } from '../../../../jest-lib/renderHook';
 
 jest.mock( '../../provider/postSetting/usePostSetting' );
 
@@ -78,16 +77,9 @@ it( '[1DDC9FA6] useSelectableSymbols() - loading, invalid network type', async (
 	const res: UsePostSettingResult = undefined;
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
-	try {
-		// ACT
-		// データ取得中はネットワーク種別はundefinedを渡すべきだが、不正な値が渡された時のテスト。
-		renderHook( () => sut( NetworkType.Mainnet ) );
-		expect( true ).toBeFalsy(); // ここには到達しない
-	} catch ( e ) {
-		// ASSERT
-		assert( e instanceof Error );
-		expect( e.message ).toContain( '[FC51AFA9]' );
-	}
+	// ACT, ASSERT
+	// データ取得中はネットワーク種別はundefinedを渡すべきだが、不正な値が渡された時のテスト。
+	expect( () => renderHook( () => sut( NetworkType.Mainnet ) ) ).toThrow( '[FC51AFA9]' );
 } );
 
 /**
@@ -129,13 +121,6 @@ it( '[BF4948EE] useSelectableSymbols() - invalid network type', async () => {
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
-	// ACT
-	try {
-		renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) );
-		expect( true ).toBeFalsy(); // ここには到達しない
-	} catch ( e ) {
-		// ASSERT
-		assert( e instanceof Error );
-		expect( e.message ).toContain( '[F470863B]' );
-	}
+	// ACT, ASSERT
+	expect( () => renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ) ).toThrow( '[F470863B]' );
 } );
