@@ -60,21 +60,9 @@ const useNetworkSelectProps = (
 	postSetting: ScreenPostSetting,
 	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >
 ) => {
-	const value = postSetting.sellingNetwork;
 	const networks = useSelectableNetworks();
-	const onChange = useCallback(
-		( network: NetworkType ) => {
-			setPostSetting( ( s ) => ( {
-				...s,
-				sellingNetwork: network,
-			} ) );
-		},
-		[ setPostSetting ]
-	);
 	return {
-		value,
 		networks,
-		onChange,
 	};
 };
 

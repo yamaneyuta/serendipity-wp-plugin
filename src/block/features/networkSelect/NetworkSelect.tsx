@@ -1,15 +1,14 @@
+import { useCallback } from 'react';
 import { NetworkType } from '../../../types/gql/generated';
 import { BlockSelect, BlockSelectOption } from '../../components/BlockSelect';
+import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
 
 interface NetworkSelectProps {
-	value: string | null | undefined;
 	networks: string[] | null | undefined;
-	onChange: ( network: NetworkType ) => void;
 }
-export const NetworkSelect: React.FC< NetworkSelectProps > = ( { value, networks, onChange } ) => {
-	const handleChange = ( event: React.ChangeEvent< HTMLSelectElement > ) => {
-		onChange( event.target.value as NetworkType );
-	};
+export const NetworkSelect: React.FC< NetworkSelectProps > = ( { networks } ) => {
+	const handleChange = useOnChangeCallback();
+	const { selectedNetwork: value } = useSelectedNetwork();
 
 	const disabled = value === undefined; // 読み込み中はコントロールを無効化
 
@@ -23,5 +22,16 @@ export const NetworkSelect: React.FC< NetworkSelectProps > = ( { value, networks
 				</BlockSelectOption>
 			) ) }
 		</BlockSelect>
+	);
+};
+
+const useOnChangeCallback = () => {
+	const { setSelectedNetwork } = useSelectedNetwork();
+
+	return useCallback(
+		( event: React.ChangeEvent< HTMLSelectElement > ) => {
+			setSelectedNetwork( event.target.value as NetworkType );
+		},
+		[ setSelectedNetwork ]
 	);
 };
