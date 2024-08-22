@@ -1,6 +1,5 @@
 import { ScreenPostSetting } from './ScreenPostSetting.type';
 import { useScreenPostSetting } from './useScreenPostSetting';
-// const equal = require('fast-deep-equal');
 import equal from 'fast-deep-equal';
 
 /**

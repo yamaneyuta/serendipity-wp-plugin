@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn, expect, userEvent, within } from '@storybook/test';
-import { BlockAmountInput, TEST_ID } from './BlockAmountInput';
+import { BlockAmountInput } from './BlockAmountInput';
+
+const TEST_ID = '9844799D'; // コンポーネントに付与するdata-testid
 
 const meta: Meta< typeof BlockAmountInput > = {
 	title: 'Components/BlockAmountInput',
@@ -21,7 +23,9 @@ export default meta;
 type Story = StoryObj< typeof BlockAmountInput >;
 
 export const Default: Story = {
-	args: {},
+	args: {
+		'data-testid': TEST_ID,
+	},
 	play: async ( { args, canvasElement } ) => {
 		const canvas = within( canvasElement );
 		const input = canvas.getByTestId( TEST_ID );
@@ -50,6 +54,7 @@ export const Default: Story = {
 
 export const Disabled: Story = {
 	args: {
+		'data-testid': TEST_ID,
 		disabled: true,
 	},
 	play: async ( { args, canvasElement } ) => {

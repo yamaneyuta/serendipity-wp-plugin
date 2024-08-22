@@ -5,7 +5,7 @@ import { useScreenPostSetting } from './screenData/useScreenPostSetting';
 import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
 import { useAutoSavePostSetting } from './save/useAutoSavePostSetting';
 import { useIsScreenDataChanged } from './screenData/useIsScreenDataChanged';
-import { useSellableSymbols } from './screenData/useSellableSymbols';
+import { useSelectableSymbols } from './selectValues/useSelectableSymbols';
 import { SymbolSelect } from './SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { BlockAmountInput } from '../components/BlockAmountInput';
@@ -88,7 +88,7 @@ const useSymbolSelectProps = (
 	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >
 ) => {
 	const value = postSetting.sellingPrice?.symbol;
-	const symbols = useSellableSymbols( postSetting.sellingNetwork );
+	const symbols = useSelectableSymbols( postSetting.sellingNetwork );
 	const onChange = useSetPriceSymbolCallback( setPostSetting );
 	return {
 		value,
