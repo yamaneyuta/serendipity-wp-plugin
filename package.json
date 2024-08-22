@@ -11,7 +11,7 @@
 		"build:block": "wp-scripts build",
 		"build:graphql-types": "graphql-codegen",
 		"ci:lint": "run-p lint:js format",
-		"ci:test": "run-p test:storybook coverage:phpunit",
+		"ci:test": "run-p coverage:js test:storybook coverage:phpunit",
 		"clean": "run-s clean:php-cache",
 		"clean:js": "rm -rf build/*",
 		"clean:php-cache": "rm -rf includes/cache/*.php",
