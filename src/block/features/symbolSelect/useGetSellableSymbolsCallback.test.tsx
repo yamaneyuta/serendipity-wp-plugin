@@ -27,8 +27,8 @@ it( '[8F11FAF5] useGetSellableSymbolsCallback() - invalid network', async () => 
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT, ASSERT
-	const getSellableSymbols = renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ).result.current;
-	expect( getSellableSymbols ).toThrow( '[3D102039]' );
+	const getSellableSymbols = renderHook( () => sut() ).result.current;
+	expect( () => getSellableSymbols( 'INVALID_NETWORK' as unknown as NetworkType ) ).toThrow( '[3D102039]' );
 } );
 
 /**
@@ -46,6 +46,6 @@ it( '[E0E21F73] useGetSellableSymbolsCallback() - invalid response', async () =>
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT, ASSERT
-	const getMainnet = renderHook( () => sut( NetworkType.Mainnet ) ).result.current;
-	expect( getMainnet ).toThrow( '[519DA805]' );
+	const getMainnet = renderHook( () => sut() ).result.current;
+	expect( () => getMainnet( NetworkType.Mainnet ) ).toThrow( '[519DA805]' );
 } );

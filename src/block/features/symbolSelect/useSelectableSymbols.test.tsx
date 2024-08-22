@@ -122,5 +122,5 @@ it( '[BF4948EE] useSelectableSymbols() - invalid network type', async () => {
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT, ASSERT
-	expect( () => renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ) ).toThrow( '[F470863B]' );
+	expect( () => renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ) ).toThrow( '[3D102039]' );
 } );
