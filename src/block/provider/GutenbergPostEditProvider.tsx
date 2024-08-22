@@ -1,7 +1,8 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { BlockEditorPropertyProvider } from './editor/BlockEditorPropertyProvider';
-import { PostSettingProvider } from './serverData/postSetting/PostSettingProvider';
+import { ServerDataProvider } from './serverData/ServerDataProvider';
 import { PostIDProvider } from './postID/PostIDProvider';
+import { UserInputProvider } from './userInput/UserInputProvider';
 
 // アクティブになったときは再読みしない
 const client = new QueryClient( {
@@ -18,15 +19,18 @@ type GutenbergPostEditProviderProps = {
 
 export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps > = ( { children } ) => {
 	return (
-		<QueryClientProvider client={ client }>
+		<>
 			{ /* 投稿IDを取得 */ }
 			<PostIDProvider>
 				{ /* WordPressのエディタ情報を取得 */ }
 				<BlockEditorPropertyProvider>
-					{ /* 投稿設定情報を取得 */ }
-					<PostSettingProvider>{ children }</PostSettingProvider>
+					{ /* サーバーに保存されている情報(投稿設定)を取得 */ }
+					<ServerDataProvider client={ client }>
+						{ /* ユーザーが入力した値を保持 */ }
+						<UserInputProvider>{ children }</UserInputProvider>
+					</ServerDataProvider>
 				</BlockEditorPropertyProvider>
 			</PostIDProvider>
-		</QueryClientProvider>
+		</>
 	);
 };
