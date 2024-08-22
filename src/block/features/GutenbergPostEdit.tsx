@@ -9,9 +9,9 @@ import { useSelectableSymbols } from './symbolSelect/useSelectableSymbols';
 import { SymbolSelect } from './symbolSelect/SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { BlockAmountInput } from '../components/BlockAmountInput';
-import { NetworkSelect } from './NetworkSelect';
+import { NetworkSelect } from './networkSelect/NetworkSelect';
 import { NetworkType } from '../../types/gql/generated';
-import { useSelectableNetworks } from './screenData/useSelectableNetworks';
+import { useSelectableNetworks } from './networkSelect/useSelectableNetworks';
 
 type GutenbergPostEditProps = {
 	onDataChanged: () => void;
