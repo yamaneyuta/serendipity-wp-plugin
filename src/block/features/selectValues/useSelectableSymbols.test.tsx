@@ -22,14 +22,14 @@ it( '[23C5844D] useSelectableSymbols() - default', async () => {
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT
-	const { result: mainnetSellableSymbols } = renderHook( () => sut( NetworkType.Mainnet ) );
-	const { result: testnetSellableSymbols } = renderHook( () => sut( NetworkType.Testnet ) );
-	const { result: privatenetSellableSymbols } = renderHook( () => sut( NetworkType.Privatenet ) );
+	const mainnetSellableSymbols = renderHook( () => sut( NetworkType.Mainnet ) ).result.current;
+	const testnetSellableSymbols = renderHook( () => sut( NetworkType.Testnet ) ).result.current;
+	const privatenetSellableSymbols = renderHook( () => sut( NetworkType.Privatenet ) ).result.current;
 
 	// ASSERT
-	expect( mainnetSellableSymbols.current ).toEqual( [ 'JPY' ] );
-	expect( testnetSellableSymbols.current ).toEqual( [ 'USD' ] );
-	expect( privatenetSellableSymbols.current ).toEqual( [ 'EUR', 'GBP' ] );
+	expect( mainnetSellableSymbols ).toEqual( [ 'JPY' ] );
+	expect( testnetSellableSymbols ).toEqual( [ 'USD' ] );
+	expect( privatenetSellableSymbols ).toEqual( [ 'EUR', 'GBP' ] );
 } );
 
 /**
@@ -42,10 +42,10 @@ it( '[1DDC9FA6] useSelectableSymbols(undefined) - loading', async () => {
 
 	// ACT
 	// 仕様上、ネットワーク種別にundefinedが渡される時は読み込み中の時。
-	const { result: sellableSymbols } = renderHook( () => sut( undefined ) );
+	const sellableSymbols = renderHook( () => sut( undefined ) ).result.current;
 
 	// ASSERT
-	expect( sellableSymbols.current ).toBeUndefined();
+	expect( sellableSymbols ).toBeUndefined();
 } );
 
 /**
@@ -63,10 +63,10 @@ it( '[1DDC9FA6] useSelectableSymbols(null) - loading', async () => {
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT
-	const { result: sellableSymbols } = renderHook( () => sut( null ) );
+	const sellableSymbols = renderHook( () => sut( null ) ).result.current;
 
 	// ASSERT
-	expect( sellableSymbols.current ).toBeNull();
+	expect( sellableSymbols ).toBeNull();
 } );
 
 /**
@@ -97,14 +97,14 @@ it( '[E9CD00AF] useSelectableSymbols() - null', async () => {
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT
-	const { result: mainnetSellableSymbols } = renderHook( () => sut( NetworkType.Mainnet ) );
-	const { result: testnetSellableSymbols } = renderHook( () => sut( NetworkType.Testnet ) );
-	const { result: privatenetSellableSymbols } = renderHook( () => sut( NetworkType.Privatenet ) );
+	const mainnetSellableSymbols = renderHook( () => sut( NetworkType.Mainnet ) ).result.current;
+	const testnetSellableSymbols = renderHook( () => sut( NetworkType.Testnet ) ).result.current;
+	const privatenetSellableSymbols = renderHook( () => sut( NetworkType.Privatenet ) ).result.current;
 
 	// ASSERT
-	expect( mainnetSellableSymbols.current ).toBeNull();
-	expect( testnetSellableSymbols.current ).toBeNull();
-	expect( privatenetSellableSymbols.current ).toBeNull();
+	expect( mainnetSellableSymbols ).toBeNull();
+	expect( testnetSellableSymbols ).toBeNull();
+	expect( privatenetSellableSymbols ).toBeNull();
 } );
 
 /**
