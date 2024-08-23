@@ -10,9 +10,8 @@ import { SymbolSelect } from './symbolSelect/SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { BlockAmountInput } from '../components/BlockAmountInput';
 import { NetworkSelect } from './networkSelect/NetworkSelect';
-import { useSelectableNetworks } from './networkSelect/useSelectableNetworks';
 import { useAutoBindServerData } from './load/useAutoBindServerData';
-import { useSelectedNetwork } from '../provider/userInput/selectedNetwork/useSelectedNetwork';
+import { useNetworkSelectProps } from './networkSelect/useNetworkSelectProps';
 
 type GutenbergPostEditProps = {
 	onDataChanged: () => void;
@@ -44,14 +43,13 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 	}, [ onDataChanged, isDataChanged ] );
 
 	// 各種コントロールのプロパティを取得
-	const networkSelectProps = useNetworkSelectProps( postSetting, setPostSetting );
 	const priceValueProps = usePriceValueProps( postSetting, setPostSetting, serverPostSetting );
 	const selectSymbolProps = useSymbolSelectProps( postSetting, setPostSetting );
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
 			<div style={ { width: '100%' } }>
-				<NetworkSelect { ...networkSelectProps } />
+				<NetworkSelect { ...useNetworkSelectProps() } />
 			</div>
 			<div style={ { display: 'flex', alignItems: 'flex-end' } }>
 				<BlockAmountInput { ...priceValueProps } style={ { display: 'block', maxWidth: '100px' } } />
@@ -59,18 +57,6 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 			</div>
 		</Placeholder>
 	);
-};
-
-const useNetworkSelectProps = (
-	postSetting: ScreenPostSetting,
-	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >
-) => {
-	const { selectedNetwork: value } = useSelectedNetwork();
-	const networks = useSelectableNetworks();
-	return {
-		value,
-		networks,
-	};
 };
 
 /**
