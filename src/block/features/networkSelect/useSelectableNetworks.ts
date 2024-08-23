@@ -14,7 +14,7 @@ export const useSelectableNetworks = () => {
 			return undefined;
 		}
 
-		const networks: string[] = []; // 戻り値となるネットワーク一覧
+		const networks: NetworkType[] = []; // 戻り値となるネットワーク一覧
 
 		// 各ネットワークで販売可能な通貨シンボルが存在する場合は、ネットワーク一覧に追加
 		if ( serverPostSetting.mainnetSellableSymbols ) {
