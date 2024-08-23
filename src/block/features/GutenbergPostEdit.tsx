@@ -3,14 +3,14 @@ import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
 import { useScreenPostSetting } from './screenData/useScreenPostSetting';
 import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
-import { useAutoSavePostSetting } from './save/useAutoSavePostSetting';
+import { useAutoSavePostSetting } from './watch/useAutoSavePostSetting';
 import { useIsScreenDataChanged } from './screenData/useIsScreenDataChanged';
 import { useSelectableSymbols } from './symbolSelect/useSelectableSymbols';
 import { SymbolSelect } from './symbolSelect/SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { BlockAmountInput } from '../components/BlockAmountInput';
 import { NetworkSelect } from './networkSelect/NetworkSelect';
-import { useAutoBindServerData } from './load/useAutoBindServerData';
+import { useAutoBindServerData } from './watch/useAutoBindServerData';
 import { useNetworkSelectProps } from './networkSelect/useNetworkSelectProps';
 
 type GutenbergPostEditProps = {
