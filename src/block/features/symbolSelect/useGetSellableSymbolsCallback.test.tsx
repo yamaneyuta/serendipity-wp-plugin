@@ -3,7 +3,7 @@ import { useGetSellableSymbolsCallback as sut } from './useGetSellableSymbolsCal
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
 import { renderHook } from '../../../../jest-lib/renderHook';
 
-jest.mock( '../../provider/postSetting/usePostSetting' );
+jest.mock( '../../provider/serverData/postSetting/usePostSetting' );
 
 type UsePostSettingResult = ReturnType< typeof usePostSetting >;
 
