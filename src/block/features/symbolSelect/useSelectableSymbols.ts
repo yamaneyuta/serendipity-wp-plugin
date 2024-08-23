@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { NetworkType } from '../../../types/gql/generated';
-import { useGetSellableSymbolsCallback } from './useGetSellableSymbolsCallback';
+import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
 
 /**
  * 画面で選択可能な通貨シンボル一覧を取得します。
