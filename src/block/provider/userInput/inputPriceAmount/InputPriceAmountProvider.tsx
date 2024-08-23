@@ -1,4 +1,5 @@
 import { createContext, useState } from 'react';
+import { Assert } from '../../../lib/Assert';
 
 type InputPriceAmountContextType = ReturnType< typeof _useInputPriceAmount >;
 
@@ -6,19 +7,28 @@ export const InputPriceAmountContext = createContext< InputPriceAmountContextTyp
 
 const _useInputPriceAmount = () => {
 	// 価格(0xから開始する16進数の文字列)
-	const [ inputAmount, _setInputAmount ] = useState< string | null | undefined >( undefined );
+	const [ inputAmountHex, _setInputAmountHex ] = useState< string | null | undefined >( undefined );
 
 	// 価格の小数点以下の桁数
 	const [ inputDecimals, _setInputDecimals ] = useState< number | null | undefined >( undefined );
 
 	// 価格を更新する関数
-	const setInputPriceAmount = ( amount: string, decimals: number ) => {
-		_setInputAmount( amount );
+	const setInputPriceAmount = ( amountHex: string | null | undefined, decimals: number | null | undefined ) => {
+		// 引数のチェック
+		if ( amountHex ) {
+			Assert.isAmountHex( amountHex );
+		}
+		if ( typeof decimals === 'number' ) {
+			Assert.isDecimals( decimals );
+		}
+
+		// stateを更新
+		_setInputAmountHex( amountHex );
 		_setInputDecimals( decimals );
 	};
 
 	return {
-		inputAmount,
+		inputAmountHex,
 		inputDecimals,
 		setInputPriceAmount,
 	};
