@@ -6,12 +6,12 @@ import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
 import { useAutoSavePostSetting } from './watch/useAutoSavePostSetting';
 import { SymbolSelect } from './symbolSelect/SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
-import { BlockAmountInput } from '../components/BlockAmountInput';
 import { NetworkSelect } from './networkSelect/NetworkSelect';
 import { useAutoBindServerData } from './watch/useAutoBindServerData';
 import { useNetworkSelectProps } from './networkSelect/useNetworkSelectProps';
 import { useNotifyDataChangedToEditor } from './watch/useNotifyDataChangedToEditor';
 import { useSymbolSelectProps } from './symbolSelect/useSymbolSelectProps';
+import { PriceValueInput } from './priceValueInput/PriceValueInput';
 
 type GutenbergPostEditProps = {
 	onDataChanged: () => void;
@@ -46,7 +46,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 				<NetworkSelect { ...useNetworkSelectProps() } />
 			</div>
 			<div style={ { display: 'flex', alignItems: 'flex-end' } }>
-				<BlockAmountInput { ...priceValueProps } style={ { display: 'block', maxWidth: '100px' } } />
+				<PriceValueInput { ...priceValueProps } style={ { display: 'block', maxWidth: '100px' } } />
 				<SymbolSelect { ...useSymbolSelectProps() } />
 			</div>
 		</Placeholder>
@@ -57,7 +57,7 @@ const usePriceValueProps = (
 	postSetting: ScreenPostSetting,
 	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >,
 	serverPostSetting: ScreenPostSetting
-): React.ComponentProps< typeof BlockAmountInput > => {
+): React.ComponentProps< typeof PriceValueInput > => {
 	const [ text, setText ] = useState< string | undefined >( undefined ); // 入力テキストボックスに表示する値
 
 	// サーバーから取得した設定情報が変更された時に入力テキストボックスに表示する値を更新
