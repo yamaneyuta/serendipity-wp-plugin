@@ -4,7 +4,7 @@ import { useSelectedNetwork } from '../../../provider/userInput/selectedNetwork/
 /**
  * 販売するネットワークが画面上で変更されたかどうかを取得します。
  */
-export const useIsSelectedNetworkChanged = () => {
+export const useIsSellingNetworkChanged = () => {
 	// サーバーから取得した販売ネットワーク
 	const sellingNetwork = useSellingNetwork();
 	// ユーザーが選択したネットワーク

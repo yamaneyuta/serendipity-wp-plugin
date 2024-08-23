@@ -1,4 +1,4 @@
-import { useIsSelectedNetworkChanged } from './useIsSelectedNetworkChanged';
+import { useIsSellingNetworkChanged } from './useIsSellingNetworkChanged';
 import { useSelectedNetwork } from '../../../provider/userInput/selectedNetwork/useSelectedNetwork';
 import { useSellingNetwork } from '../../../provider/serverData/useSellingNetwork';
 import { NetworkType } from '../../../../types/gql/generated';
@@ -6,7 +6,7 @@ import { NetworkType } from '../../../../types/gql/generated';
 jest.mock( '../../../provider/userInput/selectedNetwork/useSelectedNetwork' );
 jest.mock( '../../../provider/serverData/useSellingNetwork' );
 
-describe( '[F183C408] useIsSelectedNetworkChanged()', () => {
+describe( '[F183C408] useIsSellingNetworkChanged()', () => {
 	// undefinedが含まれる場合は変更されたとみなさない
 	// [サーバーから取得した販売ネットワーク, ユーザーが選択したネットワーク, 期待値(変更されたかどうか)]
 	const dataset: [ NetworkType | null | undefined, NetworkType | null | undefined, boolean ][] = [
@@ -29,12 +29,12 @@ describe( '[F183C408] useIsSelectedNetworkChanged()', () => {
 	];
 
 	for ( const [ srv, usr, expected ] of dataset ) {
-		it( `[E45D770B] useIsSelectedNetworkChanged() - srv: (${ srv }, usr: ${ usr }) -> ${ expected }`, async () => {
+		it( `[E45D770B] useIsSellingNetworkChanged() - srv: (${ srv }, usr: ${ usr }) -> ${ expected }`, async () => {
 			( useSellingNetwork as jest.Mock ).mockReturnValue( srv );
 			( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: usr } );
 
-			const isSelectedNetworkChanged = useIsSelectedNetworkChanged();
-			expect( isSelectedNetworkChanged ).toEqual( expected );
+			const isSellingNetworkChanged = useIsSellingNetworkChanged();
+			expect( isSellingNetworkChanged ).toEqual( expected );
 		} );
 	}
 } );
