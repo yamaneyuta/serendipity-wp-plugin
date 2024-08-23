@@ -1,6 +1,6 @@
 import { NetworkType } from '../../../types/gql/generated';
 import { useGetSellableSymbolsCallback as sut } from './useGetSellableSymbolsCallback';
-import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
+import { usePostSetting } from './postSetting/usePostSetting';
 import { renderHook } from '../../../../jest-lib/renderHook';
 
 jest.mock( '../../provider/serverData/postSetting/usePostSetting' );
