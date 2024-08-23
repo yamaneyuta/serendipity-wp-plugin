@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { InputPriceAmountContext } from './InputPriceAmountProvider';
 
 /**
- * ユーザーが入力した価格を取得または設定します。
+ * ユーザーが入力した価格を取得または設定する機能を提供します。
  */
 export const useInputPriceAmount = () => {
 	const context = useContext( InputPriceAmountContext );
