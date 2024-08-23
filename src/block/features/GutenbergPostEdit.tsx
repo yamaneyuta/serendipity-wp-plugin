@@ -4,7 +4,6 @@ import { widget } from '@wordpress/icons';
 import { useScreenPostSetting } from './screenData/useScreenPostSetting';
 import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
 import { useAutoSavePostSetting } from './watch/useAutoSavePostSetting';
-import { useIsScreenDataChanged } from './screenData/useIsScreenDataChanged';
 import { useSelectableSymbols } from './symbolSelect/useSelectableSymbols';
 import { SymbolSelect } from './symbolSelect/SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
@@ -12,6 +11,7 @@ import { BlockAmountInput } from '../components/BlockAmountInput';
 import { NetworkSelect } from './networkSelect/NetworkSelect';
 import { useAutoBindServerData } from './watch/useAutoBindServerData';
 import { useNetworkSelectProps } from './networkSelect/useNetworkSelectProps';
+import { useNotifyDataChangedToEditor } from './watch/useNotifyDataChangedToEditor';
 
 type GutenbergPostEditProps = {
 	onDataChanged: () => void;
@@ -20,6 +20,9 @@ type GutenbergPostEditProps = {
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataChanged } ) => {
 	// サーバーから取得した情報を画面に反映
 	useAutoBindServerData();
+
+	// データが変更された時にWordPressのエディタに通知
+	useNotifyDataChangedToEditor( onDataChanged );
 
 	// 画面で保持する設定情報
 	/** @deprecated */
@@ -33,14 +36,6 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 	useEffect( () => {
 		setPostSetting( JSON.parse( JSON.stringify( serverPostSetting ) ) );
 	}, [ serverPostSetting ] );
-
-	// 画面上の情報が変更された時に保存ボタンが押せるようにonDataChangedを呼び出す
-	const isDataChanged = useIsScreenDataChanged( postSetting );
-	useEffect( () => {
-		if ( isDataChanged ) {
-			onDataChanged();
-		}
-	}, [ onDataChanged, isDataChanged ] );
 
 	// 各種コントロールのプロパティを取得
 	const priceValueProps = usePriceValueProps( postSetting, setPostSetting, serverPostSetting );

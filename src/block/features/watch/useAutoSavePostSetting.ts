@@ -3,7 +3,7 @@ import { PostSettingInput } from '../../../types/gql/generated';
 import { useEditorProperty } from '../../provider/editor/useEditorProperty';
 import { useSavePostSettingCallback } from '../../provider/serverData/postSetting/useSavePostSettingCallback';
 import { ScreenPostSetting } from '../screenData/ScreenPostSetting.type';
-import { useIsScreenDataChanged } from '../screenData/useIsScreenDataChanged';
+import { useIsDataChanged } from './useIsDataChanged';
 
 /**
  * 投稿編集画面で、投稿が手動で保存された時に設定も保存します。
@@ -12,7 +12,7 @@ import { useIsScreenDataChanged } from '../screenData/useIsScreenDataChanged';
 export const useAutoSavePostSetting = ( postSetting: ScreenPostSetting ) => {
 	const isManualSaving = useIsManualSaving();
 	const save = useSavePostSettingCallback();
-	const isDataChanged = useIsScreenDataChanged( postSetting );
+	const isDataChanged = useIsDataChanged();
 
 	useEffect( () => {
 		if ( ! isManualSaving || ! isDataChanged ) {
