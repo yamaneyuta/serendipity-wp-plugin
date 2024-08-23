@@ -4,7 +4,7 @@ import { useSelectedPriceSymbol } from '../../../provider/userInput/selectedPric
 /**
  * 販売価格の通貨シンボルが画面上で変更されたかどうかを取得します。
  */
-export const useIsSelectedPriceSymbolChanged = () => {
+export const useIsSellingPriceSymbolChanged = () => {
 	// サーバーから取得した販売価格の通貨シンボル
 	const sellingPriceSymbol = useSellingPriceSymbol();
 	// ユーザーが選択した販売価格の通貨シンボル
