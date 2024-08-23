@@ -4,11 +4,11 @@ import { BlockSelect, BlockSelectOption } from '../../components/BlockSelect';
 import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
 
 interface NetworkSelectProps {
+	value: NetworkType | null | undefined;
 	networks: string[] | null | undefined;
 }
-export const NetworkSelect: React.FC< NetworkSelectProps > = ( { networks } ) => {
+export const NetworkSelect: React.FC< NetworkSelectProps > = ( { value, networks } ) => {
 	const handleChange = useOnChangeCallback();
-	const { selectedNetwork: value } = useSelectedNetwork();
 
 	const disabled = value === undefined; // 読み込み中はコントロールを無効化
 

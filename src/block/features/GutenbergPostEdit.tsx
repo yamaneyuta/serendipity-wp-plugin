@@ -10,15 +10,20 @@ import { SymbolSelect } from './symbolSelect/SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { BlockAmountInput } from '../components/BlockAmountInput';
 import { NetworkSelect } from './networkSelect/NetworkSelect';
-import { NetworkType } from '../../types/gql/generated';
 import { useSelectableNetworks } from './networkSelect/useSelectableNetworks';
+import { useAutoBindServerData } from './load/useAutoBindServerData';
+import { useSelectedNetwork } from '../provider/userInput/selectedNetwork/useSelectedNetwork';
 
 type GutenbergPostEditProps = {
 	onDataChanged: () => void;
 };
 
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataChanged } ) => {
+	// サーバーから取得した情報を画面に反映
+	useAutoBindServerData();
+
 	// 画面で保持する設定情報
+	/** @deprecated */
 	const [ postSetting, setPostSetting ] = useState< ScreenPostSetting >( {} );
 	// サーバーから取得した設定情報
 	const serverPostSetting = useScreenPostSetting();
@@ -60,8 +65,10 @@ const useNetworkSelectProps = (
 	postSetting: ScreenPostSetting,
 	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >
 ) => {
+	const { selectedNetwork: value } = useSelectedNetwork();
 	const networks = useSelectableNetworks();
 	return {
+		value,
 		networks,
 	};
 };
