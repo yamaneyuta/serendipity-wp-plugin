@@ -1,11 +1,11 @@
 import { createContext, useState } from 'react';
 import { Assert } from '../../../lib/Assert';
 
-type InputPriceAmountContextType = ReturnType< typeof _useInputPriceAmount >;
+type InputPriceValueContextType = ReturnType< typeof _useInputPriceValue >;
 
-export const InputPriceAmountContext = createContext< InputPriceAmountContextType | undefined >( undefined );
+export const InputPriceValueContext = createContext< InputPriceValueContextType | undefined >( undefined );
 
-const _useInputPriceAmount = () => {
+const _useInputPriceValue = () => {
 	// 価格(0xから開始する16進数の文字列)
 	const [ inputAmountHex, _setInputAmountHex ] = useState< string | null | undefined >( undefined );
 
@@ -13,7 +13,7 @@ const _useInputPriceAmount = () => {
 	const [ inputDecimals, _setInputDecimals ] = useState< number | null | undefined >( undefined );
 
 	// 価格を更新する関数
-	const setInputPriceAmount = ( amountHex: string | null | undefined, decimals: number | null | undefined ) => {
+	const setInputPriceValue = ( amountHex: string | null | undefined, decimals: number | null | undefined ) => {
 		// 引数のチェック
 		if ( amountHex ) {
 			Assert.isAmountHex( amountHex );
@@ -30,11 +30,11 @@ const _useInputPriceAmount = () => {
 	return {
 		inputAmountHex,
 		inputDecimals,
-		setInputPriceAmount,
+		setInputPriceValue,
 	};
 };
 
-type InputPriceAmountProviderProps = {
+type InputPriceValueProviderProps = {
 	children: React.ReactNode;
 };
 
@@ -43,7 +43,7 @@ type InputPriceAmountProviderProps = {
  * @param root0
  * @param root0.children
  */
-export const InputPriceAmountProvider: React.FC< InputPriceAmountProviderProps > = ( { children } ) => {
-	const value = _useInputPriceAmount();
-	return <InputPriceAmountContext.Provider value={ value }>{ children }</InputPriceAmountContext.Provider>;
+export const InputPriceValueProvider: React.FC< InputPriceValueProviderProps > = ( { children } ) => {
+	const value = _useInputPriceValue();
+	return <InputPriceValueContext.Provider value={ value }>{ children }</InputPriceValueContext.Provider>;
 };

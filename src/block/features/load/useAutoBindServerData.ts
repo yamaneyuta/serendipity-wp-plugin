@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
 import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
-import { useInputPriceAmount } from '../../provider/userInput/inputPriceAmount/useInputPriceAmount';
+import { useInputPriceValue } from '../../provider/userInput/inputPriceValue/useInputPriceValue';
 
 /**
  * サーバーから取得したデータをProviderのstateにバインドする機能を提供します。
  */
 export const useAutoBindServerData = () => {
 	useAutoBindSellingNetwork(); // 販売ネットワークの情報をバインド
-	useAutoBindSellingPriceAmount(); // 販売価格の情報をバインド
+	useAutoBindSellingPriceValue(); // 販売価格の情報をバインド
 };
 
 /**
@@ -30,17 +30,17 @@ const useAutoBindSellingNetwork = () => {
 /**
  * サーバーから受信した販売価格の情報をProviderのstateにバインドします。
  */
-const useAutoBindSellingPriceAmount = () => {
+const useAutoBindSellingPriceValue = () => {
 	// 販売価格をサーバーから取得
 	const sellingPrice = usePostSetting()?.sellingPrice;
 
 	// 画面で入力された価格を設定する関数を取得
-	const { setInputPriceAmount } = useInputPriceAmount();
+	const { setInputPriceValue } = useInputPriceValue();
 
 	// サーバーから受信した値が変更された時に販売価格を設定する
 	useEffect( () => {
 		const amountHex = sellingPrice ? sellingPrice.amountHex : sellingPrice;
 		const decimals = sellingPrice ? sellingPrice.decimals : sellingPrice;
-		setInputPriceAmount( amountHex, decimals );
-	}, [ sellingPrice, setInputPriceAmount ] );
+		setInputPriceValue( amountHex, decimals );
+	}, [ sellingPrice, setInputPriceValue ] );
 };

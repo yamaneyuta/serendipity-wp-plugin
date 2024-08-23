@@ -1,5 +1,5 @@
 import { SelectedNetworkProvider } from './selectedNetwork/SelectedNetworkProvider';
-import { InputPriceAmountProvider } from './inputPriceAmount/InputPriceAmountProvider';
+import { InputPriceValueProvider } from './inputPriceValue/InputPriceValueProvider';
 import { SelectedPriceSymbolProvider } from './selectedPriceSymbol/SelectedPriceSymbolProvider';
 
 type UserInputProviderProps = {
@@ -9,9 +9,9 @@ type UserInputProviderProps = {
 export const UserInputProvider: React.FC< UserInputProviderProps > = ( { children } ) => {
 	return (
 		<SelectedNetworkProvider>
-			<InputPriceAmountProvider>
+			<InputPriceValueProvider>
 				<SelectedPriceSymbolProvider>{ children }</SelectedPriceSymbolProvider>
-			</InputPriceAmountProvider>
+			</InputPriceValueProvider>
 		</SelectedNetworkProvider>
 	);
 };
