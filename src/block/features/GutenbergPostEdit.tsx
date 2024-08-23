@@ -4,7 +4,6 @@ import { widget } from '@wordpress/icons';
 import { useScreenPostSetting } from './screenData/useScreenPostSetting';
 import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
 import { useAutoSavePostSetting } from './watch/useAutoSavePostSetting';
-import { useSelectableSymbols } from './symbolSelect/useSelectableSymbols';
 import { SymbolSelect } from './symbolSelect/SymbolSelect';
 import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { BlockAmountInput } from '../components/BlockAmountInput';
@@ -12,6 +11,7 @@ import { NetworkSelect } from './networkSelect/NetworkSelect';
 import { useAutoBindServerData } from './watch/useAutoBindServerData';
 import { useNetworkSelectProps } from './networkSelect/useNetworkSelectProps';
 import { useNotifyDataChangedToEditor } from './watch/useNotifyDataChangedToEditor';
+import { useSymbolSelectProps } from './symbolSelect/useSymbolSelectProps';
 
 type GutenbergPostEditProps = {
 	onDataChanged: () => void;
@@ -39,7 +39,6 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 
 	// 各種コントロールのプロパティを取得
 	const priceValueProps = usePriceValueProps( postSetting, setPostSetting, serverPostSetting );
-	const selectSymbolProps = useSymbolSelectProps( postSetting, setPostSetting );
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
@@ -48,29 +47,10 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 			</div>
 			<div style={ { display: 'flex', alignItems: 'flex-end' } }>
 				<BlockAmountInput { ...priceValueProps } style={ { display: 'block', maxWidth: '100px' } } />
-				<SymbolSelect { ...selectSymbolProps } />
+				<SymbolSelect { ...useSymbolSelectProps() } />
 			</div>
 		</Placeholder>
 	);
-};
-
-/**
- * 通貨シンボル選択コントロールのプロパティを取得します。
- * @param postSetting
- * @param setPostSetting
- */
-const useSymbolSelectProps = (
-	postSetting: ScreenPostSetting,
-	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >
-) => {
-	const value = postSetting.sellingPrice?.symbol;
-	const symbols = useSelectableSymbols( postSetting.sellingNetwork );
-	const onChange = useSetPriceSymbolCallback( setPostSetting );
-	return {
-		value,
-		symbols,
-		onChange,
-	};
 };
 
 const usePriceValueProps = (
@@ -111,24 +91,4 @@ const usePriceValueProps = (
 		onChange,
 		width: 90,
 	};
-};
-
-const useSetPriceSymbolCallback = ( setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > > ) => {
-	return useCallback(
-		( symbol: string ) => {
-			setPostSetting( ( s ) => {
-				if ( ! s.sellingPrice ) {
-					throw new Error( '{0EA4F3DD-42B0-4048-8C15-3D947D2405A3}' );
-				}
-				return {
-					...s,
-					sellingPrice: {
-						...s.sellingPrice,
-						symbol,
-					},
-				};
-			} );
-		},
-		[ setPostSetting ]
-	);
 };
