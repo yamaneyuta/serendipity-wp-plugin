@@ -4,6 +4,7 @@ import type { ScreenPostSetting } from './ScreenPostSetting.type';
 
 /**
  * 画面上で保持する設定情報をサーバーから取得します。
+ * @deprecated
  */
 export const useScreenPostSetting = (): ScreenPostSetting => {
 	const postSetting = usePostSetting();

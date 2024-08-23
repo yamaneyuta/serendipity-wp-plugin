@@ -5,6 +5,7 @@ import equal from 'fast-deep-equal';
 /**
  * ユーザーが画面操作によって設定を変更したかどうかを取得します。
  * @param postSetting
+ * @deprecated
  */
 export const useIsScreenDataChanged = ( postSetting: ScreenPostSetting ) => {
 	const serverData = useScreenPostSetting();
