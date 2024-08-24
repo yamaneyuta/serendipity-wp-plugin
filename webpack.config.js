@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const config = require( '@wordpress/scripts/config/webpack.config' );
 
 if( [ 'true', '1' ].includes( process.env.CHOKIDAR_USEPOLLING ) ) {
@@ -9,6 +10,15 @@ if( [ 'true', '1' ].includes( process.env.CHOKIDAR_USEPOLLING ) ) {
 
 module.exports = {
 	...config,
+
+	plugins: [
+		...config.plugins,
+
+		// assertを使うための設定
+		new webpack.ProvidePlugin({
+			process: 'process/browser',
+		}),
+	],
 
 	// 各エントリポイントを定義
 	entry: {
