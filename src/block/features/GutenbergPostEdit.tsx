@@ -1,11 +1,10 @@
-import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
 import { useScreenPostSetting } from './screenData/useScreenPostSetting';
 import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
 import { useAutoSavePostSetting } from './watch/useAutoSavePostSetting';
 import { SymbolSelect } from './symbolSelect/SymbolSelect';
-import { amountToInputValue, inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { NetworkSelect } from './networkSelect/NetworkSelect';
 import { useAutoBindServerData } from './watch/useAutoBindServerData';
 import { useNetworkSelectProps } from './networkSelect/useNetworkSelectProps';
@@ -53,43 +52,4 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 			</div>
 		</Placeholder>
 	);
-};
-
-const usePriceValueProps = (
-	postSetting: ScreenPostSetting,
-	setPostSetting: Dispatch< SetStateAction< ScreenPostSetting > >,
-	serverPostSetting: ScreenPostSetting
-): React.ComponentProps< typeof PriceValueInput > => {
-	const [ text, setText ] = useState< string | undefined >( undefined ); // 入力テキストボックスに表示する値
-
-	// サーバーから取得した設定情報が変更された時に入力テキストボックスに表示する値を更新
-	useEffect( () => {
-		if ( ! serverPostSetting.sellingPrice ) {
-			setText( undefined );
-			return;
-		}
-		const amount = BigInt( serverPostSetting.sellingPrice.amountHex );
-		const decimals = serverPostSetting.sellingPrice.decimals;
-		setText( amountToInputValue( amount, decimals ) );
-	}, [ serverPostSetting ] );
-
-	// ユーザーによって入力値が変更された時の処理
-	const onChange = ( e: React.ChangeEvent< HTMLInputElement > ) => {
-		const inputText = e.target.value;
-		setText( inputText );
-		const { amount, decimals } = inputValueToAmount( inputText );
-		setPostSetting( ( s ) => ( {
-			...s,
-			sellingPrice: {
-				...s.sellingPrice,
-				amountHex: '0x' + amount.toString( 16 ),
-				decimals,
-			},
-		} ) );
-	};
-
-	return {
-		value: text ?? '',
-		onChange,
-	};
 };
