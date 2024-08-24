@@ -10,7 +10,7 @@
 		"build": "npm run build:graphql-types && tsc --noEmit && npm run build:block",
 		"build:block": "wp-scripts build",
 		"build:graphql-types": "graphql-codegen",
-		"ci:lint": "run-p lint:js format",
+		"ci:lint": "run-p lint:css lint:js format",
 		"ci:test": "run-p coverage:js test:storybook coverage:phpunit",
 		"clean": "run-p clean:*",
 		"clean:coverage": "rm -rf coverage",
