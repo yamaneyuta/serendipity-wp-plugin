@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { createContext, useCallback } from 'react';
 import {
 	PostSettingInput,
@@ -47,15 +48,11 @@ type PostSettingProviderProps = {
  */
 const checkPostSetting = ( postSetting: PostSettingQuery | undefined ) => {
 	if ( postSetting ) {
-		if ( ! postSetting.mainnetSellableSymbols === undefined ) {
-			throw new Error( '[1ED2539F] mainnetSellableSymbols is not defined' );
-		}
-		if ( ! postSetting.testnetSellableSymbols === undefined ) {
-			throw new Error( '[7F7A9241] testnetSellableSymbols is not defined' );
-		}
-		if ( postSetting.privatenetSellableSymbols === undefined ) {
-			throw new Error( '[B1F3CD99] privatenetSellableSymbols is not defined' );
-		}
+		const { mainnetSellableSymbols, testnetSellableSymbols, privatenetSellableSymbols } = postSetting;
+
+		assert( mainnetSellableSymbols !== undefined, '[1ED2539F] mainnetSellableSymbols is not defined' );
+		assert( testnetSellableSymbols !== undefined, '[7F7A9241] testnetSellableSymbols is not defined' );
+		assert( privatenetSellableSymbols !== undefined, '[B1F3CD99] privatenetSellableSymbols is not defined' );
 	}
 };
 

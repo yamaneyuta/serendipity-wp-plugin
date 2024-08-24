@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { useContext } from 'react';
 import { InputPriceValueContext } from './InputPriceValueProvider';
 
@@ -6,9 +7,7 @@ import { InputPriceValueContext } from './InputPriceValueProvider';
  */
 export const useInputPriceValue = () => {
 	const context = useContext( InputPriceValueContext );
-	if ( ! context ) {
-		throw new Error( '[A09C1515] Context is not found' );
-	}
+	assert( context, '[A09C1515] Context is not found' );
 
 	return context;
 };
