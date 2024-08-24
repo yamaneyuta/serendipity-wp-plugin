@@ -34,10 +34,9 @@
 ### 各種設定値
 開発用環境及びテスト用環境で設定されている値の一覧です。
 
-| 項目         | 値                                                     | 開発 | テスト |
-|:-------------|:-------------------------------------------------------|:----:|:------:|
-| WPユーザー名 | admin                                                  |  ✓  |   ✓   |
-| WPパスワード | password                                               |  ✓  |   ✓   |
-| WPバージョン | [.wp-env.override.json](./.wp-env.override.json)で指定 |  ✓  |   ✓   |
-| PHPバージョン| [.wp-env.override.json](./.wp-env.override.json)で指定 |  ✓  |   ✓   |
-
+| 項目         | 値                                                                         | 開発 | テスト |
+|:-------------|:---------------------------------------------------------------------------|:----:|:------:|
+| WPユーザー名 | admin                                                                      |  ✓  |   ✓   |
+| WPパスワード | password                                                                   |  ✓  |   ✓   |
+| WPバージョン | [compose.devcontainer.yml](./.devcontainer/compose.devcontainer.yml)で指定 |  ✓  |   ✓   |
+| PHPバージョン| [compose.devcontainer.yml](./.devcontainer/compose.devcontainer.yml)で指定 |  ✓  |   ✓   |
