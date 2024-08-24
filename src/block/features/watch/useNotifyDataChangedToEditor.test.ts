@@ -4,22 +4,26 @@ import { renderHook } from '../../../../jest-lib/renderHook';
 
 jest.mock( './useIsDataChanged' );
 
-it.each`
-	isDataChanged | calledCount
-	${ false }    | ${ 0 }
-	${ true }     | ${ 1 }
-`(
-	'[80620CE6] useNotifyDataChangedToEditor() - isDataChanged: $isDataChanged -> calledCount: $calledCount',
-	( { isDataChanged, calledCount } ) => {
-		// ARRANGE
-		const onDataChangedCallback = jest.fn();
-		( useIsDataChanged as jest.Mock ).mockReturnValue( isDataChanged );
+describe( '[AD82F369] useNotifyDataChangedToEditor()', () => {
+	// データが変更されている場合にonDataChangedCallbackが呼ばれる
+	// isDataChanged, calledCount
+	const dataset: [ boolean, number ][] = [
+		[ false, 0 ],
+		[ true, 1 ],
+	];
 
-		// ACT
-		renderHook( () => useNotifyDataChangedToEditor( onDataChangedCallback ) );
+	for ( const [ isDataChanged, calledCount ] of dataset ) {
+		it( `[80620CE6] useNotifyDataChangedToEditor() - isDataChanged: ${ isDataChanged } -> calledCount: ${ calledCount }`, () => {
+			// ARRANGE
+			const onDataChangedCallback = jest.fn();
+			( useIsDataChanged as jest.Mock ).mockReturnValue( isDataChanged );
 
-		// ASSERT
-		// onDataChangedCallbackが呼ばれた回数を確認
-		expect( onDataChangedCallback ).toHaveBeenCalledTimes( calledCount );
+			// ACT
+			renderHook( () => useNotifyDataChangedToEditor( onDataChangedCallback ) );
+
+			// ASSERT
+			// onDataChangedCallbackが呼ばれた回数を確認
+			expect( onDataChangedCallback ).toHaveBeenCalledTimes( calledCount );
+		} );
 	}
-);
+} );
