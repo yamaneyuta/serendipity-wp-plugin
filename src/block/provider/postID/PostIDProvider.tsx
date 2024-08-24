@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { createContext } from 'react';
 import { usePostIDFromDom } from '../../lib/postID/usePostIDFromDom';
 
@@ -9,9 +10,7 @@ const _usePostID = (): number => {
 	const postID = usePostIDFromDom();
 
 	// 投稿編集画面ではpostIDが取得できる
-	if ( postID === null ) {
-		throw new Error( '{50F2A586-B14C-4CFA-B245-0B87C8E8364C}' );
-	}
+	assert( postID !== null, '[50F2A586] postID is null' );
 
 	return postID;
 };

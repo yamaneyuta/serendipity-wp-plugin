@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { useEffect, useMemo } from 'react';
 import AsyncLock from 'async-lock';
 import { inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
@@ -24,9 +25,8 @@ export const useAutoSavePostSetting = () => {
 			return;
 		}
 
-		if ( ! postSettingInput ) {
-			throw new Error( '[136AA840] Invalid postSettingInput' );
-		}
+		// データが変更されている場合、サーバーに送信する設定は取得できる
+		assert( postSettingInput, '[136AA840] Invalid postSettingInput' );
 
 		if ( ! lock.isBusy() ) {
 			lock.acquire( '{77F905B2-764C-409C-B8D9-F3D757D8A790}', async () => {

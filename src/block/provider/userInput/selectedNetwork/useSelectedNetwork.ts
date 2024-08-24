@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { useContext } from 'react';
 import { SelectedNetworkContext } from './SelectedNetworkProvider';
 
@@ -6,9 +7,7 @@ import { SelectedNetworkContext } from './SelectedNetworkProvider';
  */
 export const useSelectedNetwork = () => {
 	const context = useContext( SelectedNetworkContext );
-	if ( ! context ) {
-		throw new Error( '[90D2588E] Context is not found' );
-	}
+	assert( context, '[90D2588E] Context is not found' );
 
 	return context;
 };

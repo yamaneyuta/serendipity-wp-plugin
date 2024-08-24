@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { useCallback } from 'react';
 import { NetworkType } from '../../../types/gql/generated';
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
@@ -24,14 +25,15 @@ export const useGetSellableSymbolsCallback = () => {
 					case NetworkType.Privatenet:
 						return postSetting.privatenetSellableSymbols;
 					default:
-						throw new Error( '[3D102039] Invalid selling network type. - network: ' + network );
+						assert( false, `[3D102039] Invalid selling network type. - network: ${ network }` );
 				}
 			} )();
 
 			// APIの仕様上、selectableSymbolsはundefinedにはならない
-			if ( selectableSymbols === undefined ) {
-				throw new Error( '[519DA805] Sellable symbols is undefined. - network: ' + network );
-			}
+			assert(
+				selectableSymbols !== undefined,
+				`[519DA805] Sellable symbols is undefined. - network: ${ network }`
+			);
 
 			return selectableSymbols;
 		},

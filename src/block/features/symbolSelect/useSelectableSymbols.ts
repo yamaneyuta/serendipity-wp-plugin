@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { useMemo } from 'react';
 import { NetworkType } from '../../../types/gql/generated';
 import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
@@ -23,9 +24,10 @@ export const useSelectableSymbols = ( sellingNetwork: NetworkType | null | undef
 
 		// APIの仕様上、販売ネットワークをサーバーから取得すると同時に販売可能な通貨シンボルも取得するため、
 		// selectableSymbolsはundefinedにはならない
-		if ( selectableSymbols === undefined ) {
-			throw new Error( '[FC51AFA9] selectableSymbols is undefined. - sellingNetwork: ' + sellingNetwork );
-		}
+		assert(
+			selectableSymbols !== undefined,
+			`[FC51AFA9] selectableSymbols is undefined. - sellingNetwork: ${ sellingNetwork }`
+		);
 
 		return selectableSymbols;
 	}, [ sellingNetwork, getSellableSymbols ] );

@@ -1,3 +1,4 @@
+import assert from 'assert';
 import { useContext } from 'react';
 import { SelectedPriceSymbolContext } from './SelectedPriceSymbolProvider';
 
@@ -6,9 +7,7 @@ import { SelectedPriceSymbolContext } from './SelectedPriceSymbolProvider';
  */
 export const useSelectedPriceSymbol = () => {
 	const context = useContext( SelectedPriceSymbolContext );
-	if ( ! context ) {
-		throw new Error( '[DBB8277B] Context is not found' );
-	}
+	assert( context, '[DBB8277B] Context is not found' );
 
 	return context;
 };
