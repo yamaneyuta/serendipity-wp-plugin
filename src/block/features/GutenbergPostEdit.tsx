@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
-import { useScreenPostSetting } from './screenData/useScreenPostSetting';
-import { ScreenPostSetting } from './screenData/ScreenPostSetting.type';
 import { useAutoSavePostSetting } from './watch/useAutoSavePostSetting';
 import { SymbolSelect } from './symbolSelect/SymbolSelect';
 import { NetworkSelect } from './networkSelect/NetworkSelect';
@@ -20,22 +17,10 @@ type GutenbergPostEditProps = {
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataChanged } ) => {
 	// サーバーから取得した情報を画面に反映
 	useAutoBindServerData();
-
 	// データが変更された時にWordPressのエディタに通知
 	useNotifyDataChangedToEditor( onDataChanged );
-
-	// 画面で保持する設定情報
-	/** @deprecated */
-	const [ postSetting, setPostSetting ] = useState< ScreenPostSetting >( {} );
-	// サーバーから取得した設定情報
-	const serverPostSetting = useScreenPostSetting();
-	// 投稿保存時に設定情報を保存する
-	useAutoSavePostSetting( postSetting );
-
-	// サーバーから取得した設定情報を画面で保持する設定情報にコピー
-	useEffect( () => {
-		setPostSetting( JSON.parse( JSON.stringify( serverPostSetting ) ) );
-	}, [ serverPostSetting ] );
+	// 投稿保存時に設定情報を保存
+	useAutoSavePostSetting();
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
