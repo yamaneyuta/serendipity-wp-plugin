@@ -36,15 +36,15 @@ const useAutoBindSellingNetwork = () => {
  */
 const useAutoBindSellingPriceValue = () => {
 	// 販売価格をサーバーから取得
-	const { amountHex, decimals } = useSellingPriceValue();
+	const sellingPriceValue = useSellingPriceValue();
 
 	// 画面で入力された価格を設定する関数を取得
 	const { setInputPriceValue } = useInputPriceValue();
 
 	// サーバーから受信した値が変更された時に販売価格を設定する
 	useEffect( () => {
-		setInputPriceValue( amountHex, decimals );
-	}, [ amountHex, decimals, setInputPriceValue ] );
+		setInputPriceValue( sellingPriceValue );
+	}, [ sellingPriceValue, setInputPriceValue ] );
 };
 
 /**
