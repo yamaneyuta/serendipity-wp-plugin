@@ -11,6 +11,7 @@ import { useAutoBindServerData } from './watch/useAutoBindServerData';
 import { useNetworkSelectProps } from './networkSelect/useNetworkSelectProps';
 import { useNotifyDataChangedToEditor } from './watch/useNotifyDataChangedToEditor';
 import { useSymbolSelectProps } from './symbolSelect/useSymbolSelectProps';
+import { usePriceValueInputProps } from './priceValueInput/usePriceValueInputProps';
 import { PriceValueInput } from './priceValueInput/PriceValueInput';
 
 type GutenbergPostEditProps = {
@@ -37,16 +38,17 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataC
 		setPostSetting( JSON.parse( JSON.stringify( serverPostSetting ) ) );
 	}, [ serverPostSetting ] );
 
-	// 各種コントロールのプロパティを取得
-	const priceValueProps = usePriceValueProps( postSetting, setPostSetting, serverPostSetting );
-
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
 			<div style={ { width: '100%' } }>
 				<NetworkSelect { ...useNetworkSelectProps() } />
 			</div>
 			<div style={ { display: 'flex', alignItems: 'flex-end' } }>
-				<PriceValueInput { ...priceValueProps } style={ { display: 'block', maxWidth: '100px' } } />
+				<PriceValueInput
+					{ ...usePriceValueInputProps() }
+					width={ 90 }
+					style={ { display: 'block', maxWidth: '100px' } }
+				/>
 				<SymbolSelect { ...useSymbolSelectProps() } />
 			</div>
 		</Placeholder>
@@ -89,6 +91,5 @@ const usePriceValueProps = (
 	return {
 		value: text ?? '',
 		onChange,
-		width: 90,
 	};
 };
