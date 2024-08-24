@@ -4,8 +4,8 @@ import {
 	PostSettingQuery,
 	usePostSettingQuery,
 	useSetPostSettingMutation,
-} from '../../../types/gql/generated';
-import { usePostID } from '../postID/usePostID';
+} from '../../../../types/gql/generated';
+import { usePostID } from '../../postID/usePostID';
 
 type PostSettingType = ReturnType< typeof _usePostSetting >;
 

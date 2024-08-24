@@ -1,15 +1,13 @@
 import { useMemo } from 'react';
 import { NetworkType } from '../../../types/gql/generated';
-import { useGetSellableSymbolsCallback } from './useGetSellableSymbolsCallback';
+import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
 
 /**
  * 画面で選択可能な通貨シンボル一覧を取得します。
  * @param sellingNetwork
  */
 export const useSelectableSymbols = ( sellingNetwork: NetworkType | null | undefined ): string[] | null | undefined => {
-	const getMainnetSelectableSymbols = useGetSellableSymbolsCallback( NetworkType.Mainnet );
-	const getTestnetSelectableSymbols = useGetSellableSymbolsCallback( NetworkType.Testnet );
-	const getPrivatenetSelectableSymbols = useGetSellableSymbolsCallback( NetworkType.Privatenet );
+	const getSellableSymbols = useGetSellableSymbolsCallback();
 
 	return useMemo( () => {
 		if ( sellingNetwork === undefined ) {
@@ -21,18 +19,7 @@ export const useSelectableSymbols = ( sellingNetwork: NetworkType | null | undef
 			return null;
 		}
 
-		const selectableSymbols = ( () => {
-			switch ( sellingNetwork ) {
-				case NetworkType.Mainnet:
-					return getMainnetSelectableSymbols();
-				case NetworkType.Testnet:
-					return getTestnetSelectableSymbols();
-				case NetworkType.Privatenet:
-					return getPrivatenetSelectableSymbols();
-				default:
-					throw new Error( `[F470863B] Invalid sellingNetwork. (${ sellingNetwork })` );
-			}
-		} )();
+		const selectableSymbols = getSellableSymbols( sellingNetwork );
 
 		// APIの仕様上、販売ネットワークをサーバーから取得すると同時に販売可能な通貨シンボルも取得するため、
 		// selectableSymbolsはundefinedにはならない
@@ -41,5 +28,5 @@ export const useSelectableSymbols = ( sellingNetwork: NetworkType | null | undef
 		}
 
 		return selectableSymbols;
-	}, [ sellingNetwork, getMainnetSelectableSymbols, getTestnetSelectableSymbols, getPrivatenetSelectableSymbols ] );
+	}, [ sellingNetwork, getSellableSymbols ] );
 };

@@ -1,9 +1,9 @@
 import { NetworkType } from '../../../types/gql/generated';
 import { useSelectableSymbols as sut } from './useSelectableSymbols';
-import { usePostSetting } from '../../provider/postSetting/usePostSetting';
+import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
 import { renderHook } from '../../../../jest-lib/renderHook';
 
-jest.mock( '../../provider/postSetting/usePostSetting' );
+jest.mock( '../../provider/serverData/postSetting/usePostSetting' );
 
 type UsePostSettingResult = ReturnType< typeof usePostSetting >;
 
@@ -122,5 +122,5 @@ it( '[BF4948EE] useSelectableSymbols() - invalid network type', async () => {
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT, ASSERT
-	expect( () => renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ) ).toThrow( '[F470863B]' );
+	expect( () => renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ) ).toThrow( '[3D102039]' );
 } );

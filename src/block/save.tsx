@@ -5,7 +5,7 @@
  * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
  */
 import { useBlockProps } from '@wordpress/block-editor';
-import { getBlockClassName } from './features/className/getBlockClassName';
+import { ClassName } from './lib/ClassName';
 
 /**
  * The save function defines the way in which the different attributes should
@@ -15,9 +15,8 @@ import { getBlockClassName } from './features/className/getBlockClassName';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#save
  */
 export default function save() {
-	const className = getBlockClassName();
 	const myProps = {
-		className,
+		className: ClassName.block(),
 	};
 	//	ウィジェット表示用のクラス名を付与
 	const props = useBlockProps?.save( myProps ) ?? myProps;

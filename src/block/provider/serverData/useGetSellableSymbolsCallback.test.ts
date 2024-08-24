@@ -1,9 +1,9 @@
 import { NetworkType } from '../../../types/gql/generated';
 import { useGetSellableSymbolsCallback as sut } from './useGetSellableSymbolsCallback';
-import { usePostSetting } from '../../provider/postSetting/usePostSetting';
+import { usePostSetting } from './postSetting/usePostSetting';
 import { renderHook } from '../../../../jest-lib/renderHook';
 
-jest.mock( '../../provider/postSetting/usePostSetting' );
+jest.mock( '../../provider/serverData/postSetting/usePostSetting' );
 
 type UsePostSettingResult = ReturnType< typeof usePostSetting >;
 
@@ -27,8 +27,8 @@ it( '[8F11FAF5] useGetSellableSymbolsCallback() - invalid network', async () => 
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT, ASSERT
-	const getSellableSymbols = renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ).result.current;
-	expect( getSellableSymbols ).toThrow( '[3D102039]' );
+	const getSellableSymbols = renderHook( () => sut() ).result.current;
+	expect( () => getSellableSymbols( 'INVALID_NETWORK' as unknown as NetworkType ) ).toThrow( '[3D102039]' );
 } );
 
 /**
@@ -46,6 +46,6 @@ it( '[E0E21F73] useGetSellableSymbolsCallback() - invalid response', async () =>
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT, ASSERT
-	const getMainnet = renderHook( () => sut( NetworkType.Mainnet ) ).result.current;
-	expect( getMainnet ).toThrow( '[519DA805]' );
+	const getMainnet = renderHook( () => sut() ).result.current;
+	expect( () => getMainnet( NetworkType.Mainnet ) ).toThrow( '[519DA805]' );
 } );
