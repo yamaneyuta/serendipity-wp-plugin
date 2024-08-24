@@ -6,7 +6,7 @@ export const InputPriceValueContext = createContext< InputPriceValueContextType 
 
 const _useInputPriceValue = () => {
 	// 価格(表示用) 10進数で画面上に表示される値
-	const [inputPriceValue, setInputPriceValue] = useState< string | null | undefined >( undefined );
+	const [ inputPriceValue, setInputPriceValue ] = useState< string | null | undefined >( undefined );
 
 	return {
 		inputPriceValue,
