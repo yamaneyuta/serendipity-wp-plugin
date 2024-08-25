@@ -1,6 +1,6 @@
 # wp-envで起動される、いずれかのコンテナが立ち上がるまで待機し、そのコンテナ名に使用されているハッシュ値(ディレクトリ名)を取得する。
 # ※ `[hash]_default`がネットワーク名になる。
-loop_count=60
+loop_count=1800
 for i in $(seq $loop_count); do
 	# 起動中のコンテナ名に32桁のハッシュ値が含まれる場合は、そのハッシュ値を取得
 	# ※ `docker network ls`では、wp-env起動前に取得できるパータンがあるため、`docker ps`を使用
