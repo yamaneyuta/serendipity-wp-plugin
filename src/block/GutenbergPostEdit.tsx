@@ -1,14 +1,14 @@
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
-import { useAutoSavePostSetting } from './watch/useAutoSavePostSetting';
-import { SymbolSelect } from './symbolSelect/SymbolSelect';
-import { NetworkSelect } from './networkSelect/NetworkSelect';
-import { useAutoBindServerData } from './watch/useAutoBindServerData';
-import { useNetworkSelectProps } from './networkSelect/useNetworkSelectProps';
-import { useNotifyDataChangedToEditor } from './watch/useNotifyDataChangedToEditor';
-import { useSymbolSelectProps } from './symbolSelect/useSymbolSelectProps';
-import { usePriceValueInputProps } from './priceValueInput/usePriceValueInputProps';
-import { PriceValueInput } from './priceValueInput/PriceValueInput';
+import { useAutoSavePostSetting } from './features/watch/useAutoSavePostSetting';
+import { SymbolSelect } from './features/symbolSelect/SymbolSelect';
+import { NetworkSelect } from './features/networkSelect/NetworkSelect';
+import { useAutoBindServerData } from './features/watch/useAutoBindServerData';
+import { useNetworkSelectProps } from './features/networkSelect/useNetworkSelectProps';
+import { useNotifyDataChangedToEditor } from './features/watch/useNotifyDataChangedToEditor';
+import { useSymbolSelectProps } from './features/symbolSelect/useSymbolSelectProps';
+import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
+import { PriceValueInput } from './features/priceValueInput/PriceValueInput';
 
 type GutenbergPostEditProps = {
 	onDataChanged: () => void;

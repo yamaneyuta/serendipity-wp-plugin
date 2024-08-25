@@ -24,7 +24,7 @@ import './editor.scss';
 // import { GutenbergPostEdit } from './components/GutenbergPostEdit';
 import { BlockEditProps } from '@wordpress/blocks';
 
-import { GutenbergPostEdit } from './features/GutenbergPostEdit';
+import { GutenbergPostEdit } from './GutenbergPostEdit';
 import { GutenbergPostEditProvider } from './provider/GutenbergPostEditProvider';
 import { useCallback } from 'react';
 
