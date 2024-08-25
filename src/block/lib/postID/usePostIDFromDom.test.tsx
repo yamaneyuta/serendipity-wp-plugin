@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render } from '../../../../jest-lib/render';
 import { usePostIDFromDom } from './usePostIDFromDom';
 
 const TEST_ID = '6CEC0231';
