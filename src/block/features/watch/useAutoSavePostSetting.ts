@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import AsyncLock from 'async-lock';
 import { inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { PostSettingInput } from '../../../types/gql/generated';
-import { useEditorProperty } from '../../provider/editor/useEditorProperty';
+import { useEditorProperty } from '../../provider/windowData/editor/useEditorProperty';
 import { useSavePostSettingCallback } from '../../provider/serverData/postSetting/useSavePostSettingCallback';
 import { useIsDataChanged } from './useIsDataChanged';
 import { useInputPriceValue } from '../../provider/userInput/inputPriceValue/useInputPriceValue';

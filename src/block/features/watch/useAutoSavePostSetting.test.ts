@@ -1,5 +1,5 @@
 import { useAutoSavePostSetting } from './useAutoSavePostSetting';
-import { useEditorProperty } from '../../provider/editor/useEditorProperty';
+import { useEditorProperty } from '../../provider/windowData/editor/useEditorProperty';
 import { useIsDataChanged } from './useIsDataChanged';
 import { useSavePostSettingCallback } from '../../provider/serverData/postSetting/useSavePostSettingCallback';
 import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
@@ -8,7 +8,7 @@ import { useSelectedPriceSymbol } from '../../provider/userInput/selectedPriceSy
 import { NetworkType } from '../../../types/gql/generated';
 import { renderHook } from '../../../../jest-lib/renderHook';
 
-jest.mock( '../../provider/editor/useEditorProperty' );
+jest.mock( '../../provider/windowData/editor/useEditorProperty' );
 jest.mock( './useIsDataChanged' );
 jest.mock( '../../provider/serverData/postSetting/useSavePostSettingCallback' );
 jest.mock( '../../provider/userInput/selectedNetwork/useSelectedNetwork' );

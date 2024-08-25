@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
-import { BlockEditorPropertyProvider } from './editor/BlockEditorPropertyProvider';
+import { BlockEditorPropertyProvider } from './windowData/editor/BlockEditorPropertyProvider';
 import { ServerDataProvider } from './serverData/ServerDataProvider';
 import { PostIDProvider } from './windowData/postID/PostIDProvider';
 import { UserInputProvider } from './userInput/UserInputProvider';
