@@ -5,10 +5,9 @@ interface NetworkSelectProps {
 	value: NetworkType | null | undefined;
 	networks: string[] | null | undefined;
 	onChange: React.ChangeEventHandler< HTMLSelectElement >;
+	disabled?: boolean;
 }
-export const NetworkSelect: React.FC< NetworkSelectProps > = ( { value, networks, onChange } ) => {
-	const disabled = value === undefined; // 読み込み中はコントロールを無効化
-
+export const NetworkSelect: React.FC< NetworkSelectProps > = ( { value, networks, onChange, disabled } ) => {
 	return (
 		<BlockSelect value={ value ?? '' } onChange={ onChange } disabled={ disabled }>
 			{ value === null ? <BlockSelectOption>{ 'Select a network' }</BlockSelectOption> : null }

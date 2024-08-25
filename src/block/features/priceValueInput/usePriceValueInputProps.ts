@@ -9,9 +9,13 @@ export const usePriceValueInputProps = () => {
 
 	const onChange = useOnChangeCallback();
 
+	// undefinedの時はコントロールを無効化
+	const disabled = value === undefined;
+
 	return {
 		value: value ?? '', // nullやundefinedの場合は空文字を表示
 		onChange,
+		disabled,
 	};
 };
 

@@ -10,10 +10,15 @@ export const useSymbolSelectProps = () => {
 	const value = useSelectedPriceSymbol().selectedPriceSymbol;
 	const symbols = useSelectableSymbols( useSelectedNetwork().selectedNetwork );
 	const onChange = useOnChangeCallback();
+
+	// 読み込み中はコントロールを無効化
+	const disabled = value === undefined;
+
 	return {
 		value,
 		symbols,
 		onChange,
+		disabled,
 	};
 };
 
