@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import { NetworkType } from '../../../types/gql/generated';
 import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
 import { useSelectableNetworks } from './useSelectableNetworks';
+import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
+import { useSelectedPriceSymbol } from '../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol';
 
 /**
  * ネットワーク選択コンポーネントのプロパティを取得します。
@@ -33,10 +35,23 @@ export const useNetworkSelectProps = () => {
 const useOnChangeCallback = () => {
 	const { setSelectedNetwork } = useSelectedNetwork();
 
+	const { selectedPriceSymbol, setSelectedPriceSymbol } = useSelectedPriceSymbol();
+	const getSellableSymbol = useGetSellableSymbolsCallback();
+
 	return useCallback(
 		( event: React.ChangeEvent< HTMLSelectElement > ) => {
-			setSelectedNetwork( event.target.value as NetworkType );
+			const network = event.target.value as NetworkType;
+			// 選択されているネットワークを更新
+			setSelectedNetwork( network );
+
+			// 以下、現在選択されている通貨シンボルが変更後のネットワークに存在しない場合はnullを設定する処理
+			// ネットワーク変更後に選択可能な通貨シンボルを取得
+			const symbols = getSellableSymbol( network );
+			if ( selectedPriceSymbol && symbols && ! symbols.includes( selectedPriceSymbol ) ) {
+				// 選択されている通貨シンボルが変更後のネットワークで選択不可の場合はnullに変更
+				setSelectedPriceSymbol( null );
+			}
 		},
-		[ setSelectedNetwork ]
+		[ setSelectedNetwork, selectedPriceSymbol, setSelectedPriceSymbol, getSellableSymbol ]
 	);
 };
