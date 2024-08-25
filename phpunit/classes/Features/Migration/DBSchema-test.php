@@ -35,7 +35,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 
 	/**
 	 * @test
-	 * @testdox [AC325463] DBSchema::migrage() - host: $host
+	 * @testdox [AC325463] DBSchema::migrate() - host: $host
 	 * @dataProvider wpdbListProvider
 	 */
 	public function migrate( string $host ) {

@@ -10,7 +10,7 @@ abstract class TableName {
 	// 定数の値(テーブル名)は変更しないでください
 	// テーブル作成済みの実環境と不整合が発生し、テストは通るが実環境でエラーが発生する、という状況になります。
 
-	private const PSOT_SETTING_HISTORY = 'hist_post_setting';
+	private const POST_SETTING_HISTORY = 'hist_post_setting';
 
 	private static function get( string $table_name ): string {
 		$prefix = ( new PluginInfo() )->tableNamePrefix();
@@ -19,6 +19,6 @@ abstract class TableName {
 	}
 
 	public static function postSettingHistory(): string {
-		return self::get( self::PSOT_SETTING_HISTORY );
+		return self::get( self::POST_SETTING_HISTORY );
 	}
 }
