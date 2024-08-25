@@ -8,7 +8,7 @@ import { useSelectableNetworks } from './useSelectableNetworks';
  */
 export const useNetworkSelectProps = () => {
 	// 選択されたネットワークはProviderのstateから取得
-	const { selectedNetwork } = useSelectedNetwork();
+	const { selectedNetwork: value } = useSelectedNetwork();
 
 	// 選択可能なネットワークはサーバーから受信した情報から取得される
 	const networks = useSelectableNetworks();
@@ -16,10 +16,14 @@ export const useNetworkSelectProps = () => {
 	// ネットワークが変更された時のコールバック
 	const onChange = useOnChangeCallback();
 
+	// 読み込み中はコントロールを無効化
+	const disabled = value === undefined;
+
 	return {
-		value: selectedNetwork,
+		value,
 		networks,
 		onChange,
+		disabled,
 	};
 };
 
