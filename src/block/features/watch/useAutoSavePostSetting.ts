@@ -6,9 +6,9 @@ import { PostSettingInput } from '../../../types/gql/generated';
 import { useEditorProperty } from '../../provider/windowData/editor/useEditorProperty';
 import { useSavePostSettingCallback } from '../../provider/serverData/postSetting/useSavePostSettingCallback';
 import { useIsDataChanged } from './useIsDataChanged';
-import { useInputPriceValue } from '../../provider/userInput/inputPriceValue/useInputPriceValue';
-import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
-import { useSelectedPriceSymbol } from '../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol';
+import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
+import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
+import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 
 /**
  * 投稿編集画面で、投稿が手動で保存された時に設定も保存します。

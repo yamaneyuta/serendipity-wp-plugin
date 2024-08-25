@@ -2,11 +2,11 @@ import { SelectedNetworkProvider } from './selectedNetwork/SelectedNetworkProvid
 import { InputPriceValueProvider } from './inputPriceValue/InputPriceValueProvider';
 import { SelectedPriceSymbolProvider } from './selectedPriceSymbol/SelectedPriceSymbolProvider';
 
-type UserInputProviderProps = {
+type WidgetStateProviderProps = {
 	children: React.ReactNode;
 };
 
-export const UserInputProvider: React.FC< UserInputProviderProps > = ( { children } ) => {
+export const WidgetStateProvider: React.FC< WidgetStateProviderProps > = ( { children } ) => {
 	return (
 		<SelectedNetworkProvider>
 			<InputPriceValueProvider>

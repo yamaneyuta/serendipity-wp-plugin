@@ -2,18 +2,18 @@ import { useAutoSavePostSetting } from './useAutoSavePostSetting';
 import { useEditorProperty } from '../../provider/windowData/editor/useEditorProperty';
 import { useIsDataChanged } from './useIsDataChanged';
 import { useSavePostSettingCallback } from '../../provider/serverData/postSetting/useSavePostSettingCallback';
-import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
-import { useInputPriceValue } from '../../provider/userInput/inputPriceValue/useInputPriceValue';
-import { useSelectedPriceSymbol } from '../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol';
+import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
+import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
+import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 import { NetworkType } from '../../../types/gql/generated';
 import { renderHook } from '../../../../jest-lib/renderHook';
 
 jest.mock( '../../provider/windowData/editor/useEditorProperty' );
 jest.mock( './useIsDataChanged' );
 jest.mock( '../../provider/serverData/postSetting/useSavePostSettingCallback' );
-jest.mock( '../../provider/userInput/selectedNetwork/useSelectedNetwork' );
-jest.mock( '../../provider/userInput/inputPriceValue/useInputPriceValue' );
-jest.mock( '../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol' );
+jest.mock( '../../provider/widgetState/selectedNetwork/useSelectedNetwork' );
+jest.mock( '../../provider/widgetState/inputPriceValue/useInputPriceValue' );
+jest.mock( '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol' );
 
 /**
  * ユーザーが入力した値に問題が無い場合、タイミングによってsaveが呼ばれるかどうかのテスト

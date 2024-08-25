@@ -1,5 +1,5 @@
 import { ChangeEventHandler } from 'react';
-import { useInputPriceValue } from '../../provider/userInput/inputPriceValue/useInputPriceValue';
+import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
 
 /**
  * 価格入力コントロールのプロパティを取得します。

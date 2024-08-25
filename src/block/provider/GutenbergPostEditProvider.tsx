@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { BlockEditorPropertyProvider } from './windowData/editor/BlockEditorPropertyProvider';
 import { ServerDataProvider } from './serverData/ServerDataProvider';
 import { PostIDProvider } from './windowData/postID/PostIDProvider';
-import { UserInputProvider } from './userInput/UserInputProvider';
+import { WidgetStateProvider } from './widgetState/WidgetStateProvider';
 
 // アクティブになったときは再読みしない
 const client = new QueryClient( {
@@ -26,8 +26,8 @@ export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps
 				<BlockEditorPropertyProvider>
 					{ /* サーバーに保存されている情報(投稿設定)を取得 */ }
 					<ServerDataProvider client={ client }>
-						{ /* ユーザーが入力した値を保持 */ }
-						<UserInputProvider>{ children }</UserInputProvider>
+						{ /* ウィジェットの状態を保持 */ }
+						<WidgetStateProvider>{ children }</WidgetStateProvider>
 					</ServerDataProvider>
 				</BlockEditorPropertyProvider>
 			</PostIDProvider>

@@ -1,5 +1,5 @@
 import { useSellingPriceValue } from '../../../provider/serverData/useSellingPriceValue';
-import { useInputPriceValue } from '../../../provider/userInput/inputPriceValue/useInputPriceValue';
+import { useInputPriceValue } from '../../../provider/widgetState/inputPriceValue/useInputPriceValue';
 
 /**
  * 販売価格の数量が画面上で変更されたかどうかを取得します。

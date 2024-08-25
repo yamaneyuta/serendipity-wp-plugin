@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import { NetworkType } from '../../../types/gql/generated';
-import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
+import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
 import { useSelectableNetworks } from './useSelectableNetworks';
 import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
-import { useSelectedPriceSymbol } from '../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol';
+import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 
 /**
  * ネットワーク選択コンポーネントのプロパティを取得します。

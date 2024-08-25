@@ -1,9 +1,9 @@
 import { useIsSellingPriceValueChanged } from './useIsSellingPriceValueChanged';
 import { useSellingPriceValue } from '../../../provider/serverData/useSellingPriceValue';
-import { useInputPriceValue } from '../../../provider/userInput/inputPriceValue/useInputPriceValue';
+import { useInputPriceValue } from '../../../provider/widgetState/inputPriceValue/useInputPriceValue';
 
 jest.mock( '../../../provider/serverData/useSellingPriceValue' );
-jest.mock( '../../../provider/userInput/inputPriceValue/useInputPriceValue' );
+jest.mock( '../../../provider/widgetState/inputPriceValue/useInputPriceValue' );
 
 describe( '[482CA42A] useIsSellingPriceValueChanged()', () => {
 	// undefinedが含まれる場合は変更されたと見なさない

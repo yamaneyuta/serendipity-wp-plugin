@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useSelectedPriceSymbol } from '../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol';
-import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
+import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
+import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
 import { useSelectableSymbols } from './useSelectableSymbols';
 
 /**

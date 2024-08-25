@@ -1,9 +1,9 @@
 import { useIsSellingPriceSymbolChanged } from './useIsSellingPriceSymbolChanged';
 import { useSellingPriceSymbol } from '../../../provider/serverData/useSellingPriceSymbol';
-import { useSelectedPriceSymbol } from '../../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol';
+import { useSelectedPriceSymbol } from '../../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 
 jest.mock( '../../../provider/serverData/useSellingPriceSymbol' );
-jest.mock( '../../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol' );
+jest.mock( '../../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol' );
 
 describe( '[EE3ACF32] useIsSellingPriceSymbolChanged()', () => {
 	// undefinedが含まれる場合は変更されたと見なさない

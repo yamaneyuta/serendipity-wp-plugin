@@ -1,5 +1,5 @@
 import { useSellingNetwork } from '../../../provider/serverData/useSellingNetwork';
-import { useSelectedNetwork } from '../../../provider/userInput/selectedNetwork/useSelectedNetwork';
+import { useSelectedNetwork } from '../../../provider/widgetState/selectedNetwork/useSelectedNetwork';
 
 /**
  * 販売するネットワークが画面上で変更されたかどうかを取得します。

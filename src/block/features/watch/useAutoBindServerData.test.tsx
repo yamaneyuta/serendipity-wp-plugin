@@ -1,9 +1,9 @@
 import { getByTestId, render } from '@testing-library/react';
 import { useAutoBindServerData } from './useAutoBindServerData';
-import { UserInputProvider } from '../../provider/userInput/UserInputProvider';
-import { useSelectedNetwork } from '../../provider/userInput/selectedNetwork/useSelectedNetwork';
-import { useInputPriceValue } from '../../provider/userInput/inputPriceValue/useInputPriceValue';
-import { useSelectedPriceSymbol } from '../../provider/userInput/selectedPriceSymbol/useSelectedPriceSymbol';
+import { WidgetStateProvider } from '../../provider/widgetState/WidgetStateProvider';
+import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
+import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
+import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 import { useSellingNetwork } from '../../provider/serverData/useSellingNetwork';
 import { useSellingPriceValue } from '../../provider/serverData/useSellingPriceValue';
 import { useSellingPriceSymbol } from '../../provider/serverData/useSellingPriceSymbol';
@@ -59,9 +59,9 @@ describe( '[BA8935C1] useAutoBindServerData()', () => {
 
 			// ACT
 			render(
-				<UserInputProvider>
+				<WidgetStateProvider>
 					<Sut />
-				</UserInputProvider>
+				</WidgetStateProvider>
 			);
 
 			// Providerのstateに値がバインドされていることを確認

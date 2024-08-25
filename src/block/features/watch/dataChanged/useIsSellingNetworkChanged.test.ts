@@ -1,9 +1,9 @@
 import { useIsSellingNetworkChanged } from './useIsSellingNetworkChanged';
-import { useSelectedNetwork } from '../../../provider/userInput/selectedNetwork/useSelectedNetwork';
+import { useSelectedNetwork } from '../../../provider/widgetState/selectedNetwork/useSelectedNetwork';
 import { useSellingNetwork } from '../../../provider/serverData/useSellingNetwork';
 import { NetworkType } from '../../../../types/gql/generated';
 
-jest.mock( '../../../provider/userInput/selectedNetwork/useSelectedNetwork' );
+jest.mock( '../../../provider/widgetState/selectedNetwork/useSelectedNetwork' );
 jest.mock( '../../../provider/serverData/useSellingNetwork' );
 
 describe( '[F183C408] useIsSellingNetworkChanged()', () => {
