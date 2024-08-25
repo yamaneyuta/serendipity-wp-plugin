@@ -14,8 +14,7 @@ const config: CodegenConfig = {
 			],
 			config: {
 				// ※ jestで`Cannot find module`が発生するため、相対パスで記述している
-				fetcher: '../../../node_modules/@yamaneyuta/serendipity-lib-frontend#fetcher', // 生成されるファイルからのパス
-				// fetcher: '@yamaneyuta/serendipity-lib-frontend#fetcher', // 相対パスの場合は、生成されるファイルからのパス
+				fetcher: '@yamaneyuta/serendipity-lib-frontend#fetcher', // 相対パスの場合は、生成されるファイルからのパス
 				// isReactHook: true,
 				// exposeQueryKeys: true,
 			},
