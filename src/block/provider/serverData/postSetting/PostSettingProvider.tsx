@@ -6,7 +6,7 @@ import {
 	usePostSettingQuery,
 	useSetPostSettingMutation,
 } from '../../../../types/gql/generated';
-import { usePostID } from '../../postID/usePostID';
+import { usePostID } from '../../windowData/postID/usePostID';
 
 type PostSettingType = ReturnType< typeof _usePostSetting >;
 

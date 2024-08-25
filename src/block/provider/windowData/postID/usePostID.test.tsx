@@ -1,9 +1,9 @@
 import { usePostID } from './usePostID';
-import { render } from '../../../../jest-lib/render';
-import { usePostIDFromDom } from '../../lib/postID/usePostIDFromDom';
+import { render } from '../../../../../jest-lib/render';
+import { usePostIDFromDom } from '../../../lib/postID/usePostIDFromDom';
 import { PostIDProvider } from './PostIDProvider';
 
-jest.mock( '../../lib/postID/usePostIDFromDom' );
+jest.mock( '../../../lib/postID/usePostIDFromDom' );
 
 const TEST_ID = 'F905B9E0';
 

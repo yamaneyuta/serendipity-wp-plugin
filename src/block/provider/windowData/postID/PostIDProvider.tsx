@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { createContext } from 'react';
-import { usePostIDFromDom } from '../../lib/postID/usePostIDFromDom';
+import { usePostIDFromDom } from '../../../lib/postID/usePostIDFromDom';
 
 type PostIdType = ReturnType< typeof _usePostID >;
 
