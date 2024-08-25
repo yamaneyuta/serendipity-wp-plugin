@@ -4,10 +4,9 @@ interface SymbolSelectProps {
 	value: string | null | undefined;
 	symbols: string[] | null | undefined;
 	onChange: React.ChangeEventHandler< HTMLSelectElement >;
+	disabled?: boolean;
 }
-export const SymbolSelect: React.FC< SymbolSelectProps > = ( { value, symbols, onChange } ) => {
-	const disabled = value === undefined; // 読み込み中はコントロールを無効化
-
+export const SymbolSelect: React.FC< SymbolSelectProps > = ( { value, symbols, onChange, disabled } ) => {
 	return (
 		<BlockSelect value={ value ?? '' } onChange={ onChange } disabled={ disabled }>
 			{ value === null ? <BlockSelectOption>{ 'Select a symbol' }</BlockSelectOption> : null }
