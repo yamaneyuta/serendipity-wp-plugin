@@ -1,8 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
-import { BlockEditorPropertyProvider } from './windowData/editor/BlockEditorPropertyProvider';
-import { ServerDataProvider } from './serverData/ServerDataProvider';
-import { PostIDProvider } from './windowData/postID/PostIDProvider';
+import { WindowDataProvider } from './windowData/WindowDataProvider';
 import { WidgetStateProvider } from './widgetState/WidgetStateProvider';
+import { ServerDataProvider } from './serverData/ServerDataProvider';
 
 // アクティブになったときは再読みしない
 const client = new QueryClient( {
@@ -20,17 +19,14 @@ type GutenbergPostEditProviderProps = {
 export const GutenbergPostEditProvider: React.FC< GutenbergPostEditProviderProps > = ( { children } ) => {
 	return (
 		<>
-			{ /* 投稿IDを取得 */ }
-			<PostIDProvider>
-				{ /* WordPressのエディタ情報を取得 */ }
-				<BlockEditorPropertyProvider>
-					{ /* サーバーに保存されている情報(投稿設定)を取得 */ }
-					<ServerDataProvider client={ client }>
-						{ /* ウィジェットの状態を保持 */ }
-						<WidgetStateProvider>{ children }</WidgetStateProvider>
-					</ServerDataProvider>
-				</BlockEditorPropertyProvider>
-			</PostIDProvider>
+			{ /* グローバルオブジェクトから取得した情報を保持 */ }
+			<WindowDataProvider>
+				{ /* サーバーに保存されている情報(投稿設定)を取得 */ }
+				<ServerDataProvider client={ client }>
+					{ /* ウィジェットの状態を保持 */ }
+					<WidgetStateProvider>{ children }</WidgetStateProvider>
+				</ServerDataProvider>
+			</WindowDataProvider>
 		</>
 	);
 };
