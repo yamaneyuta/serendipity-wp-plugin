@@ -8,6 +8,18 @@ use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
 
 class Assert {
 
+	public static function true( bool $condition, string $message ): void {
+		if ( ! $condition ) {   // falseの場合は例外を投げる
+			throw new \InvalidArgumentException( $message );
+		}
+	}
+
+	public static function false( bool $condition, string $message ): void {
+		if ( $condition ) { // trueの場合は例外を投げる
+			throw new \InvalidArgumentException( $message );
+		}
+	}
+
 	public static function isPostID( int $post_ID ): void {
 		if ( ! ( new Validator() )->isPostID( $post_ID ) ) {
 			throw new \InvalidArgumentException( '[C1D3D3A4] Invalid post ID. - post_ID: ' . $post_ID );
