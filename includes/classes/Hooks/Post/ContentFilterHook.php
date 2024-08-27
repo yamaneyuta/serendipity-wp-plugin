@@ -23,7 +23,9 @@ class ContentFilterHook {
 		Assert::isPostID( $post_ID );
 
 		if ( ! $this->shouldFilterContent( $post_ID ) ) {
+			Assert::false( is_singular(), '[F18FB707] should not be singular' );
 			Assert::false( is_feed(), '[B63A1B4B] should not be feed' );
+			Assert::false( is_preview(), '[2952AB24] should not be preview' );
 
 			// フィルタしない場合はそのまま返す
 			return $content;
@@ -49,8 +51,10 @@ class ContentFilterHook {
 		} else {
 			// その他。以下の場合を含む。
 			// - フィード(RSS, ATOM等): is_feed() === true
-			// 　- 記事一覧が表示されるページ
+			// 　- 記事一覧が表示されるページ: is_archive() === true
+			// 　- カテゴリーページ: is_category() === true
 			// 　- /wp-json/wp/v2/posts へアクセス(GET)された時
+			Assert::false( is_preview(), '[E3AB3400] should not be preview' );
 
 			// 無料部分のみを返す。
 			$contentFilter = new ContentFilter( $content );
