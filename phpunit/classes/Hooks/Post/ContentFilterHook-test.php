@@ -27,7 +27,7 @@ class ContentFilterHookTest extends IntegrationTestBase {
 		$content = apply_filters( 'the_content', get_post( $post_ID )->post_content );
 
 		// ASSERT
-		// 個別ページでは無料部分とブロックが表示され、有料部分は表示されないことを確認
+		// トップページでは無料部分だけ表示され、ブロック及び有料部分は表示されないことを確認
 		$this->assertTrue( $samplePostContent->hasFreeText( $content ) );
 		$this->assertFalse( $samplePostContent->hasBlock( $content ) );
 		$this->assertFalse( $samplePostContent->hasPaidText( $content ) );
