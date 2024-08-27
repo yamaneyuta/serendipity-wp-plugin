@@ -94,4 +94,31 @@ class ContentFilterHookTest extends IntegrationTestBase {
 		$this->assertFalse( $samplePostContent->hasBlock( $content ) );
 		$this->assertFalse( $samplePostContent->hasPaidText( $content ) );
 	}
+
+
+	/**
+	 * ブロックが含まれない投稿を作成した場合、登録した内容で(フィルタされずに)表示されることを確認する
+	 *
+	 * @test
+	 * @testdox [2C260893][Hooks] ContentFilterHook - no block
+	 */
+	public function noBlock() {
+		// ARRANGE
+		// 投稿を作成
+		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost(
+			array(
+				'post_content' => '<p>This is no block content.</p>',
+			)
+		);
+		// トップページへ移動
+		$this->go_to( '/' );
+
+		// ACT
+		// 投稿の内容を取得
+		$content = apply_filters( 'the_content', get_post( $post_ID )->post_content );
+
+		// ASSERT
+		// ブロックが含まれない投稿の場合、登録した内容で(フィルタされずに)表示されることを確認
+		$this->assertEquals( '<p>This is no block content.</p>', trim( $content ) );  // 改行が含まれるためtrim
+	}
 }
