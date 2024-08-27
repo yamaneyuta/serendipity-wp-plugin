@@ -22,10 +22,18 @@ class ExcerptFilterHook {
 	public function addFilterGetTheExcerpt( string $excerpt ): string {
 		// ※ 引数(他プラグイン等で変更された抜粋)を使用せずに抜粋を生成しているため、
 		// 　 抜粋を加工する別のプラグインがあった場合、競合することに注意。
+		$post = get_post();
+
+		// 投稿編集画面で抜粋がユーザーによって設定されている場合はその値を返す
+		if ( has_excerpt() ) {
+			// `has_excerpt()`は`$post->post_excerpt`に値が設定されているかどうかを判定しているため、`$post->post_excerpt`を返す
+			// 参考: https://developer.wordpress.org/reference/functions/has_excerpt/#source
+			return $post->post_excerpt;
+		}
 
 		// 投稿内容を取得
 		// ※ ここで`./ContentFilterHook`で登録したフィルタが適用される
-		$the_content = apply_filters( 'the_content', get_the_content( '', false, get_post() ) );
+		$the_content = apply_filters( 'the_content', get_the_content( '', false, $post ) );
 
 		// `wp_trim_excerpt`相当の処理を行った結果を返す
 		return $this->trimExcerpt( $the_content );
