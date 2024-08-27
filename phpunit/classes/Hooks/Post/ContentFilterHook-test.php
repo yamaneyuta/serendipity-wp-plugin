@@ -121,4 +121,47 @@ class ContentFilterHookTest extends IntegrationTestBase {
 		// ブロックが含まれない投稿の場合、登録した内容で(フィルタされずに)表示されることを確認
 		$this->assertEquals( '<p>This is no block content.</p>', trim( $content ) );  // 改行が含まれるためtrim
 	}
+
+	/**
+	 * get_the_content_feed()を用いてフィードの内容を取得した場合、無料部分のみが表示されることを確認する
+	 *
+	 * @test
+	 * @testdox [727D2C6F][Hooks] ContentFilterHook - get_the_content_feed feed_type: $feed_type
+	 * @dataProvider getTheContentFeedDataProvider
+	 */
+	public function getTheContentFeed( string $feed_type ) {
+		// ARRANGE
+		$samplePostContent = new SamplePostContent();
+		// 投稿を作成
+		$contributor = $this->getUser( UserType::CONTRIBUTOR );
+		$post_ID     = $contributor->createPost(
+			array(
+				'post_content' => $samplePostContent->get(),
+			)
+		);
+
+		// ACT
+		// フィードのURLへ移動
+		$this->go_to( '/?feed=' . $feed_type );
+		// グローバルオブジェクトに設定していないとテストに失敗するため`go_to`の後に`setup_postdata`を実行
+		setup_postdata( get_post( $post_ID ) );
+		// フィードを取得
+		$feed = get_the_content_feed( $feed_type );
+
+		// ASSERT
+		$this->assertTrue( $samplePostContent->hasFreeText( $feed ) );
+		$this->assertFalse( $samplePostContent->hasBlock( $feed ) );
+		$this->assertFalse( $samplePostContent->hasPaidText( $feed ) );
+	}
+
+	public function getTheContentFeedDataProvider(): array {
+		// フィードの種類
+		// https://developer.wordpress.org/reference/functions/get_the_content_feed/#parameters
+		return array(
+			array( 'rss2' ),
+			array( 'atom' ),
+			array( 'rss' ),
+			array( 'rdf' ),
+		);
+	}
 }
