@@ -20,6 +20,9 @@ class ExcerptFilterHook {
 	}
 
 	public function addFilterGetTheExcerpt( string $excerpt ): string {
+		// ※ 引数(他プラグイン等で変更された抜粋)を使用せずに抜粋を生成しているため、
+		// 　 抜粋を加工する別のプラグインがあった場合、競合することに注意。
+
 		// 投稿内容を取得
 		// ※ ここで`./ContentFilterHook`で登録したフィルタが適用される
 		$the_content = apply_filters( 'the_content', get_the_content( '', false, get_post() ) );
