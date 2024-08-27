@@ -61,4 +61,37 @@ class ContentFilterHookTest extends IntegrationTestBase {
 		$this->assertTrue( $samplePostContent->hasBlock( $content ) );
 		$this->assertFalse( $samplePostContent->hasPaidText( $content ) );
 	}
+
+	/**
+	 * `/wp-json/wp/v2/posts`にアクセス(GET)したときに有料部分が表示されないことを確認する
+	 *
+	 * @test
+	 * @testdox [62A575F7][Hooks] ContentFilterHook - /wp-json/wp/v2/posts
+	 */
+	public function wpV2Posts() {
+		// ARRANGE
+		$samplePostContent = new SamplePostContent();
+		// 投稿を作成
+		$contributor = $this->getUser( UserType::CONTRIBUTOR );
+		$contributor->createPost(
+			array(
+				'post_content' => $samplePostContent->get(),
+			)
+		);
+
+		// ACT
+		// `/wp-json/wp/v2/posts`へアクセス(WP_REST_Requestの第二引数で`/wp-json`は記述しない)
+		$request  = new WP_REST_Request( 'GET', '/wp/v2/posts' );
+		$response = rest_do_request( $request );
+
+		// ASSERT
+		$this->assertEquals( 200, $response->get_status() ); // RESTのレスポンスが正常であること
+		// bodyを取得
+		$body    = $response->get_data();
+		$content = wp_json_encode( $body );   // json形式の文字列を判定対象とする
+		// 無料部分のみ取得でき、ブロック及び有料部分は非表示であることを確認
+		$this->assertTrue( $samplePostContent->hasFreeText( $content ) );
+		$this->assertFalse( $samplePostContent->hasBlock( $content ) );
+		$this->assertFalse( $samplePostContent->hasPaidText( $content ) );
+	}
 }
