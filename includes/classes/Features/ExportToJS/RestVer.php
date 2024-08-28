@@ -4,7 +4,6 @@ namespace Cornix\Serendipity\Core\Features\ExportToJS;
 
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
-use Cornix\Serendipity\Core\Lib\SystemInfo\Environment;
 
 class RestVer {
 	/**

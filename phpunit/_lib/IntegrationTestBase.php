@@ -6,7 +6,6 @@ use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 /**
