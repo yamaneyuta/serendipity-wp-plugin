@@ -29,6 +29,8 @@
 		"env:start": "WP_ENV_PHP_VERSION=${PHP_VERSION} WP_ENV_CORE=WordPress/WordPress#${WP_VERSION} wp-env start --xdebug=develop,coverage,debug",
 		"env:reset": "wp-env clean all && wp-env start",
 		"env:destroy": "wp-env destroy",
+		"export": "run-s export:license:*",
+		"export:license:block": "tsx ./.bin/export-block-license.ts",
 		"format": "run-s format:js format:php",
 		"format:js": "eslint --fix .bin src && prettier --write .bin src",
 		"format:php": "phpcbf .",
