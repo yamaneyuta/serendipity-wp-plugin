@@ -38,7 +38,7 @@
 		"lint:js": "eslint .bin src && prettier --check .bin src",
 		"lint:php": "phpcs -s .",
 		"packages-update": "wp-scripts packages-update",
-		"prepare": "npm run prepare:copy-constants && npm run build",
+		"prepare": "run-s prepare:copy-constants export build",
 		"prepare:copy-constants": "cp -f node_modules/@yamaneyuta/serendipity-constants/dist/backend/constants.json includes/assets/",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"release": "npx release-it",
