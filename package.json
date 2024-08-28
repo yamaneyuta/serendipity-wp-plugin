@@ -34,6 +34,7 @@
 		"env:destroy": "wp-env destroy",
 		"export": "run-s export:license:*",
 		"export:license:block": "tsx ./.bin/export-block-license.ts",
+		"export:license:php": "tsx ./.bin/export-php-license.ts",
 		"format": "run-s format:js format:php",
 		"format:js": "eslint --fix .bin src && prettier --write .bin src",
 		"format:php": "phpcbf .",
