@@ -105,6 +105,7 @@ jobs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
 
+    - run: npm run ci:check-license
     - run: npm run ci:lint
     - run: npm run ci:test
     # wp-envの起動設定(--xdebug=)によってphpunitのテストは問題なく終了するがカバレッジレポートが出力されない、という状況になるため、
