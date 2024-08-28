@@ -109,7 +109,7 @@ jobs:
     - run: npm run ci:test
     # wp-envの起動設定(--xdebug=)によってphpunitのテストは問題なく終了するがカバレッジレポートが出力されない、という状況になるため、
     # `ci:test`で実行するphpunitはcoverage出力オプションありをテスト実施項目とする。
-    # ※ カバレッジレポートが出力されているかどうかのチェック処理は`postcoverage:phpunit`に記述。
+    # ※ カバレッジレポートが出力されているかどうかのチェック処理は`postcoverage:php`に記述。
 
     # cleanコマンドでエラーが発生しないことを確認。
     - run: npm run clean
