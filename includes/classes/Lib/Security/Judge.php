@@ -6,28 +6,36 @@ namespace Cornix\Serendipity\Core\Lib\Security;
 use Cornix\Serendipity\Core\Features\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
 
-class Assert {
 
-	public static function isPostID( int $post_ID ): void {
+/**
+ * 本システムにおいて`check～`は、引数の値を検証し、不正な値の場合は例外をスローする動作を行います。
+ * これはスマートコントラクトのライブラリが`check～`関数で`revert`を行っているものを参考にしています。
+ *
+ * 参考: Ownable.sol#_checkOwner
+ * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/1edc2ae004974ebf053f4eba26b45469937b9381/contracts/access/Ownable.sol#L63-L67
+ */
+class Judge {
+
+	public static function checkPostID( int $post_ID ): void {
 		if ( ! ( new Validator() )->isPostID( $post_ID ) ) {
 			throw new \InvalidArgumentException( '[C1D3D3A4] Invalid post ID. - post_ID: ' . $post_ID );
 		}
 	}
 
-	public static function isAmountHex( string $hex ): void {
+	public static function checkAmountHex( string $hex ): void {
 		if ( ! ( new Validator() )->isAmountHex( $hex ) ) {
 			throw new \InvalidArgumentException( '[9D226886] Invalid hex. - hex: ' . $hex );
 		}
 	}
 
-	public static function isDecimals( int $decimals ): void {
+	public static function checkDecimals( int $decimals ): void {
 		if ( ! ( new Validator() )->isDecimals( $decimals ) ) {
 			throw new \InvalidArgumentException( '[24FF24F8] Invalid decimals. - decimals: ' . $decimals );
 		}
 	}
 
 	/** 価格のシンボルとして有効な値であることを確認します。(ネットワーク不問) */
-	public static function isSymbol( string $symbol ): void {
+	public static function checkSymbol( string $symbol ): void {
 		// いずれかのネットワークの販売可能なシンボルであればOKの判定
 		foreach ( NetworkType::getAll() as $network_type ) {
 			if ( ( new Validator() )->isSellableSymbol( $network_type, $symbol ) ) {
@@ -38,20 +46,20 @@ class Assert {
 	}
 
 	/** 販売価格に使用可能なシンボルであることを確認します。 */
-	public static function isSellableSymbol( string $network_type, string $symbol ): void {
+	public static function checkSellableSymbol( string $network_type, string $symbol ): void {
 		if ( ! ( new Validator() )->isSellableSymbol( $network_type, $symbol ) ) {
 			throw new \InvalidArgumentException( '[CA216343] Invalid selling symbol. - network_type: ' . $network_type . ', symbol: ' . $symbol );
 		}
 	}
 
-	public static function isNetworkType( string $network_type ): void {
+	public static function checkNetworkType( string $network_type ): void {
 		if ( ! ( new Validator() )->isNetworkType( $network_type ) ) {
 			throw new \InvalidArgumentException( '[A6E9242D] Invalid network type. - network_type: ' . $network_type );
 		}
 	}
 
 	/** アドレスが有効な文字列であることを確認します。 */
-	public static function isAddress( string $address ): void {
+	public static function checkAddress( string $address ): void {
 		if ( ! \Web3\Utils::isAddress( $address ) ) {
 			throw new \InvalidArgumentException( '[66BDC040] Invalid address. - address: ' . $address );
 		}

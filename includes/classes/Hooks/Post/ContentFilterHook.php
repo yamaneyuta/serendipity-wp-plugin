@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Hooks\Post;
 
 use Cornix\Serendipity\Core\Lib\Post\ContentFilter;
 use Cornix\Serendipity\Core\Lib\Security\Access;
-use Cornix\Serendipity\Core\Lib\Security\Assert;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class ContentFilterHook {
@@ -20,7 +20,7 @@ class ContentFilterHook {
 
 		// 現在の投稿IDを取得
 		$post_ID = get_the_ID();
-		Assert::isPostID( $post_ID );
+		Judge::checkPostID( $post_ID );
 
 		if ( ! $this->shouldFilterContent( $post_ID ) ) {
 			assert( ! is_singular(), '[F18FB707] should not be singular' );

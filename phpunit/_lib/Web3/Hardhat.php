@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Security\Assert;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Web3\Methods\EthMethod;
 use Web3\Providers\HttpProvider;
@@ -54,7 +54,7 @@ class Hardhat {
 			}
 		);
 
-		Assert::isAmountHex( $id );
+		Judge::checkAmountHex( $id );
 
 		return $id;
 	}
