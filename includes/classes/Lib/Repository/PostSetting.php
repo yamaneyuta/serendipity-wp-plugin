@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
-use Cornix\Serendipity\Core\Lib\Security\Assert;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\PostSettingType;
 use Cornix\Serendipity\Core\Types\PriceType;
 use wpdb;
@@ -65,11 +65,11 @@ class PostSetting {
 	public function set( int $post_id, PostSettingType $post_setting ) {
 		$selling_price = $post_setting->sellingPrice;
 
-		Assert::isPostID( $post_id );
-		Assert::isAmountHex( $selling_price->amountHex );
-		Assert::isDecimals( $selling_price->decimals );
-		Assert::isSellableSymbol( $post_setting->sellingNetwork, $selling_price->symbol );
-		Assert::isNetworkType( $post_setting->sellingNetwork );
+		Judge::checkPostID( $post_id );
+		Judge::checkAmountHex( $selling_price->amountHex );
+		Judge::checkDecimals( $selling_price->decimals );
+		Judge::checkSellableSymbol( $post_setting->sellingNetwork, $selling_price->symbol );
+		Judge::checkNetworkType( $post_setting->sellingNetwork );
 
 		$result = $this->wpdb->insert(
 			$this->table_name,

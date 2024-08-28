@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
-use Cornix\Serendipity\Core\Lib\Security\Assert;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
 use Web3\Eth;
@@ -52,7 +52,7 @@ class Blockchain {
 			}
 		);
 		assert( $chain_ID_hex !== '0x00', '[1BAA2783] Failed to get chain ID.' );
-		Assert::isAmountHex( $chain_ID_hex );
+		Judge::checkAmountHex( $chain_ID_hex );
 
 		return $chain_ID_hex;
 	}
@@ -73,7 +73,7 @@ class Blockchain {
 			}
 		);
 		assert( $block_number_hex !== '0x00', '[C38AC4D1] Failed to get block number.' );
-		Assert::isAmountHex( $block_number_hex );
+		Judge::checkAmountHex( $block_number_hex );
 
 		return $block_number_hex;
 	}
@@ -82,7 +82,7 @@ class Blockchain {
 	 * アカウントの残高を取得します。
 	 */
 	public function getBalanceHex( string $address ): string {
-		Assert::isAddress( $address );
+		Judge::checkAddress( $address );
 		$eth = new Eth( $this->rpc_url );
 
 		$balance_hex = '0x00';
@@ -97,7 +97,7 @@ class Blockchain {
 			}
 		);
 
-		Assert::isAmountHex( $balance_hex );
+		Judge::checkAmountHex( $balance_hex );
 		return $balance_hex;
 	}
 
