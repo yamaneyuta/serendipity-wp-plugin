@@ -27,6 +27,7 @@ checker.init(
 
 			// ライセンスファイルをコピー
 			require( 'fs' ).copyFileSync( src, dst );
+			console.log( dst ); // eslint-disable-line no-console
 		}
 
 		// ライセンス情報をエクスポート
@@ -34,5 +35,6 @@ checker.init(
 			( JSON.stringify( packages ) as string ).replaceAll( `${ process.cwd() }/node_modules`, '.' )
 		);
 		require( 'fs' ).writeFileSync( META_FILE_PATH, JSON.stringify( result, null, 2 ) );
+		console.log( META_FILE_PATH ); // eslint-disable-line no-console
 	}
 );
