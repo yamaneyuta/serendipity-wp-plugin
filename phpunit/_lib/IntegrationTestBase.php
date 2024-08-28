@@ -175,7 +175,7 @@ class TestUser {
 
 		// 投稿を作成するためのパラメータのうち、`post_author`をここで設定。
 		// パラメータ: https://miya0001.github.io/wp-unit-docs/factory.html#parameters
-		Assert::false( isset( $args['post_author'] ), '[71FE0EDC] post_author is not allowed in $args' );
+		assert( ! isset( $args['post_author'] ), '[71FE0EDC] post_author is not allowed in $args' );
 		$args['post_author'] = $this->id;
 
 		// 投稿を作成
