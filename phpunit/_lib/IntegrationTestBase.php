@@ -6,6 +6,7 @@ use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
+use Cornix\Serendipity\Core\Lib\Security\Assert;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 /**
@@ -166,18 +167,23 @@ class TestUser {
 		wp_set_current_user( $this->id );
 	}
 
-	public function createPost(): int {
+	public function createPost( array $args = array() ): int {
 		if ( ! user_can( $this->id, 'edit_posts' ) ) {
 			// 投稿を作成する権限がないエラー
 			throw new Exception( '[2DD19278] You do not have permission to create a post. id: ' . $this->id );
 		}
 
+		// 投稿を作成するためのパラメータのうち、`post_author`をここで設定。
 		// パラメータ: https://miya0001.github.io/wp-unit-docs/factory.html#parameters
+		assert( ! isset( $args['post_author'] ), '[71FE0EDC] post_author is not allowed in $args' );
+		$args['post_author'] = $this->id;
+
+		// 投稿を作成
 		return ( new class() extends WP_UnitTestCase {
 			public function createPost( array $args ) {
 				return $this->factory()->post->create( $args );
 			}
-		} )->createPost( array( 'post_author' => $this->id ) );
+		} )->createPost( $args );
 	}
 
 	public function __toString(): string {

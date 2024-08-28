@@ -23,7 +23,10 @@ class ContentFilterHook {
 		Assert::isPostID( $post_ID );
 
 		if ( ! $this->shouldFilterContent( $post_ID ) ) {
-			Assert::false( is_feed(), '[B63A1B4B] should not be feed' );
+			assert( ! is_singular(), '[F18FB707] should not be singular' );
+			assert( ! is_feed(), '[B63A1B4B] should not be feed' );
+			assert( ! is_preview(), '[2952AB24] should not be preview' );
+			assert( ! is_category(), '[CEFB85D3] should not be category' );
 
 			// フィルタしない場合はそのまま返す
 			return $content;
@@ -32,7 +35,8 @@ class ContentFilterHook {
 			// 　　1. is_single: 投稿ページ・添付ページ・カスタム投稿タイプの個別ページ
 			// 　　2. is_page: 固定ページ
 			// 　　3. is_attachment: 添付ページ
-			Assert::false( is_feed(), '[A4A5E6E7] should not be feed' );
+			assert( ! is_feed(), '[A4A5E6E7] should not be feed' );
+			assert( ! is_category(), '[CEFB85D3] should not be category' );
 
 			$contentFilter = new ContentFilter( $content );
 			$free          = $contentFilter->getFree();  // 無料部分を取得
@@ -42,15 +46,17 @@ class ContentFilterHook {
 				return $content;
 			} else {
 				$widget = $contentFilter->getWidget();  // ウィジェットを取得
-				Assert::true( is_string( $widget ), '[4F2720BC] Invalid content. - content: ' . $content );
+				assert( is_string( $widget ), '[4F2720BC] Invalid content. - content: ' . $content );
 				// 無料部分が取得できた場合は、ウィジェットを追加して返す。
 				return $free . $widget;
 			}
 		} else {
 			// その他。以下の場合を含む。
 			// - フィード(RSS, ATOM等): is_feed() === true
-			// 　- 記事一覧が表示されるページ
+			// 　- 記事一覧が表示されるページ: is_archive() === true
+			// 　- カテゴリーページ: is_category() === true
 			// 　- /wp-json/wp/v2/posts へアクセス(GET)された時
+			assert( ! is_preview(), '[E3AB3400] should not be preview' );
 
 			// 無料部分のみを返す。
 			$contentFilter = new ContentFilter( $content );

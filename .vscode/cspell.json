@@ -29,6 +29,7 @@
 		"phpmyadmin",
 		"phpseclib",
 		"phpunit",
+		"postdata",
 		"privatenet",
 		"Rendererable",
 		"RPCURL",

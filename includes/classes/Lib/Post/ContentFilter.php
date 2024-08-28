@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Post;
 
 use Cornix\Serendipity\Core\Lib\Repository\ClassName;
-use Cornix\Serendipity\Core\Lib\Security\Assert;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 /**
@@ -13,7 +12,7 @@ class ContentFilter {
 
 	public function __construct( string $content ) {
 		// $contentは、コメントを含まないHTMLタグ
-		Assert::false( Strings::strpos( $content, '<!-- wp:' ), "[9BA30031] Invalid content. - content: $content" );
+		assert( ! Strings::strpos( $content, '<!-- wp:' ), "[9BA30031] Invalid content. - content: $content" );
 
 		$this->content   = $content;
 		$this->className = ( new ClassName() )->getBlock();
@@ -50,7 +49,7 @@ class ContentFilter {
 
 		// ウィジェットの開始位置から終了位置まで
 		$widget_end_pos = $this->getWidgetEndPos();
-		Assert::true( is_int( $widget_end_pos ), "[B4EC65DA] Invalid content. - content: $this->content" );
+		assert( is_int( $widget_end_pos ), "[B4EC65DA] Invalid content. - content: $this->content" );
 		return Strings::substr( $this->content, $widget_start_pos, $widget_end_pos - $widget_start_pos );
 	}
 
@@ -78,11 +77,11 @@ class ContentFilter {
 
 		// `<div `の位置をすべて取得(ウィジェットが配置されている場合はdivタグが1つ以上存在する)
 		$div_positions = Strings::all_strpos( $this->content, '<div ' );
-		Assert::true( count( $div_positions ) > 0, "[26EAB256] Invalid content. - content: $this->content" );
+		assert( count( $div_positions ) > 0, "[26EAB256] Invalid content. - content: $this->content" );
 
 		// ウィジェットのdivタグの開始位置を取得
 		$widget_start_pos = max( array_filter( $div_positions, fn( $pos ) => $pos < $class_name_pos ) );
-		Assert::true( is_int( $widget_start_pos ), "[805CD4D1] Invalid content. - content: $this->content" );
+		assert( is_int( $widget_start_pos ), "[805CD4D1] Invalid content. - content: $this->content" );
 
 		// ウィジェットのdivタグの開始位置を返す
 		return $widget_start_pos;
@@ -98,7 +97,7 @@ class ContentFilter {
 		// ウィジェットのクラス名の位置から開始して最初に出現する`</div>`の位置を取得
 		$end_tag        = '</div>';
 		$widget_end_pos = Strings::strpos( $this->content, $end_tag, $class_name_pos );
-		Assert::true( false !== $widget_end_pos, "[CCA43C75] Invalid content. - content: $this->content" );
+		assert( false !== $widget_end_pos, "[CCA43C75] Invalid content. - content: $this->content" );
 		return $widget_end_pos + Strings::strlen( $end_tag );
 	}
 }
