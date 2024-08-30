@@ -33,7 +33,7 @@ export const getComposerPackages = ( projectPath: string ) => {
 			return licenseArray.length > 1 ? `(${ licenseText })` : licenseText;
 		} )();
 		// ライセンスファイルのパスを取得
-		const licenseFile = getLicensePath( packageName );
+		const licenseFile = getLicensePath( projectPath, packageName );
 
 		// リポジトリURLを取得
 		const repository = getRepositoryUrl( packageName, composerLock );
@@ -72,12 +72,14 @@ type ComposerLock = {
 
 /**
  * 指定したパッケージのライセンスファイルパスを取得します。
+ * @param projectPath
  * @param packageName
  */
-const getLicensePath = ( packageName: string ) => {
+const getLicensePath = ( projectPath: string, packageName: string ) => {
+	const vendorRootPath = path.join( projectPath, 'vendor' );
 	// globパッケージを使用して、ライセンスファイルを検索
 	for ( const licenseFileName of LICENSE_FILE_NAMES ) {
-		const files = glob.sync( `/workspaces/includes/vendor/${ packageName }/**/${ licenseFileName }` );
+		const files = glob.sync( `${ vendorRootPath }/${ packageName }/**/${ licenseFileName }` );
 		if ( files.length > 0 ) {
 			return files[ 0 ];
 		}
