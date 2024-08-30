@@ -1,6 +1,6 @@
 import path from 'path';
 import * as checker from 'license-checker';
-import { exportLicense } from './export-license';
+import { exportLicense } from './lib/exportLicense';
 
 const EXPORT_DIR = path.join( process.cwd(), 'public', 'license', 'block' );
 
