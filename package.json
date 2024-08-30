@@ -11,8 +11,9 @@
 		"build": "npm run build:graphql-types && tsc --noEmit && npm run build:block",
 		"build:block": "wp-scripts build",
 		"build:graphql-types": "graphql-codegen",
-		"check-license": "run-s check-license:js",
+		"check-license": "run-s check-license:*",
 		"check-license:js": "license-checker --production --excludePrivatePackages --onlyAllow '0BSD;Apache-2.0;Apache-2.0 WITH LLVM-exception;BSD-2-Clause;BSD-3-Clause;CC0-1.0;CC-BY-3.0;GPL-2.0-or-later;ISC;MIT' > /dev/null",
+		"check-license:php": "tsx .bin/check-php-license",
 		"ci:check-license": "run-p check-license:*",
 		"ci:lint": "run-p lint:css lint:js format",
 		"ci:test": "run-p coverage:js test:storybook coverage:php",
@@ -34,6 +35,7 @@
 		"env:destroy": "wp-env destroy",
 		"export": "run-s export:license:*",
 		"export:license:block": "tsx ./.bin/export-block-license.ts",
+		"export:license:php": "tsx ./.bin/export-php-license.ts",
 		"format": "run-s format:js format:php",
 		"format:js": "eslint --fix .bin src && prettier --write .bin src",
 		"format:php": "phpcbf .",
@@ -56,7 +58,8 @@
 		"build-storybook": "storybook build",
 		"update:package": "npx npm-check-updates -u --target minor",
 		"watch": "npm run watch:graphql",
-		"watch:graphql": "graphql-codegen --watch"
+		"watch:graphql": "graphql-codegen --watch",
+		"z": "cd includes && composer-license-checker check -p './includes' --allowlist DUMMY_LICENSE --allowlist MIT"
 	},
 	"# note": {
 		"// - devDependencies: ": "",
