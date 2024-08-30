@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import fs from 'node:fs';
 import glob from 'glob'; // eslint-disable-line import/no-extraneous-dependencies
+import { ModuleInfos, ModuleInfo } from 'license-checker';
 
 // 検索するライセンスファイルの名前(順番に検索)
 const LICENSE_FILE_NAMES = [ 'LICENSE' ];
@@ -19,7 +20,7 @@ export const getComposerPackages = ( projectPath: string ) => {
 	// composer.lockファイルの内容を取得
 	const composerLock = getComposerLock( projectPath );
 
-	const packages = {};
+	const packages = {} as ModuleInfos;
 	for ( const packageName of Object.keys( composerOutput ) ) {
 		// バージョンを取得(例: "v1.0.0" => "1.0.0")
 		const version = composerOutput[ packageName ].version.replace( /^v/, '' );
@@ -42,7 +43,7 @@ export const getComposerPackages = ( projectPath: string ) => {
 			licenses,
 			repository,
 			licenseFile,
-		};
+		} as ModuleInfo;
 	}
 
 	return packages;
