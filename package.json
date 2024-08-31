@@ -58,8 +58,7 @@
 		"build-storybook": "storybook build",
 		"update:package": "npx npm-check-updates -u --target minor",
 		"watch": "npm run watch:graphql",
-		"watch:graphql": "graphql-codegen --watch",
-		"z": "cd includes && composer-license-checker check -p './includes' --allowlist DUMMY_LICENSE --allowlist MIT"
+		"watch:graphql": "graphql-codegen --watch"
 	},
 	"# note": {
 		"// - devDependencies: ": "",
