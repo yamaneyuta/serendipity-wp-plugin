@@ -1,7 +1,7 @@
 services:
   development:
     environment:
-      CHOKIDAR_USEPOLLING: ${CHOKIDAR_USEPOLLING:-true} # WSL2用(default: false)
-      CHOKIDAR_INTERVAL: ${CHOKIDAR_INTERVAL:-300} # WSL2用(default: 100)
+      # CHOKIDAR_USEPOLLING: ${CHOKIDAR_USEPOLLING:-true} # WSL2(/mnt/c以下で作業する時)用(default: false)
+      # CHOKIDAR_INTERVAL: ${CHOKIDAR_INTERVAL:-300} # WSL2(/mnt/c以下で作業する時)用(default: 100)
       LANG: ${LANG:-ja_JP.UTF-8}
       GIT_EDITOR: ${GIT_EDITOR:-code --wait}
