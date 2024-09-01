@@ -105,7 +105,7 @@
 		"@wordpress/scripts": "^27.9.0",
 		"@yamaneyuta/serendipity-constants": "github:yamaneyuta/serendipity-constants#0.8.4",
 		"@yamaneyuta/serendipity-dev-conf": "github:yamaneyuta/serendipity-dev-conf#0.8.3",
-		"@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.5",
+		"@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.6",
 		"@yamaneyuta/serendipity-lib-js-price-format": "github:yamaneyuta/serendipity-lib-js-price-format#0.8.4",
 		"concurrently": "^8.2.2",
 		"eslint-plugin-storybook": "^0.8.0",
