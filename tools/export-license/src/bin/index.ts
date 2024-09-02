@@ -4,6 +4,7 @@ import { getPackagesComposer } from '../lib/getPackagesComposer';
 import { getPackageManagerType, PackageManagerType } from '../lib/getPackageManagerType';
 import { copyLicenseFiles } from '../lib/copyLicenseFiles';
 import { exportLicenseMeta } from '../lib/exportLicenseMeta';
+import { verifyMetaFile } from '../lib/verify/verifyMetaFile';
 
 const main = async () => {
 	// コマンドラインから引数を取得
@@ -21,7 +22,8 @@ const main = async () => {
 	// ライセンス情報を出力
 	exportLicenseMeta( packages, start, output, metaFile );
 
-	// console.log( packages );
+	// 出力したライセンス情報を検証
+	verifyMetaFile( metaFile );
 };
 
 const getPackagesInfo = async ( start: string, packageManagerType: PackageManagerType ) => {
