@@ -6,7 +6,8 @@
   "devDependencies": {
     "@types/license-checker": "^25.0.6",
     "@yamaneyuta/serendipity-dev-conf": "github:yamaneyuta/serendipity-dev-conf#0.8.3",
-		"prettier": "npm:wp-prettier@^3.0.3"
+    "prettier": "npm:wp-prettier@^3.0.3",
+    "tsx": "^4.19.0"
   },
   "scripts": {
     "build": "tsc",
