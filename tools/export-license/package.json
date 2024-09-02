@@ -25,7 +25,8 @@
     "clean": "rm -rf dist/*",
     "format": "eslint --fix src && prettier --write src",
     "lint": "eslint src && prettier --check src",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "release": "npx release-it"
   },
   "peerDependencies": {
     "glob": "^11.0.0",
