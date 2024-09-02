@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf dist/*",
     "format": "eslint --fix src && prettier --write src",
     "lint": "eslint src && prettier --check src",
     "prepare": "npm run build"
