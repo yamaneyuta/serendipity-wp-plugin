@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc",
     "format": "eslint --fix src && prettier --write src",
-    "lint": "eslint src && prettier --check src"
+    "lint": "eslint src && prettier --check src",
+    "prepare": "npm run build"
   }
 }
