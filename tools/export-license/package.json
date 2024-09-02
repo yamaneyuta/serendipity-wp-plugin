@@ -16,6 +16,7 @@
     "prepare": "npm run build"
   },
   "peerDependencies": {
+    "glob": "^11.0.0",
     "license-checker": "^25.0.1"
   }
 }
