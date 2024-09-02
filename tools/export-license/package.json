@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "main": "index.js",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "bin": {
     "export-license": "dist/bin/index.js"
   },
