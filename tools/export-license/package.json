@@ -22,6 +22,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "postbuild": "sed -i '1s/^/#!\\/usr\\/bin\\/env node\\n/' dist/bin/*.js",
     "clean": "rm -rf dist/*",
     "format": "eslint --fix src && prettier --write src",
     "lint": "eslint src && prettier --check src",
