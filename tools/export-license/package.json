@@ -25,10 +25,12 @@
     "postbuild": "sed -i '1s/^/#!\\/usr\\/bin\\/env node\\n/' dist/bin/*.js",
     "ci:build": "tsc --noEmit --skipLibCheck false && npm run build",
     "clean": "rm -rf dist/*",
+    "coverage": "jest --coverage",
     "format": "eslint --fix src && prettier --write src",
     "lint": "eslint src && prettier --check src",
     "prepare": "npm run build",
-    "release": "npx release-it"
+    "release": "npx release-it",
+    "test": "jest"
   },
   "peerDependencies": {
     "glob": "^11.0.0",
