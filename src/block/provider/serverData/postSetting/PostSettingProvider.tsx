@@ -1,9 +1,6 @@
 import assert from 'assert';
 import { createContext } from 'react';
-import {
-	PostSettingQuery,
-	usePostSettingQuery,
-} from '../../../../types/gql/generated';
+import { PostSettingQuery, usePostSettingQuery } from '../../../../types/gql/generated';
 import { usePostID } from '../../windowData/postID/usePostID';
 
 type PostSettingType = ReturnType< typeof _usePostSetting >;

@@ -5,7 +5,5 @@ type WindowDataProviderProps = {
 };
 
 export const WindowDataProvider: React.FC< WindowDataProviderProps > = ( { children } ) => {
-	return (
-		<PostIDProvider>{ children }</PostIDProvider>
-	);
+	return <PostIDProvider>{ children }</PostIDProvider>;
 };

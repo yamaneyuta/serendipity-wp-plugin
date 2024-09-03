@@ -14,7 +14,6 @@ type GutenbergPostEditProps = {
 };
 
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { attributes, setAttributes } ) => {
-
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
 			<div style={ { width: '100%' } }>
