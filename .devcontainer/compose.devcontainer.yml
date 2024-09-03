@@ -14,6 +14,7 @@ services:
       - WP_VERSION=${WP_VERSION:-5.4} # WordPressのバージョン(https://ja.wordpress.org/download/releases/ に記載のタグ)
     volumes:
       - ..:/workspaces
+      - ../../serendipity-dist-wp-plugin-public/public:/workspaces/public
       - node_modules:/workspaces/node_modules
       - dot_phpunit:/workspaces/.phpunit
       - includes_vendor:/workspaces/includes/vendor
