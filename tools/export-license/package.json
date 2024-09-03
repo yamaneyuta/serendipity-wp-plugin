@@ -5,14 +5,15 @@
   "main": "index.js",
   "exports": {
     ".": {
-      "require": "./dist/index.js"
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
     }
   },
   "files": [
     "dist"
   ],
   "bin": {
-    "export-license": "dist/bin/index.js"
+    "export-license": "dist/cjs/bin/index.js"
   },
   "devDependencies": {
     "@types/license-checker": "^25.0.6",
@@ -21,8 +22,10 @@
     "tsx": "^4.19.0"
   },
   "scripts": {
-    "build": "tsc",
-    "postbuild": "sed -i '1s/^/#!\\/usr\\/bin\\/env node\\n/' dist/bin/*.js",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "postbuild": "sed -i '1s/^/#!\\/usr\\/bin\\/env node\\n/' dist/cjs/bin/*.js",
     "ci:build": "tsc --noEmit --skipLibCheck false && npm run build",
     "clean": "rm -rf dist/*",
     "coverage": "jest --coverage",
