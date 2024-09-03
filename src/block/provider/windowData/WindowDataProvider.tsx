@@ -1,4 +1,3 @@
-import { BlockEditorPropertyProvider } from './editor/BlockEditorPropertyProvider';
 import { PostIDProvider } from './postID/PostIDProvider';
 
 type WindowDataProviderProps = {
@@ -7,8 +6,6 @@ type WindowDataProviderProps = {
 
 export const WindowDataProvider: React.FC< WindowDataProviderProps > = ( { children } ) => {
 	return (
-		<BlockEditorPropertyProvider>
-			<PostIDProvider>{ children }</PostIDProvider>
-		</BlockEditorPropertyProvider>
+		<PostIDProvider>{ children }</PostIDProvider>
 	);
 };
