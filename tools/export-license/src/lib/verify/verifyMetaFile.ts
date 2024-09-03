@@ -37,7 +37,6 @@ const checkLicenseFileExist = ( metaFile: string ) => {
 		const licenseFile = meta[ key ].licenseFile;
 		assert( licenseFile, '[00955602] licenseFile is not found. key: ' + key );
 		const licensePath = path.join( path.dirname( metaFile ), licenseFile );
-		console.log( 'licensePath: ', licensePath );
 		// ライセンスファイルが存在しない場合はエラー
 		if ( ! fs.existsSync( licensePath ) ) {
 			throw new Error( `[E5A2D1A3] licenseFile is not found. licenseFile: ${ licensePath }` );
