@@ -1,8 +1,6 @@
 import { useIsDataChanged } from './useIsDataChanged';
-import { useIsSellingPriceValueChanged } from './dataChanged/useIsSellingPriceValueChanged';
 import { useIsSellingPriceSymbolChanged } from './dataChanged/useIsSellingPriceSymbolChanged';
 
-jest.mock( './dataChanged/useIsSellingPriceValueChanged' );
 jest.mock( './dataChanged/useIsSellingPriceSymbolChanged' );
 
 /**
@@ -23,7 +21,6 @@ describe( '[83691B9A] useIsDataChanged', () => {
 
 	for ( const [ networkChanged, priceValueChanged, priceSymbolChanged, expected ] of dataset ) {
 		it( `[A42C8A21] should return ${ expected } when networkChanged: ${ networkChanged }, priceValueChanged: ${ priceValueChanged }, priceSymbolChanged: ${ priceSymbolChanged }`, () => {
-			( useIsSellingPriceValueChanged as jest.Mock ).mockReturnValue( priceValueChanged );
 			( useIsSellingPriceSymbolChanged as jest.Mock ).mockReturnValue( priceSymbolChanged );
 
 			const result = useIsDataChanged();
