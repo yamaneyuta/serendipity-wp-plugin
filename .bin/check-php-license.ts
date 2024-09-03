@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import path from 'node:path';
 import packageJson from '../package.json';
-import { getComposerPackages } from './lib/getComposerPackages';
+import { getPackagesComposer } from '@yamaneyuta/serendipity-dev-export-license';
 
 // package.json内でのlicense-checkerを実行するスクリプト名
 const JS_LICENSE_CHECKER_SCRIPT_NAME = 'check-license:js';
@@ -16,7 +16,7 @@ const main = () => {
 
 	// composerを使ってPHPの依存ライブラリを取得
 	const projectPath = path.join( process.cwd(), 'includes' );
-	const packages = getComposerPackages( projectPath );
+	const packages = getPackagesComposer( projectPath );
 
 	// ライセンスチェック
 	let hasError = false;
