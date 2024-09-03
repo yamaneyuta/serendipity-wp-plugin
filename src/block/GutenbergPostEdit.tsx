@@ -2,7 +2,6 @@ import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
 import { SymbolSelect } from './features/symbolSelect/SymbolSelect';
 import { NetworkSelect } from './features/networkSelect/NetworkSelect';
-import { useAutoBindServerData } from './features/watch/useAutoBindServerData';
 import { useNetworkSelectProps } from './features/networkSelect/useNetworkSelectProps';
 import { useSymbolSelectProps } from './features/symbolSelect/useSymbolSelectProps';
 import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
@@ -13,8 +12,6 @@ type GutenbergPostEditProps = {
 };
 
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataChanged } ) => {
-	// サーバーから取得した情報を画面に反映
-	useAutoBindServerData();
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
