@@ -6,12 +6,14 @@ import { useNetworkSelectProps } from './features/networkSelect/useNetworkSelect
 import { useSymbolSelectProps } from './features/symbolSelect/useSymbolSelectProps';
 import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
 import { PriceValueInput } from './features/priceValueInput/PriceValueInput';
+import { WidgetAttributes } from './types/WidgetAttributes';
 
 type GutenbergPostEditProps = {
-	onDataChanged: () => void;
+	attributes: Readonly< WidgetAttributes >;
+	setAttributes: ( attrs: Partial< WidgetAttributes > ) => void;
 };
 
-export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataChanged } ) => {
+export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { attributes, setAttributes } ) => {
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
