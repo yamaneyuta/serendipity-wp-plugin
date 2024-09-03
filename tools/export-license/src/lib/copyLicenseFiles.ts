@@ -10,6 +10,9 @@ import { getVendorDirName } from './getVendorDirName';
  * @param output
  */
 export const copyLicenseFiles = ( packages: ModuleInfos, start: string, output: string ) => {
+	// コピーしたファイル一覧を格納する配列
+	const copiedFiles: string[] = [];
+
 	for ( const name of Object.keys( packages ) ) {
 		const src = packages[ name ].licenseFile;
 		if ( ! src ) {
@@ -28,7 +31,9 @@ export const copyLicenseFiles = ( packages: ModuleInfos, start: string, output: 
 		// ライセンスファイルをコピー
 		if ( ! fs.existsSync( dst ) ) {
 			fs.copyFileSync( src, dst );
-			console.log( dst );
+			copiedFiles.push( dst );
 		}
 	}
+
+	return copiedFiles;
 };
