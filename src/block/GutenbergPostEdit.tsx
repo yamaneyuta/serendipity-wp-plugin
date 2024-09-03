@@ -1,6 +1,5 @@
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
-import { useAutoSavePostSetting } from './features/watch/useAutoSavePostSetting';
 import { SymbolSelect } from './features/symbolSelect/SymbolSelect';
 import { NetworkSelect } from './features/networkSelect/NetworkSelect';
 import { useAutoBindServerData } from './features/watch/useAutoBindServerData';
@@ -16,8 +15,6 @@ type GutenbergPostEditProps = {
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { onDataChanged } ) => {
 	// サーバーから取得した情報を画面に反映
 	useAutoBindServerData();
-	// 投稿保存時に設定情報を保存
-	useAutoSavePostSetting();
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
