@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import fs from 'node:fs';
-import glob from 'glob';
+import { globSync } from 'glob';
 import { ModuleInfos, ModuleInfo } from 'license-checker';
 
 // 検索するライセンスファイルの名前(順番に検索)
@@ -76,7 +76,7 @@ const getLicensePath = ( projectPath: string, packageName: string ) => {
 	const vendorRootPath = path.join( projectPath, 'vendor' );
 	// globパッケージを使用して、ライセンスファイルを検索
 	for ( const licenseFileName of LICENSE_FILE_NAMES ) {
-		const files = glob.sync( `${ vendorRootPath }/${ packageName }/**/${ licenseFileName }` );
+		const files = globSync( `${ vendorRootPath }/${ packageName }/**/${ licenseFileName }` );
 		if ( files.length > 0 ) {
 			return files[ 0 ];
 		}
