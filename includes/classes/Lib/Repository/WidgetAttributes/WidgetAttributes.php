@@ -68,6 +68,9 @@ class WidgetAttributes {
 				return $block_name === $block['blockName'];
 			}
 		);
+		// インデックスを振り直す
+		$blocks = array_values( $blocks );
+
 		// ウィジェットは1投稿につき1つまでしか存在しない
 		assert( count( $blocks ) <= 1, '[FD104DDE] Widget block must be only one in a post' );
 
