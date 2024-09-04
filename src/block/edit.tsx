@@ -21,16 +21,10 @@ import { useBlockProps } from '@wordpress/block-editor';
  */
 import './editor.scss';
 
-// import { GutenbergPostEdit } from './components/GutenbergPostEdit';
 import { BlockEditProps } from '@wordpress/blocks';
-
 import { GutenbergPostEdit } from './GutenbergPostEdit';
 import { GutenbergPostEditProvider } from './provider/GutenbergPostEditProvider';
-import { useCallback } from 'react';
-
-type BlockAttributes = {
-	dummy: string;
-};
+import { WidgetAttributes } from './types/WidgetAttributes';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -38,25 +32,19 @@ type BlockAttributes = {
  *
  * @param root0
  * @param root0.setAttributes
+ * @param root0.attributes
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  */
-const Edit: React.FC< BlockEditProps< BlockAttributes > > = ( { setAttributes } ) => {
+const Edit: React.FC< BlockEditProps< WidgetAttributes > > = ( { setAttributes, attributes } ) => {
 	const blockProps = useBlockProps?.() ?? {};
-
-	// ユーザーの入力によって画面上のデータが更新された時に呼び出す関数。
-	// `setAttributes`で値を設定することでWordPressの保存ボタンが押下できるようになる。
-	const onDataChanged = useCallback( () => {
-		// 設定する値の意味はないので、毎回値が異なればよい。
-		// 今回は日時を設定している。
-		setAttributes( { dummy: new Date().toISOString() } );
-	}, [ setAttributes ] );
 
 	return (
 		<div { ...blockProps }>
-			<GutenbergPostEditProvider>
-				<GutenbergPostEdit onDataChanged={ onDataChanged } />
+			<GutenbergPostEditProvider attributes={ attributes } setAttributes={ setAttributes }>
+				<GutenbergPostEdit />
 			</GutenbergPostEditProvider>
 		</div>
 	);
 };
+
 export default Edit;

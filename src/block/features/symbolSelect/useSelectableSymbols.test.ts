@@ -2,15 +2,17 @@ import { NetworkType } from '../../../types/gql/generated';
 import { useSelectableSymbols as sut } from './useSelectableSymbols';
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
 import { renderHook } from '../../../../jest-lib/renderHook';
+import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
 
 jest.mock( '../../provider/serverData/postSetting/usePostSetting' );
+jest.mock( '../../provider/widgetState/selectedNetwork/useSelectedNetwork' );
 
 type UsePostSettingResult = ReturnType< typeof usePostSetting >;
 
 /**
- * 通常のテスト。各ネットワークで選択可能な通貨シンボルを取得できる場合。
+ * 通常のテスト。メインネットが選択された時に対応する通貨シンボルが取得できる。
  */
-it( '[23C5844D] useSelectableSymbols() - default', async () => {
+it( '[23C5844D] useSelectableSymbols() - default(mainnet)', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
 		mainnetSellableSymbols: [ 'JPY' ],
@@ -20,16 +22,57 @@ it( '[23C5844D] useSelectableSymbols() - default', async () => {
 		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
+	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Mainnet } );
 
 	// ACT
-	const mainnetSellableSymbols = renderHook( () => sut( NetworkType.Mainnet ) ).result.current;
-	const testnetSellableSymbols = renderHook( () => sut( NetworkType.Testnet ) ).result.current;
-	const privatenetSellableSymbols = renderHook( () => sut( NetworkType.Privatenet ) ).result.current;
+	const mainnetSellableSymbols = renderHook( () => sut() ).result.current;
 
 	// ASSERT
 	expect( mainnetSellableSymbols ).toEqual( [ 'JPY' ] );
-	expect( testnetSellableSymbols ).toEqual( [ 'USD' ] );
-	expect( privatenetSellableSymbols ).toEqual( [ 'EUR', 'GBP' ] );
+} );
+
+/**
+ * 通常のテスト。テストネットが選択された時に対応する通貨シンボルが取得できる。
+ */
+it( '[69581160] useSelectableSymbols() - default(testnet)', async () => {
+	// ARRANGE
+	const res: UsePostSettingResult = {
+		mainnetSellableSymbols: [ 'JPY' ],
+		testnetSellableSymbols: [ 'USD' ],
+		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
+		sellingNetwork: null,
+		sellingPrice: null,
+	};
+	( usePostSetting as jest.Mock ).mockReturnValue( res );
+	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Testnet } );
+
+	// ACT
+	const mainnetSellableSymbols = renderHook( () => sut() ).result.current;
+
+	// ASSERT
+	expect( mainnetSellableSymbols ).toEqual( [ 'USD' ] );
+} );
+
+/**
+ * 通常のテスト。テストネットが選択された時に対応する通貨シンボルが取得できる。
+ */
+it( '[B43240DF] useSelectableSymbols() - default(privatenet)', async () => {
+	// ARRANGE
+	const res: UsePostSettingResult = {
+		mainnetSellableSymbols: [ 'JPY' ],
+		testnetSellableSymbols: [ 'USD' ],
+		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
+		sellingNetwork: null,
+		sellingPrice: null,
+	};
+	( usePostSetting as jest.Mock ).mockReturnValue( res );
+	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Privatenet } );
+
+	// ACT
+	const mainnetSellableSymbols = renderHook( () => sut() ).result.current;
+
+	// ASSERT
+	expect( mainnetSellableSymbols ).toEqual( [ 'EUR', 'GBP' ] );
 } );
 
 /**
@@ -41,8 +84,7 @@ it( '[1DDC9FA6] useSelectableSymbols(undefined) - loading', async () => {
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
 	// ACT
-	// 仕様上、ネットワーク種別にundefinedが渡される時は読み込み中の時。
-	const sellableSymbols = renderHook( () => sut( undefined ) ).result.current;
+	const sellableSymbols = renderHook( () => sut() ).result.current;
 
 	// ASSERT
 	expect( sellableSymbols ).toBeUndefined();
@@ -61,9 +103,10 @@ it( '[1DDC9FA6] useSelectableSymbols(null) - loading', async () => {
 		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
+	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: null } );
 
 	// ACT
-	const sellableSymbols = renderHook( () => sut( null ) ).result.current;
+	const sellableSymbols = renderHook( () => sut() ).result.current;
 
 	// ASSERT
 	expect( sellableSymbols ).toBeNull();
@@ -76,10 +119,14 @@ it( '[1DDC9FA6] useSelectableSymbols() - loading, invalid network type', async (
 	// ARRANGE
 	const res: UsePostSettingResult = undefined;
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
+	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Mainnet } );
 
-	// ACT, ASSERT
-	// データ取得中はネットワーク種別はundefinedを渡すべきだが、不正な値が渡された時のテスト。
-	expect( () => renderHook( () => sut( NetworkType.Mainnet ) ) ).toThrow( '[FC51AFA9]' );
+	// ACT
+	const sellableSymbols = renderHook( () => sut() ).result.current;
+
+	// ASSERT
+	// 通常、このような状態は発生しないが、データ取得中のためundefinedが返ることを確認
+	expect( sellableSymbols ).toBeUndefined();
 } );
 
 /**
@@ -95,16 +142,13 @@ it( '[E9CD00AF] useSelectableSymbols() - null', async () => {
 		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
+	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Mainnet } );
 
 	// ACT
-	const mainnetSellableSymbols = renderHook( () => sut( NetworkType.Mainnet ) ).result.current;
-	const testnetSellableSymbols = renderHook( () => sut( NetworkType.Testnet ) ).result.current;
-	const privatenetSellableSymbols = renderHook( () => sut( NetworkType.Privatenet ) ).result.current;
+	const mainnetSellableSymbols = renderHook( () => sut() ).result.current;
 
 	// ASSERT
 	expect( mainnetSellableSymbols ).toBeNull();
-	expect( testnetSellableSymbols ).toBeNull();
-	expect( privatenetSellableSymbols ).toBeNull();
 } );
 
 /**
@@ -120,7 +164,10 @@ it( '[BF4948EE] useSelectableSymbols() - invalid network type', async () => {
 		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
+	( useSelectedNetwork as jest.Mock ).mockReturnValue( {
+		selectedNetwork: 'INVALID_NETWORK' as unknown as NetworkType,
+	} );
 
 	// ACT, ASSERT
-	expect( () => renderHook( () => sut( 'INVALID_NETWORK' as unknown as NetworkType ) ) ).toThrow( '[3D102039]' );
+	expect( () => renderHook( () => sut() ) ).toThrow( '[3D102039]' );
 } );

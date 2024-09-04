@@ -30,9 +30,18 @@ registerBlockType( metadata.name, {
 	title: metadata.title,
 	category: metadata.category,
 	attributes: {
-		dummy: {
+		sellingNetworkCategory: {
 			type: 'string',
-			default: undefined,
+			// nullを指定するとシンタックスエラーになるため強制的に型を指定。
+			default: null as unknown as string,
+		},
+		sellingPrice: {
+			type: 'object',
+			default: {
+				amountHex: '0x' + 0n.toString( 16 ),
+				decimals: 0,
+				symbol: null,
+			},
 		},
 	},
 	/**

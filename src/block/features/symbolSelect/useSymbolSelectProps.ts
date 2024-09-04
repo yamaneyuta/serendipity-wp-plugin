@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
-import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
 import { useSelectableSymbols } from './useSelectableSymbols';
 
 /**
@@ -8,7 +7,7 @@ import { useSelectableSymbols } from './useSelectableSymbols';
  */
 export const useSymbolSelectProps = () => {
 	const value = useSelectedPriceSymbol().selectedPriceSymbol;
-	const symbols = useSelectableSymbols( useSelectedNetwork().selectedNetwork );
+	const symbols = useSelectableSymbols();
 	const onChange = useOnChangeCallback();
 
 	// 読み込み中はコントロールを無効化

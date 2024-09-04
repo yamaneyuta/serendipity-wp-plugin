@@ -1,11 +1,6 @@
 import assert from 'assert';
-import { createContext, useCallback } from 'react';
-import {
-	PostSettingInput,
-	PostSettingQuery,
-	usePostSettingQuery,
-	useSetPostSettingMutation,
-} from '../../../../types/gql/generated';
+import { createContext } from 'react';
+import { PostSettingQuery, usePostSettingQuery } from '../../../../types/gql/generated';
 import { usePostID } from '../../windowData/postID/usePostID';
 
 type PostSettingType = ReturnType< typeof _usePostSetting >;
@@ -14,27 +9,11 @@ export const PostSettingContext = createContext< PostSettingType | undefined >( 
 
 const _usePostSetting = () => {
 	const postID = usePostID();
-	const { data, refetch } = usePostSettingQuery( { postID } );
+	const { data } = usePostSettingQuery( { postID } );
 	checkPostSetting( data ); // データの整合性チェック
-	const { mutateAsync } = useSetPostSettingMutation( {
-		onSuccess: async () => {
-			await refetch();
-		},
-	} );
-
-	const savePostSetting = useCallback(
-		async ( postSetting: PostSettingInput ) => {
-			await mutateAsync( {
-				postID,
-				postSetting,
-			} );
-		},
-		[ postID, mutateAsync ]
-	);
 
 	return {
 		postSetting: data,
-		savePostSetting,
 	};
 };
 
