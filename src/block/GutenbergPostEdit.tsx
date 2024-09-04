@@ -6,17 +6,13 @@ import { useNetworkSelectProps } from './features/networkSelect/useNetworkSelect
 import { useSymbolSelectProps } from './features/symbolSelect/useSymbolSelectProps';
 import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
 import { PriceValueInput } from './features/priceValueInput/PriceValueInput';
-import { WidgetAttributes } from './types/WidgetAttributes';
 import { useInitWidgetState } from './features/initialize/useInitWidgetState';
 
-type GutenbergPostEditProps = {
-	attributes: Readonly< WidgetAttributes >;
-	setAttributes: ( attrs: Partial< WidgetAttributes > ) => void;
-};
+type GutenbergPostEditProps = {};
 
-export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { attributes, setAttributes } ) => {
+export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 	// ウィジェットの状態を初期化
-	useInitWidgetState( attributes );
+	useInitWidgetState();
 
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
