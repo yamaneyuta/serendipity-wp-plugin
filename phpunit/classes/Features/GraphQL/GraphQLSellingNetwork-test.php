@@ -2,9 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
-use Cornix\Serendipity\Core\Lib\Repository\PostSetting;
-use Cornix\Serendipity\Core\Types\PostSettingType;
-use Cornix\Serendipity\Core\Types\PriceType;
+use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class GraphQLSellingNetwork extends IntegrationTestBase {
 
@@ -32,11 +30,13 @@ class GraphQLSellingNetwork extends IntegrationTestBase {
 		$this->getUser( $user_type )->setCurrentUser();
 
 		// 寄稿者が投稿を作成
-		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();
-		// 投稿の設定を保存
-		global $wpdb;
-		$postSetting = new PostSettingType( new PriceType( '0x123456', 18, 'ETH' ), NetworkType::MAINNET );
-		( new PostSetting( $wpdb ) )->set( $post_ID, $postSetting );
+		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost(
+			array(
+				'post_content' => $this->createTestPostContent(
+					new WidgetAttributesType( NetworkType::MAINNET, '0x123456', 18, 'ETH' )
+				),
+			)
+		);
 
 		// 投稿のステータスを変更(公開、下書き、等)
 		// https://developer.wordpress.org/reference/functions/wp_update_post/#user-contributed-notes
