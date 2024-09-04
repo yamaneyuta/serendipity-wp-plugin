@@ -2,14 +2,12 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
-use Cornix\Serendipity\Core\Lib\Repository\PostSetting;
-use Cornix\Serendipity\Core\Types\PostSettingType;
-use Cornix\Serendipity\Core\Types\PriceType;
+use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 /**
- * postSettingに対してアクセスできないことを確認するテスト
+ * widgetAttributesに対してアクセスできないことを確認するテスト
  *
- * ※ `RootValue.php`で`postSetting`フィールドがResolverとして登録されているが、
+ * ※ `RootValue.php`で`widgetAttributes`フィールドがResolverとして登録されているが、
  *    GraphQLの定義ではQueryに登録されていないため、アクセスできないことを確認する
  */
 class GraphQLPostSettingTest extends IntegrationTestBase {
@@ -30,7 +28,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 
 	/**
 	 * @test
-	 * @testdox [41FBDDF6][GraphQL] postSetting - user: $user_type, query_type: $query_type
+	 * @testdox [41FBDDF6][GraphQL] widgetAttributes - user: $user_type, query_type: $query_type
 	 * @dataProvider accessDataProvider
 	 */
 	public function access( string $user_type, int $query_type ) {
@@ -38,11 +36,13 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		$this->getUser( $user_type )->setCurrentUser();
 
 		// 寄稿者が投稿を作成
-		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost();
-		// 投稿の設定を保存
-		global $wpdb;
-		$postSetting = new PostSettingType( new PriceType( '0x123456', 18, 'ETH' ), NetworkType::MAINNET );
-		( new PostSetting( $wpdb ) )->set( $post_ID, $postSetting );
+		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost(
+			array(
+				'post_content' => $this->createTestPostContent(
+					new WidgetAttributesType( NetworkType::MAINNET, '0x123456', 18, 'ETH' )
+				),
+			)
+		);
 
 		// 投稿のステータスを公開に変更
 		$ret = wp_update_post(
@@ -62,15 +62,15 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
 		$this->assertFalse( isset( $data['data'] ) );   // 設定が取得できない
 		// エラーメッセージが正しいことを確認
-		$this->assertEquals( $data['errors'][0]['message'], 'Cannot query field "postSetting" on type "Query".' );
+		$this->assertEquals( $data['errors'][0]['message'], 'Cannot query field "widgetAttributes" on type "Query".' );
 	}
 
 	private function getQueryAndVariables( int $query_type, int $post_ID ): array {
 		switch ( $query_type ) {
 			case 1:
 				$query     = <<<GRAPHQL
-					query PostSetting(\$postID: Int!) {
-						postSetting(postID: \$postID) {
+					query WidgetAttributes(\$postID: Int!) {
+						widgetAttributes(postID: \$postID) {
 							sellingPrice {
 								amountHex
 								decimals
@@ -86,7 +86,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 			case 2:
 				$query     = <<<GRAPHQL
 					query {
-						postSetting
+						widgetAttributes
 					}
 				GRAPHQL;
 				$variables = null;

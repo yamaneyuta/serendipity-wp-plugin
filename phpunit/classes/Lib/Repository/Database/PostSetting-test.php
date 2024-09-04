@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Types\PriceType;
 
 /**
  * 投稿設定のテスト
+ * @deprecated TODO: 削除
  */
 class PostSettingTest extends IntegrationTestBase {
 

@@ -4,9 +4,12 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Features\Migration\DBSchema;
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
+use Cornix\Serendipity\Core\Lib\Repository\BlockName;
+use Cornix\Serendipity\Core\Lib\Repository\ClassName;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
+use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 /**
  * 結合テストの基底クラス
@@ -100,6 +103,58 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 	/** @var WP_REST_Server */
 	private $server;
+
+	/**
+	 * テスト用の投稿コンテンツを作成します。
+	 *
+	 * @param WidgetAttributesType $widget_attributes
+	 * @return string
+	 */
+	protected function createTestPostContent( WidgetAttributesType $widget_attributes ): string {
+		return ( new TestPostContent( $widget_attributes ) )->create();
+	}
+}
+
+/**
+ * テスト用の投稿コンテンツを作成するクラス
+ */
+class TestPostContent {
+	public function __construct( WidgetAttributesType $widget_attributes ) {
+		$this->widget_attributes = $widget_attributes;
+	}
+
+	private WidgetAttributesType $widget_attributes;
+
+	public function create() {
+		$class_name = ( new ClassName() )->getBlock();
+		$html       = "<div class=\"${class_name}\"></div>";
+		// https://developer.wordpress.org/reference/functions/serialize_blocks/#parameters
+		return serialize_blocks(
+			array(
+				array(
+					'blockName'    => 'core/paragraph',
+					'attrs'        => array(),
+					'innerBlocks'  => array(),
+					'innerHTML'    => '<p>FREE_AREA</p>',
+					'innerContent' => array( '<p>FREE_AREA</p>' ),
+				),
+				array(
+					'blockName'    => BlockName::get(),
+					'attrs'        => json_decode( json_encode( $this->widget_attributes ), true ),
+					'innerBlocks'  => array(),
+					'innerHTML'    => $html,
+					'innerContent' => array( $html ),
+				),
+				array(
+					'blockName'    => 'core/paragraph',
+					'attrs'        => array(),
+					'innerBlocks'  => array(),
+					'innerHTML'    => '<p>PAID_AREA</p>',
+					'innerContent' => array( '<p>PAID_AREA</p>' ),
+				),
+			)
+		);
+	}
 }
 
 
@@ -166,6 +221,12 @@ class TestUser {
 		wp_set_current_user( $this->id );
 	}
 
+	/**
+	 * 投稿を作成します。
+	 *
+	 * @param array{post_content:?string,post_title:?string, ... } $args
+	 * @return int 投稿ID
+	 */
 	public function createPost( array $args = array() ): int {
 		if ( ! user_can( $this->id, 'edit_posts' ) ) {
 			// 投稿を作成する権限がないエラー

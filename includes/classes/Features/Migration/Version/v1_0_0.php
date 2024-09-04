@@ -32,6 +32,7 @@ class v1_0_0 extends MigrationBase {
 
 	/**
 	 * 投稿設定履歴テーブルを作成します。
+	 * @deprecated TODO: 削除
 	 */
 	private function createPostSettingHistoryTable() {
 		$table_name = TableName::postSettingHistory();
@@ -69,6 +70,7 @@ class v1_0_0 extends MigrationBase {
 
 	/**
 	 * 投稿設定履歴テーブルを削除します。
+	 * @deprecated TODO: 削除
 	 */
 	private function dropPostSettingHistoryTable() {
 		$table_name = TableName::postSettingHistory();

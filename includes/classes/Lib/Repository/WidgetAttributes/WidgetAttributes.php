@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
-use Cornix\Serendipity\Core\Types\PriceType;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class WidgetAttributes {
@@ -36,21 +35,19 @@ class WidgetAttributes {
 		}
 
 		// 以下のキーが存在することを確認
-		assert( array_key_exists( 'sellingNetworkCategory', $attributes ), '[A2D17053] sellingNetworkCategory property does not exist' );
-		assert( array_key_exists( 'sellingPrice', $attributes ), '[65A44855] sellingPrice property does not exist' );
-		assert( array_key_exists( 'amountHex', $attributes['sellingPrice'] ), '[2018DA62] amountHex property does not exist' );
-		assert( array_key_exists( 'decimals', $attributes['sellingPrice'] ), '[CC49D23A] decimals property does not exist' );
+		assert( array_key_exists( 'sellingNetwork', $attributes ), '[A2D17053] sellingNetwork property does not exist' );
+		assert( array_key_exists( 'sellingAmountHex', $attributes ), '[65A44855] sellingAmountHex property does not exist' );
+		assert( array_key_exists( 'sellingDecimals', $attributes ), '[2018DA62] sellingDecimals property does not exist' );
+		assert( array_key_exists( 'sellingSymbol', $attributes ), '[CC49D23A] sellingSymbol property does not exist' );
+		// ※ ブロックの属性が追加された場合でも、原則キーの存在チェックはここに追加しない。(互換性を保つため)
 
 		// 保存された販売ネットワークを取得
-		$selling_network = $attributes['sellingNetworkCategory'];
-		// 保存された価格を取得
-		/** @var array{amountHex:string,decimals:int,symbol:?string} */
-		$selling_price = $attributes['sellingPrice'];
+		$selling_network    = $attributes['sellingNetwork'];
+		$selling_amount_hex = $attributes['sellingAmountHex'];
+		$selling_decimals   = $attributes['sellingDecimals'];
+		$selling_symbol     = $attributes['sellingSymbol'];
 
-		// 価格をPriceTypeに変換
-		$price = new PriceType( $selling_price['amountHex'], $selling_price['decimals'], $selling_price['symbol'] );
-
-		return new WidgetAttributesType( $price, $selling_network );
+		return new WidgetAttributesType( $selling_network, $selling_amount_hex, $selling_decimals, $selling_symbol );
 	}
 
 	/**
@@ -68,6 +65,9 @@ class WidgetAttributes {
 				return $block_name === $block['blockName'];
 			}
 		);
+		// インデックスを振り直す
+		$blocks = array_values( $blocks );
+
 		// ウィジェットは1投稿につき1つまでしか存在しない
 		assert( count( $blocks ) <= 1, '[FD104DDE] Widget block must be only one in a post' );
 
