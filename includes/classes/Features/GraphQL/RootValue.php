@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostSettingResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\WidgetAttributesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetPostSettingResolver;
 
 class RootValue {
 
@@ -17,13 +16,12 @@ class RootValue {
 		global $wpdb;
 
 		$resolvers = array(
-			'postSetting'     => new PostSettingResolver( $wpdb ),
+			'widgetAttributes' => new WidgetAttributesResolver(),
 			// Query
-			'sellingPrice'    => new SellingPriceResolver(),
-			'sellingNetwork'  => new SellingNetworkResolver(),
-			'sellableSymbols' => new SellableSymbolsResolver(),
+			'sellingPrice'     => new SellingPriceResolver(),
+			'sellingNetwork'   => new SellingNetworkResolver(),
+			'sellableSymbols'  => new SellableSymbolsResolver(),
 			// Mutation
-			'setPostSetting'  => new SetPostSettingResolver( $wpdb ),
 		);
 
 		$result = array();

@@ -33,7 +33,7 @@ const useInitSelectedNetwork = () => {
 	useEffect( () => {
 		if ( selectedNetwork === undefined ) {
 			// TODO: キャストを修正
-			setSelectedNetwork( widgetAttributes.sellingNetworkCategory as NetworkType | null );
+			setSelectedNetwork( widgetAttributes.sellingNetwork as NetworkType | null );
 		}
 	}, [ widgetAttributes, selectedNetwork, setSelectedNetwork ] );
 };

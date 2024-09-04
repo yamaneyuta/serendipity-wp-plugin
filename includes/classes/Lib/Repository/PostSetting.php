@@ -10,6 +10,9 @@ use Cornix\Serendipity\Core\Types\PriceType;
 use wpdb;
 use yamaneyuta\Ulid;
 
+/**
+ * @deprecated TODO: 削除
+ */
 class PostSetting {
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb       = $wpdb;

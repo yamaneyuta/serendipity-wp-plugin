@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+/**
+ * @deprecated TODO: 削除
+ */
 class PostSettingType {
 	public function __construct( PriceType $price, string $selling_network ) {
 		$this->sellingPrice   = $price;

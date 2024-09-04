@@ -30,7 +30,7 @@ registerBlockType( metadata.name, {
 	title: metadata.title,
 	category: metadata.category,
 	attributes: {
-		sellingNetworkCategory: {
+		sellingNetwork: {
 			type: 'string',
 			// nullを指定するとシンタックスエラーになるため強制的に型を指定。
 			default: null as unknown as string,
