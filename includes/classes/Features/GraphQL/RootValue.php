@@ -16,7 +16,7 @@ class RootValue {
 		global $wpdb;
 
 		$resolvers = array(
-			'postSetting'     => new WidgetAttributesResolver(),
+			'widgetAttributes'     => new WidgetAttributesResolver(),
 			// Query
 			'sellingPrice'    => new SellingPriceResolver(),
 			'sellingNetwork'  => new SellingNetworkResolver(),

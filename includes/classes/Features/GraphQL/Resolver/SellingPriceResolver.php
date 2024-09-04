@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Types\PriceType;
+use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class SellingPriceResolver extends ResolverBase {
 
@@ -21,8 +22,9 @@ class SellingPriceResolver extends ResolverBase {
 			throw new \LogicException( '[1A90BD10] You do not have permission to access this post.' );
 		}
 
-		// 投稿設定を取得
-		$post_setting = $root_value['postSetting']( $root_value, array( 'postID' => $post_ID ) );
-		return $post_setting ? $post_setting->sellingPrice : null;
+		// ウィジェットの属性を取得
+		/** @var WidgetAttributesType|null */
+		$widget_attributes = $root_value['widgetAttributes']( $root_value, array( 'postID' => $post_ID ) );
+		return $widget_attributes ? $widget_attributes->sellingPrice : null;
 	}
 }
