@@ -35,20 +35,17 @@ class WidgetAttributes {
 		}
 
 		// 以下のキーが存在することを確認
-		assert( array_key_exists( 'sellingNetworkCategory', $attributes ), '[A2D17053] sellingNetworkCategory property does not exist' );
-		assert( array_key_exists( 'sellingPrice', $attributes ), '[65A44855] sellingPrice property does not exist' );
-		assert( array_key_exists( 'amountHex', $attributes['sellingPrice'] ), '[2018DA62] amountHex property does not exist' );
-		assert( array_key_exists( 'decimals', $attributes['sellingPrice'] ), '[CC49D23A] decimals property does not exist' );
+		assert( array_key_exists( 'sellingNetwork', $attributes ), '[A2D17053] sellingNetwork property does not exist' );
+		assert( array_key_exists( 'sellingAmountHex', $attributes ), '[65A44855] sellingAmountHex property does not exist' );
+		assert( array_key_exists( 'sellingDecimals', $attributes ), '[2018DA62] sellingDecimals property does not exist' );
+		assert( array_key_exists( 'sellingSymbol', $attributes ), '[CC49D23A] sellingSymbol property does not exist' );
 		// ※ ブロックの属性が追加された場合でも、原則キーの存在チェックはここに追加しない。(互換性を保つため)
 
 		// 保存された販売ネットワークを取得
-		$selling_network = $attributes['sellingNetwork'];
-		// 保存された価格を取得
-		/** @var array{amountHex:string,decimals:int,symbol:?string} */
-		$selling_price      = $attributes['sellingPrice'];
-		$selling_amount_hex = $selling_price['amountHex'];
-		$selling_decimals   = $selling_price['decimals'];
-		$selling_symbol     = $selling_price['symbol'];
+		$selling_network    = $attributes['sellingNetwork'];
+		$selling_amount_hex = $attributes['sellingAmountHex'];
+		$selling_decimals   = $attributes['sellingDecimals'];
+		$selling_symbol     = $attributes['sellingSymbol'];
 
 		return new WidgetAttributesType( $selling_network, $selling_amount_hex, $selling_decimals, $selling_symbol );
 	}
