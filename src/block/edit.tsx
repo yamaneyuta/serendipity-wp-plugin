@@ -40,7 +40,7 @@ const Edit: React.FC< BlockEditProps< WidgetAttributes > > = ( { setAttributes, 
 
 	return (
 		<div { ...blockProps }>
-			<GutenbergPostEditProvider>
+			<GutenbergPostEditProvider attributes={ attributes } setAttributes={ setAttributes }>
 				<GutenbergPostEdit attributes={ attributes } setAttributes={ setAttributes } />
 			</GutenbergPostEditProvider>
 		</div>
