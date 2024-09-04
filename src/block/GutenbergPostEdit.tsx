@@ -7,6 +7,7 @@ import { useSymbolSelectProps } from './features/symbolSelect/useSymbolSelectPro
 import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
 import { PriceValueInput } from './features/priceValueInput/PriceValueInput';
 import { WidgetAttributes } from './types/WidgetAttributes';
+import { useInitWidgetState } from './features/initialize/useInitWidgetState';
 
 type GutenbergPostEditProps = {
 	attributes: Readonly< WidgetAttributes >;
@@ -14,6 +15,9 @@ type GutenbergPostEditProps = {
 };
 
 export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( { attributes, setAttributes } ) => {
+	// ウィジェットの状態を初期化
+	useInitWidgetState( attributes );
+
 	return (
 		<Placeholder icon={ widget } label={ 'serendipity' }>
 			<div style={ { width: '100%' } }>
