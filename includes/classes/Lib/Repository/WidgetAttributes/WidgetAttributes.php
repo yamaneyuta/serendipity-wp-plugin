@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
-use Cornix\Serendipity\Core\Types\PriceType;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class WidgetAttributes {
@@ -40,17 +39,18 @@ class WidgetAttributes {
 		assert( array_key_exists( 'sellingPrice', $attributes ), '[65A44855] sellingPrice property does not exist' );
 		assert( array_key_exists( 'amountHex', $attributes['sellingPrice'] ), '[2018DA62] amountHex property does not exist' );
 		assert( array_key_exists( 'decimals', $attributes['sellingPrice'] ), '[CC49D23A] decimals property does not exist' );
+		// ※ ブロックの属性が追加された場合でも、原則キーの存在チェックはここに追加しない。(互換性を保つため)
 
 		// 保存された販売ネットワークを取得
 		$selling_network = $attributes['sellingNetworkCategory'];
 		// 保存された価格を取得
 		/** @var array{amountHex:string,decimals:int,symbol:?string} */
 		$selling_price = $attributes['sellingPrice'];
+		$selling_amount_hex = $selling_price['amountHex'];
+		$selling_decimals = $selling_price['decimals'];
+		$selling_symbol = $selling_price['symbol'];
 
-		// 価格をPriceTypeに変換
-		$price = new PriceType( $selling_price['amountHex'], $selling_price['decimals'], $selling_price['symbol'] );
-
-		return new WidgetAttributesType( $price, $selling_network );
+		return new WidgetAttributesType( $selling_network, $selling_amount_hex, $selling_decimals, $selling_symbol );
 	}
 
 	/**

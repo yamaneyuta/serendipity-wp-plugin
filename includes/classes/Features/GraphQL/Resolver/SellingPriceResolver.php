@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\SellingPrice;
 use Cornix\Serendipity\Core\Types\PriceType;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
@@ -25,6 +26,7 @@ class SellingPriceResolver extends ResolverBase {
 		// ウィジェットの属性を取得
 		/** @var WidgetAttributesType|null */
 		$widget_attributes = $root_value['widgetAttributes']( $root_value, array( 'postID' => $post_ID ) );
-		return $widget_attributes ? $widget_attributes->sellingPrice : null;
+		// 価格の型に変換して返す
+		return $widget_attributes ? SellingPrice::fromWidgetAttributes( $widget_attributes ) : null;
 	}
 }
