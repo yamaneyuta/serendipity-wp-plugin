@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostSettingResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\WidgetAttributesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
@@ -16,7 +16,7 @@ class RootValue {
 		global $wpdb;
 
 		$resolvers = array(
-			'postSetting'     => new PostSettingResolver( $wpdb ),
+			'postSetting'     => new WidgetAttributesResolver(),
 			// Query
 			'sellingPrice'    => new SellingPriceResolver(),
 			'sellingNetwork'  => new SellingNetworkResolver(),
