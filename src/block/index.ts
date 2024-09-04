@@ -35,13 +35,17 @@ registerBlockType( metadata.name, {
 			// nullを指定するとシンタックスエラーになるため強制的に型を指定。
 			default: null as unknown as string,
 		},
-		sellingPrice: {
-			type: 'object',
-			default: {
-				amountHex: '0x' + 0n.toString( 16 ),
-				decimals: 0,
-				symbol: null,
-			},
+		sellingAmountHex: {
+			type: 'string',
+			default: '0x' + 0n.toString( 16 ),
+		},
+		sellingDecimals: {
+			type: 'number',
+			default: 0,
+		},
+		sellingSymbol: {
+			type: 'string',
+			default: null as unknown as string,
 		},
 	},
 	/**

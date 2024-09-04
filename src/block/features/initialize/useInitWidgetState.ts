@@ -50,8 +50,8 @@ const useInitPriceValue = () => {
 
 	useEffect( () => {
 		if ( inputPriceValue === undefined ) {
-			const { amountHex, decimals } = widgetAttributes.sellingPrice;
-			const inputValue = amountToInputValue( amountHex, decimals );
+			const { sellingAmountHex, sellingDecimals } = widgetAttributes;
+			const inputValue = amountToInputValue( sellingAmountHex, sellingDecimals );
 			setInputPriceValue( inputValue );
 		}
 	}, [ widgetAttributes, inputPriceValue, setInputPriceValue ] );
@@ -69,7 +69,7 @@ const useInitSelectedPriceSymbol = () => {
 
 	useEffect( () => {
 		if ( selectedPriceSymbol === undefined ) {
-			setSelectedPriceSymbol( widgetAttributes.sellingPrice.symbol );
+			setSelectedPriceSymbol( widgetAttributes.sellingSymbol );
 		}
 	}, [ widgetAttributes, selectedPriceSymbol, setSelectedPriceSymbol ] );
 };

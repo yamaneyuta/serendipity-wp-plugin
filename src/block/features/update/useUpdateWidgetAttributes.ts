@@ -67,13 +67,10 @@ const useUpdatePriceValueAttribute = () => {
 		}
 
 		// 値が変更されている場合は更新
-		if (
-			widgetAttributes.sellingPrice.amountHex !== amountHex ||
-			widgetAttributes.sellingPrice.decimals !== decimals
-		) {
+		if ( widgetAttributes.sellingAmountHex !== amountHex || widgetAttributes.sellingDecimals !== decimals ) {
 			const newAttributes: WidgetAttributes = structuredClone( widgetAttributes );
-			newAttributes.sellingPrice.amountHex = amountHex;
-			newAttributes.sellingPrice.decimals = decimals;
+			newAttributes.sellingAmountHex = amountHex;
+			newAttributes.sellingDecimals = decimals;
 			setWidgetAttributes( newAttributes );
 		}
 	}, [ widgetAttributes, setWidgetAttributes, inputPriceValue ] );
@@ -91,9 +88,9 @@ const useUpdatePriceSymbolAttribute = () => {
 
 	useEffect( () => {
 		// 値が変更されている場合は更新
-		if ( selectedPriceSymbol !== undefined && widgetAttributes.sellingPrice.symbol !== selectedPriceSymbol ) {
+		if ( selectedPriceSymbol !== undefined && widgetAttributes.sellingSymbol !== selectedPriceSymbol ) {
 			const newAttributes: WidgetAttributes = structuredClone( widgetAttributes );
-			newAttributes.sellingPrice.symbol = selectedPriceSymbol;
+			newAttributes.sellingSymbol = selectedPriceSymbol;
 			setWidgetAttributes( newAttributes );
 		}
 	}, [ widgetAttributes, setWidgetAttributes, selectedPriceSymbol ] );
