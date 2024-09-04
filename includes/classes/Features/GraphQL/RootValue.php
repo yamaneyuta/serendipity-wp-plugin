@@ -16,11 +16,11 @@ class RootValue {
 		global $wpdb;
 
 		$resolvers = array(
-			'widgetAttributes'     => new WidgetAttributesResolver(),
+			'widgetAttributes' => new WidgetAttributesResolver(),
 			// Query
-			'sellingPrice'    => new SellingPriceResolver(),
-			'sellingNetwork'  => new SellingNetworkResolver(),
-			'sellableSymbols' => new SellableSymbolsResolver(),
+			'sellingPrice'     => new SellingPriceResolver(),
+			'sellingNetwork'   => new SellingNetworkResolver(),
+			'sellableSymbols'  => new SellableSymbolsResolver(),
 			// Mutation
 		);
 

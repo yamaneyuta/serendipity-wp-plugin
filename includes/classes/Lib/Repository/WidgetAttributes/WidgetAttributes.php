@@ -45,10 +45,10 @@ class WidgetAttributes {
 		$selling_network = $attributes['sellingNetworkCategory'];
 		// 保存された価格を取得
 		/** @var array{amountHex:string,decimals:int,symbol:?string} */
-		$selling_price = $attributes['sellingPrice'];
+		$selling_price      = $attributes['sellingPrice'];
 		$selling_amount_hex = $selling_price['amountHex'];
-		$selling_decimals = $selling_price['decimals'];
-		$selling_symbol = $selling_price['symbol'];
+		$selling_decimals   = $selling_price['decimals'];
+		$selling_symbol     = $selling_price['symbol'];
 
 		return new WidgetAttributesType( $selling_network, $selling_amount_hex, $selling_decimals, $selling_symbol );
 	}
