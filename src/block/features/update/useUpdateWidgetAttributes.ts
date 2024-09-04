@@ -32,10 +32,10 @@ const useUpdateSellingNetworkAttribute = () => {
 
 	useEffect( () => {
 		// 値が変更されている場合は更新
-		if ( selectedNetwork !== undefined && widgetAttributes.sellingNetworkCategory !== selectedNetwork ) {
+		if ( selectedNetwork !== undefined && widgetAttributes.sellingNetwork !== selectedNetwork ) {
 			setWidgetAttributes( {
 				...widgetAttributes,
-				sellingNetworkCategory: selectedNetwork,
+				sellingNetwork: selectedNetwork,
 			} );
 		}
 	}, [ widgetAttributes, setWidgetAttributes, selectedNetwork ] );

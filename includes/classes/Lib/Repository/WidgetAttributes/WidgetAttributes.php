@@ -42,7 +42,7 @@ class WidgetAttributes {
 		// ※ ブロックの属性が追加された場合でも、原則キーの存在チェックはここに追加しない。(互換性を保つため)
 
 		// 保存された販売ネットワークを取得
-		$selling_network = $attributes['sellingNetworkCategory'];
+		$selling_network = $attributes['sellingNetwork'];
 		// 保存された価格を取得
 		/** @var array{amountHex:string,decimals:int,symbol:?string} */
 		$selling_price      = $attributes['sellingPrice'];
