@@ -15,7 +15,6 @@ type Query {
 }
 
 type Mutation {
-	setPostSetting(postID: Int!, postSetting: PostSettingInput!): Boolean
 	login(email: String!, password: String!): Boolean	# TODO: 削除
 }
 

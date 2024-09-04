@@ -6,7 +6,6 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostSettingResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetPostSettingResolver;
 
 class RootValue {
 
@@ -23,7 +22,6 @@ class RootValue {
 			'sellingNetwork'  => new SellingNetworkResolver(),
 			'sellableSymbols' => new SellableSymbolsResolver(),
 			// Mutation
-			'setPostSetting'  => new SetPostSettingResolver( $wpdb ),
 		);
 
 		$result = array();
