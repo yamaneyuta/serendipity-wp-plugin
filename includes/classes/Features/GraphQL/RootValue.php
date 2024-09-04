@@ -27,7 +27,16 @@ class RootValue {
 		$result = array();
 		foreach ( $resolvers as $field => $resolver ) {
 			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver ) {
-				return $resolver->resolve( $root_value, $args );
+				try {
+					return $resolver->resolve( $root_value, $args );
+				} catch ( \Exception $e ) {
+					if ( 'testing' !== getenv( 'APP_ENV' ) ) {
+						// TODO: use logger
+						error_log( $e->getMessage() );
+						error_log( $e->getTraceAsString() );
+					}
+					throw $e;
+				}
 			};
 		}
 
