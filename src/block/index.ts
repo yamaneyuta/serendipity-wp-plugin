@@ -38,7 +38,7 @@ registerBlockType( metadata.name, {
 		sellingPrice: {
 			type: 'object',
 			default: {
-				amountHex: '0x0',
+				amountHex: '0x' + 0n.toString( 16 ),
 				decimals: 0,
 				symbol: null,
 			},
