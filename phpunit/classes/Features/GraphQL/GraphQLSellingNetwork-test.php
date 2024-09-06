@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class GraphQLSellingNetwork extends IntegrationTestBase {
@@ -33,7 +33,7 @@ class GraphQLSellingNetwork extends IntegrationTestBase {
 		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost(
 			array(
 				'post_content' => $this->createTestPostContent(
-					new WidgetAttributesType( NetworkType::MAINNET, '0x123456', 18, 'ETH' )
+					new WidgetAttributesType( NetworkCategory::mainnet(), '0x123456', 18, 'ETH' )
 				),
 			)
 		);
@@ -63,10 +63,10 @@ class GraphQLSellingNetwork extends IntegrationTestBase {
 		// 正常に取得できることを期待している条件の時
 		if ( $expected ) {
 			$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
-			$selling_network = $data['data']['sellingNetwork'];
+			$selling_network_category_ID = $data['data']['sellingNetwork'];
 			$this->assertEquals(
-				$selling_network,
-				NetworkType::MAINNET
+				$selling_network_category_ID,
+				NetworkCategory::mainnet()->id()
 			);  // 登録したネットワークが取得できている
 		} else {
 			$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
