@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
-class GraphQLSellingNetwork extends IntegrationTestBase {
+class GraphQLSellingNetworkCategory extends IntegrationTestBase {
 
 	// #[\Override]
 	public function setUp(): void {
@@ -22,7 +22,7 @@ class GraphQLSellingNetwork extends IntegrationTestBase {
 
 	/**
 	 * @test
-	 * @testdox [45E5CCA4][GraphQL] sellingNetwork - post_status: $post_status, user: $user_type, expected: $expected
+	 * @testdox [45E5CCA4][GraphQL] sellingNetworkCategory - post_status: $post_status, user: $user_type, expected: $expected
 	 * @dataProvider accessDataProvider
 	 */
 	public function access( string $post_status, string $user_type, bool $expected ) {
