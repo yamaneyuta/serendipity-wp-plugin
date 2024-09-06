@@ -1,5 +1,5 @@
 
-query PostSetting($postID: Int!) {
+query PostSetting {
 	mainnetSellableSymbols: sellableSymbols(networkType: MAINNET)
 	testnetSellableSymbols: sellableSymbols(networkType: TESTNET)
 	privatenetSellableSymbols: sellableSymbols(networkType: PRIVATENET)

@@ -1,15 +1,13 @@
 import assert from 'assert';
 import { createContext } from 'react';
 import { PostSettingQuery, usePostSettingQuery } from '../../../../types/gql/generated';
-import { usePostID } from '../../windowData/postID/usePostID';
 
 type PostSettingType = ReturnType< typeof _usePostSetting >;
 
 export const PostSettingContext = createContext< PostSettingType | undefined >( undefined );
 
 const _usePostSetting = () => {
-	const postID = usePostID();
-	const { data } = usePostSettingQuery( { postID } );
+	const { data } = usePostSettingQuery();
 	checkPostSetting( data ); // データの整合性チェック
 
 	return {
