@@ -57,7 +57,7 @@ class OracleData {
 	}
 
 	/**
-	 * 指定したネットワーク種別に存在するOracleのシンボル(`XXX/USD`の`XXX`部分)一覧を取得します。
+	 * 指定したネットワークカテゴリに存在するOracleのシンボル(`XXX/USD`の`XXX`部分)一覧を取得します。
 	 *
 	 * @return string[]
 	 */
@@ -74,7 +74,7 @@ class OracleData {
 	}
 
 	/**
-	 * 指定されたネットワーク種別における、OracleのチェーンIDを取得します。
+	 * 指定されたネットワークカテゴリにおける、OracleのチェーンIDを取得します。
 	 */
 	private function getChainID( NetworkCategory $network_category ): int {
 		if ( $network_category === NetworkCategory::mainnet() ) {

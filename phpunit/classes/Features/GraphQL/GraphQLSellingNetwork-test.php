@@ -79,17 +79,17 @@ class GraphQLSellingNetwork extends IntegrationTestBase {
 		return array(
 			// post_status, user, expected(visible or not)
 
-			// 公開状態の投稿の販売ネットワーク種別は誰でも閲覧可能
+			// 公開状態の投稿の販売ネットワークカテゴリは誰でも閲覧可能
 			array( 'publish', UserType::ADMINISTRATOR, true ),
 			array( 'publish', UserType::CONTRIBUTOR, true ),
 			array( 'publish', UserType::ANOTHER_CONTRIBUTOR, true ),
 			array( 'publish', UserType::VISITOR, true ),
 
-			// 下書き(非公開状態)の投稿の販売ネットワーク種別は、投稿の作成者と管理者のみ閲覧可能
-			array( 'draft', UserType::ADMINISTRATOR, true ),          // 管理者は非公開の投稿の販売ネットワーク種別を閲覧可能
-			array( 'draft', UserType::CONTRIBUTOR, true ),           // 寄稿者は自身が作成した非公開の投稿の販売ネットワーク種別を閲覧可能
-			array( 'draft', UserType::ANOTHER_CONTRIBUTOR, false ),  // 他の寄稿者は自身が作成していない非公開の投稿の販売ネットワーク種別を閲覧不可
-			array( 'draft', UserType::VISITOR, false ),              // 訪問者は非公開の投稿の販売ネットワーク種別を閲覧不可
+			// 下書き(非公開状態)の投稿の販売ネットワークカテゴリは、投稿の作成者と管理者のみ閲覧可能
+			array( 'draft', UserType::ADMINISTRATOR, true ),          // 管理者は非公開の投稿の販売ネットワークカテゴリを閲覧可能
+			array( 'draft', UserType::CONTRIBUTOR, true ),           // 寄稿者は自身が作成した非公開の投稿の販売ネットワークカテゴリを閲覧可能
+			array( 'draft', UserType::ANOTHER_CONTRIBUTOR, false ),  // 他の寄稿者は自身が作成していない非公開の投稿の販売ネットワークカテゴリを閲覧不可
+			array( 'draft', UserType::VISITOR, false ),              // 訪問者は非公開の投稿の販売ネットワークカテゴリを閲覧不可
 		);
 	}
 }

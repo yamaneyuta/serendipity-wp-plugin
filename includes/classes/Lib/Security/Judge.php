@@ -66,7 +66,7 @@ class Judge {
 	/**
 	 * 販売価格に使用可能な通貨シンボルでない場合は例外をスローします。
 	 *
-	 * @param NetworkCategory $network_category ネットワーク種別
+	 * @param NetworkCategory $network_category ネットワークカテゴリ
 	 * @param string          $symbol 通貨シンボル
 	 * @throws InvalidArgumentException
 	 * @deprecated 現在未使用のため暫定的にマーク
