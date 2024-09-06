@@ -1,4 +1,4 @@
-import { SelectedNetworkProvider } from './selectedNetwork/SelectedNetworkProvider';
+import { SelectedNetworkCategoryProvider } from './selectedNetwork/SelectedNetworkCategoryProvider';
 import { InputPriceValueProvider } from './inputPriceValue/InputPriceValueProvider';
 import { SelectedPriceSymbolProvider } from './selectedPriceSymbol/SelectedPriceSymbolProvider';
 import { WidgetAttributes } from '../../types/WidgetAttributes';
@@ -17,11 +17,11 @@ export const WidgetStateProvider: React.FC< WidgetStateProviderProps > = ( {
 } ) => {
 	return (
 		<WidgetAttributesProvider attributes={ attributes } setAttributes={ setAttributes }>
-			<SelectedNetworkProvider>
+			<SelectedNetworkCategoryProvider>
 				<InputPriceValueProvider>
 					<SelectedPriceSymbolProvider>{ children }</SelectedPriceSymbolProvider>
 				</InputPriceValueProvider>
-			</SelectedNetworkProvider>
+			</SelectedNetworkCategoryProvider>
 		</WidgetAttributesProvider>
 	);
 };

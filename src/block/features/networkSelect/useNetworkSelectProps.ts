@@ -1,16 +1,16 @@
 import { useCallback } from 'react';
-import { NetworkType } from '../../../types/gql/generated';
-import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
+import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetwork/useSelectedNetworkCategory';
 import { useSelectableNetworks } from './useSelectableNetworks';
 import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
+import { NetworkCategory } from '../../../types/NetworkCategory';
 
 /**
  * ネットワーク選択コンポーネントのプロパティを取得します。
  */
-export const useNetworkSelectProps = () => {
+export const useNetworkCategorySelectProps = () => {
 	// 選択されたネットワークはProviderのstateから取得
-	const { selectedNetwork: value } = useSelectedNetwork();
+	const { selectedNetworkCategory: value } = useSelectedNetworkCategory();
 
 	// 選択可能なネットワークはサーバーから受信した情報から取得される
 	const networks = useSelectableNetworks();
@@ -33,16 +33,16 @@ export const useNetworkSelectProps = () => {
  * ネットワークが変更された時のコールバックを取得します。
  */
 const useOnChangeCallback = () => {
-	const { setSelectedNetwork } = useSelectedNetwork();
+	const { setSelectedNetworkCategory } = useSelectedNetworkCategory();
 
 	const { selectedPriceSymbol, setSelectedPriceSymbol } = useSelectedPriceSymbol();
 	const getSellableSymbol = useGetSellableSymbolsCallback();
 
 	return useCallback(
 		( event: React.ChangeEvent< HTMLSelectElement > ) => {
-			const network = event.target.value as NetworkType;
+			const network = NetworkCategory.from( parseInt( event.target.value ) );
 			// 選択されているネットワークを更新
-			setSelectedNetwork( network );
+			setSelectedNetworkCategory( network );
 
 			// 以下、現在選択されている通貨シンボルが変更後のネットワークに存在しない場合はnullを設定する処理
 			// ネットワーク変更後に選択可能な通貨シンボルを取得
@@ -52,6 +52,6 @@ const useOnChangeCallback = () => {
 				setSelectedPriceSymbol( null );
 			}
 		},
-		[ setSelectedNetwork, selectedPriceSymbol, setSelectedPriceSymbol, getSellableSymbol ]
+		[ setSelectedNetworkCategory, selectedPriceSymbol, setSelectedPriceSymbol, getSellableSymbol ]
 	);
 };

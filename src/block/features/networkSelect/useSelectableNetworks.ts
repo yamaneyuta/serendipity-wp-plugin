@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
-import { NetworkType } from '../../../types/gql/generated';
+import { NetworkCategory } from '../../../types/NetworkCategory';
 
 /**
  * 投稿編集画面で選択可能なネットワーク一覧を取得します。
@@ -14,17 +14,17 @@ export const useSelectableNetworks = () => {
 			return undefined;
 		}
 
-		const networks: NetworkType[] = []; // 戻り値となるネットワーク一覧
+		const networks: NetworkCategory[] = []; // 戻り値となるネットワークカテゴリ一覧
 
-		// 各ネットワークで販売可能な通貨シンボルが存在する場合は、ネットワーク一覧に追加
+		// 各ネットワークで販売可能な通貨シンボルが存在する場合は、ネットワークカテゴリ一覧に追加
 		if ( serverPostSetting.mainnetSellableSymbols ) {
-			networks.push( NetworkType.Mainnet );
+			networks.push( NetworkCategory.mainnet() );
 		}
 		if ( serverPostSetting.testnetSellableSymbols ) {
-			networks.push( NetworkType.Testnet );
+			networks.push( NetworkCategory.testnet() );
 		}
 		if ( serverPostSetting.privatenetSellableSymbols ) {
-			networks.push( NetworkType.Privatenet );
+			networks.push( NetworkCategory.privatenet() );
 		}
 
 		return networks;

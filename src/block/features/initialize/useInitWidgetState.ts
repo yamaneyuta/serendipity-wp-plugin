@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { amountToInputValue } from '@yamaneyuta/serendipity-lib-js-price-format';
-import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
-import { NetworkType } from '../../../types/gql/generated';
+import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetwork/useSelectedNetworkCategory';
 import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 import { useWidgetAttributes } from '../../provider/widgetState/widgetAttributes/useWidgetAttributes';
+import { NetworkCategory } from '../../../types/NetworkCategory';
 
 /**
  * ウィジェット(ブロック)の状態を初期化します。
@@ -28,14 +28,17 @@ const useInitSelectedNetwork = () => {
 	const { widgetAttributes } = useWidgetAttributes();
 
 	// ユーザーが選択したネットワーク
-	const { selectedNetwork, setSelectedNetwork } = useSelectedNetwork();
+	const { selectedNetworkCategory, setSelectedNetworkCategory } = useSelectedNetworkCategory();
 
 	useEffect( () => {
-		if ( selectedNetwork === undefined ) {
-			// TODO: キャストを修正
-			setSelectedNetwork( widgetAttributes.sellingNetwork as NetworkType | null );
+		if ( selectedNetworkCategory === undefined ) {
+			if ( widgetAttributes.sellingNetworkCategoryID === null ) {
+				setSelectedNetworkCategory( null );
+			} else {
+				setSelectedNetworkCategory( NetworkCategory.from( widgetAttributes.sellingNetworkCategoryID ) );
+			}
 		}
-	}, [ widgetAttributes, selectedNetwork, setSelectedNetwork ] );
+	}, [ widgetAttributes, selectedNetworkCategory, setSelectedNetworkCategory ] );
 };
 
 /**
