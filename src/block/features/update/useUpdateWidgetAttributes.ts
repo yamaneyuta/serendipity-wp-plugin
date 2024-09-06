@@ -3,7 +3,6 @@ import { inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format'
 import { useSelectedNetwork } from '../../provider/widgetState/selectedNetwork/useSelectedNetwork';
 import { useWidgetAttributes } from '../../provider/widgetState/widgetAttributes/useWidgetAttributes';
 import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
-import { WidgetAttributes } from '../../types/WidgetAttributes';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 
 /**
@@ -31,12 +30,9 @@ const useUpdateSellingNetworkAttribute = () => {
 	const { selectedNetwork } = useSelectedNetwork();
 
 	useEffect( () => {
-		// 値が変更されている場合は更新
+		// 値が変更されている場合は属性を更新
 		if ( selectedNetwork !== undefined && widgetAttributes.sellingNetwork !== selectedNetwork ) {
-			setWidgetAttributes( {
-				...widgetAttributes,
-				sellingNetwork: selectedNetwork,
-			} );
+			setWidgetAttributes( ( s ) => ( { ...s, sellingNetwork: selectedNetwork } ) );
 		}
 	}, [ widgetAttributes, setWidgetAttributes, selectedNetwork ] );
 };
@@ -66,12 +62,9 @@ const useUpdatePriceValueAttribute = () => {
 			decimals = tmp.decimals;
 		}
 
-		// 値が変更されている場合は更新
+		// 値が変更されている場合は属性を更新
 		if ( widgetAttributes.sellingAmountHex !== amountHex || widgetAttributes.sellingDecimals !== decimals ) {
-			const newAttributes: WidgetAttributes = structuredClone( widgetAttributes );
-			newAttributes.sellingAmountHex = amountHex;
-			newAttributes.sellingDecimals = decimals;
-			setWidgetAttributes( newAttributes );
+			setWidgetAttributes( ( s ) => ( { ...s, sellingAmountHex: amountHex, sellingDecimals: decimals } ) );
 		}
 	}, [ widgetAttributes, setWidgetAttributes, inputPriceValue ] );
 };
@@ -87,11 +80,9 @@ const useUpdatePriceSymbolAttribute = () => {
 	const { selectedPriceSymbol } = useSelectedPriceSymbol();
 
 	useEffect( () => {
-		// 値が変更されている場合は更新
+		// 値が変更されている場合は属性を更新
 		if ( selectedPriceSymbol !== undefined && widgetAttributes.sellingSymbol !== selectedPriceSymbol ) {
-			const newAttributes: WidgetAttributes = structuredClone( widgetAttributes );
-			newAttributes.sellingSymbol = selectedPriceSymbol;
-			setWidgetAttributes( newAttributes );
+			setWidgetAttributes( ( s ) => ( { ...s, sellingSymbol: selectedPriceSymbol } ) );
 		}
 	}, [ widgetAttributes, setWidgetAttributes, selectedPriceSymbol ] );
 };
