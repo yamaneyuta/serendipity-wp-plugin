@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
-import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetwork/useSelectedNetworkCategory';
+import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
 import { useWidgetAttributes } from '../../provider/widgetState/widgetAttributes/useWidgetAttributes';
 import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';

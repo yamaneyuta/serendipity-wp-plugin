@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetwork/useSelectedNetworkCategory';
-import { useSelectableNetworks } from './useSelectableNetworks';
+import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
+import { useSelectableNetworkCategories } from './useSelectableNetworkCategories';
 import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 import { NetworkCategory } from '../../../types/NetworkCategory';
@@ -13,7 +13,7 @@ export const useNetworkCategorySelectProps = () => {
 	const { selectedNetworkCategory: value } = useSelectedNetworkCategory();
 
 	// 選択可能なネットワークはサーバーから受信した情報から取得される
-	const networks = useSelectableNetworks();
+	const networks = useSelectableNetworkCategories();
 
 	// ネットワークが変更された時のコールバック
 	const onChange = useOnChangeCallback();

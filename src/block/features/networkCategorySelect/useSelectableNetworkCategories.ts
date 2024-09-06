@@ -3,9 +3,9 @@ import { usePostSetting } from '../../provider/serverData/postSetting/usePostSet
 import { NetworkCategory } from '../../../types/NetworkCategory';
 
 /**
- * 投稿編集画面で選択可能なネットワーク一覧を取得します。
+ * 投稿編集画面で選択可能なネットワークカテゴリ一覧を取得します。
  */
-export const useSelectableNetworks = () => {
+export const useSelectableNetworkCategories = () => {
 	const serverPostSetting = usePostSetting();
 
 	return useMemo( () => {

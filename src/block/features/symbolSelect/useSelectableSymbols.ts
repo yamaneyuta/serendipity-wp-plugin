@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useGetSellableSymbolsCallback } from '../../provider/serverData/useGetSellableSymbolsCallback';
-import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetwork/useSelectedNetworkCategory';
+import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
 
 /**
  * 画面で選択可能な通貨シンボル一覧を取得します。

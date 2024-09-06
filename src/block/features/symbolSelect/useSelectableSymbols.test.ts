@@ -1,11 +1,11 @@
 import { useSelectableSymbols as sut } from './useSelectableSymbols';
 import { usePostSetting } from '../../provider/serverData/postSetting/usePostSetting';
 import { renderHook } from '../../../../jest-lib/renderHook';
-import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetwork/useSelectedNetworkCategory';
+import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
 import { NetworkCategory } from '../../../types/NetworkCategory';
 
 jest.mock( '../../provider/serverData/postSetting/usePostSetting' );
-jest.mock( '../../provider/widgetState/selectedNetwork/useSelectedNetworkCategory' );
+jest.mock( '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory' );
 
 type UsePostSettingResult = ReturnType< typeof usePostSetting >;
 

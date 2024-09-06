@@ -1,4 +1,4 @@
-import { SelectedNetworkCategoryProvider } from './selectedNetwork/SelectedNetworkCategoryProvider';
+import { SelectedNetworkCategoryProvider } from './selectedNetworkCategory/SelectedNetworkCategoryProvider';
 import { InputPriceValueProvider } from './inputPriceValue/InputPriceValueProvider';
 import { SelectedPriceSymbolProvider } from './selectedPriceSymbol/SelectedPriceSymbolProvider';
 import { WidgetAttributes } from '../../types/WidgetAttributes';

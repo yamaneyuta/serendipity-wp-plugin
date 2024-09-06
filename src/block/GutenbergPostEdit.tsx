@@ -1,8 +1,8 @@
 import { Placeholder } from '@wordpress/components';
 import { widget } from '@wordpress/icons';
 import { SymbolSelect } from './features/symbolSelect/SymbolSelect';
-import { NetworkCategorySelect } from './features/networkSelect/NetworkCategorySelect';
-import { useNetworkCategorySelectProps } from './features/networkSelect/useNetworkSelectProps';
+import { NetworkCategorySelect } from './features/networkCategorySelect/NetworkCategorySelect';
+import { useNetworkCategorySelectProps } from './features/networkCategorySelect/useNetworkCategorySelectProps';
 import { useSymbolSelectProps } from './features/symbolSelect/useSymbolSelectProps';
 import { usePriceValueInputProps } from './features/priceValueInput/usePriceValueInputProps';
 import { PriceValueInput } from './features/priceValueInput/PriceValueInput';
