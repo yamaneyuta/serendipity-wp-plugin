@@ -6,13 +6,12 @@ export type WidgetAttributes = {
 	/** 販売するネットワーク(MAINNET, TESTNET, PRIVATENET) */
 	sellingNetwork: string | null;
 
-	/** 販売価格 */
-	sellingPrice: {
-		/** 数量 */
-		amountHex: string;
-		/** 小数点以下桁数 */
-		decimals: number;
-		/** 通貨シンボル */
-		symbol: string | null;
-	};
+	/** 販売価格の値(sellingDecimalsの値と共に使用する) */
+	sellingAmountHex: string;
+
+	/** 販売価格の小数点以下桁数 */
+	sellingDecimals: number;
+
+	/** 販売価格の通貨シンボル */
+	sellingSymbol: string | null;
 };

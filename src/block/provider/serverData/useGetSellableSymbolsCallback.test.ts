@@ -21,8 +21,6 @@ it( '[8F11FAF5] useGetSellableSymbolsCallback() - invalid network', async () => 
 		mainnetSellableSymbols: [ 'JPY' ],
 		testnetSellableSymbols: [ 'USD' ],
 		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
-		sellingNetwork: null,
-		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 
@@ -40,8 +38,6 @@ it( '[E0E21F73] useGetSellableSymbolsCallback() - invalid response', async () =>
 		mainnetSellableSymbols: undefined, // 不正な値(APIの仕様上、undefinedになることはない)
 		testnetSellableSymbols: [ 'USD' ],
 		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
-		sellingNetwork: null,
-		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 

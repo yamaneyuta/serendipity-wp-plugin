@@ -1,21 +1,6 @@
 
 query PostSetting($postID: Int!) {
-	# 販売価格
-	sellingPrice(postID: $postID) {
-		amountHex
-		decimals
-		symbol
-	}
-
-	# 販売しているネットワーク種別
-	sellingNetwork(postID: $postID)
-
 	mainnetSellableSymbols: sellableSymbols(networkType: MAINNET)
 	testnetSellableSymbols: sellableSymbols(networkType: TESTNET)
 	privatenetSellableSymbols: sellableSymbols(networkType: PRIVATENET)
 }
-
-
-# mutation SetPostSetting($postID: Int!, $postSetting: PostSettingInput!) {
-# 	setPostSetting(postID: $postID, postSetting: $postSetting)
-# }

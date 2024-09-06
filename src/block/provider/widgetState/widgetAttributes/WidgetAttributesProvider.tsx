@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { WidgetAttributes } from '../../../types/WidgetAttributes';
 
 type WidgetAttributesContextType = ReturnType< typeof _useWidgetAttributes >;
@@ -9,10 +9,16 @@ const _useWidgetAttributes = (
 	attributes: Readonly< WidgetAttributes >,
 	setAttributes: ( attrs: Partial< WidgetAttributes > ) => void
 ) => {
-	// `edit.tsx`で取得した`attributes`及び`setAttributes`をそのまま返す
+	const [ widgetAttributes, setWidgetAttributes ] = useState( structuredClone( attributes ) as WidgetAttributes );
+
+	// 状態が更新された時は、`setAttributes`を呼び出してWordPressで管理されている`attributes`を更新する
+	useEffect( () => {
+		setAttributes( widgetAttributes );
+	}, [ setAttributes, widgetAttributes ] );
+
 	return {
-		widgetAttributes: attributes,
-		setWidgetAttributes: setAttributes,
+		widgetAttributes,
+		setWidgetAttributes,
 	};
 };
 

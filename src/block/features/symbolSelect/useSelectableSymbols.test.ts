@@ -18,8 +18,6 @@ it( '[23C5844D] useSelectableSymbols() - default(mainnet)', async () => {
 		mainnetSellableSymbols: [ 'JPY' ],
 		testnetSellableSymbols: [ 'USD' ],
 		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
-		sellingNetwork: null,
-		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Mainnet } );
@@ -40,8 +38,6 @@ it( '[69581160] useSelectableSymbols() - default(testnet)', async () => {
 		mainnetSellableSymbols: [ 'JPY' ],
 		testnetSellableSymbols: [ 'USD' ],
 		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
-		sellingNetwork: null,
-		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Testnet } );
@@ -62,8 +58,6 @@ it( '[B43240DF] useSelectableSymbols() - default(privatenet)', async () => {
 		mainnetSellableSymbols: [ 'JPY' ],
 		testnetSellableSymbols: [ 'USD' ],
 		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
-		sellingNetwork: null,
-		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Privatenet } );
@@ -99,8 +93,6 @@ it( '[1DDC9FA6] useSelectableSymbols(null) - loading', async () => {
 		mainnetSellableSymbols: [ 'JPY' ],
 		testnetSellableSymbols: [ 'USD' ],
 		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
-		sellingNetwork: null,
-		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: null } );
@@ -138,8 +130,6 @@ it( '[E9CD00AF] useSelectableSymbols() - null', async () => {
 		mainnetSellableSymbols: null,
 		testnetSellableSymbols: null,
 		privatenetSellableSymbols: null,
-		sellingNetwork: null,
-		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 	( useSelectedNetwork as jest.Mock ).mockReturnValue( { selectedNetwork: NetworkType.Mainnet } );
@@ -160,8 +150,6 @@ it( '[BF4948EE] useSelectableSymbols() - invalid network type', async () => {
 		mainnetSellableSymbols: [ 'JPY' ],
 		testnetSellableSymbols: [ 'USD' ],
 		privatenetSellableSymbols: [ 'EUR', 'GBP' ],
-		sellingNetwork: null,
-		sellingPrice: null,
 	};
 	( usePostSetting as jest.Mock ).mockReturnValue( res );
 	( useSelectedNetwork as jest.Mock ).mockReturnValue( {
