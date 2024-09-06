@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Enum\ChainID;
-use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class OracleData {
 
@@ -61,8 +61,8 @@ class OracleData {
 	 *
 	 * @return string[]
 	 */
-	public function getSymbols( string $network_type ): array {
-		$chain_ID = $this->getChainID( $network_type );
+	public function getSymbols( NetworkCategory $network_category ): array {
+		$chain_ID = $this->getChainID( $network_category );
 		/** @var string[] */
 		$symbols = array();
 		foreach ( $this->oracle_data as $data ) {
@@ -76,16 +76,17 @@ class OracleData {
 	/**
 	 * 指定されたネットワーク種別における、OracleのチェーンIDを取得します。
 	 */
-	private function getChainID( string $network_type ): int {
-		switch ( $network_type ) {
-			case NetworkType::MAINNET:
-				return ChainID::ETH_MAINNET;
-			case NetworkType::TESTNET:
-				return ChainID::SEPOLIA;
-			case NetworkType::PRIVATENET:
-				return ChainID::PRIVATENET_L1;
-			default:
-				throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_type: ' . $network_type );
+	private function getChainID( NetworkCategory $network_category ): int {
+		if ( $network_category === NetworkCategory::mainnet() ) {
+			return ChainID::ETH_MAINNET;
 		}
+		if ( $network_category === NetworkCategory::testnet() ) {
+			return ChainID::SEPOLIA;
+		}
+		if ( $network_category === NetworkCategory::privatenet() ) {
+			return ChainID::PRIVATENET_L1;
+		}
+
+		throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_category: ' . $network_category );
 	}
 }

@@ -1,6 +1,6 @@
 
 query PostSetting {
-	mainnetSellableSymbols: sellableSymbols(networkType: MAINNET)
-	testnetSellableSymbols: sellableSymbols(networkType: TESTNET)
-	privatenetSellableSymbols: sellableSymbols(networkType: PRIVATENET)
+	mainnetSellableSymbols: sellableSymbols(1)
+	testnetSellableSymbols: sellableSymbols(2)
+	privatenetSellableSymbols: sellableSymbols(3)
 }
