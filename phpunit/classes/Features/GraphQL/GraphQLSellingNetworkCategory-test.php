@@ -50,7 +50,7 @@ class GraphQLSellingNetworkCategory extends IntegrationTestBase {
 
 		$query     = <<<GRAPHQL
 			query SellingNetwork(\$postID: Int!) {
-				sellingNetwork(postID: \$postID)
+				sellingNetworkCategory(postID: \$postID)
 			}
 		GRAPHQL;
 		$variables = array(
@@ -63,14 +63,14 @@ class GraphQLSellingNetworkCategory extends IntegrationTestBase {
 		// 正常に取得できることを期待している条件の時
 		if ( $expected ) {
 			$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
-			$selling_network_category_ID = $data['data']['sellingNetwork'];
+			$selling_network_category_ID = $data['data']['sellingNetworkCategory'];
 			$this->assertEquals(
 				$selling_network_category_ID,
 				NetworkCategory::mainnet()->id()
 			);  // 登録したネットワークが取得できている
 		} else {
 			$this->assertTrue( isset( $data['errors'] ) );  // エラーフィールドが存在する
-			$this->assertNull( $data['data']['sellingNetwork'] );   // 設定が取得できない
+			$this->assertNull( $data['data']['sellingNetworkCategory'] );   // 設定が取得できない
 		}
 	}
 

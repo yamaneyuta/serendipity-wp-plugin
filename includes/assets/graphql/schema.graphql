@@ -8,7 +8,7 @@ type Query {
 	sellingPrice(postID: Int!): Price
 
 	# 販売しているネットワークカテゴリを取得
-	sellingNetwork(postID: Int!): Int
+	sellingNetworkCategory(postID: Int!): Int
 
 	# 販売価格として設定可能な通貨シンボル一覧(投稿画面で販売価格を設定するときに使用)
 	sellableSymbols(networkCategoryID: Int!): [String!]
