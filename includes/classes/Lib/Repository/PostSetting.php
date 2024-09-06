@@ -71,8 +71,8 @@ class PostSetting {
 		Judge::checkPostID( $post_id );
 		Judge::checkAmountHex( $selling_price->amountHex );
 		Judge::checkDecimals( $selling_price->decimals );
-		Judge::checkSellableSymbol( $post_setting->sellingNetwork, $selling_price->symbol );
-		Judge::checkNetworkType( $post_setting->sellingNetwork );
+		// Judge::checkSellableSymbol( $post_setting->sellingNetwork, $selling_price->symbol );
+		// Judge::checkNetworkType( $post_setting->sellingNetwork );
 
 		$result = $this->wpdb->insert(
 			$this->table_name,
