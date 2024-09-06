@@ -25,17 +25,6 @@ type Price {
 	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
 }
 
-enum NetworkType {
-	MAINNET
-	TESTNET
-	PRIVATENET
-}
-
-type SellableSymbols {
-	networkType: String!	# ネットワーク種別('mainnet', 'testnet', 'privatenet')
-	symbols: [String!]!		# 販売価格として設定可能な通貨シンボル一覧
-}
-
 input PriceInput {
 	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
 	decimals: Int!  	# 小数点以下の桁数
