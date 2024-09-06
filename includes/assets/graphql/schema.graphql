@@ -11,7 +11,7 @@ type Query {
 	sellingNetwork(postID: Int!): Int
 
 	# 販売価格として設定可能な通貨シンボル一覧(投稿画面で販売価格を設定するときに使用)
-	sellableSymbols(networkType: NetworkType!): [String!]
+	sellableSymbols(networkCategoryID: Int!): [String!]
 }
 
 type Mutation {
@@ -43,6 +43,6 @@ input PriceInput {
 }
 
 input PostSettingInput {
+	sellingNetworkCategoryID: Int!
 	sellingPrice: PriceInput!
-	sellingNetwork: NetworkType!
 }
