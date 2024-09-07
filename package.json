@@ -1,5 +1,5 @@
 {
-	"name": "@yamaneyuta/serendipity-wp-plugin",
+	"name": "todo-list",
 	"version": "0.8.0",
 	"private": true,
 	"description": "Example block scaffolded with Create Block tool.",
