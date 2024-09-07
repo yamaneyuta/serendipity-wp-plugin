@@ -7,7 +7,7 @@
  * Version:           0.8.0
  * Author:            The WordPress Contributors
  * License:           Split License
- * License URI:       https://www.example.com/
+ * License URI:       ./LICENSE
  * Text Domain:       todo-list
  */
 
