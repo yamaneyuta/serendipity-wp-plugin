@@ -3,8 +3,8 @@
  * (BlockAttributesは`@wordpress/blocks`に存在したため別の名称で定義)
  */
 export type WidgetAttributes = {
-	/** 販売するネットワーク(MAINNET, TESTNET, PRIVATENET) */
-	sellingNetwork: string | null;
+	/** 販売対象のネットワークカテゴリID */
+	sellingNetworkCategoryID: number | null;
 
 	/** 販売価格の値(sellingDecimalsの値と共に使用する) */
 	sellingAmountHex: string;

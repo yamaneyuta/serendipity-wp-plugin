@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Features\Repository\SellableSymbols;
-use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 /**
  * 本システムにおいて`check～`は、引数の値を検証し、不正な値の場合は例外をスローする動作を行います。
@@ -66,25 +66,14 @@ class Judge {
 	/**
 	 * 販売価格に使用可能な通貨シンボルでない場合は例外をスローします。
 	 *
-	 * @param string $network_type ネットワーク種別
-	 * @param string $symbol 通貨シンボル
+	 * @param NetworkCategory $network_category ネットワークカテゴリ
+	 * @param string          $symbol 通貨シンボル
 	 * @throws InvalidArgumentException
+	 * @deprecated 現在未使用のため暫定的にマーク
 	 */
-	public static function checkSellableSymbol( string $network_type, string $symbol ): void {
-		if ( ! Validator::isSellableSymbol( $network_type, $symbol ) ) {
-			throw new \InvalidArgumentException( '[CA216343] Invalid selling symbol. - network_type: ' . $network_type . ', symbol: ' . $symbol );
-		}
-	}
-
-	/**
-	 * ネットワーク種別として有効な値でない場合は例外をスローします。
-	 *
-	 * @param string $network_type ネットワーク種別
-	 * @throws InvalidArgumentException
-	 */
-	public static function checkNetworkType( string $network_type ): void {
-		if ( ! Validator::isNetworkType( $network_type ) ) {
-			throw new \InvalidArgumentException( '[A6E9242D] Invalid network type. - network_type: ' . $network_type );
+	public static function checkSellableSymbol( NetworkCategory $network_category, string $symbol ): void {
+		if ( ! Validator::isSellableSymbol( $network_category, $symbol ) ) {
+			throw new \InvalidArgumentException( '[CA216343] Invalid selling symbol. - network_category: ' . $network_category . ', symbol: ' . $symbol );
 		}
 	}
 
@@ -129,25 +118,24 @@ class Validator {
 
 	public static function isSymbol( string $symbol ): bool {
 		// いずれかのネットワークの販売可能なシンボルであればOKとする
-		foreach ( NetworkType::getAll() as $network_type ) {
-			if ( self::isSellableSymbol( $network_type, $symbol ) ) {
-				return true;
-			}
+		if ( self::isSellableSymbol( NetworkCategory::mainnet(), $symbol ) ) {
+			return true;
+		}
+		if ( self::isSellableSymbol( NetworkCategory::testnet(), $symbol ) ) {
+			return true;
+		}
+		if ( self::isSellableSymbol( NetworkCategory::privatenet(), $symbol ) ) {
+			return true;
 		}
 		return false;
 	}
 
 	/** 販売価格に使用可能なシンボルかどうかを返します。 */
-	public static function isSellableSymbol( string $network_type, string $symbol ): bool {
+	public static function isSellableSymbol( NetworkCategory $network_category, string $symbol ): bool {
 		// 販売可能なシンボル一覧を取得
-		$sellable_symbol = ( new SellableSymbols() )->get( $network_type );
+		$sellable_symbol = ( new SellableSymbols() )->get( $network_category );
 
 		return in_array( $symbol, $sellable_symbol, true );
-	}
-
-	/** 指定された文字列がネットワーク種別かどうかを返します。 */
-	public static function isNetworkType( string $network_type ): bool {
-		return in_array( $network_type, NetworkType::getAll(), true );
 	}
 
 	public static function isAddress( string $address ): bool {

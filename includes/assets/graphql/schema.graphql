@@ -7,11 +7,11 @@ type Query {
 	# 販売価格を取得
 	sellingPrice(postID: Int!): Price
 
-	# 販売しているネットワーク種別を取得
-	sellingNetwork(postID: Int!): NetworkType
+	# 販売しているネットワークカテゴリを取得
+	sellingNetworkCategory(postID: Int!): Int
 
 	# 販売価格として設定可能な通貨シンボル一覧(投稿画面で販売価格を設定するときに使用)
-	sellableSymbols(networkType: NetworkType!): [String!]
+	sellableSymbols(networkCategoryID: Int!): [String!]
 }
 
 type Mutation {
@@ -25,17 +25,6 @@ type Price {
 	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
 }
 
-enum NetworkType {
-	MAINNET
-	TESTNET
-	PRIVATENET
-}
-
-type SellableSymbols {
-	networkType: String!	# ネットワーク種別('mainnet', 'testnet', 'privatenet')
-	symbols: [String!]!		# 販売価格として設定可能な通貨シンボル一覧
-}
-
 input PriceInput {
 	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
 	decimals: Int!  	# 小数点以下の桁数
@@ -43,6 +32,6 @@ input PriceInput {
 }
 
 input PostSettingInput {
+	sellingNetworkCategoryID: Int!
 	sellingPrice: PriceInput!
-	sellingNetwork: NetworkType!
 }

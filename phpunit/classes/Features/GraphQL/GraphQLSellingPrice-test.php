@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Enum\NetworkType;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 /**
@@ -36,7 +36,7 @@ class GraphQLSellingPriceTest extends IntegrationTestBase {
 		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost(
 			array(
 				'post_content' => $this->createTestPostContent(
-					new WidgetAttributesType( NetworkType::MAINNET, '0x123456', 18, 'ETH' )
+					new WidgetAttributesType( NetworkCategory::mainnet(), '0x123456', 18, 'ETH' )
 				),
 			)
 		);

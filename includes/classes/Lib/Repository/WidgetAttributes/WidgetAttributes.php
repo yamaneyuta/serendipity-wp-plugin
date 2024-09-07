@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class WidgetAttributes {
@@ -29,25 +30,29 @@ class WidgetAttributes {
 	 * 取得したブロックの情報をWidgetAttributesTypeに変換します。
 	 */
 	private function convertToWidgetAttributesType( array $widget_parser_block ): WidgetAttributesType {
-		$attributes = $widget_parser_block['attrs'];
-		if ( $attributes === null ) {
+		if ( ! isset( $widget_parser_block['attrs'] ) ) {
 			return null;
 		}
+		/** @var array */
+		$attributes = $widget_parser_block['attrs'];
 
 		// 以下のキーが存在することを確認
-		assert( array_key_exists( 'sellingNetwork', $attributes ), '[A2D17053] sellingNetwork property does not exist' );
+		assert( array_key_exists( 'sellingNetworkCategoryID', $attributes ), '[A2D17053] sellingNetworkCategoryID property does not exist' );
 		assert( array_key_exists( 'sellingAmountHex', $attributes ), '[65A44855] sellingAmountHex property does not exist' );
 		assert( array_key_exists( 'sellingDecimals', $attributes ), '[2018DA62] sellingDecimals property does not exist' );
 		assert( array_key_exists( 'sellingSymbol', $attributes ), '[CC49D23A] sellingSymbol property does not exist' );
 		// ※ ブロックの属性が追加された場合でも、原則キーの存在チェックはここに追加しない。(互換性を保つため)
 
 		// 保存された販売ネットワークを取得
-		$selling_network    = $attributes['sellingNetwork'];
+		$selling_network_category = NetworkCategory::from( $attributes['sellingNetworkCategoryID'] );
+		/** @var string */
 		$selling_amount_hex = $attributes['sellingAmountHex'];
-		$selling_decimals   = $attributes['sellingDecimals'];
-		$selling_symbol     = $attributes['sellingSymbol'];
+		/** @var int */
+		$selling_decimals = $attributes['sellingDecimals'];
+		/** @var string */
+		$selling_symbol = $attributes['sellingSymbol'];
 
-		return new WidgetAttributesType( $selling_network, $selling_amount_hex, $selling_decimals, $selling_symbol );
+		return new WidgetAttributesType( $selling_network_category, $selling_amount_hex, $selling_decimals, $selling_symbol );
 	}
 
 	/**
