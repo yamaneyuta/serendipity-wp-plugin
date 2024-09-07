@@ -21,8 +21,8 @@ jobs:
     strategy:
       matrix:
         env: [
-          { php-version: 7.4, wordpress-version: 5.4 },
-          { php-version: 8.3, wordpress-version: 6.5.4 }
+          { php-version: "7.4", wordpress-version: "5.4" },
+          { php-version: "8.3", wordpress-version: "6.5.4" }
         ]
 
     steps:

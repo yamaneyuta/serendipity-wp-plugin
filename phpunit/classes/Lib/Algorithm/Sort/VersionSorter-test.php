@@ -33,8 +33,8 @@ class VersionSorterTest extends WP_UnitTestCase {
 	}
 
 	public function provideSort() {
-		$versions = array( '1.0.0', '0.8.0', '0.0.0' ); // 昇順に並べ直すので昇順にならないように宣言。現在のプラグインバージョンを必ず入れること。
-		$expected = array( '0.0.0', '0.8.0', '1.0.0' );
+		$versions = array( '0.8.0', '0.5.0', '0.0.0' ); // 昇順に並べ直すので昇順にならないように宣言。現在のプラグインバージョンを必ず入れること。
+		$expected = array( '0.0.0', '0.5.0', '0.8.0' );
 
 		$this->assertEquals( ( new PluginInfo() )->version(), end( $expected ) ); // プラグインのバージョンをは最後になることを確認
 

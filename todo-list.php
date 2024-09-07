@@ -4,10 +4,10 @@
  * Description:       Example static block scaffolded with Create Block tool.
  * Requires at least: 5.4
  * Requires PHP:      7.4
- * Version:           1.0.0
- * Author:            The WordPress Contributors
+ * Version:           0.8.0
+ * Author:            yamaneyuta
  * License:           Split License
- * License URI:       https://www.example.com/
+ * License URI:       ./LICENSE
  * Text Domain:       todo-list
  */
 
