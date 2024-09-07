@@ -4,7 +4,7 @@
 	"private": true,
 	"description": "Example block scaffolded with Create Block tool.",
 	"license": "Split License",
-	"author": "The WordPress Contributors",
+	"author": "yamaneyuta",
 	"main": "build/index.js",
 	"scripts": {
 		"prebuild": "npm run clean:php-cache",

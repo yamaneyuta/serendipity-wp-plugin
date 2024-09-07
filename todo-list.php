@@ -5,7 +5,7 @@
  * Requires at least: 5.4
  * Requires PHP:      7.4
  * Version:           0.8.0
- * Author:            The WordPress Contributors
+ * Author:            yamaneyuta
  * License:           Split License
  * License URI:       ./LICENSE
  * Text Domain:       todo-list
