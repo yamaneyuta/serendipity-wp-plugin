@@ -10,6 +10,7 @@ export class EntryPhpFile {
 	private static readonly FIELD_NAME_VERSION = 'Version'; // プラグインバージョン
 	private static readonly FIELD_NAME_REQUIRES_AT_LEAST = 'Requires at least'; // 最低限必要なWordPressバージョン
 	private static readonly FIELD_NAME_TEXT_DOMAIN = 'Text Domain'; // テキストドメイン
+	private static readonly FIELD_NAME_LICENSE = 'License'; // ライセンス
 
 	/**
 	 * 本プラグインのバージョンを取得します。
@@ -30,6 +31,13 @@ export class EntryPhpFile {
 	 */
 	public static getTextDomain(): string {
 		return this.getHeaderFieldsValue( this.FIELD_NAME_TEXT_DOMAIN );
+	}
+
+	/**
+	 * 本プラグインのライセンスを取得します。
+	 */
+	public static getLicense(): string {
+		return this.getHeaderFieldsValue( this.FIELD_NAME_LICENSE );
 	}
 
 	/**

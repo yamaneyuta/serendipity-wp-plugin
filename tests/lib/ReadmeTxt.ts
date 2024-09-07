@@ -8,6 +8,7 @@ import path from 'node:path';
 export class ReadmeTxt {
 	private static readonly FIELD_NAME_REQUIRES_AT_LEAST = 'Requires at least'; // 最低限必要なWordPressバージョン
 	private static readonly FIELD_NAME_TESTED_UP_TO = 'Tested up to'; // 最新テスト済みWordPressバージョン
+	private static readonly FIELD_NAME_LICENSE = 'License'; // ライセンス
 
 	/**
 	 * 本プラグインが最低限必要とするWordPressバージョンを取得します。
@@ -21,6 +22,13 @@ export class ReadmeTxt {
 	 */
 	public static getTestedUpTo(): string {
 		return this.getHeaderFieldsValue( this.FIELD_NAME_TESTED_UP_TO );
+	}
+
+	/**
+	 * 本プラグインのライセンスを取得します。
+	 */
+	public static getLicense(): string {
+		return this.getHeaderFieldsValue( this.FIELD_NAME_LICENSE );
 	}
 
 	/**
