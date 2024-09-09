@@ -34,9 +34,5 @@
     "prepare": "npm run build",
     "release": "npx release-it",
     "test": "jest"
-  },
-  "peerDependencies": {
-    "glob": "^11.0.0",
-    "license-checker": "^25.0.1"
   }
 }
