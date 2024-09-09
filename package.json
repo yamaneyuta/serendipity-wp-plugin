@@ -13,7 +13,7 @@
     "dist"
   ],
   "bin": {
-    "export-license": "dist/cjs/bin/index.js"
+    "export-asset-php": "dist/cjs/bin/index.js"
   },
   "devDependencies": {
     "@types/license-checker": "^25.0.6",
