@@ -1,6 +1,6 @@
 {
   "name": "@yamaneyuta/serendipity-dev-export-asset-php",
-  "version": "0.8.5",
+  "version": "0.8.0",
   "private": true,
   "main": "index.js",
   "exports": {
