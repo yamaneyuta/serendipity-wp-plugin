@@ -1,5 +1,5 @@
 {
-  "name": "@yamaneyuta/serendipity-dev-export-license",
+  "name": "@yamaneyuta/serendipity-dev-export-asset-php",
   "version": "0.8.5",
   "private": true,
   "main": "index.js",
