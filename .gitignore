@@ -1,6 +1,7 @@
 /.devcontainer/development-internal/compose.network.yml
 
-# publicディレクトリはリリースファイル(zip)に含めるが、Git管理は行わない
+# 別リポジトリのディレクトリをマウントしているため、Git管理対象外
+/i18n
 /public
 
 # graphql-codegenの生成ファイル

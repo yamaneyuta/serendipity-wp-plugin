@@ -15,6 +15,7 @@ services:
     volumes:
       - ..:/workspaces
       - ../../serendipity-resources/public:/workspaces/public
+      - ../../serendipity-resources/i18n:/workspaces/i18n
       - node_modules:/workspaces/node_modules
       - dot_phpunit:/workspaces/.phpunit
       - includes_vendor:/workspaces/includes/vendor
