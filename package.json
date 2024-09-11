@@ -13,7 +13,7 @@
 		"build:block": "wp-scripts build",
 		"build:graphql-types": "graphql-codegen",
 		"check-license": "run-s check-license:*",
-		"check-license:js": "license-checker --production --excludePrivatePackages --onlyAllow '0BSD;Apache-2.0;Apache-2.0 WITH LLVM-exception;BSD-2-Clause;BSD-3-Clause;CC0-1.0;CC-BY-3.0;GPL-2.0-or-later;ISC;MIT' > /dev/null",
+		"check-license:js": "license-checker --production --excludePrivatePackages --onlyAllow '0BSD;Apache-2.0 WITH LLVM-exception;BSD-2-Clause;BSD-3-Clause;CC0-1.0;CC-BY-3.0;GPL-2.0-or-later;ISC;MIT' > /dev/null",
 		"check-license:php": "tsx .bin/check-php-license",
 		"ci:check-license": "run-p check-license:*",
 		"ci:lint": "run-p lint:css lint:js format",
@@ -61,6 +61,13 @@
 		"watch:graphql": "graphql-codegen --watch"
 	},
 	"# note": {
+		"// - scripts": "",
+		"//   - check-license: ": "",
+		"//     - 'GPLv3'や'GPLv3 or later'はGPLv2と互換がないため指定不可": "",
+		"//        ⇒ https://www.gnu.org/licenses/gpl-faq.ja.html#gpl-compat-matrix": "",
+		"//     - 'Apache-2.0'はGPLv2と互換がないため指定不可": "",
+		"//     - 'Apache-2.0 WITH LLVM-exception'は指定可": "",
+		"//        ⇒ https://github.com/ccampbell/mousetrap/issues/421": "",
 		"// - devDependencies: ": "",
 		"//   - @wordpress/scripts": "",
 		"//     - WordPress6.5以前を対象とする場合、はv27を使う必要がある ": "",

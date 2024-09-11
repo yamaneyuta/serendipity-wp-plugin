@@ -13,6 +13,8 @@ const JS_LICENSE_CHECKER_SCRIPT_NAME = 'check-license:js';
 const main = () => {
 	// 許可されたライセンス一覧を取得
 	const allowedLicenses = getAllowedLicenses();
+	// 許可されたライセンスの互換性をチェック
+	checkIncompatibilityGPLv2( allowedLicenses );
 
 	// composerを使ってPHPの依存ライブラリを取得
 	const projectPath = path.join( process.cwd(), 'includes' );
@@ -30,6 +32,37 @@ const main = () => {
 	}
 	if ( hasError ) {
 		process.exit( 1 );
+	}
+};
+
+/**
+ * GPLv2との互換性をチェックします。
+ * 互換が無いライセンスが許可するライセンス一覧に含まれている場合はエラー表示を行ってプロセスを終了します。
+ * @param allowedLicenses
+ */
+const checkIncompatibilityGPLv2 = ( allowedLicenses: string[] ) => {
+	// GPLv3の文字列が含まれているかどうか
+	// `GPLv3`や`GPLv3 or later`は`GPLv2`と互換性がないため、エラーとする
+	const isGPLv3 = ( license: string ) => {
+		return license.toUpperCase().includes( 'GPL' ) && license.includes( '3' );
+	};
+
+	// Apache 2.0の文字列が含まれているかどうか
+	// `Apache 2.0`は`GPLv2`と互換性がないため、エラーとする
+	// ただし、`Apache-2.0 WITH LLVM-exception`は`GPLv2`と互換性があるため、エラーとしない
+	const isApache2 = ( license: string ) => {
+		if ( license === 'Apache-2.0 WITH LLVM-exception' ) {
+			return false;
+		}
+		return license.toUpperCase().includes( 'APACHE' ) && license.includes( '2' );
+	};
+
+	// 互換が無いライセンスが許可リストに含まれている場合はエラーを表示して終了
+	for ( const license of allowedLicenses ) {
+		if ( isGPLv3( license ) || isApache2( license ) ) {
+			console.error( `[0BE7A453] Invalid license - license: ${ license }` );
+			process.exit( 1 );
+		}
 	}
 };
 
