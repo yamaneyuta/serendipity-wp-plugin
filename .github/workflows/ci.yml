@@ -114,6 +114,8 @@ jobs:
 
     # cleanコマンドでエラーが発生しないことを確認。
     - run: npm run clean
+    # zipファイル生成の過程でエラーが発生しないことを確認。
+    - run: npm run plugin-zip
 
   docker-build:
     runs-on: ubuntu-latest

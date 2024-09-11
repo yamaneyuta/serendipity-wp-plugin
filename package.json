@@ -8,7 +8,8 @@
 	"main": "build/index.js",
 	"scripts": {
 		"prebuild": "npm run clean:php-cache",
-		"build": "npm run build:graphql-types && tsc --noEmit && npm run build:block",
+		"build": "run-s build:graphql-types build:block",
+		"prebuild:block": "tsc --noEmit",
 		"build:block": "wp-scripts build",
 		"build:graphql-types": "graphql-codegen",
 		"check-license": "run-s check-license:*",
@@ -43,6 +44,7 @@
 		"packages-update": "wp-scripts packages-update",
 		"prepare": "run-s prepare:copy-constants export build",
 		"prepare:copy-constants": "cp -f node_modules/@yamaneyuta/serendipity-constants/dist/backend/constants.json includes/assets/",
+		"preplugin-zip": "run-s clean i18n build",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"release": "npx release-it",
 		"start": "wp-scripts start",

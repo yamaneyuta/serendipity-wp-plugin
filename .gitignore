@@ -1,6 +1,7 @@
 /.devcontainer/development-internal/compose.network.yml
 
-# publicディレクトリはリリースファイル(zip)に含めるが、Git管理は行わない
+# 別リポジトリのディレクトリをマウントしているため、Git管理対象外
+/i18n
 /public
 
 # graphql-codegenの生成ファイル
@@ -9,10 +10,8 @@
 .devcontainer/.intelephense-includes
 
 # 翻訳関連ファイル
-# .potファイルはコマンドで毎回生成されるためGit管理不要
-# .poファイルは各言語への翻訳が記載されているためGit管理対象
 # .moファイルは.poファイルをコンパイルしたバイナリファイルのためGit管理対象外
-*.pot
+# ※ ただし、リリースするzipファイルには含める
 *.mo
 
 # Logs

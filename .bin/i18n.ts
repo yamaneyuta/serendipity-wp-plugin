@@ -10,7 +10,7 @@ const TEXT_DOMAIN = packageJson.name;
 const WP_CLI_PLUGIN_DIR: string = path.join( 'wp-content/plugins', path.basename( process.cwd() ) );
 
 /** 翻訳ファイルが一時的に格納されるディレクトリ */
-const I18N_WORK_DIR_NAME = 'i18n';
+const I18N_WORK_DIR_NAME = 'i18n/wp-plugin';
 
 /** プラグインに含めるファイルを格納するディレクトリ名 */
 const OUTPUT_DIR_NAME = 'languages';
