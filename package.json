@@ -61,6 +61,13 @@
 		"watch:graphql": "graphql-codegen --watch"
 	},
 	"# note": {
+		"// - scripts": "",
+		"//   - check-license: ": "",
+		"//     - 'GPLv3'や'GPLv3 or later'はGPLv2と互換がないため指定不可": "",
+		"//        ⇒ https://www.gnu.org/licenses/gpl-faq.ja.html#gpl-compat-matrix": "",
+		"//     - 'Apache-2.0'はGPLv2と互換がないため指定不可": "",
+		"//     - 'Apache-2.0 WITH LLVM-exception'は指定可": "",
+		"//        ⇒ https://github.com/ccampbell/mousetrap/issues/421": "",
 		"// - devDependencies: ": "",
 		"//   - @wordpress/scripts": "",
 		"//     - WordPress6.5以前を対象とする場合、はv27を使う必要がある ": "",
