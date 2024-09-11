@@ -36,6 +36,7 @@
 		"format": "run-s format:js format:php",
 		"format:js": "eslint --fix .bin src tests && prettier --write .bin src tests",
 		"format:php": "phpcbf .",
+		"i18n": "tsx .bin/i18n",
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "eslint .bin src tests && prettier --check .bin src tests",
 		"lint:php": "phpcs -s .",

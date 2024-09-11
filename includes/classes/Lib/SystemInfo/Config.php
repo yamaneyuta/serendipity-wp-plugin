@@ -44,6 +44,7 @@ class Config {
 		return $this->json_loader->get( $path );
 	}
 
+	/** @deprecated Lib/Repository/HandleNameに移動 */
 	public function getHandleName( string $name ): string {
 		return ( new HandleName() )->get( $name );
 	}

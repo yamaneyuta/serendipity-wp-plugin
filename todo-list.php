@@ -9,7 +9,10 @@
  * License:           Split License
  * License URI:       ./LICENSE
  * Text Domain:       todo-list
+ * Domain Path:       /languages
  */
+
+// [Header Requirements](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/)
 
 declare(strict_types=1);
 if ( ! defined( 'ABSPATH' ) ) {
