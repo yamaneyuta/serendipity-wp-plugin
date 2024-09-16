@@ -2,9 +2,10 @@
 # ※ `[hash]_default`がネットワーク名になる。
 loop_count=1800
 for i in $(seq $loop_count); do
-	# 起動中のコンテナ名に32桁のハッシュ値が含まれる場合は、そのハッシュ値を取得
+	# 起動中のコンテナIDに32桁のハッシュ値が含まれる場合は、そのハッシュ値を取得
+	# ※ `docker ps`で出力されるIDは2番目の列なのでawk $2で取得
 	# ※ `docker network ls`では、wp-env起動前に取得できるパータンがあるため、`docker ps`を使用
-	hash=$(docker ps | grep -oE '[0-9a-f]{32}')
+	hash=$(docker ps | awk '{ print $2 }' | grep -m1 -oE '[0-9a-f]{32}')
 
 	if [[ -n $hash ]]; then
 		# ハッシュ値が取得できた場合はループを抜ける
