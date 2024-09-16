@@ -6,6 +6,7 @@ use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hooks\Page\AdminPageHook;
 use Cornix\Serendipity\Core\Hooks\Post\ContentFilterHook;
 use Cornix\Serendipity\Core\Hooks\Page\PostEditHook;
+use Cornix\Serendipity\Core\Hooks\Page\ViewPageHook;
 use Cornix\Serendipity\Core\Hooks\Post\ExcerptFilterHook;
 use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
@@ -25,6 +26,8 @@ class EntryPoint {
 		( new AdminPageHook() )->register();
 		// 投稿(新規/編集)画面
 		( new PostEditHook() )->register();
+		// 投稿表示画面
+		( new ViewPageHook() )->register();
 
 		// 抜粋のフィルタ
 		( new ExcerptFilterHook() )->register();
