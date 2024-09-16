@@ -15,13 +15,6 @@ class Slug {
 	 * 管理画面メニューのルートで使用するスラッグを取得します。
 	 */
 	public function adminMenuRoot(): string {
-		return $this->text_domain . '-admin-menu';
-	}
-
-	/**
-	 * 管理画面でライセンス情報を表示する画面で使用するスラッグを取得します。
-	 */
-	public function adminMenuLicense(): string {
-		return $this->text_domain . '-admin-menu-license';
+		return $this->text_domain;
 	}
 }

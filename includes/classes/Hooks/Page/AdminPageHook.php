@@ -21,10 +21,6 @@ class AdminPageHook {
 	public function addActionAdminMenu(): void {
 		assert( is_admin() );
 
-		// 仮のスラッグ。メニューに表示しない画面はこのslugを`add_submenu_page`の`$parent_slug`に指定する。(値は重複しなければ良いので適当)
-		// -> WordPress6.4あたりから、`add_submenu_page`の`$parent_slug`に`null`を指定するとエラーが発生するようになったため、その対応。
-		$fictitious_slug = '9b760f15-09c4-4503-b3cb-5a1bc941dc33';
-
 		$slug = new Slug();
 		$i18n = new I18n();
 
