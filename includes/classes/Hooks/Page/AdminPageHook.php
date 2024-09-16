@@ -40,25 +40,9 @@ class AdminPageHook {
 			$i18n->pluginName(),    // 管理画面のメニューに表示されるテキスト
 			$capability,            // ユーザー権限
 			$slug->adminMenuRoot(), // メニューのスラッグ
-			function () {
-				// このページは表示されない
-				throw new \LogicException( '[B12213EC] This page should not be displayed.' );
-			},
+			$page_callback,
 			'dashicons-admin-generic',  // メニューに表示されるアイコン
 		);
-
-		// サブレベルメニュー『ライセンス』追加
-		add_submenu_page(
-			$slug->adminMenuRoot(), // 親メニューのスラッグ
-			$i18n->adminMenuTitleLicense(), // メニューが表示された際のページのタイトルタグに表示されるテキスト（ブラウザのタブに表示されるテキスト）
-			$i18n->adminMenuTitleLicense(), // 管理画面のメニューに表示されるテキスト
-			$capability,            // ユーザー権限
-			$slug->adminMenuLicense(),  // メニューのスラッグ
-			$page_callback,
-		);
-
-		// デフォルトで追加される、トップレベルメニューと同じ表示名のサブメニューを削除
-		remove_submenu_page( $slug->adminMenuRoot(), $slug->adminMenuRoot() );
 	}
 
 	/**
