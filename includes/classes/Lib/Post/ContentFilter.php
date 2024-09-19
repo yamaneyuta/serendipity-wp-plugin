@@ -75,15 +75,15 @@ class ContentFilter {
 			return null;
 		}
 
-		// `<div `の位置をすべて取得(ウィジェットが配置されている場合はdivタグが1つ以上存在する)
-		$div_positions = Strings::all_strpos( $this->content, '<div ' );
-		assert( count( $div_positions ) > 0, "[26EAB256] Invalid content. - content: $this->content" );
+		// `<aside `の位置をすべて取得(ウィジェットが配置されている場合はasideタグが1つ以上存在する)
+		$elm_positions = Strings::all_strpos( $this->content, '<aside ' );
+		assert( count( $elm_positions ) > 0, "[26EAB256] Invalid content. - content: $this->content" );
 
-		// ウィジェットのdivタグの開始位置を取得
-		$widget_start_pos = max( array_filter( $div_positions, fn( $pos ) => $pos < $class_name_pos ) );
+		// ウィジェットのタグ開始位置を取得
+		$widget_start_pos = max( array_filter( $elm_positions, fn( $pos ) => $pos < $class_name_pos ) );
 		assert( is_int( $widget_start_pos ), "[805CD4D1] Invalid content. - content: $this->content" );
 
-		// ウィジェットのdivタグの開始位置を返す
+		// ウィジェットのタグ開始位置を返す
 		return $widget_start_pos;
 	}
 
@@ -94,8 +94,8 @@ class ContentFilter {
 			return null;
 		}
 
-		// ウィジェットのクラス名の位置から開始して最初に出現する`</div>`の位置を取得
-		$end_tag        = '</div>';
+		// ウィジェットのクラス名の位置から開始して最初に出現する閉じタグの位置を取得
+		$end_tag        = '</aside>';
 		$widget_end_pos = Strings::strpos( $this->content, $end_tag, $class_name_pos );
 		assert( false !== $widget_end_pos, "[CCA43C75] Invalid content. - content: $this->content" );
 		return $widget_end_pos + Strings::strlen( $end_tag );

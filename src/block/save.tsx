@@ -20,5 +20,5 @@ export default function save() {
 	};
 	//	ウィジェット表示用のクラス名を付与
 	const props = useBlockProps?.save( myProps ) ?? myProps;
-	return <div { ...props }></div>;
+	return <aside { ...props }></aside>;
 }
