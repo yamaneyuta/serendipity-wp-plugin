@@ -28,7 +28,7 @@ class SamplePostContent {
 			<!-- /wp:paragraph -->
 
 			<!-- wp:create-block/todo-list {"dummy":"2024-08-26T10:54:22.901Z"} -->
-			<div class="wp-block-create-block-todo-list {$this->class_name}"></div>
+			<aside class="wp-block-create-block-todo-list {$this->class_name}"></aside>
 			<!-- /wp:create-block/todo-list -->
 
 			<!-- wp:paragraph -->
