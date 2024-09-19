@@ -1,4 +1,3 @@
-import { ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn, expect, within } from '@storybook/test';
 import { BlockButton } from './BlockButton';
@@ -23,21 +22,12 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj< typeof BlockButton >;
 
-/**
- * ボタンがクリックされたときに呼び出される関数を初期化します。
- *
- * ※ Storybook上は不要だが、jestから呼び出した時に`toHaveBeenCalled`が期待通りに動作しなかったため追加
- * @param args
- */
-const clearOnClick = ( args: ComponentProps< typeof BlockButton > ) => {
-	( args.onClick as ReturnType< typeof fn > ).mockClear();
-};
-
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default: Story = {
-	args: {},
+	args: {
+		onClick: fn(),
+	},
 	play: async ( { args, canvasElement } ) => {
-		clearOnClick( args );
 		const canvas = within( canvasElement );
 		canvas.getByRole( 'button' ).click();
 		// ボタンがクリックされたことを確認
@@ -48,9 +38,9 @@ export const Default: Story = {
 export const IsBusy: Story = {
 	args: {
 		isBusy: true,
+		onClick: fn(),
 	},
 	play: async ( { args, canvasElement } ) => {
-		clearOnClick( args );
 		const canvas = within( canvasElement );
 		canvas.getByRole( 'button' ).click();
 		// ボタンがクリックされていないことを確認
@@ -61,9 +51,9 @@ export const IsBusy: Story = {
 export const Disabled: Story = {
 	args: {
 		disabled: true,
+		onClick: fn(),
 	},
 	play: async ( { args, canvasElement } ) => {
-		clearOnClick( args );
 		const canvas = within( canvasElement );
 		canvas.getByRole( 'button' ).click();
 		// ボタンがクリックされていないことを確認
