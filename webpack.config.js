@@ -16,7 +16,7 @@ module.exports = {
 
 		// assertを使うための設定
 		new webpack.ProvidePlugin({
-			process: 'process/browser',
+			process: require.resolve( 'process/browser' ),
 		}),
 	],
 
