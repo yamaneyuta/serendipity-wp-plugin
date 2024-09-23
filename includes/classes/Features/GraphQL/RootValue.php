@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\WidgetAttributesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryIdResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPostContentInfoResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
 
 class RootValue {
@@ -19,6 +20,8 @@ class RootValue {
 			'widgetAttributes'       => new WidgetAttributesResolver(),
 			// Query
 			'sellingPrice'           => new SellingPriceResolver(),
+			'sellingPostContentInfo' => new SellingPostContentInfoResolver(),
+
 			'sellingNetworkCategory' => new SellingNetworkCategoryIdResolver(),
 			'sellableSymbols'        => new SellableSymbolsResolver(),
 			// Mutation
