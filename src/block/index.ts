@@ -30,6 +30,7 @@ registerBlockType( metadata.name, {
 	title: metadata.title,
 	category: metadata.category,
 	attributes: {
+		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
 		sellingNetworkCategoryID: {
 			type: 'number',
 			// nullを指定するとシンタックスエラーになるため強制的に型を指定。
