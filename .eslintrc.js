@@ -3,7 +3,7 @@ config.extends.push('plugin:storybook/recommended');
 
 config.ignorePatterns = [
 	...config.ignorePatterns,
-	"src/types",
+	"src/types/gql",
 ];
 
 module.exports = config;
