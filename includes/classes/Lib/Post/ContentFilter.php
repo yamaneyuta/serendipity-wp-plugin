@@ -54,6 +54,21 @@ class ContentFilter {
 	}
 
 	/**
+	 * 投稿の有料部分を取得します。
+	 * @return null|string 投稿の有料部分
+	 */
+	public function getPaid(): ?string {
+		$widget_end_pos = $this->getWidgetEndPos();
+		if ( null === $widget_end_pos ) {
+			// ウィジェットが配置されていない場合はnullを返す
+			return null;
+		}
+
+		// ウィジェットの終了位置から最後まで
+		return Strings::substr( $this->content, $widget_end_pos );
+	}
+
+	/**
 	 * ウィジェットのクラス名の出現する位置を取得します。
 	 *
 	 * @return int|null $this->contentにおけるウィジェットのクラス名の出現位置。クラス名(ウィジェット)が存在しない場合はnull。
