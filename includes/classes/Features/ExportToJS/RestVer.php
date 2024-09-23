@@ -36,9 +36,18 @@ class RestVarData {
 		// GraphQL APIのURL
 		$graphql_url = ( new RestProperty() )->graphQLURL();
 
-		return array(
+		// 出力する変数
+		$result = array(
 			'wpRestNonce' => $wp_rest_nonce,
 			'graphqlUrl'  => $graphql_url,
 		);
+
+		// 現在の投稿IDが取得できる場合は追加
+		$post_id = get_the_ID();
+		if ( false !== $post_id ) {
+			$result['postID'] = $post_id;
+		}
+
+		return $result;
 	}
 }

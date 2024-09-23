@@ -55,6 +55,7 @@ class ContentFilter {
 
 	/**
 	 * 投稿の有料部分を取得します。
+	 *
 	 * @return null|string 投稿の有料部分
 	 */
 	public function getPaid(): ?string {

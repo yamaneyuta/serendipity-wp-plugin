@@ -7,6 +7,13 @@ type Query {
 	# 販売価格を取得
 	sellingPrice(postID: Int!): Price
 
+	# 販売対象となっている投稿コンテンツの(保存されているHTMLに関する)情報を取得
+	sellingPostContentInfo(postID: Int!): SellingPostContentInfo
+
+	# TODO: 購入可能なシンボル一覧(チェーンIDとセットで取得できるように)
+
+	# -------------------- 以下、管理者向けクエリ --------------------
+
 	# 販売しているネットワークカテゴリを取得
 	sellingNetworkCategory(postID: Int!): Int
 
@@ -23,6 +30,13 @@ type Price {
 	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
 	decimals: Int!  	# 小数点以下の桁数
 	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
+}
+
+# 販売対象となっている投稿コンテンツの(保存されているHTMLに関する)情報
+type SellingPostContentInfo {
+	characterCount: Int!	# 文字数
+	# 単語数はPHPでカウントすることが難しいため見送り	wordCount: Int!			# 単語数
+	imageCount: Int!		# 画像数
 }
 
 input PriceInput {

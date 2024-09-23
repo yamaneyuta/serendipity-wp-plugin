@@ -21,4 +21,12 @@ class PostContent {
 		$post = get_post( $this->post_ID );
 		return $post->post_content;
 	}
+
+	/**
+	 * 投稿の本文からHTMLコメントを削除したものを取得します。
+	 */
+	public function getCommentRemoved(): string {
+		// HTMLコメントを削除
+		return preg_replace( '/<!--.*?-->/s', '', $this->get() );
+	}
 }
