@@ -35,6 +35,7 @@ export class NetworkCategory {
 
 	/**
 	 * ネットワークカテゴリIDが不正な値の場合に例外をスローします。
+	 * @param networkCategoryID
 	 */
 	private static checkNetworkCategoryID( networkCategoryID: number ): void {
 		if (
