@@ -28,7 +28,7 @@ class GraphQLHook {
 		// GraphQLのエンドポイントを登録
 		$success = register_rest_route(
 			$this->rest_property->namespace(),
-			$this->rest_property->graphQLRoute(),
+			$this->rest_property->graphQlRoute(),
 			array(
 				'methods'             => 'POST',
 				'callback'            => fn ( \WP_REST_Request $request ) => $this->callback( $request ),

@@ -74,7 +74,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	private function crateRestPropertyStub(): RestProperty {
 		$rest_property_stub = $this->createMock( RestProperty::class );
 		$rest_property_stub->method( 'namespace' )->willReturn( 'phpunit' );    // テスト用の名前空間
-		$rest_property_stub->method( 'graphQLRoute' )->willReturn( ( new RestProperty() )->graphQLRoute() ); // こちらは変更しない
+		$rest_property_stub->method( 'graphQlRoute' )->willReturn( ( new RestProperty() )->graphQlRoute() ); // こちらは変更しない
 		return $rest_property_stub;
 	}
 
@@ -89,8 +89,8 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		$rest_property = $this->crateRestPropertyStub();
 		$namespace     = $rest_property->namespace();
-		$graphQLRoute  = $rest_property->graphQLRoute();
-		$request       = new WP_REST_Request( 'POST', "/${namespace}${graphQLRoute}" );
+		$graphQlRoute  = $rest_property->graphQlRoute();
+		$request       = new WP_REST_Request( 'POST', "/${namespace}${graphQlRoute}" );
 
 		$request->set_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $request_data ) );

@@ -13,7 +13,7 @@ class RestProperty {
 		return ( new PluginInfo() )->textDomain();
 	}
 
-	public function graphQLRoute(): string {
+	public function graphQlRoute(): string {
 		return '/graphql';
 	}
 
@@ -30,6 +30,6 @@ class RestProperty {
 		$wp_settings   = new WPSettings();
 		$api_root_path = $wp_settings->isDefaultPermalink() ? '/index.php?rest_route=/' : '/wp-json/';
 
-		return untrailingslashit( $wp_settings->siteAddress() ) . $api_root_path . $this->namespace() . $this->graphQLRoute();
+		return untrailingslashit( $wp_settings->siteAddress() ) . $api_root_path . $this->namespace() . $this->graphQlRoute();
 	}
 }
