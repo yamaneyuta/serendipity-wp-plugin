@@ -6,7 +6,7 @@ use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\ClassName;
-use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
+use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
@@ -260,8 +260,8 @@ class TestUser {
 class HardhatController {
 	public function __construct() {
 		$this->rpc_urls = array(
-			( new DefaultRPCURLData() )->getPrivatenetL1(),
-			( new DefaultRPCURLData() )->getPrivatenetL2(),
+			( new DefaultRpcUrlData() )->getPrivatenetL1(),
+			( new DefaultRpcUrlData() )->getPrivatenetL2(),
 		);
 
 		$this->initialize();

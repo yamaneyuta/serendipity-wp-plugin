@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 use Cornix\Serendipity\Core\Lib\Enum\ChainID;
 use LogicException;
 
-class DefaultRPCURLData {
+class DefaultRpcUrlData {
 
 	private const CHAIN_ID_INDEX = 0;
 	private const URL_INDEX      = 1;
@@ -13,8 +13,8 @@ class DefaultRPCURLData {
 	public function __construct() {
 		$privatenet_l1         = ChainID::PRIVATENET_L1;
 		$privatenet_l2         = ChainID::PRIVATENET_L2;
-		$privatenet_l1_rpc_url = $this->getPrivatenetRPCURL( $privatenet_l1 );
-		$privatenet_l2_rpc_url = $this->getPrivatenetRPCURL( $privatenet_l2 );
+		$privatenet_l1_rpc_url = $this->getPrivatenetRpcURL( $privatenet_l1 );
+		$privatenet_l2_rpc_url = $this->getPrivatenetRpcURL( $privatenet_l2 );
 
 		// デフォルトのRPCデータ
 		// ※ プライベートネットのURLはcompose.ymlに記載のhostname
@@ -39,7 +39,7 @@ class DefaultRPCURLData {
 	 * @return string RPC URL
 	 * @throws LogicException プライベートネットで使用されるチェーンID以外が指定された場合
 	 */
-	private function getPrivatenetRPCURL( int $chain_ID ): string {
+	private function getPrivatenetRpcURL( int $chain_ID ): string {
 		$is_testing = DB_NAME === 'tests-wordpress';    // テストモード(phpunit)で実行中かどうかを判定
 
 		switch ( $chain_ID ) {

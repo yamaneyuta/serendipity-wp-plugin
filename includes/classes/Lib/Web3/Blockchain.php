@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
+use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
@@ -121,7 +121,7 @@ class Blockchain {
 	 * @return bool プライベートネットに接続可能な場合はtrue
 	 */
 	public static function isPrivatenetConnectable(): bool {
-		$privatenet = new Blockchain( ( new DefaultRPCURLData() )->getPrivatenetL1() );
+		$privatenet = new Blockchain( ( new DefaultRpcUrlData() )->getPrivatenetL1() );
 		return $privatenet->connectable();
 	}
 }

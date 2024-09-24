@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Enum\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
+use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 class BlockchainTest extends IntegrationTestBase {
@@ -24,8 +24,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getChainIDHexDataProvider() {
 		return array(
-			array( ( new DefaultRPCURLData() )->getPrivatenetL1(), ChainID::PRIVATENET_L1 ),
-			array( ( new DefaultRPCURLData() )->getPrivatenetL2(), ChainID::PRIVATENET_L2 ),
+			array( ( new DefaultRpcUrlData() )->getPrivatenetL1(), ChainID::PRIVATENET_L1 ),
+			array( ( new DefaultRpcUrlData() )->getPrivatenetL2(), ChainID::PRIVATENET_L2 ),
 		);
 	}
 
@@ -46,8 +46,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBlockNumberHexDataProvider() {
 		return array(
-			array( ( new DefaultRPCURLData() )->getPrivatenetL1() ),
-			array( ( new DefaultRPCURLData() )->getPrivatenetL2() ),
+			array( ( new DefaultRpcUrlData() )->getPrivatenetL1() ),
+			array( ( new DefaultRpcUrlData() )->getPrivatenetL2() ),
 		);
 	}
 
@@ -70,8 +70,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBalanceHexDataProvider() {
 		return array(
-			array( ( new DefaultRPCURLData() )->getPrivatenetL1() ),
-			array( ( new DefaultRPCURLData() )->getPrivatenetL2() ),
+			array( ( new DefaultRpcUrlData() )->getPrivatenetL1() ),
+			array( ( new DefaultRpcUrlData() )->getPrivatenetL2() ),
 		);
 	}
 
@@ -90,8 +90,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function rpcURLDataProvider() {
 		return array(
-			array( ( new DefaultRPCURLData() )->get( ChainID::PRIVATENET_L1 ), true ),
-			array( ( new DefaultRPCURLData() )->get( ChainID::PRIVATENET_L2 ), true ),
+			array( ( new DefaultRpcUrlData() )->get( ChainID::PRIVATENET_L1 ), true ),
+			array( ( new DefaultRpcUrlData() )->get( ChainID::PRIVATENET_L2 ), true ),
 			array( 'http://localhost', false ),
 		);
 	}
