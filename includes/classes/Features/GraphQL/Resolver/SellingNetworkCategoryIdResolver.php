@@ -16,10 +16,8 @@ class SellingNetworkCategoryIdResolver extends ResolverBase {
 		/** @var int */
 		$post_ID = $args['postID'];
 
-		// 投稿が公開済み、または編集可能な権限がある時に設定されている販売ネットワークカテゴリIDを返します。
-		if ( ! $this->isPublishedOrEditable( $post_ID ) ) {
-			throw new \LogicException( '[A9085BAC] You do not have permission to access this post.' );
-		}
+		// 投稿は公開済み、または編集可能な権限があることをチェック
+		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// ウィジェットの属性を取得
 		/** @var WidgetAttributesType|null */
