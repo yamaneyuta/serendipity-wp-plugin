@@ -64,12 +64,18 @@ class Strings {
 
 
 	/**
-	 * @param string $string
+	 * @param string      $string
+	 * @param string|null $encoding 省略またはnullの場合は内部エンコーディングを使用します。
 	 * @return int|false
 	 */
-	public static function strlen( string $string ) {
+	public static function strlen( string $string, ?string $encoding = null ) {
 		if ( self::is_mbstring_enabled() ) {
-			return mb_strlen( $string );
+			// $encodingがnullableになったのはphp8.0から
+			if ( is_null( $encoding ) ) {
+				return mb_strlen( $string );
+			} else {
+				return mb_strlen( $string, $encoding );
+			}
 		} else {
 			return strlen( $string );
 		}
