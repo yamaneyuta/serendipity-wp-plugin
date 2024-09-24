@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\Page;
 
+use Cornix\Serendipity\Core\Lib\Repository\PhpVarName;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
-use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
 
 class PhpVer {
 	/**
@@ -11,7 +11,7 @@ class PhpVer {
 	 */
 	public function addInlineScript( string $handle ): void {
 		// javascriptとして出力する際の変数名を取得
-		$js_var_name = ( new Config() )->getConstant( 'phpVarName.rest' );
+		$js_var_name = ( new PhpVarName() )->get();
 
 		// 出力する変数の値
 		$var = ( new PhpVarData() )->get();
