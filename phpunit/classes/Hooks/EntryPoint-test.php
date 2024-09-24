@@ -36,7 +36,7 @@ class EntryPointTestBase extends WP_UnitTestCase {
 			// 各種アクションを実行
 			do_action( 'rest_api_init' );
 			do_action( 'enqueue_block_assets' );
-		} catch ( Exception $e ) {
+		} catch ( Throwable $e ) {
 			$error = $e;
 		}
 

@@ -19,7 +19,7 @@ class MySQLiFactory {
 			try {
 				$mysqli = new mysqli( $wpdb->dbhost, $wpdb->dbuser, $wpdb->dbpassword, $wpdb->dbname );
 				return $mysqli;
-			} catch ( \Exception $e ) {
+			} catch ( \Throwable $e ) {
 				error_log( '[5403F424]' . $e->getMessage() );
 				sleep( 1 );
 			}

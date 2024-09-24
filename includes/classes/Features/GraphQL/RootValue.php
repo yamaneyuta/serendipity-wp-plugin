@@ -33,7 +33,7 @@ class RootValue {
 			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver ) {
 				try {
 					return $resolver->resolve( $root_value, $args );
-				} catch ( \Exception $e ) {
+				} catch ( \Throwable $e ) {
 					if ( 'testing' !== getenv( 'APP_ENV' ) ) {
 						// TODO: use logger
 						error_log( $e->getMessage() );

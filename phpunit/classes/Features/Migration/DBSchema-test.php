@@ -47,7 +47,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 		$err = null;
 		try {
 			$sut->migrate();
-		} catch ( Exception $e ) {
+		} catch ( Throwable $e ) {
 			$err = $e;
 		}
 
@@ -72,7 +72,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 		$err = null;
 		try {
 			$sut->rollback();
-		} catch ( Exception $e ) {
+		} catch ( Throwable $e ) {
 			$err = $e;
 		}
 
@@ -97,7 +97,7 @@ class DBSchemaTest extends WP_UnitTestCase {
 		$err = null;
 		try {
 			$sut->uninstall();
-		} catch ( Exception $e ) {
+		} catch ( Throwable $e ) {
 			$err = $e;
 		}
 

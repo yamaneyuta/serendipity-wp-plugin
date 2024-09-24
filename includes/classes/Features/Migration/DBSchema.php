@@ -39,7 +39,7 @@ class DBSchema {
 
 				assert( $db_schema_version->get() === $version );
 
-			} catch ( \Exception $e ) {
+			} catch ( \Throwable $e ) {
 				// マイグレーションに失敗した場合はロールバックを試みて例外を再スロー
 				$migrator->down();
 				throw $e;
