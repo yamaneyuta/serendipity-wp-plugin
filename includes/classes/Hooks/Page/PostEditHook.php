@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\Page;
 
-use Cornix\Serendipity\Core\Features\ExportToJS\RestVer;
+use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Lib\Repository\HandleName;
 
@@ -41,6 +41,6 @@ class PostEditHook {
 		);
 
 		// インラインスクリプトを追加
-		( new RestVer() )->exportToJS( $handle );
+		( new PhpVer() )->addInlineScript( $handle );
 	}
 }

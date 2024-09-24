@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\Page;
 
-use Cornix\Serendipity\Core\Features\ExportToJS\RestVer;
+use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
 use Cornix\Serendipity\Core\Lib\Repository\HandleName;
 
@@ -32,7 +32,7 @@ class ViewPageHook {
 			true   // フッターに出力
 		);
 		// インラインスクリプトを追加
-		( new RestVer() )->exportToJS( $handle_name );
+		( new PhpVer() )->addInlineScript( $handle_name );
 
 		// スタイルを登録
 		wp_enqueue_style(
