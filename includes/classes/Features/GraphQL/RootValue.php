@@ -14,7 +14,6 @@ class RootValue {
 	 * @return array<string, mixed>
 	 */
 	public function get() {
-		global $wpdb;
 
 		$resolvers = array(
 			'widgetAttributes'       => new WidgetAttributesResolver(),
