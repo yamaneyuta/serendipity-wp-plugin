@@ -23,7 +23,7 @@ class RestProperty {
 	 *
 	 * @return string
 	 */
-	public function graphQLURL(): string {
+	public function graphQlURL(): string {
 		// パーマリンク構造が基本の場合は、`/wp-json/`を含むURLではアクセスできないので`?rest_route=`を含むURLでAPIアクセスを行う。
 		// 参考: https://labor.ewigleere.net/2021/11/06/wordpress-restapi-404notfound-permalink-basic/
 

@@ -34,7 +34,7 @@ class PhpVarData {
 		$wp_rest_nonce = wp_create_nonce( 'wp_rest' );
 
 		// GraphQL APIのURL
-		$graphql_url = ( new RestProperty() )->graphQLURL();
+		$graphql_url = ( new RestProperty() )->graphQlURL();
 
 		// 出力する変数
 		$result = array(
