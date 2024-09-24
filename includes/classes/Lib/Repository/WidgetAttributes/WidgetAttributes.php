@@ -59,7 +59,7 @@ class WidgetAttributes {
 	 * ウィジェットのブロック情報を取得します。
 	 */
 	private function getWidgetParserBlock(): ?array {
-		$post_content = $this->post_content->get();
+		$post_content = $this->post_content->getRaw();
 		$blocks       = parse_blocks( $post_content );
 		$block_name   = BlockName::get(); // ウィジェットに付与されているブロック名
 
