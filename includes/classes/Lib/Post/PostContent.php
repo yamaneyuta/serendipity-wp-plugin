@@ -17,7 +17,7 @@ class PostContent {
 	/**
 	 * 投稿の本文を取得します。
 	 */
-	public function get(): string {
+	public function getRaw(): string {
 		$post = get_post( $this->post_ID );
 		return $post->post_content;
 	}
@@ -27,6 +27,6 @@ class PostContent {
 	 */
 	public function getCommentRemoved(): string {
 		// HTMLコメントを削除
-		return preg_replace( '/<!--.*?-->/s', '', $this->get() );
+		return preg_replace( '/<!--.*?-->/s', '', $this->getRaw() );
 	}
 }

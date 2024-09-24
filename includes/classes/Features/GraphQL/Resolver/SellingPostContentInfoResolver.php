@@ -19,10 +19,8 @@ class SellingPostContentInfoResolver extends ResolverBase {
 		/** @var int */
 		$post_ID = $args['postID'];
 
-		// 投稿が公開済み、または編集可能な権限がある時に有料部分に指定したコンテンツの情報を取得します。
-		if ( ! $this->isPublishedOrEditable( $post_ID ) ) {
-			throw new \LogicException( '[9A22060C] You do not have permission to access this post.' );
-		}
+		// 投稿は公開済み、または編集可能な権限があることをチェック
+		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// HTMLコメントを含まない投稿本文を取得
 		$content = ( new PostContent( $post_ID ) )->getCommentRemoved();

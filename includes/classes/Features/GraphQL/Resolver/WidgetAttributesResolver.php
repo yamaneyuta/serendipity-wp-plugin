@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
+use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class WidgetAttributesResolver extends ResolverBase {
 
@@ -17,7 +18,10 @@ class WidgetAttributesResolver extends ResolverBase {
 		/** @var int */
 		$post_ID = $args['postID'];
 
-		// 投稿設定を取得します。
+		// 投稿は公開済み、または編集可能な権限があることをチェック
+		$this->checkIsPublishedOrEditable( $post_ID );
+
+		// 投稿設定を取得して返す
 		return ( new WidgetAttributes( new PostContent( $post_ID ) ) )->get();
 	}
 }

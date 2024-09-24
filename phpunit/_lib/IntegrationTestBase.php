@@ -6,7 +6,7 @@ use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\ClassName;
-use Cornix\Serendipity\Core\Lib\Repository\DefaultRPCURLData;
+use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
@@ -74,7 +74,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	private function crateRestPropertyStub(): RestProperty {
 		$rest_property_stub = $this->createMock( RestProperty::class );
 		$rest_property_stub->method( 'namespace' )->willReturn( 'phpunit' );    // テスト用の名前空間
-		$rest_property_stub->method( 'graphQLRoute' )->willReturn( ( new RestProperty() )->graphQLRoute() ); // こちらは変更しない
+		$rest_property_stub->method( 'graphQlRoute' )->willReturn( ( new RestProperty() )->graphQlRoute() ); // こちらは変更しない
 		return $rest_property_stub;
 	}
 
@@ -89,8 +89,8 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		$rest_property = $this->crateRestPropertyStub();
 		$namespace     = $rest_property->namespace();
-		$graphQLRoute  = $rest_property->graphQLRoute();
-		$request       = new WP_REST_Request( 'POST', "/${namespace}${graphQLRoute}" );
+		$graphQlRoute  = $rest_property->graphQlRoute();
+		$request       = new WP_REST_Request( 'POST', "/${namespace}${graphQlRoute}" );
 
 		$request->set_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $request_data ) );
@@ -260,8 +260,8 @@ class TestUser {
 class HardhatController {
 	public function __construct() {
 		$this->rpc_urls = array(
-			( new DefaultRPCURLData() )->getPrivatenetL1(),
-			( new DefaultRPCURLData() )->getPrivatenetL2(),
+			( new DefaultRpcUrlData() )->getPrivatenetL1(),
+			( new DefaultRpcUrlData() )->getPrivatenetL2(),
 		);
 
 		$this->initialize();
