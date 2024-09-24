@@ -5,7 +5,7 @@ import { globSync } from 'glob';
 import { ModuleInfos, ModuleInfo } from 'license-checker';
 
 // 検索するライセンスファイルの名前(順番に検索)
-const LICENSE_FILE_NAMES = [ 'LICENSE' ];
+const LICENSE_FILE_NAMES = [ 'LICENSE', 'LICENSE.md' ];
 
 /**
  * composerで管理されているパッケージのライセンス情報を取得します。
