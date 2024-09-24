@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
+use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class WidgetAttributesResolver extends ResolverBase {
 
