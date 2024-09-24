@@ -36,18 +36,13 @@ class WidgetAttributes {
 		/** @var array */
 		$attributes = $widget_parser_block['attrs'];
 
-		// 以下のキーが存在することを確認
-		assert( array_key_exists( 'sellingNetworkCategoryID', $attributes ), '[A2D17053] sellingNetworkCategoryID property does not exist' );
-		assert( array_key_exists( 'sellingAmountHex', $attributes ), '[65A44855] sellingAmountHex property does not exist' );
-		assert( array_key_exists( 'sellingDecimals', $attributes ), '[2018DA62] sellingDecimals property does not exist' );
-		assert( array_key_exists( 'sellingSymbol', $attributes ), '[CC49D23A] sellingSymbol property does not exist' );
-		// ※ ブロックの属性が追加された場合でも、原則キーの存在チェックはここに追加しない。(互換性を保つため)
-
-		// 保存された販売ネットワークを取得
-		$selling_network_category = NetworkCategory::from( $attributes['sellingNetworkCategoryID'] );
-		/** @var string */
+		// 保存された各情報を取得
+		$selling_network_category_id = $attributes['sellingNetworkCategoryID'];
+		/** @var NetworkCategory|null */
+		$selling_network_category = null === $selling_network_category_id ? null : NetworkCategory::from( $selling_network_category_id );
+		/** @var string|null */
 		$selling_amount_hex = $attributes['sellingAmountHex'];
-		/** @var int */
+		/** @var int|null */
 		$selling_decimals = $attributes['sellingDecimals'];
 		/** @var string */
 		$selling_symbol = $attributes['sellingSymbol'];
