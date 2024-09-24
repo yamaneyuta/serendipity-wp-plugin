@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { inputValueToAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
+import { toAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
 import { useWidgetAttributes } from '../../provider/widgetState/widgetAttributes/useWidgetAttributes';
 import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
@@ -66,7 +66,7 @@ const useUpdatePriceValueAttribute = () => {
 
 		// ユーザーが入力した価格をamountとdecimalsに変換
 		if ( inputPriceValue ) {
-			const tmp = inputValueToAmount( inputPriceValue );
+			const tmp = toAmount( inputPriceValue );
 			amountHex = '0x' + tmp.amount.toString( 16 );
 			decimals = tmp.decimals;
 		}
