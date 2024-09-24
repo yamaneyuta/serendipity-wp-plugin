@@ -9,6 +9,6 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 class PhpVarName {
 	public function get(): string {
 		// ※ TypeScript側と整合性を取ること
-		return 'php_var_rest_20792bdd';
+		return 'php_var_20792bdd';
 	}
 }
