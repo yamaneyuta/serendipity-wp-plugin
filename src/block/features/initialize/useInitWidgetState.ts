@@ -53,7 +53,11 @@ const useInitPriceValue = () => {
 
 	useEffect( () => {
 		if ( inputPriceValue === undefined ) {
-			const { sellingAmountHex, sellingDecimals } = widgetAttributes;
+			let { sellingAmountHex, sellingDecimals } = widgetAttributes;
+			// 値がnullの場合は0になるように`0x0`と`0`を設定
+			sellingAmountHex = sellingAmountHex === null ? '0x0' : sellingAmountHex;
+			sellingDecimals = sellingDecimals === null ? 0 : sellingDecimals;
+
 			const inputValue = toValueText( sellingAmountHex, sellingDecimals );
 			setInputPriceValue( inputValue );
 		}
