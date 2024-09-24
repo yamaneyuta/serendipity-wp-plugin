@@ -30,6 +30,7 @@ registerBlockType( metadata.name, {
 	title: metadata.title,
 	category: metadata.category,
 	attributes: {
+		// 型は`src/block/types/WidgetAttributes.ts`と同期をとること。
 		// ※ デフォルト値を設定する場合は、`includes/classes/Types/WidgetAttributesType.php`の設定も確認すること。
 		sellingNetworkCategoryID: {
 			type: 'number',
@@ -38,11 +39,11 @@ registerBlockType( metadata.name, {
 		},
 		sellingAmountHex: {
 			type: 'string',
-			default: '0x' + 0n.toString( 16 ),
+			default: null as unknown as string,
 		},
 		sellingDecimals: {
 			type: 'number',
-			default: 0,
+			default: null as unknown as number,
 		},
 		sellingSymbol: {
 			type: 'string',
