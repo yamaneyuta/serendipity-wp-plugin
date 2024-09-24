@@ -43,11 +43,6 @@ class Config {
 		}
 		return $this->json_loader->get( $path );
 	}
-
-	/** @deprecated Lib/Repository/HandleNameに移動 */
-	public function getHandleName( string $name ): string {
-		return ( new HandleName() )->get( $name );
-	}
 }
 
 /**
@@ -73,23 +68,5 @@ class JsonLoader {
 			$target = $target[ $key ];
 		}
 		return $target;
-	}
-}
-
-
-/**
- * WordPressのhookに登録する際に使用するハンドル名を取得するクラス。
- *
- * @internal
- */
-class HandleName {
-	private $_handle_names = array(
-		// 『src/block/index.js』(文字列)のMD5ハッシュ値。
-		'block_script' => '6e7ba80738b3f81da8c4f83d13e6a344',
-	);
-
-	public function get( string $name ): string {
-		assert( array_key_exists( $name, $this->_handle_names ) );
-		return $this->_handle_names[ $name ];
 	}
 }

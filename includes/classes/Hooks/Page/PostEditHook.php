@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Hooks\Page;
 
 use Cornix\Serendipity\Core\Features\ExportToJS\RestVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
-use Cornix\Serendipity\Core\Lib\SystemInfo\Config;
+use Cornix\Serendipity\Core\Lib\Repository\HandleName;
 
 /**
  * 投稿編集画面のフック(投稿新規作成画面を含む)
@@ -25,7 +25,7 @@ class PostEditHook {
 		}
 
 		// ブロックエディタで使用するスクリプトを登録するときのハンドル名を取得。
-		$handle = ( new Config() )->getHandleName( 'block_script' );
+		$handle = ( new HandleName() )->blockScript();
 
 		// アセットファイルを読み込む。
 		$asset_file_path = ( new ProjectFile( self::DIST_DIR . '/index.asset.php' ) )->toLocalPath();
