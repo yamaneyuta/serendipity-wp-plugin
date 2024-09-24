@@ -14,14 +14,6 @@ class WidgetAttributesType {
 		$this->sellingAmountHex         = $selling_amount_hex;
 		$this->sellingDecimals          = $selling_decimals;
 		$this->sellingSymbol            = $selling_symbol;
-
-		// プロパティが既定値と一致する場合、値がpost_contentに保存されないため、`src/block/index.ts`で指定しているデフォルト値を設定
-		if ( null === $this->sellingAmountHex ) {
-			$this->sellingAmountHex = '0x0';
-		}
-		if ( null === $this->sellingDecimals ) {
-			$this->sellingDecimals = 0;
-		}
 	}
 
 	// プロパティはGraphQLで使用するためcamelCaseで定義
