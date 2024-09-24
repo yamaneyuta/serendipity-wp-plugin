@@ -4,6 +4,9 @@ schema {
 }
 
 type Query {
+	# 投稿タイトルを取得
+	postTitle(postID: Int!): String!
+
 	# 販売価格を取得
 	sellingPrice(postID: Int!): Price
 
