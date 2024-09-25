@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Hooks\Update;
 
-use Cornix\Serendipity\Core\Features\Migration\DBSchema;
+use Cornix\Serendipity\Core\Features\Update\PluginUpdater;
+use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
+use Cornix\Serendipity\Core\Lib\Repository\OptionKeyName;
+use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
 // - `update_plugins_{$host_name}`
@@ -26,17 +29,51 @@ use Cornix\Serendipity\Core\Features\Migration\DBSchema;
 class PluginUpdateHook {
 
 	public function register(): void {
-		add_action( 'plugins_loaded', array( $this, 'addActionPluginLoaded' ) );
+		add_action( 'admin_init', array( $this, 'addActionAdminInit' ) );
 	}
 
-	public function addActionPluginLoaded(): void {
-		// 管理画面以外は処理抜け
-		if ( is_admin() ) {
+	public function addActionAdminInit(): void {
+		assert( is_admin() );
+
+		// 方針:
+		// optionsテーブルに保存されているプラグインのバージョン(最後にインストールされたバージョン)を取得し、
+		// 現在のプラグインのバージョンと比較する。
+		// 現在のプラグインバージョンの方が新しい場合は、プラグインのアップデート処理を実行する。
+		// プラグインのアップデート処理が完了後、optionsテーブルに保存されているプラグインのバージョンを更新する。
+
+		$option = new Option( ( new OptionKeyName() )->lastInstalledPluginVersion() );
+		/** @var string|null */
+		$last_ver    = $option->get( null ); // 最後にインストールされたプラグインバージョン
+		$current_ver = ( new PluginInfo() )->version(); // 現在のプラグインバージョン
+
+		if ( ! $this->isUpgradeNeeded( $last_ver, $current_ver ) ) {
+			// アップグレード不要な場合は処理抜け
+			// ※ ダウングレード(非推奨)された場合もここを通ることに注意
+			// 　 ダウングレードしても動作する可能性がゼロではないので、エラーとはしていない
 			return;
 		}
 
-		// データベースマイグレーション
-		global $wpdb;
-		( new DBSchema( $wpdb ) )->migrate();
+		// 更新処理
+		( new PluginUpdater() )->update( $last_ver, $current_ver );
+
+		// プラグインのバージョンを保存
+		$option->update( $current_ver );
+
+		// ※ 更新処理が失敗した時、エラーの無限ループに陥る可能性がある。
+		// 　 エラー発生時にプラグインを無効化することを検討したが、
+		// 　 無効化されたことに気づかない(有料部分が見える状態の)ままになるリスクがあると判断し
+		// 　 プラグインの無効化処理は実装していない。
+	}
+
+	/** アップグレード処理が必要かどうかを取得します。 */
+	private function isUpgradeNeeded( ?string $last_version, string $current_version ): bool {
+		// 初回インストール時はアップグレードが必要
+		if ( null === $last_version ) {
+			return true;
+		}
+
+		// バージョンを比較して現在のプラグインバージョンの方が新しい場合、アップグレードが必要
+		// ※ ダウングレード(非推奨)された場合はアップグレード不要の判定
+		return version_compare( $last_version, $current_version, '<' );
 	}
 }
