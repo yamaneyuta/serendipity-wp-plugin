@@ -20,12 +20,21 @@ class SignerPrivateKey {
 
 	/**
 	 * 秘密鍵を取得します。
-	 *
-	 * @return null|string
+	 * 秘密鍵が作成されていない場合は例外をスローします。
 	 */
-	public function get(): ?string {
+	public function get(): string {
 		$obj = $this->option->get( null );
-		return $obj ? $obj->value : null;
+		if ( null === $obj ) {
+			throw new \Exception( '[D49203A3] The private key has not been set.' );
+		}
+		return $obj->value;
+	}
+
+	/**
+	 * 秘密鍵が保存済みかどうかを取得します。
+	 */
+	public function exists(): bool {
+		return null !== $this->option->get( null );
 	}
 
 	/**
@@ -34,7 +43,8 @@ class SignerPrivateKey {
 	 * @param string $private_key
 	 */
 	public function save( string $private_key ): void {
-		if ( null !== $this->get() ) {
+		// 上書き禁止
+		if ( $this->exists() ) {
 			throw new \Exception( '[2DD53C18] The private key has already been set.' );
 		}
 

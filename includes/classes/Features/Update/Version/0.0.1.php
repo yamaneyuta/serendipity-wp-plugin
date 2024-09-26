@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 class v001 {
 
 	public function up() {
-		// 署名用ウォレットの秘密鍵が存在しない場合は生成して保存
+		// 署名用ウォレットの秘密鍵を初期化
 		( new PrivateKeyInitializer() )->initialize();
 	}
 
@@ -27,10 +27,12 @@ class PrivateKeyInitializer {
 	 * 署名用ウォレットの秘密鍵が存在しない場合は生成して保存します。
 	 */
 	public function initialize(): void {
-		$private_key = ( new SignerPrivateKey() )->get();
-		if ( null === $private_key ) {
+		$signer_private_key = new SignerPrivateKey();
+
+		if ( ! $signer_private_key->exists() ) {
+			// 秘密鍵を生成して保存
 			$private_key = ( new PrivateKey() )->generate();
-			( new SignerPrivateKey() )->save( $private_key );
+			$signer_private_key->save( $private_key );
 		}
 	}
 }
