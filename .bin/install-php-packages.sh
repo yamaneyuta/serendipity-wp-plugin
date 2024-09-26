@@ -12,7 +12,7 @@ function main() {
 	install_phpunit
 
 	# includeディレクトリで扱うパッケージをインストール
-	cd includes && composer install && cd -
+	cd includes && composer install --ignore-platform-req=ext-gmp && cd -
 
 	# 不要なファイルを削除
 	delete_unnecessary_files
