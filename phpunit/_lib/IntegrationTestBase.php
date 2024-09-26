@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Features\Migration\DBSchema;
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
@@ -49,22 +48,22 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	 * - 通常の結合テストの場合: setUpメソッド内で引数無しで呼び出す
 	 * - 各データベースに対してクエリのテストを行うような場合: 各テストメソッド内で引数を指定して呼び出す
 	 */
-	protected function initializeDatabase( wpdb $wpdb = null ): void {
-		// 引数がnullの場合は、$wpdbをグローバル変数から取得
-		$wpdb = $wpdb ?? $GLOBALS['wpdb'];
+	// protected function initializeDatabase( wpdb $wpdb = null ): void {
+	// 引数がnullの場合は、$wpdbをグローバル変数から取得
+	// $wpdb = $wpdb ?? $GLOBALS['wpdb'];
 
-		// プラグイン用Optionを削除
-		// ※ $wpdbの参照先が`tests-mysql`以外であっても、スキーマバージョンは`tests-mysql`の
-		// optionsを参照しているのでOptionテーブルの初期化も必要
-		( new OptionUninstaller() )->execute();
+	// プラグイン用Optionを削除
+	// ※ $wpdbの参照先が`tests-mysql`以外であっても、スキーマバージョンは`tests-mysql`の
+	// optionsを参照しているのでOptionテーブルの初期化も必要
+	// ( new OptionUninstaller() )->execute();
 
-		// 本プラグイン用のテーブルを再作成
-		$dbSchema = new DBSchema( $wpdb );
-		$dbSchema->uninstall();
-		$dbSchema->migrate();
+	// 本プラグイン用のテーブルを再作成
+	// $dbSchema = new DBSchema( $wpdb );
+	// $dbSchema->uninstall();
+	// $dbSchema->migrate();
 
-		$wpdb->query( 'COMMIT;' );
-	}
+	// $wpdb->query( 'COMMIT;' );
+	// }
 
 	public function getUser( string $user_type ): TestUser {
 		return new TestUser( $user_type );
