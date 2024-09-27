@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
  */
 class SignerPrivateKey {
 	public function __construct() {
-		$this->option = new Option( ( new OptionKeyName() )->signerPrivateKey() );
+		$this->option = ( new OptionFactory() )->signerPrivateKey();
 	}
 	private Option $option;
 

@@ -1,0 +1,30 @@
+<?php
+declare(strict_types=1);
+
+namespace Cornix\Serendipity\Core\Lib\Repository;
+
+use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
+
+class OptionFactory {
+
+	/**
+	 * Optionオブジェクトを生成します。
+	 */
+	private function createOption( string $raw_option_key_name ): Option {
+		return new Option( ( new Prefix() )->optionKeyName() . $raw_option_key_name );
+	}
+
+	/**
+	 * 本プラグインがインストールされた時のバージョンを取得または保存するオブジェクトを取得します。
+	 */
+	public function lastInstalledPluginVersion(): Option {
+		return $this->createOption( 'last_installed_plugin_version' );
+	}
+
+	/**
+	 * 本プラグインが使用する署名用ウォレットの秘密鍵を取得または保存するオブジェクトを取得します。
+	 */
+	public function signerPrivateKey(): Option {
+		return $this->createOption( 'signer_private_key' );
+	}
+}
