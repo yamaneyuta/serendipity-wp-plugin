@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
-use Cornix\Serendipity\Core\Lib\Database\Schema\PricePatternTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\PurchaseTicketTable;
 use Cornix\Serendipity\Core\Lib\Repository\SignerPrivateKey;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 
@@ -17,16 +17,16 @@ class v001 {
 		( new PrivateKeyInitializer() )->initialize();
 
 		global $wpdb;
-		// 価格パターンテーブルを作成
-		( new PricePatternTable( $wpdb ) )->create();
+		// 購入用チケットテーブルを作成
+		( new PurchaseTicketTable( $wpdb ) )->create();
 	}
 
 	public function down() {
 		// 署名用ウォレットの秘密鍵の削除は行わない
 
 		global $wpdb;
-		// 価格パターンテーブルを削除
-		( new PricePatternTable( $wpdb ) )->drop();
+		// 購入用チケットテーブルを削除
+		( new PurchaseTicketTable( $wpdb ) )->drop();
 	}
 }
 
