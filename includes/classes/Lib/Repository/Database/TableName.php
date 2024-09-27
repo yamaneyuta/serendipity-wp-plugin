@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository\Database;
 
-use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
+use Cornix\Serendipity\Core\Lib\Repository\Prefix;
 
 class TableName {
 
@@ -15,7 +15,7 @@ class TableName {
 	 * 作成するテーブル名はこのメソッドを使用してください
 	 */
 	private function addPrefix( string $table_name ): string {
-		return ( new PluginInfo() )->tableNamePrefix() . $table_name;
+		return ( new Prefix() )->tableName() . $table_name;
 	}
 
 	public function pricePattern(): string {
