@@ -6,18 +6,15 @@ namespace Cornix\Serendipity\Core\Lib\Database\Schema;
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
 
-// 他のテーブルと結合するための価格パターンを格納するテーブル
-//
-//
-// 用途: 購入時のブロックチェーントランザクションと購入時の設定価格の紐づけ
-// 　    ⇒ 購入用チケット発行時にこのテーブルに販売価格を登録しておき、
-// 　       ブロックチェーントランザクションにあるチケットIDから販売価格を取得する
 
-class PricePatternTable {
+/**
+ * 発行した購入用チケットの情報を保存するテーブル
+ */
+class PurchaseTicketTable {
 	public function __construct( \wpdb $wpdb ) {
 		$this->wpdb       = $wpdb;
 		$this->mysqli     = ( new MySQLiFactory() )->create( $wpdb );
-		$this->table_name = ( new TableName() )->pricePattern();
+		$this->table_name = ( new TableName() )->purchaseTicket();
 	}
 
 	private \wpdb $wpdb;
@@ -25,7 +22,7 @@ class PricePatternTable {
 	private string $table_name;
 
 	/**
-	 * 価格パターンテーブルを作成します。
+	 * 購入用チケットテーブルを作成します。
 	 */
 	public function create(): void {
 		$charset = $this->wpdb->get_charset_collate();
@@ -33,11 +30,11 @@ class PricePatternTable {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`id`                   varchar(191)        NOT NULL,
-				`amount_hex`           varchar(191)        NOT NULL,
-				`decimals`             int                 NOT NULL,
-				`symbol`               varchar(191)        NOT NULL,
-				PRIMARY KEY (`id`)
+				`ticket_id`                   varchar(191)        NOT NULL,
+				`selling_amount_hex`           varchar(191)        NOT NULL,
+				`selling_decimals`             int                 NOT NULL,
+				`selling_symbol`               varchar(191)        NOT NULL,
+				PRIMARY KEY (`ticket_id`)
 			) ${charset};
 		SQL;
 
@@ -46,7 +43,7 @@ class PricePatternTable {
 	}
 
 	/**
-	 * 価格パターンテーブルを削除します。
+	 * 購入用チケットテーブルを削除します。
 	 */
 	public function drop(): void {
 		$sql = <<<SQL
