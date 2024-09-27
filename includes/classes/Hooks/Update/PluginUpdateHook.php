@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\Update;
 
 use Cornix\Serendipity\Core\Features\Update\PluginUpdater;
-use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
-use Cornix\Serendipity\Core\Lib\Repository\OptionKeyName;
+use Cornix\Serendipity\Core\Lib\Repository\OptionFactory;
 use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
@@ -41,7 +40,7 @@ class PluginUpdateHook {
 		// 現在のプラグインバージョンの方が新しい場合は、プラグインのアップデート処理を実行する。
 		// プラグインのアップデート処理が完了後、optionsテーブルに保存されているプラグインのバージョンを更新する。
 
-		$option = new Option( ( new OptionKeyName() )->lastInstalledPluginVersion() );
+		$option = ( new OptionFactory() )->lastInstalledPluginVersion();
 		/** @var string|null */
 		$last_ver    = $option->get( null ); // 最後にインストールされたプラグインバージョン
 		$current_ver = ( new PluginInfo() )->version(); // 現在のプラグインバージョン

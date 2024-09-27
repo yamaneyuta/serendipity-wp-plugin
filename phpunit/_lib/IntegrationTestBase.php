@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Features\Migration\DBSchema;
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
+use Cornix\Serendipity\Core\Features\Uninstall\TableUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
+use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
+use Cornix\Serendipity\Core\Lib\Logger\ILogger;
+use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\ClassName;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
@@ -21,6 +24,12 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		parent::setUp();
 		// Your own additional setup.
 
+		$this->setUpSilentLogger();     // 何もログを出力しないように設定
+
+		global $wpdb;
+		( new TableHandler( $wpdb ) )->setUp(); // データベースのテーブルのセットアップ(全削除)
+		( new OptionsHandler() )->setUp();      // optionsテーブルのセットアップ(全削除)
+
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new WP_REST_Server();
 
@@ -29,6 +38,13 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		// Hardhatの初期化
 		( new HardhatController() )->setUp();
+
+		// admin_initの代わりにPluginUpdateHookを呼び出す
+		// ⇒Optionsテーブルが初期化されているので、プラグインの初期インストール処理が実行される
+		$current_screen = get_current_screen();
+		set_current_screen( 'index.php' );
+		( new PluginUpdateHook() )->addActionAdminInit();
+		set_current_screen( $current_screen );
 	}
 
 	// #[\Override]
@@ -39,8 +55,24 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		global $wp_rest_server;
 		$wp_rest_server = null;
 
+		global $wpdb;
+		( new OptionsHandler() )->tearDown();       // optionsテーブルの後処理
+		( new TableHandler( $wpdb ) )->tearDown();  // データベースのテーブルの後処理
+
 		// Your own additional tear down.
 		parent::tearDown();
+	}
+
+	private function setUpSilentLogger(): void {
+		// 何もしないロガーを設定
+		Logger::setLogger(
+			new class() implements ILogger {
+				public function debug( $_ ) {}
+				public function info( $_ ) {}
+				public function warn( $_ ) {}
+				public function error( $_ ) {}
+			}
+		);
 	}
 
 	/**
@@ -49,22 +81,22 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	 * - 通常の結合テストの場合: setUpメソッド内で引数無しで呼び出す
 	 * - 各データベースに対してクエリのテストを行うような場合: 各テストメソッド内で引数を指定して呼び出す
 	 */
-	protected function initializeDatabase( wpdb $wpdb = null ): void {
-		// 引数がnullの場合は、$wpdbをグローバル変数から取得
-		$wpdb = $wpdb ?? $GLOBALS['wpdb'];
+	// protected function initializeDatabase( wpdb $wpdb = null ): void {
+	// 引数がnullの場合は、$wpdbをグローバル変数から取得
+	// $wpdb = $wpdb ?? $GLOBALS['wpdb'];
 
-		// プラグイン用Optionを削除
-		// ※ $wpdbの参照先が`tests-mysql`以外であっても、スキーマバージョンは`tests-mysql`の
-		// optionsを参照しているのでOptionテーブルの初期化も必要
-		( new OptionUninstaller() )->execute();
+	// プラグイン用Optionを削除
+	// ※ $wpdbの参照先が`tests-mysql`以外であっても、スキーマバージョンは`tests-mysql`の
+	// optionsを参照しているのでOptionテーブルの初期化も必要
+	// ( new OptionUninstaller() )->execute();
 
-		// 本プラグイン用のテーブルを再作成
-		$dbSchema = new DBSchema( $wpdb );
-		$dbSchema->uninstall();
-		$dbSchema->migrate();
+	// 本プラグイン用のテーブルを再作成
+	// $dbSchema = new DBSchema( $wpdb );
+	// $dbSchema->uninstall();
+	// $dbSchema->migrate();
 
-		$wpdb->query( 'COMMIT;' );
-	}
+	// $wpdb->query( 'COMMIT;' );
+	// }
 
 	public function getUser( string $user_type ): TestUser {
 		return new TestUser( $user_type );
@@ -112,6 +144,37 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	 */
 	protected function createTestPostContent( WidgetAttributesType $widget_attributes ): string {
 		return ( new TestPostContent( $widget_attributes ) )->create();
+	}
+}
+
+/**
+ * Optionsテーブルの処理を行うクラス(テスト用)
+ *
+ * @internal
+ */
+class OptionsHandler {
+	public function setUp(): void {
+		// プラグイン用Optionを削除
+		( new OptionUninstaller() )->execute();
+	}
+	public function tearDown(): void {
+		// Do nothing
+		// setUpで削除するため、tearDownでの処理は不要
+	}
+}
+
+class TableHandler {
+	public function __construct( \wpdb $wpdb ) {
+		$this->wpdb = $wpdb;
+	}
+	private \wpdb $wpdb;
+
+	public function setUp(): void {
+		( new TableUninstaller() )->execute( $this->wpdb );
+	}
+	public function tearDown(): void {
+		// Do nothing
+		// setUpで削除するため、tearDownでの処理は不要
 	}
 }
 

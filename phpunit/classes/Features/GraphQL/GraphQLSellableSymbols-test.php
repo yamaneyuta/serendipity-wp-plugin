@@ -10,8 +10,6 @@ class GraphQLSellableSymbolsTest extends IntegrationTestBase {
 	public function setUp(): void {
 		parent::setUp();
 		// Your own additional setup.
-
-		$this->initializeDatabase();
 	}
 
 	// #[\Override]
