@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
+use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\ClassName;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
@@ -20,6 +21,8 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		parent::setUp();
 		// Your own additional setup.
 
+		( new OptionsHandler() )->setUp();  // optionsテーブルのセットアップ
+
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new WP_REST_Server();
 
@@ -28,6 +31,13 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		// Hardhatの初期化
 		( new HardhatController() )->setUp();
+
+		// admin_initの代わりにPluginUpdateHookを呼び出す
+		// ⇒Optionsテーブルが初期化されているので、プラグインの初期インストール処理が実行される
+		$current_screen = get_current_screen();
+		set_current_screen( 'index.php' );
+		( new PluginUpdateHook() )->addActionAdminInit();
+		set_current_screen( $current_screen );
 	}
 
 	// #[\Override]
@@ -37,6 +47,8 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		global $wp_rest_server;
 		$wp_rest_server = null;
+
+		( new OptionsHandler() )->tearDown();   // optionsテーブルの後処理
 
 		// Your own additional tear down.
 		parent::tearDown();
@@ -111,6 +123,22 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	 */
 	protected function createTestPostContent( WidgetAttributesType $widget_attributes ): string {
 		return ( new TestPostContent( $widget_attributes ) )->create();
+	}
+}
+
+/**
+ * Optionsテーブルの処理を行うクラス(テスト用)
+ *
+ * @internal
+ */
+class OptionsHandler {
+	public function setUp(): void {
+		// プラグイン用Optionを削除
+		( new OptionUninstaller() )->execute();
+	}
+	public function tearDown(): void {
+		// Do nothing
+		// setUpで削除するため、tearDownでの処理は不要
 	}
 }
 
