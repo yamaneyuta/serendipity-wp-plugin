@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
+use Cornix\Serendipity\Core\Features\Uninstall\TableUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Logger\ILogger;
@@ -25,7 +26,9 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		$this->setUpSilentLogger();     // 何もログを出力しないように設定
 
-		( new OptionsHandler() )->setUp();  // optionsテーブルのセットアップ
+		global $wpdb;
+		( new TableHandler( $wpdb ) )->setUp(); // データベースのテーブルのセットアップ(全削除)
+		( new OptionsHandler() )->setUp();      // optionsテーブルのセットアップ(全削除)
 
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new WP_REST_Server();
@@ -52,7 +55,9 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		global $wp_rest_server;
 		$wp_rest_server = null;
 
-		( new OptionsHandler() )->tearDown();   // optionsテーブルの後処理
+		global $wpdb;
+		( new OptionsHandler() )->tearDown();       // optionsテーブルの後処理
+		( new TableHandler( $wpdb ) )->tearDown();  // データベースのテーブルの後処理
 
 		// Your own additional tear down.
 		parent::tearDown();
@@ -151,6 +156,21 @@ class OptionsHandler {
 	public function setUp(): void {
 		// プラグイン用Optionを削除
 		( new OptionUninstaller() )->execute();
+	}
+	public function tearDown(): void {
+		// Do nothing
+		// setUpで削除するため、tearDownでの処理は不要
+	}
+}
+
+class TableHandler {
+	public function __construct( \wpdb $wpdb ) {
+		$this->wpdb = $wpdb;
+	}
+	private \wpdb $wpdb;
+
+	public function setUp(): void {
+		( new TableUninstaller() )->execute( $this->wpdb );
 	}
 	public function tearDown(): void {
 		// Do nothing
