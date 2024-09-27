@@ -4,6 +4,8 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
+use Cornix\Serendipity\Core\Lib\Logger\ILogger;
+use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\ClassName;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
@@ -20,6 +22,8 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	public function setUp(): void {
 		parent::setUp();
 		// Your own additional setup.
+
+		$this->setUpSilentLogger();     // 何もログを出力しないように設定
 
 		( new OptionsHandler() )->setUp();  // optionsテーブルのセットアップ
 
@@ -52,6 +56,18 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		// Your own additional tear down.
 		parent::tearDown();
+	}
+
+	private function setUpSilentLogger(): void {
+		// 何もしないロガーを設定
+		Logger::setLogger(
+			new class() implements ILogger {
+				public function debug( $_ ) {}
+				public function info( $_ ) {}
+				public function warn( $_ ) {}
+				public function error( $_ ) {}
+			}
+		);
 	}
 
 	/**
