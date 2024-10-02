@@ -27,4 +27,11 @@ class OptionFactory {
 	public function signerPrivateKey(): Option {
 		return $this->createOption( 'signer_private_key' );
 	}
+
+	/**
+	 * 販売者の利用規約同意情報を取得または保存するオブジェクトを取得します。
+	 */
+	public function sellerTermsAgreedInfo(): Option {
+		return $this->createOption( 'seller_terms_agreed_info' );
+	}
 }
