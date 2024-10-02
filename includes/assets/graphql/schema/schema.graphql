@@ -46,7 +46,11 @@ type SellingPostContentInfo {
 }
 
 type PurchaseTicketInfo {
-	ticketIdHex: String!	# チケットID(0xプレフィックス付きの16進数)
+	purchaseTicketIdHex: String!	# チケットID(0xプレフィックス付きの16進数)
+	sellerSignature: String!		# 販売者の署名
+	sellerSignatureVersion: Int!	# 販売者の署名バージョン
+	paymentTokenAddress: String!	# 支払いトークンのアドレス
+	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
 }
 
 input PriceInput {
