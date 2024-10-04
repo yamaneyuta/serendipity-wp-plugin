@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 class WidgetAttributes {
@@ -33,22 +32,8 @@ class WidgetAttributes {
 		if ( ! isset( $widget_parser_block['attrs'] ) ) {
 			return null;
 		}
-		/** @var array */
-		$attributes = $widget_parser_block['attrs'];
 
-		// 保存された各情報を取得
-		/** @var int|null */
-		$selling_network_category_id = $attributes['sellingNetworkCategoryID'];
-		/** @var NetworkCategory|null */
-		$selling_network_category = null === $selling_network_category_id ? null : NetworkCategory::from( $selling_network_category_id );
-		/** @var string|null */
-		$selling_amount_hex = $attributes['sellingAmountHex'];
-		/** @var int|null */
-		$selling_decimals = $attributes['sellingDecimals'];
-		/** @var string|null */
-		$selling_symbol = $attributes['sellingSymbol'];
-
-		return new WidgetAttributesType( $selling_network_category, $selling_amount_hex, $selling_decimals, $selling_symbol );
+		return WidgetAttributesType::fromAttrs( $widget_parser_block['attrs'] );
 	}
 
 	/**

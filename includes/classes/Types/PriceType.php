@@ -11,14 +11,17 @@ class PriceType {
 		Judge::checkDecimals( $decimals );
 		Judge::checkSymbol( $symbol );
 
-		$this->amountHex = $amount_hex;
-		$this->decimals  = $decimals;
-		$this->symbol    = $symbol;
+		$this->amount_hex = $amount_hex;
+		$this->decimals   = $decimals;
+		$this->symbol     = $symbol;
 	}
 
-	public string $amountHex; // GraphQLで使用するためcamelCase
+	/** 金額の数量(0xプレフィックス付きの16進数) */
+	public string $amount_hex;
 
+	/** 金額の小数点以下桁数 */
 	public int $decimals;
 
+	/** 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。 */
 	public string $symbol;
 }

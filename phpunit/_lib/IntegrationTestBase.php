@@ -203,7 +203,7 @@ class TestPostContent {
 				),
 				array(
 					'blockName'    => BlockName::get(),
-					'attrs'        => json_decode( json_encode( $this->widget_attributes ), true ),
+					'attrs'        => $this->widget_attributes->toAttrs(),
 					'innerBlocks'  => array(),
 					'innerHTML'    => $html,
 					'innerContent' => array( $html ),

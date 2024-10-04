@@ -12,9 +12,9 @@ class SellingPrice {
 	 * ウィジェット(ブロック)の属性値から販売価格を取得します。
 	 */
 	public static function fromWidgetAttributes( WidgetAttributesType $widgetAttributes ): ?PriceType {
-		$amount_hex = $widgetAttributes->sellingAmountHex;
-		$decimals   = $widgetAttributes->sellingDecimals;
-		$symbol     = $widgetAttributes->sellingSymbol;
+		$amount_hex = $widgetAttributes->selling_amount_hex;
+		$decimals   = $widgetAttributes->selling_decimals;
+		$symbol     = $widgetAttributes->selling_symbol;
 
 		// nullが含まれる場合はnullを返す
 		if ( is_null( $amount_hex ) || is_null( $decimals ) || is_null( $symbol ) ) {

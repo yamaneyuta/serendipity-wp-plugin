@@ -47,9 +47,9 @@ class IssuePurchaseTicketResolver extends ResolverBase {
 		}
 
 		// 現時点での販売価格を取得
-		$selling_amount_hex = $widget_attributes->sellingAmountHex;
-		$selling_decimals   = $widget_attributes->sellingDecimals;
-		$selling_symbol     = $widget_attributes->sellingSymbol;
+		$selling_amount_hex = $widget_attributes->selling_amount_hex;
+		$selling_decimals   = $widget_attributes->selling_decimals;
+		$selling_symbol     = $widget_attributes->selling_symbol;
 
 		// 購入用のチケットを発行
 		global $wpdb;

@@ -12,16 +12,13 @@ class SellingPostContentInfoType {
 			throw new \InvalidArgumentException( '[545DC452] Invalid image count. - image_count: ' . $image_count );
 		}
 
-		$this->characterCount = $character_count;
-		$this->imageCount     = $image_count;
+		$this->character_count = $character_count;
+		$this->image_count     = $image_count;
 	}
 
-	//
-	// GraphQLで使用するためcamelCase
-	//
-
 	/** 販売対象の投稿内容に含まれる文字数 */
-	public int $characterCount;
+	public int $character_count;
+
 	/** 販売対象の投稿内容に含まれる画像数 */
-	public int $imageCount;
+	public int $image_count;
 }

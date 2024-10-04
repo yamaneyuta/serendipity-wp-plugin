@@ -6,14 +6,13 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Lib\Post\ContentAnalyzer;
 use Cornix\Serendipity\Core\Lib\Post\ContentFilter;
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
-use Cornix\Serendipity\Core\Types\SellingPostContentInfoType;
 
 class SellingPostContentInfoResolver extends ResolverBase {
 
 	/**
 	 * #[\Override]
 	 *
-	 * @return SellingPostContentInfoType|null
+	 * @return array|null
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
@@ -38,6 +37,9 @@ class SellingPostContentInfoResolver extends ResolverBase {
 		$character_count = $analyzer->getCharacterCount();
 		$image_count     = $analyzer->getImageCount();
 
-		return new SellingPostContentInfoType( $character_count, $image_count );
+		return array(
+			'characterCount' => $character_count,
+			'imageCount'     => $image_count,
+		);
 	}
 }
