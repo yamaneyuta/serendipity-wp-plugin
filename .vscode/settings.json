@@ -10,5 +10,6 @@
 	"intelephense.environment.includePaths": [
 		".devcontainer/.intelephense-includes/wordpress-develop/tests/phpunit/includes",
 		".phpunit/vendor"
-	]
+	],
+	"php.suggest.basic": false
 }
