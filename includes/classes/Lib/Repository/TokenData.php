@@ -62,4 +62,20 @@ class TokenData {
 		}
 		return null;
 	}
+
+	/**
+	 * 指定したチェーンIDに含まれる全てのトークンのシンボルを取得します。
+	 *
+	 * @param int $chain_ID
+	 * @return string[]
+	 */
+	public function getAllSymbols( int $chain_ID ): array {
+		$symbols = array();
+		foreach ( $this->token_data as $data ) {
+			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID ) {
+				$symbols[] = $data[ self::SYMBOL_INDEX ];
+			}
+		}
+		return $symbols;
+	}
 }
