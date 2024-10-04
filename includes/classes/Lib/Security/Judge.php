@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Security;
 use Cornix\Serendipity\Core\Features\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\PurchasableChainIDs;
+use Cornix\Serendipity\Core\Lib\Repository\PurchasableSymbols;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 /**
@@ -93,6 +94,15 @@ class Judge {
 	}
 
 	/**
+	 * 購入可能な通貨シンボルでない場合は例外をスローします。
+	 */
+	public static function checkPurchasableSymbol( int $chain_ID, string $symbol ): void {
+		if ( ! Validator::isPurchasableSymbol( $chain_ID, $symbol ) ) {
+			throw new \InvalidArgumentException( '[30970153] Invalid symbol. - chain_ID: ' . $chain_ID . ', symbol: ' . $symbol );
+		}
+	}
+
+	/**
 	 * アドレスとして有効な値でない場合は例外をスローします。
 	 *
 	 * @param string $address アドレス(ウォレットアドレス/コントラクトアドレス)
@@ -160,6 +170,14 @@ class Validator {
 		$purchasable_chain_ids = ( new PurchasableChainIDs() )->get( $network_category );
 
 		return in_array( $chain_ID, $purchasable_chain_ids, true );
+	}
+
+	/** 購入可能な通貨シンボルかどうかを返します。 */
+	public static function isPurchasableSymbol( int $chain_ID, string $symbol ): bool {
+		// 管理者が保存した購入可能なトークン一覧を取得
+		$purchasable_symbols = ( new PurchasableSymbols() )->get( $chain_ID );
+
+		return in_array( $symbol, $purchasable_symbols, true );
 	}
 
 	public static function isAddress( string $address ): bool {
