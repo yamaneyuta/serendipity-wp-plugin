@@ -42,4 +42,11 @@ class OptionFactory {
 	public function purchasableChainIDs( NetworkCategory $network_category ): Option {
 		return $this->createOption( 'purchasable_chain_ids_' . $network_category->id() );
 	}
+
+	/**
+	 * 指定したチェーンIDで、購入可能なトークン一覧を取得または保存するオブジェクトを取得します。
+	 */
+	public function purchasableSymbols( int $chain_ID ): Option {
+		return $this->createOption( 'purchasable_symbols_' . $chain_ID );
+	}
 }
