@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
+use Cornix\Serendipity\Core\Lib\Database\Schema\PurchaseTicketTable;
 use Cornix\Serendipity\Core\Lib\Repository\SignerPrivateKey;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 
@@ -14,10 +15,18 @@ class v001 {
 	public function up() {
 		// 署名用ウォレットの秘密鍵を初期化
 		( new PrivateKeyInitializer() )->initialize();
+
+		global $wpdb;
+		// 購入用チケットテーブルを作成
+		( new PurchaseTicketTable( $wpdb ) )->create();
 	}
 
 	public function down() {
 		// 署名用ウォレットの秘密鍵の削除は行わない
+
+		global $wpdb;
+		// 購入用チケットテーブルを削除
+		( new PurchaseTicketTable( $wpdb ) )->drop();
 	}
 }
 

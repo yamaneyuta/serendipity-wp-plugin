@@ -26,6 +26,9 @@ type Query {
 
 type Mutation {
 	login(email: String!, password: String!): Boolean	# TODO: 削除
+
+	# 購入用のチケットを発行
+	issuePurchaseTicket(postID: Int!, chainID: Int!, purchaseSymbol: String!): PurchaseTicketInfo
 }
 
 
@@ -40,6 +43,14 @@ type SellingPostContentInfo {
 	characterCount: Int!	# 文字数
 	# 単語数はPHPでカウントすることが難しいため見送り	wordCount: Int!			# 単語数
 	imageCount: Int!		# 画像数
+}
+
+type PurchaseTicketInfo {
+	purchaseTicketIdHex: String!	# チケットID(0xプレフィックス付きの16進数)
+	sellerSignature: String!		# 販売者の署名
+	sellerSignatureVersion: Int!	# 販売者の署名バージョン
+	paymentTokenAddress: String!	# 支払いトークンのアドレス
+	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
 }
 
 input PriceInput {

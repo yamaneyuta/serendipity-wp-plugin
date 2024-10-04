@@ -6,26 +6,6 @@ namespace Cornix\Serendipity\Core\Lib\SystemInfo;
 class PluginInfo {
 
 	/**
-	 * テーブル名のプレフィックスを取得します。
-	 */
-	public function tableNamePrefix(): string {
-		$company_name = strtolower( $this->companyName() );
-		$text_domain  = strtolower( $this->textDomain() );
-
-		return "${company_name}_${text_domain}_";
-	}
-
-	/**
-	 * オプション名のプレフィックスを取得します。
-	 *
-	 * ※ `get_option`や`update_option`呼び出し時の第一引数に使用します。
-	 */
-	public function optionNamePrefix(): string {
-		// テーブル名のプレフィックスと同じものを返す
-		return $this->tableNamePrefix();
-	}
-
-	/**
 	 * プラグインのバージョンを取得します。
 	 */
 	public function version(): string {
@@ -37,13 +17,6 @@ class PluginInfo {
 	 */
 	public function textDomain(): string {
 		return ( new PluginMainFile() )->get( 'TextDomain' );
-	}
-
-	/**
-	 * 会社名を取得します。
-	 */
-	private function companyName(): string {
-		return 'Cornix';
 	}
 }
 

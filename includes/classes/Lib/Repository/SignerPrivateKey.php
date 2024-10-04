@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
  */
 class SignerPrivateKey {
 	public function __construct() {
-		$this->option = new Option( ( new OptionKeyName() )->signerPrivateKey() );
+		$this->option = ( new OptionFactory() )->signerPrivateKey();
 	}
 	private Option $option;
 
@@ -41,8 +41,12 @@ class SignerPrivateKey {
 	 * 秘密鍵を保存します。
 	 *
 	 * @param string $private_key
+	 * @disregard P1009 Undefined type
 	 */
-	public function save( string $private_key ): void {
+	public function save(
+		#[\SensitiveParameter]
+		string $private_key
+	): void {
 		// 上書き禁止
 		if ( $this->exists() ) {
 			throw new \Exception( '[2DD53C18] The private key has already been set.' );
