@@ -22,6 +22,6 @@ class SellingNetworkCategoryIdResolver extends ResolverBase {
 		// ウィジェットの属性を取得
 		/** @var WidgetAttributesType|null */
 		$widget_attributes = $root_value['widgetAttributes']( $root_value, array( 'postID' => $post_ID ) );
-		return $widget_attributes ? $widget_attributes->selling_network_category->id() : null;
+		return $widget_attributes ? $widget_attributes->sellingNetworkCategory()->id() : null;
 	}
 }

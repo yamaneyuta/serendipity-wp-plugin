@@ -27,9 +27,9 @@ class SellingPriceResolver extends ResolverBase {
 			return null;
 		}
 		return array(
-			'amountHex' => $widget_attributes->selling_amount_hex,
-			'decimals'  => $widget_attributes->selling_decimals,
-			'symbol'    => $widget_attributes->selling_symbol,
+			'amountHex' => $widget_attributes->sellingAmountHex(),
+			'decimals'  => $widget_attributes->sellingDecimals(),
+			'symbol'    => $widget_attributes->sellingSymbol(),
 		);
 	}
 }

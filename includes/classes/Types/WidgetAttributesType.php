@@ -16,19 +16,30 @@ class WidgetAttributesType {
 		$this->selling_symbol           = $selling_symbol;
 	}
 
-	// プロパティはGraphQLで使用するためcamelCaseで定義
+	private ?NetworkCategory $selling_network_category;
+	private ?string $selling_amount_hex;
+	private ?int $selling_decimals;
+	private ?string $selling_symbol;
 
-	/** 販売対象のネットワークカテゴリID */
-	public ?NetworkCategory $selling_network_category;
+	/** 販売対象のネットワークカテゴリを取得します。 */
+	public function sellingNetworkCategory(): ?NetworkCategory {
+		return $this->selling_network_category;
+	}
 
-	/** 販売価格の値(sellingDecimalsの値と共に使用する) */
-	public ?string $selling_amount_hex;
+	/** 販売価格の値(sellingDecimalsの値と共に使用する)を取得します。 */
+	public function sellingAmountHex(): ?string {
+		return $this->selling_amount_hex;
+	}
 
-	/** 販売価格の小数点以下桁数 */
-	public ?int $selling_decimals;
+	/** 販売価格の小数点以下桁数を取得します。 */
+	public function sellingDecimals(): ?int {
+		return $this->selling_decimals;
+	}
 
-	/** 販売価格の通貨シンボル */
-	public ?string $selling_symbol;
+	/** 販売価格の通貨シンボルを取得します。 */
+	public function sellingSymbol(): ?string {
+		return $this->selling_symbol;
+	}
 
 
 	/**
