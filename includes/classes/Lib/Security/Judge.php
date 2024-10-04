@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Features\Repository\SellableSymbols;
+use Cornix\Serendipity\Core\Lib\Repository\ChainData;
+use Cornix\Serendipity\Core\Lib\Repository\PurchasableChainIDs;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 /**
@@ -78,6 +80,19 @@ class Judge {
 	}
 
 	/**
+	 * 購入可能なチェーンIDでない場合は例外をスローします。
+	 *
+	 * @param int $chain_ID
+	 * @return void
+	 * @throws InvalidArgumentException
+	 */
+	public static function checkPurchasableChainID( int $chain_ID ): void {
+		if ( ! Validator::isPurchasableChainID( $chain_ID ) ) {
+			throw new \InvalidArgumentException( '[AB85623D] Invalid chain ID. - chain_ID: ' . $chain_ID );
+		}
+	}
+
+	/**
 	 * アドレスとして有効な値でない場合は例外をスローします。
 	 *
 	 * @param string $address アドレス(ウォレットアドレス/コントラクトアドレス)
@@ -136,6 +151,15 @@ class Validator {
 		$sellable_symbol = ( new SellableSymbols() )->get( $network_category );
 
 		return in_array( $symbol, $sellable_symbol, true );
+	}
+
+	/** 購入可能なチェーンIDかどうかを返します。 */
+	public static function isPurchasableChainID( int $chain_ID ): bool {
+		// 管理者が保存した購入可能なチェーンID一覧を取得
+		$network_category      = ( new ChainData() )->getNetworkCategory( $chain_ID );
+		$purchasable_chain_ids = ( new PurchasableChainIDs() )->get( $network_category );
+
+		return in_array( $chain_ID, $purchasable_chain_ids, true );
 	}
 
 	public static function isAddress( string $address ): bool {
