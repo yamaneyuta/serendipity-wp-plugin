@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\PurchaseTicket;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
 
 class IssuePurchaseTicketResolver extends ResolverBase {
@@ -27,8 +28,10 @@ class IssuePurchaseTicketResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		// TODO: チェーンIDは購入可能であることをチェック
-		// TODO: 購入シンボルが有効であることをチェック
+		// チェーンIDは購入可能であることをチェック
+		Judge::checkPurchasableChainID( $chain_ID );
+		// 購入シンボルが有効であることをチェック
+		Judge::checkPurchasableSymbol( $chain_ID, $purchase_symbol );
 
 		// 支払用のトークンのコントラクトアドレスを取得
 		$token_data            = new TokenData();
