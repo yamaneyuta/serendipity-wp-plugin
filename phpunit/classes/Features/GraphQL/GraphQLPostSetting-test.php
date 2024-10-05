@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
-use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 /**
  * widgetAttributesに対してアクセスできないことを確認するテスト
@@ -37,7 +37,7 @@ class GraphQLPostSettingTest extends IntegrationTestBase {
 		$post_ID = $this->getUser( UserType::CONTRIBUTOR )->createPost(
 			array(
 				'post_content' => $this->createTestPostContent(
-					new WidgetAttributesType( NetworkCategory::mainnet(), '0x123456', 18, 'ETH' )
+					WidgetAttributes::from( NetworkCategory::mainnet(), '0x123456', 18, 'ETH' )
 				),
 			)
 		);

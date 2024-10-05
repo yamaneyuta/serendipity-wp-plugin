@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Database\TableName;
+use Cornix\Serendipity\Core\Types\Price;
 use yamaneyuta\Ulid;
 
 class PurchaseTicket {
@@ -15,8 +16,11 @@ class PurchaseTicket {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function issue( string $selling_amount_hex, int $selling_decimals, string $selling_symbol ): string {
-		$ticket_id = ( new Ulid() )->toUuid();
+	public function issue( Price $selling_price ): string {
+		$ticket_id          = ( new Ulid() )->toUuid();
+		$selling_amount_hex = $selling_price->amountHex();
+		$selling_decimals   = $selling_price->decimals();
+		$selling_symbol     = $selling_price->symbol();
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
