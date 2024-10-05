@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository\Name;
 
-use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
+use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
 
 class Slug {
 	public function __construct() {

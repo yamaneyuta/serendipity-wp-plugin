@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Hooks\Update;
 
 use Cornix\Serendipity\Core\Features\Update\PluginUpdater;
 use Cornix\Serendipity\Core\Lib\Repository\OptionFactory;
-use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
+use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
 // - `update_plugins_{$host_name}`
