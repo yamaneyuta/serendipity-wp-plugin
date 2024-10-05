@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-class I18n {
+class I18nText {
 	/**
 	 * プラグイン名を取得します。
 	 */
