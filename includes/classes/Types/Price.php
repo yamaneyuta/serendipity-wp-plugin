@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Types;
 
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
-class PriceType {
+class Price {
 	public function __construct( $amount_hex, $decimals, $symbol ) {
 		Judge::checkAmountHex( $amount_hex );
 		Judge::checkDecimals( $decimals );
