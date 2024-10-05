@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Post;
 
-use Cornix\Serendipity\Core\Lib\Repository\ClassName;
+use Cornix\Serendipity\Core\Lib\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 /**

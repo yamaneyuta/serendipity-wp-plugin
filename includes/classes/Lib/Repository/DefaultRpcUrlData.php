@@ -2,7 +2,7 @@
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Enum\ChainID;
+use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use LogicException;
 
 class DefaultRpcUrlData {

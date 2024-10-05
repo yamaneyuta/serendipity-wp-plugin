@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Enum;
+namespace Cornix\Serendipity\Core\Lib\Repository\Constants;
 
 final class ChainID {
 	// ==================== Mainnet ====================

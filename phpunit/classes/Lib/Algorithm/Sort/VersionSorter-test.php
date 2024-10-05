@@ -1,7 +1,7 @@
 <?php
 
 use Cornix\Serendipity\Core\Lib\Algorithm\Sort\VersionSorter;
-use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
+use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
 
 class VersionSorterTest extends WP_UnitTestCase {
 

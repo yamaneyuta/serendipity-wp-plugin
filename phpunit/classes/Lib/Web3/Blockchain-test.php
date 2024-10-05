@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Enum\ChainID;
+use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
