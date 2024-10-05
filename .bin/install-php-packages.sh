@@ -28,14 +28,21 @@ function install_phpunit() {
 	# `$PHP_VERSION`や`$WP_VERSION`によってPHPUnitのバージョンを変更
 	# PHP7.4 + WP5.4～5.8 => ^7
 	# PHP7.4 + WP5.9～6.6 => ^9
+	# PHP8.0 + WP5.6～5.8 => ^7 => 実際は動作しない
 	# PHP8.1 + WP5.9～6.6 => ^9
-	# ここでは開発環境として使用するバージョンのみ記述
+	#
 	# 参考:
 	# https://make.wordpress.org/core/handbook/references/phpunit-compatibility-and-wordpress-versions/
 	PHP_UNIT_VERSION="9.6.21"
 	if [ $PHP_VERSION = "7.4" ]; then
 		if [ $WP_VERSION = "5.4" ] || [ $WP_VERSION = "5.5" ] || [ $WP_VERSION = "5.6" ] || [ $WP_VERSION = "5.7" ] || [ $WP_VERSION = "5.8" ]; then
 			PHP_UNIT_VERSION="^7.5.20"
+		fi
+	elif [ $PHP_VERSION = "8.0" ]; then
+		if [ $WP_VERSION = "5.6" ] || [ $WP_VERSION = "5.7" ] || [ $WP_VERSION = "5.8" ]; then
+			# マトリクス上ではPHPUnit^7をサポートしているように見えるが、PHPUnit自体がPHP^7.1のサポートのためPHP8.0では動作しない
+			echo "[E39CB887] PHPUnit7 does not support PHP8.0" 1>&2
+			exit 1
 		fi
 	fi
 
