@@ -16,12 +16,22 @@ class Price {
 		$this->symbol     = $symbol;
 	}
 
-	/** 金額の数量(0xプレフィックス付きの16進数) */
-	public string $amount_hex;
+	private string $amount_hex;
+	private int $decimals;
+	private string $symbol;
 
-	/** 金額の小数点以下桁数 */
-	public int $decimals;
+	/** 金額の数量(0xプレフィックス付きの16進数)を取得します。 */
+	public function amountHex(): string {
+		return $this->amount_hex;
+	}
 
-	/** 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。 */
-	public string $symbol;
+	/** 金額の小数点以下桁数を取得します。 */
+	public function decimals(): int {
+		return $this->decimals;
+	}
+
+	/** 通貨記号(`USD`, `ETH`等)を取得します。記号(`$`等)ではない。 */
+	public function symbol(): string {
+		return $this->symbol;
+	}
 }

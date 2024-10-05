@@ -22,14 +22,13 @@ class SellingPriceResolver extends ResolverBase {
 		// ウィジェットの属性を取得
 		/** @var WidgetAttributes|null */
 		$widget_attributes = $root_value['widgetAttributes']( $root_value, array( 'postID' => $post_ID ) );
-		// 価格の型に変換して返す
-		if ( null === $widget_attributes ) {
-			return null;
-		}
-		return array(
-			'amountHex' => $widget_attributes->sellingAmountHex(),
-			'decimals'  => $widget_attributes->sellingDecimals(),
-			'symbol'    => $widget_attributes->sellingSymbol(),
+
+		// 販売価格を返す
+		$selling_price = is_null( $widget_attributes ) ? null : $widget_attributes->sellingPrice();
+		return is_null( $selling_price ) ? null : array(
+			'amountHex' => $selling_price->amountHex(),
+			'decimals'  => $selling_price->decimals(),
+			'symbol'    => $selling_price->symbol(),
 		);
 	}
 }

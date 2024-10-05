@@ -46,13 +46,11 @@ class IssuePurchaseTicketResolver extends ResolverBase {
 		}
 
 		// 現時点での販売価格を取得
-		$selling_amount_hex = $widget_attributes->sellingAmountHex();
-		$selling_decimals   = $widget_attributes->sellingDecimals();
-		$selling_symbol     = $widget_attributes->sellingSymbol();
+		$selling_price = $widget_attributes->sellingPrice();
 
 		// 購入用のチケットを発行
 		global $wpdb;
-		$purchase_ticket_id = ( new PurchaseTicket( $wpdb ) )->issue( $selling_amount_hex, $selling_decimals, $selling_symbol );
+		$purchase_ticket_id = ( new PurchaseTicket( $wpdb ) )->issue( $selling_price );
 
 		// 販売者の利用規約同意時の署名を取得
 		// $seller_terms_agreements = new AgreedSellerTerms();

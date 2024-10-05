@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
+use Cornix\Serendipity\Core\Types\Price;
 use WP_Block_Parser_Block;
 
 class WidgetAttributes {
@@ -48,20 +49,33 @@ class WidgetAttributes {
 		return is_null( $selling_network_category_id ) ? null : NetworkCategory::from( $selling_network_category_id );
 	}
 
+	/** 販売価格を取得します。 */
+	public function sellingPrice(): ?Price {
+		$amount_hex = $this->sellingAmountHex();
+		$decimals   = $this->sellingDecimals();
+		$symbol     = $this->sellingSymbol();
+
+		if ( is_null( $amount_hex ) || is_null( $decimals ) || is_null( $symbol ) ) {
+			return null;
+		}
+
+		return new Price( $amount_hex, $decimals, $symbol );
+	}
+
 	/** 販売価格の値(sellingDecimalsの値と共に使用する)を取得します。 */
-	public function sellingAmountHex(): ?string {
+	private function sellingAmountHex(): ?string {
 		return $this->attrs[ self::ATTRS_KEY_SELLING_AMOUNT_HEX ] ?? null;
 	}
 
 
 	/** 販売価格の小数点以下桁数を取得します。 */
-	public function sellingDecimals(): ?int {
+	private function sellingDecimals(): ?int {
 		return $this->attrs[ self::ATTRS_KEY_SELLING_DECIMALS ] ?? null;
 	}
 
 
 	/** 販売価格の通貨シンボルを取得します。 */
-	public function sellingSymbol(): ?string {
+	private function sellingSymbol(): ?string {
 		return $this->attrs[ self::ATTRS_KEY_SELLING_SYMBOL ] ?? null;
 	}
 }
