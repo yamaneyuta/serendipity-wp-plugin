@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Repository;
+namespace Cornix\Serendipity\Core\Lib\Repository\Name;
 
 use Cornix\Serendipity\Core\Lib\SystemInfo\PluginInfo;
 

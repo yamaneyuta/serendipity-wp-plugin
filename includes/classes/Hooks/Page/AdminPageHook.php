@@ -4,9 +4,9 @@ namespace Cornix\Serendipity\Core\Hooks\Page;
 
 use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
-use Cornix\Serendipity\Core\Lib\Repository\HandleName;
+use Cornix\Serendipity\Core\Lib\Repository\Name\HandleName;
 use Cornix\Serendipity\Core\Lib\Repository\I18n;
-use Cornix\Serendipity\Core\Lib\Repository\Slug;
+use Cornix\Serendipity\Core\Lib\Repository\Name\Slug;
 
 class AdminPageHook {
 

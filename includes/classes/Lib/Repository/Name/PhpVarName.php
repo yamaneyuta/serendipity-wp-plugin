@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Repository;
+namespace Cornix\Serendipity\Core\Lib\Repository\Name;
 
 /**
  * javascriptの変数としてPHPから情報を渡す際の変数名を返すクラス。

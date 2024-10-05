@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
-use Cornix\Serendipity\Core\Lib\Repository\BlockName;
+use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Price;
 use WP_Block_Parser_Block;

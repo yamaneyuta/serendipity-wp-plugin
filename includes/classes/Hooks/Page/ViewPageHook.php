@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Hooks\Page;
 
 use Cornix\Serendipity\Core\Features\Page\PhpVer;
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
-use Cornix\Serendipity\Core\Lib\Repository\HandleName;
+use Cornix\Serendipity\Core\Lib\Repository\Name\HandleName;
 
 class ViewPageHook {
 	public function register(): void {

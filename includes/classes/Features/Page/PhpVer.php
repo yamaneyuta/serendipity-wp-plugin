@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\Page;
 
-use Cornix\Serendipity\Core\Lib\Repository\PhpVarName;
+use Cornix\Serendipity\Core\Lib\Repository\Name\PhpVarName;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
 class PhpVer {

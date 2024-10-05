@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository\Option;
 
-use Cornix\Serendipity\Core\Lib\Repository\Prefix;
+use Cornix\Serendipity\Core\Lib\Repository\Name\Prefix;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class Option {

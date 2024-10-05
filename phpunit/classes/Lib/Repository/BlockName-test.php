@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\BlockName;
+use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
 
 class BlockNameTest extends WP_UnitTestCase {
 	/**
