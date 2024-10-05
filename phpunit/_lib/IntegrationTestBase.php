@@ -10,9 +10,9 @@ use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\ClassName;
 use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
+use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
-use Cornix\Serendipity\Core\Types\WidgetAttributesType;
 
 /**
  * 結合テストの基底クラス
@@ -139,10 +139,10 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	/**
 	 * テスト用の投稿コンテンツを作成します。
 	 *
-	 * @param WidgetAttributesType $widget_attributes
+	 * @param WidgetAttributes $widget_attributes
 	 * @return string
 	 */
-	protected function createTestPostContent( WidgetAttributesType $widget_attributes ): string {
+	protected function createTestPostContent( WidgetAttributes $widget_attributes ): string {
 		return ( new TestPostContent( $widget_attributes ) )->create();
 	}
 }
@@ -182,11 +182,11 @@ class TableHandler {
  * テスト用の投稿コンテンツを作成するクラス
  */
 class TestPostContent {
-	public function __construct( WidgetAttributesType $widget_attributes ) {
+	public function __construct( WidgetAttributes $widget_attributes ) {
 		$this->widget_attributes = $widget_attributes;
 	}
 
-	private WidgetAttributesType $widget_attributes;
+	private WidgetAttributes $widget_attributes;
 
 	public function create() {
 		$class_name = ( new ClassName() )->getBlock();
@@ -203,7 +203,7 @@ class TestPostContent {
 				),
 				array(
 					'blockName'    => BlockName::get(),
-					'attrs'        => $this->widget_attributes->toAttrs(),
+					'attrs'        => $this->widget_attributes->toArray(),
 					'innerBlocks'  => array(),
 					'innerHTML'    => $html,
 					'innerContent' => array( $html ),
