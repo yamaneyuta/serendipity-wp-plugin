@@ -44,7 +44,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		$current_screen = get_current_screen();
 		set_current_screen( 'index.php' );
 		( new PluginUpdateHook() )->addActionAdminInit();
-		set_current_screen( $current_screen );
+		set_current_screen( $current_screen ?? '' );
 	}
 
 	// #[\Override]
