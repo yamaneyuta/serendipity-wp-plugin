@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 60
 
     strategy:
+      fail-fast: false # 他のジョブが失敗しても中断しない設定
       matrix:
         env: [
           { php-version: "7.4", wordpress-version: "5.4" },
