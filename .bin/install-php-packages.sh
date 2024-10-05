@@ -25,17 +25,19 @@ function install_phpunit() {
 	# PHPのバージョンが変更されている可能性があるため、ファイルをすべて削除
 	rm -rf vendor/* composer.json composer.lock
 
-	# WP_VERSIONによってPHPUnitのバージョンを変更
-	# PHP7.4 + WP 5.4 ～ 5.8 => ^7
+	# `$PHP_VERSION`や`$WP_VERSION`によってPHPUnitのバージョンを変更
+	# PHP7.4 + WP5.4～5.8 => ^7
+	# PHP7.4 + WP5.9～6.6 => ^9
+	# PHP8.1 + WP5.9～6.6 => ^9
 	# ここでは開発環境として使用するバージョンのみ記述
-	if [ $WP_VERSION = "5.4" ] || [ $WP_VERSION = "5.5" ] || [ $WP_VERSION = "5.6" ] || [ $WP_VERSION = "5.7" ]; then
-		PHP_UNIT_VERSION="^7.5.20"
-	elif [ $WP_VERSION = "x.x" ]; then
-		PHP_UNIT_VERSION="^9.5.2"
-	else
-		PHP_UNIT_VERSION="*"
+	# 参考:
+	# https://make.wordpress.org/core/handbook/references/phpunit-compatibility-and-wordpress-versions/
+	PHP_UNIT_VERSION="9.6.21"
+	if [ $PHP_VERSION = "7.4" ]; then
+		if [ $WP_VERSION = "5.4" ] || [ $WP_VERSION = "5.5" ] || [ $WP_VERSION = "5.6" ] || [ $WP_VERSION = "5.7" ] || [ $WP_VERSION = "5.8" ]; then
+			PHP_UNIT_VERSION="^7.5.20"
+		fi
 	fi
-
 
 	composer require --dev "phpunit/phpunit:${PHP_UNIT_VERSION}" "yoast/wp-test-utils:*" "yoast/phpunit-polyfills:*"
 
