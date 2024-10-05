@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\PurchaseTicket;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
@@ -41,7 +40,7 @@ class IssuePurchaseTicketResolver extends ResolverBase {
 		}
 
 		// 投稿設定を取得
-		$widget_attributes = ( new WidgetAttributes( new PostContent( $post_ID ) ) )->get();
+		$widget_attributes = WidgetAttributes::fromPostID( $post_ID );
 		if ( null === $widget_attributes ) {
 			throw new \Exception( '[6BDB4DC3] WidgetAttributes not found' );
 		}
