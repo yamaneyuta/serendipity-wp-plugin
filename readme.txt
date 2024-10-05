@@ -2,7 +2,7 @@
 Contributors:      The WordPress Contributors
 Tags:              block
 Requires at least: 5.4
-Tested up to:      6.5.4
+Tested up to:      6.6.2
 Stable tag:        0.1.0
 License:           Split License
 License URI:       ./LICENSE
