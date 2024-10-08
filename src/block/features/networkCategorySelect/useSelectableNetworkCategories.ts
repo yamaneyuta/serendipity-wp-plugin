@@ -14,19 +14,8 @@ export const useSelectableNetworkCategories = () => {
 			return undefined;
 		}
 
-		const networks: NetworkCategory[] = []; // 戻り値となるネットワークカテゴリ一覧
-
-		// 各ネットワークで販売可能な通貨シンボルが存在する場合は、ネットワークカテゴリ一覧に追加
-		if ( serverPostSetting.mainnetSellableSymbols ) {
-			networks.push( NetworkCategory.mainnet() );
-		}
-		if ( serverPostSetting.testnetSellableSymbols ) {
-			networks.push( NetworkCategory.testnet() );
-		}
-		if ( serverPostSetting.privatenetSellableSymbols ) {
-			networks.push( NetworkCategory.privatenet() );
-		}
-
-		return networks;
+		return serverPostSetting.allNetworkCategories.map( ( networkCategory ) =>
+			NetworkCategory.from( networkCategory.id )
+		);
 	}, [ serverPostSetting ] );
 };
