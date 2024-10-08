@@ -14,6 +14,9 @@ class PostResolver extends ResolverBase {
 		/** @var int */
 		$post_ID = $args['postID'];
 
+		// 投稿は公開済み、または編集可能な権限があることをチェック
+		$this->checkIsPublishedOrEditable( $post_ID );
+
 		$selling_price            = $root_value['SellingPrice']( $root_value, array( 'postID' => $post_ID ) );
 		$selling_network_category = $root_value['SellingNetworkCategory']( $root_value, array( 'postID' => $post_ID ) );
 		$selling_content          = $root_value['SellingContent']( $root_value, array( 'postID' => $post_ID ) );
