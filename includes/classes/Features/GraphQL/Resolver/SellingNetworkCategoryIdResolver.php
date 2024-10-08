@@ -20,8 +20,7 @@ class SellingNetworkCategoryIdResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// ウィジェットの属性を取得
-		/** @var WidgetAttributes|null */
-		$widget_attributes = $root_value['widgetAttributes']( $root_value, array( 'postID' => $post_ID ) );
+		$widget_attributes = WidgetAttributes::fromPostID( $post_ID );
 		return $widget_attributes ? $widget_attributes->sellingNetworkCategory()->id() : null;
 	}
 }

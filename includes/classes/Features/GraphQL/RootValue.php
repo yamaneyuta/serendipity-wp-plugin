@@ -4,7 +4,6 @@ namespace Cornix\Serendipity\Core\Features\GraphQL;
 
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostTitleResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\WidgetAttributesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryIdResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPostContentInfoResolver;
@@ -18,7 +17,6 @@ class RootValue {
 	public function get() {
 
 		$resolvers = array(
-			'widgetAttributes'       => new WidgetAttributesResolver(),
 			// Query
 			'postTitle'              => new PostTitleResolver(),
 			'sellingPrice'           => new SellingPriceResolver(),
