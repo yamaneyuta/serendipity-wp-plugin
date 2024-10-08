@@ -2,12 +2,13 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AllNetworkCategoriesResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostTitleResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\WidgetAttributesResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryIdResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPostContentInfoResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
 
 class RootValue {
@@ -18,14 +19,17 @@ class RootValue {
 	public function get() {
 
 		$resolvers = array(
-			'widgetAttributes'       => new WidgetAttributesResolver(),
-			// Query
-			'postTitle'              => new PostTitleResolver(),
-			'sellingPrice'           => new SellingPriceResolver(),
-			'sellingPostContentInfo' => new SellingPostContentInfoResolver(),
+			// 非公開
+			'Chain'                  => new ChainResolver(),
+			'NetworkCategory'        => new NetworkCategoryResolver(),
+			'SellingContent'         => new SellingContentResolver(),
+			'SellingNetworkCategory' => new SellingNetworkCategoryResolver(),
+			'SellingPrice'           => new SellingPriceResolver(),
 
-			'sellingNetworkCategory' => new SellingNetworkCategoryIdResolver(),
-			'sellableSymbols'        => new SellableSymbolsResolver(),
+			// Query
+			'Post'                   => new PostResolver(),
+			'allNetworkCategories'   => new AllNetworkCategoriesResolver(),
+
 			// Mutation
 			'issuePurchaseTicket'    => new IssuePurchaseTicketResolver(),
 		);

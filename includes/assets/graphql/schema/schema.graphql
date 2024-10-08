@@ -4,33 +4,44 @@ schema {
 }
 
 type Query {
-	# 投稿タイトルを取得
-	postTitle(postID: Int!): String!
 
-	# 販売価格を取得
-	sellingPrice(postID: Int!): Price
-
-	# 販売対象となっている投稿コンテンツの(保存されているHTMLに関する)情報を取得
-	sellingPostContentInfo(postID: Int!): SellingPostContentInfo
-
-	# TODO: 購入可能なシンボル一覧(チェーンIDとセットで取得できるように)
+	Post(postID: Int!): Post! # 投稿情報を取得
 
 	# -------------------- 以下、管理者向けクエリ --------------------
 
-	# 販売しているネットワークカテゴリを取得
-	sellingNetworkCategory(postID: Int!): Int
+	# # 投稿一覧を取得
+	# allPosts: [Post!]!
 
-	# 販売価格として設定可能な通貨シンボル一覧(投稿画面で販売価格を設定するときに使用)
-	sellableSymbols(networkCategoryID: Int!): [String!]
+	# 全ネットワークカテゴリ一覧を取得
+	# ※ 投稿編集権限以上で使用可
+	allNetworkCategories: [NetworkCategory!]!
 }
 
 type Mutation {
-	login(email: String!, password: String!): Boolean	# TODO: 削除
-
 	# 購入用のチケットを発行
 	issuePurchaseTicket(postID: Int!, chainID: Int!, purchaseSymbol: String!): PurchaseTicketInfo
 }
 
+# 投稿に関する情報
+type Post {
+	id: Int!
+	title: String!
+	sellingPrice: Price                     # 販売価格
+	sellingNetworkCategory: NetworkCategory # 販売している(=購入可能な)ネットワークカテゴリ
+	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報
+}
+
+type NetworkCategory {
+	id: Int!
+	chains: [Chain!]! # このカテゴリに含まれるチェーン一覧
+	sellableSymbols: [String!]! # 販売価格として設定可能な通貨シンボル一覧
+}
+
+type Chain {
+	id: Int!
+	enabled: Boolean!	# 購入可能かどうかの設定
+	# symbol: String!
+}
 
 type Price {
 	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
@@ -39,7 +50,7 @@ type Price {
 }
 
 # 販売対象となっている投稿コンテンツの(保存されているHTMLに関する)情報
-type SellingPostContentInfo {
+type SellingContent {
 	characterCount: Int!	# 文字数
 	# 単語数はPHPでカウントすることが難しいため見送り	wordCount: Int!			# 単語数
 	imageCount: Int!		# 画像数
@@ -51,15 +62,4 @@ type PurchaseTicketInfo {
 	sellerSignatureVersion: Int!	# 販売者の署名バージョン
 	paymentTokenAddress: String!	# 支払いトークンのアドレス
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
-}
-
-input PriceInput {
-	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
-	decimals: Int!  	# 小数点以下の桁数
-	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
-}
-
-input PostSettingInput {
-	sellingNetworkCategoryID: Int!
-	sellingPrice: PriceInput!
 }

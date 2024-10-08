@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
 
-class SellingNetworkCategoryIdResolver extends ResolverBase {
+class SellingNetworkCategoryResolver extends ResolverBase {
 
 	/**
 	 * #[\Override]
@@ -20,8 +20,10 @@ class SellingNetworkCategoryIdResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// ウィジェットの属性を取得
-		/** @var WidgetAttributes|null */
-		$widget_attributes = $root_value['widgetAttributes']( $root_value, array( 'postID' => $post_ID ) );
-		return $widget_attributes ? $widget_attributes->sellingNetworkCategory()->id() : null;
+		$widget_attributes           = WidgetAttributes::fromPostID( $post_ID );
+		$selling_network_category_id = $widget_attributes ? $widget_attributes->sellingNetworkCategory()->id() : null;
+
+		// 指定した投稿の販売ネットワークカテゴリーを返す
+		return is_null( $selling_network_category_id ) ? null : $root_value['NetworkCategory']( $root_value, array( 'networkCategoryID' => $selling_network_category_id ) );
 	}
 }

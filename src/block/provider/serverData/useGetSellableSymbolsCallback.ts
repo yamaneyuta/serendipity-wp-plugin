@@ -16,18 +16,8 @@ export const useGetSellableSymbolsCallback = () => {
 				return undefined;
 			}
 
-			const selectableSymbols = ( () => {
-				if ( networkCategory === NetworkCategory.mainnet() ) {
-					return postSetting.mainnetSellableSymbols;
-				}
-				if ( networkCategory === NetworkCategory.testnet() ) {
-					return postSetting.testnetSellableSymbols;
-				}
-				if ( networkCategory === NetworkCategory.privatenet() ) {
-					return postSetting.privatenetSellableSymbols;
-				}
-				assert( false, `[3D102039] Invalid selling network type. - networkCategory: ${ networkCategory }` );
-			} )();
+			const selectableSymbols = postSetting.allNetworkCategories.find( ( n ) => n.id === networkCategory.id() )
+				?.sellableSymbols;
 
 			// APIの仕様上、selectableSymbolsはundefinedにはならない
 			assert(

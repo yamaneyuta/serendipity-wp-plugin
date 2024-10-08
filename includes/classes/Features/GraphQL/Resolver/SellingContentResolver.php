@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Lib\Post\ContentAnalyzer;
 use Cornix\Serendipity\Core\Lib\Post\ContentFilter;
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 
-class SellingPostContentInfoResolver extends ResolverBase {
+class SellingContentResolver extends ResolverBase {
 
 	/**
 	 * #[\Override]
