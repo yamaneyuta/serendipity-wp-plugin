@@ -4,7 +4,6 @@ namespace Cornix\Serendipity\Core\Features\GraphQL;
 
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryIdResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPostContentInfoResolver;
 
 class RootValue {
 
@@ -15,8 +14,6 @@ class RootValue {
 
 		$resolvers = array(
 			// Query
-			'sellingPostContentInfo' => new SellingPostContentInfoResolver(),
-
 			'sellingNetworkCategory' => new SellingNetworkCategoryIdResolver(),
 
 			// Mutation
