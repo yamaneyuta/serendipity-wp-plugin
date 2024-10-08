@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
-use Cornix\Serendipity\Core\Features\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\PurchasableChainIDs;
 use Cornix\Serendipity\Core\Lib\Repository\PurchasableSymbols;
+use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 /**
