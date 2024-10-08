@@ -1,6 +1,7 @@
 
 query PostSetting {
-	mainnetSellableSymbols: sellableSymbols(networkCategoryID: 1)
-	testnetSellableSymbols: sellableSymbols(networkCategoryID: 2)
-	privatenetSellableSymbols: sellableSymbols(networkCategoryID: 3)
+	allNetworkCategories {
+		id
+		sellableSymbols
+	}
 }
