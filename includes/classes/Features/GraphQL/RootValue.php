@@ -2,7 +2,10 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AllNetworkCategoriesResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
 
 class RootValue {
 
@@ -12,10 +15,15 @@ class RootValue {
 	public function get() {
 
 		$resolvers = array(
+			// 非公開
+			'NetworkCategory'      => new NetworkCategoryResolver(),
+			'Chain'                => new ChainResolver(),
+
 			// Query
+			'allNetworkCategories' => new AllNetworkCategoriesResolver(),
 
 			// Mutation
-			'issuePurchaseTicket'    => new IssuePurchaseTicketResolver(),
+			'issuePurchaseTicket'  => new IssuePurchaseTicketResolver(),
 		);
 
 		$result = array();
