@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellableSymbolsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryIdResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPostContentInfoResolver;
 
@@ -19,7 +18,7 @@ class RootValue {
 			'sellingPostContentInfo' => new SellingPostContentInfoResolver(),
 
 			'sellingNetworkCategory' => new SellingNetworkCategoryIdResolver(),
-			'sellableSymbols'        => new SellableSymbolsResolver(),
+
 			// Mutation
 			'issuePurchaseTicket'    => new IssuePurchaseTicketResolver(),
 		);
