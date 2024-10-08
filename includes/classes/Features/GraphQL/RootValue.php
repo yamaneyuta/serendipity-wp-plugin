@@ -6,6 +6,10 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AllNetworkCategoriesResolv
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
 
 class RootValue {
 
@@ -16,14 +20,18 @@ class RootValue {
 
 		$resolvers = array(
 			// 非公開
-			'NetworkCategory'      => new NetworkCategoryResolver(),
-			'Chain'                => new ChainResolver(),
+			'Chain'                  => new ChainResolver(),
+			'NetworkCategory'        => new NetworkCategoryResolver(),
+			'SellingContent'         => new SellingContentResolver(),
+			'SellingNetworkCategory' => new SellingNetworkCategoryResolver(),
+			'SellingPrice'           => new SellingPriceResolver(),
 
 			// Query
-			'allNetworkCategories' => new AllNetworkCategoriesResolver(),
+			'Post'                   => new PostResolver(),
+			'allNetworkCategories'   => new AllNetworkCategoriesResolver(),
 
 			// Mutation
-			'issuePurchaseTicket'  => new IssuePurchaseTicketResolver(),
+			'issuePurchaseTicket'    => new IssuePurchaseTicketResolver(),
 		);
 
 		$result = array();
