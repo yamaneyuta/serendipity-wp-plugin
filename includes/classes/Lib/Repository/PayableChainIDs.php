@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
+use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 /**

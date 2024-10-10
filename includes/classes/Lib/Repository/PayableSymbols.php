@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
+use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
 
 /**
  * 管理者が設定した購入者が支払い可能なトークン一覧を取得または保存するクラス。
