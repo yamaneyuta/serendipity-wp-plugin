@@ -27,10 +27,10 @@ class IssuePurchaseTicketResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		// チェーンIDは購入可能であることをチェック
-		Judge::checkPurchasableChainID( $chain_ID );
-		// 購入シンボルが有効であることをチェック
-		Judge::checkPurchasableSymbol( $chain_ID, $purchase_symbol );
+		// 支払おうとしているチェーンIDが有効であることをチェック
+		Judge::checkPayableChainID( $chain_ID );
+		// 支払おうとしているトークンが有効であることをチェック
+		Judge::checkPayableSymbol( $chain_ID, $purchase_symbol );
 
 		// 支払用のトークンのコントラクトアドレスを取得
 		$token_data            = new TokenData();

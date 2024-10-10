@@ -18,7 +18,7 @@ class PayableChainIDs {
 	 * @return Option
 	 */
 	private function getOption( NetworkCategory $network_category ): Option {
-		return ( new OptionFactory() )->purchasableChainIDs( $network_category );
+		return ( new OptionFactory() )->payableChainIDs( $network_category );
 	}
 
 	/**

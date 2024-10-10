@@ -38,16 +38,16 @@ class OptionFactory {
 	}
 
 	/**
-	 * 指定したネットワークカテゴリで、購入可能なチェーン一覧を取得または保存するオブジェクトを取得します。
+	 * 指定したネットワークカテゴリで、購入者が支払可能なチェーン一覧を取得または保存するオブジェクトを取得します。
 	 */
-	public function purchasableChainIDs( NetworkCategory $network_category ): Option {
-		return $this->createOption( 'purchasable_chain_ids_' . $network_category->id() );
+	public function payableChainIDs( NetworkCategory $network_category ): Option {
+		return $this->createOption( 'payable_chain_ids_' . $network_category->id() );
 	}
 
 	/**
-	 * 指定したチェーンIDで、購入可能なトークン一覧を取得または保存するオブジェクトを取得します。
+	 * 指定したチェーンIDで、購入者が支払可能なトークン一覧を取得または保存するオブジェクトを取得します。
 	 */
-	public function purchasableSymbols( int $chain_ID ): Option {
-		return $this->createOption( 'purchasable_symbols_' . $chain_ID );
+	public function payableSymbols( int $chain_ID ): Option {
+		return $this->createOption( 'payable_symbols_' . $chain_ID );
 	}
 }
