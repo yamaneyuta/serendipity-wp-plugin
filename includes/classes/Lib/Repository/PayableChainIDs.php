@@ -6,7 +6,10 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
-class PurchasableChainIDs {
+/**
+ * 管理者が設定した購入者が支払い可能なチェーンID一覧を取得または保存するクラス。
+ */
+class PayableChainIDs {
 
 	/**
 	 * optionsテーブルへデータを保存または取得するためのオブジェクトを取得します。
