@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Lib\Repository\ChainData;
-use Cornix\Serendipity\Core\Lib\Repository\PurchasableChainIDs;
+use Cornix\Serendipity\Core\Lib\Repository\PayableChainIDs;
 use Cornix\Serendipity\Core\Lib\Repository\PurchasableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
@@ -172,11 +172,11 @@ class Validator {
 		return in_array( $symbol, $sellable_symbol, true );
 	}
 
-	/** 購入可能なチェーンIDかどうかを返します。 */
+	/** 購入者が支払可能なチェーンIDかどうかを返します。 */
 	public static function isPurchasableChainID( int $chain_ID ): bool {
 		// 管理者が保存した購入可能なチェーンID一覧を取得
 		$network_category      = ( new ChainData() )->getNetworkCategory( $chain_ID );
-		$purchasable_chain_ids = ( new PurchasableChainIDs() )->get( $network_category );
+		$purchasable_chain_ids = ( new PayableChainIDs() )->get( $network_category );
 
 		return in_array( $chain_ID, $purchasable_chain_ids, true );
 	}

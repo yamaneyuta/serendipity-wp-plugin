@@ -43,7 +43,7 @@ type NetworkCategory {
 
 type Chain {
 	id: Int!
-	enabled: Boolean!	# (訪問者が)支払いに使用可能かどうか TODO: enabled -> payable
+	isPayable: Boolean!	# (訪問者が)支払いに使用可能かどうか
 	# symbol: String!
 }
 
