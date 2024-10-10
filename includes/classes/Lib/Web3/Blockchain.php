@@ -38,7 +38,7 @@ class Blockchain {
 			$methods_property = $reflectionClass->getProperty( 'methods' );
 			$methods_property->setAccessible( true );
 			$methods                = $methods_property->getValue( $eth );
-			$methods['eth_chainId'] = new ChainId( 'eth_chainId', array() );  // `eth_chainId`メソッド呼び出し時に使うクラスを設定
+			$methods['eth_chainId'] = new ChainIdMethod( 'eth_chainId', array() );  // `eth_chainId`メソッド呼び出し時に使うクラスを設定
 			$methods_property->setValue( $eth, $methods );
 		}
 
@@ -129,7 +129,7 @@ class Blockchain {
 /**
  * @internal
  */
-class ChainId extends EthMethod {
+class ChainIdMethod extends EthMethod {
 
 	protected $validators = array();
 
