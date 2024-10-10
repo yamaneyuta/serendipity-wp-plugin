@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Rest;
 
 use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
-use Cornix\Serendipity\Core\Lib\SystemInfo\WPSettings;
+use Cornix\Serendipity\Core\Lib\Repository\WPSettings;
 
 class RestProperty {
 

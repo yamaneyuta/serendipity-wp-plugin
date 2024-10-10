@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\SystemInfo;
+namespace Cornix\Serendipity\Core\Lib\Repository;
 
 /**
  * WordPressの設定情報を取得するクラス。
