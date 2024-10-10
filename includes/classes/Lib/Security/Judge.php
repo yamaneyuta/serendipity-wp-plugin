@@ -90,23 +90,26 @@ class Judge {
 	}
 
 	/**
-	 * 購入可能なチェーンIDでない場合は例外をスローします。
+	 * 購入者が支払可能なチェーンIDでない場合は例外をスローします。
 	 *
 	 * @param int $chain_ID
-	 * @return void
-	 * @throws InvalidArgumentException
+	 * @throws \InvalidArgumentException
 	 */
-	public static function checkPurchasableChainID( int $chain_ID ): void {
-		if ( ! Validator::isPurchasableChainID( $chain_ID ) ) {
+	public static function checkPayableChainID( int $chain_ID ): void {
+		if ( ! Validator::isPayableChainID( $chain_ID ) ) {
 			throw new \InvalidArgumentException( '[AB85623D] Invalid chain ID. - chain_ID: ' . $chain_ID );
 		}
 	}
 
 	/**
-	 * 購入可能な通貨シンボルでない場合は例外をスローします。
+	 * 購入者が支払可能な通貨シンボル(トークン)でない場合は例外をスローします。
+	 *
+	 * @param int    $chain_ID チェーンID
+	 * @param string $symbol   通貨シンボル(トークン)
+	 * @throws \InvalidArgumentException
 	 */
-	public static function checkPurchasableSymbol( int $chain_ID, string $symbol ): void {
-		if ( ! Validator::isPurchasableSymbol( $chain_ID, $symbol ) ) {
+	public static function checkPayableSymbol( int $chain_ID, string $symbol ): void {
+		if ( ! Validator::isPayableSymbol( $chain_ID, $symbol ) ) {
 			throw new \InvalidArgumentException( '[30970153] Invalid symbol. - chain_ID: ' . $chain_ID . ', symbol: ' . $symbol );
 		}
 	}
@@ -173,20 +176,20 @@ class Validator {
 	}
 
 	/** 購入者が支払可能なチェーンIDかどうかを返します。 */
-	public static function isPurchasableChainID( int $chain_ID ): bool {
-		// 管理者が保存した購入可能なチェーンID一覧を取得
-		$network_category      = ( new ChainData() )->getNetworkCategory( $chain_ID );
-		$purchasable_chain_ids = ( new PayableChainIDs() )->get( $network_category );
+	public static function isPayableChainID( int $chain_ID ): bool {
+		// 管理者が保存した、購入者が支払可能なチェーンID一覧を取得
+		$network_category  = ( new ChainData() )->getNetworkCategory( $chain_ID );
+		$payable_chain_ids = ( new PayableChainIDs() )->get( $network_category );
 
-		return in_array( $chain_ID, $purchasable_chain_ids, true );
+		return in_array( $chain_ID, $payable_chain_ids, true );
 	}
 
 	/** 購入者が支払可能なトークンかどうかを返します。 */
-	public static function isPurchasableSymbol( int $chain_ID, string $symbol ): bool {
-		// 管理者が保存した購入可能なトークン一覧を取得
-		$purchasable_symbols = ( new PayableSymbols() )->get( $chain_ID );
+	public static function isPayableSymbol( int $chain_ID, string $symbol ): bool {
+		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
+		$payable_symbols = ( new PayableSymbols() )->get( $chain_ID );
 
-		return in_array( $symbol, $purchasable_symbols, true );
+		return in_array( $symbol, $payable_symbols, true );
 	}
 
 	public static function isAddress( string $address ): bool {
