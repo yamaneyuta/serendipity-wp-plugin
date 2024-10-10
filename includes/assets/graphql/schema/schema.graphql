@@ -20,6 +20,10 @@ type Query {
 type Mutation {
 	# 購入用のチケットを発行
 	issuePurchaseTicket(postID: Int!, chainID: Int!, purchaseSymbol: String!): PurchaseTicketInfo
+
+	# (訪問者が)購入可能なチェーン一覧を設定
+	# ※ 管理者権限以上で使用可
+	setPayableChains(networkCategoryID: Int!, chainIDs: [Int!]!): Boolean!
 }
 
 # 投稿に関する情報
@@ -39,7 +43,7 @@ type NetworkCategory {
 
 type Chain {
 	id: Int!
-	enabled: Boolean!	# 購入可能かどうかの設定
+	enabled: Boolean!	# (訪問者が)支払いに使用可能かどうか TODO: enabled -> payable
 	# symbol: String!
 }
 

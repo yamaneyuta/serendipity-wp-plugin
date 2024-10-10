@@ -14,6 +14,13 @@ class Access {
 	}
 
 	/**
+	 * 現在アクセスしているユーザーが、管理者権限を持っているかどうかを返します。
+	 */
+	public function isAdministrator(): bool {
+		return current_user_can( 'administrator' );
+	}
+
+	/**
 	 * 現在アクセスしているユーザーが、指定した投稿を編集できるかどうかを返します。
 	 *
 	 * @param int $post_ID

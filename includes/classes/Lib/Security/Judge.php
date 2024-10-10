@@ -19,6 +19,15 @@ use Cornix\Serendipity\Core\Types\NetworkCategory;
 class Judge {
 
 	/**
+	 * 現在アクセスしているユーザーが管理者権限を持っていない場合は例外をスローします。
+	 */
+	public static function checkIsAdministrator(): void {
+		if ( ! ( new Access() )->isAdministrator() ) {
+			throw new \LogicException( '[D10C401C] You are not an administrator. current user ID: ' . get_current_user_id() );
+		}
+	}
+
+	/**
 	 * 投稿IDが有効でない場合は例外をスローします。
 	 *
 	 * @param int $post_ID 投稿ID
