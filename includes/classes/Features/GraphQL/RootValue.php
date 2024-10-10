@@ -10,6 +10,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetPayableChainsResolver;
 
 class RootValue {
 
@@ -32,6 +33,7 @@ class RootValue {
 
 			// Mutation
 			'issuePurchaseTicket'    => new IssuePurchaseTicketResolver(),
+			'setPayableChains'       => new SetPayableChainsResolver(),
 		);
 
 		$result = array();
