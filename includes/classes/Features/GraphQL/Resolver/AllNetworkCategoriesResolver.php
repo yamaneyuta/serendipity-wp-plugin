@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
@@ -23,12 +24,8 @@ class AllNetworkCategoriesResolver extends ResolverBase {
 			NetworkCategory::mainnet(),
 			NetworkCategory::testnet(),
 		);
-
-		// プライベートネットが使用可能かどうかを取得
-		// TODO:
-		error_log( '[6CABBBEA] Not implemented yet: get privatenet enabled' );
-		$is_privatenet_enabled = true;  // TODO: 未実装
-		if ( $is_privatenet_enabled ) {
+		// 開発モードの場合はプライベートネットも取得
+		if ( ( new Environment() )->isDevelopmentMode() ) {
 			$network_categories[] = NetworkCategory::privatenet();
 		}
 
