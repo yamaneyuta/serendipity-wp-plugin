@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\PayableChainIDs;
-use Cornix\Serendipity\Core\Lib\Repository\PurchasableSymbols;
+use Cornix\Serendipity\Core\Lib\Repository\PayableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
@@ -181,10 +181,10 @@ class Validator {
 		return in_array( $chain_ID, $purchasable_chain_ids, true );
 	}
 
-	/** 購入可能な通貨シンボルかどうかを返します。 */
+	/** 購入者が支払可能なトークンかどうかを返します。 */
 	public static function isPurchasableSymbol( int $chain_ID, string $symbol ): bool {
 		// 管理者が保存した購入可能なトークン一覧を取得
-		$purchasable_symbols = ( new PurchasableSymbols() )->get( $chain_ID );
+		$purchasable_symbols = ( new PayableSymbols() )->get( $chain_ID );
 
 		return in_array( $symbol, $purchasable_symbols, true );
 	}

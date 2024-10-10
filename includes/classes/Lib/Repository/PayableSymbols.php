@@ -5,7 +5,10 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
 
-class PurchasableSymbols {
+/**
+ * 管理者が設定した購入者が支払い可能なトークン一覧を取得または保存するクラス。
+ */
+class PayableSymbols {
 
 	/**
 	 * optionsテーブルへデータを保存または取得するためのオブジェクトを取得します。
@@ -14,7 +17,7 @@ class PurchasableSymbols {
 	 * @return Option
 	 */
 	private function getOption( int $chain_ID ): Option {
-		return ( new OptionFactory() )->purchasableSymbols( $chain_ID );
+		return ( new OptionFactory() )->payableSymbols( $chain_ID );
 	}
 
 	/**
