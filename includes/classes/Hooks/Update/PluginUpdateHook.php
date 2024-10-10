@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\Update;
 
 use Cornix\Serendipity\Core\Features\Update\PluginUpdater;
-use Cornix\Serendipity\Core\Lib\Repository\OptionFactory;
+use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
 use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
