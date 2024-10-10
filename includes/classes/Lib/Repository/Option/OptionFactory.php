@@ -49,4 +49,11 @@ class OptionFactory {
 	public function payableSymbols( int $chain_ID ): Option {
 		return $this->createOption( 'payable_symbols_' . $chain_ID );
 	}
+
+	/**
+	 * 本プラグインが開発モードで動作しているかどうかを取得または保存するオブジェクトを取得します。
+	 */
+	public function isDevelopmentMode(): Option {
+		return $this->createOption( 'is_development_mode' );
+	}
 }
