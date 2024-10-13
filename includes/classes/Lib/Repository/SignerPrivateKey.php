@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
+use Cornix\Serendipity\Core\Lib\Repository\Option\ArrayOption;
 use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
 
 // ■秘密鍵の保存について
@@ -17,7 +17,7 @@ class SignerPrivateKey {
 	public function __construct() {
 		$this->option = ( new OptionFactory() )->signerPrivateKey();
 	}
-	private Option $option;
+	private ArrayOption $option;
 
 	/**
 	 * 秘密鍵を取得します。
@@ -25,17 +25,18 @@ class SignerPrivateKey {
 	 */
 	public function get(): string {
 		$obj = $this->option->get( null );
-		if ( null === $obj ) {
+		if ( is_null( $obj ) ) {
+			// プラグイン初期化時に秘密鍵が生成されるため、ここは通らない
 			throw new \Exception( '[D49203A3] The private key has not been set.' );
 		}
-		return $obj->value;
+		return $obj['value'];
 	}
 
 	/**
 	 * 秘密鍵が保存済みかどうかを取得します。
 	 */
 	public function exists(): bool {
-		return null !== $this->option->get( null );
+		return ! is_null( $this->option->get( null ) );
 	}
 
 	/**
@@ -53,6 +54,6 @@ class SignerPrivateKey {
 			throw new \Exception( '[2DD53C18] The private key has already been set.' );
 		}
 
-		$this->option->update( (object) array( 'value' => $private_key ) );
+		$this->option->update( array( 'value' => $private_key ) );
 	}
 }

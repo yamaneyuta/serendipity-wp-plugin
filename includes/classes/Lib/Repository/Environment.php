@@ -16,9 +16,8 @@ class Environment {
 	 */
 	public function isDevelopmentMode(): bool {
 		$option = ( new OptionFactory() )->isDevelopmentMode();
-		/** @var string|null */
+		/** @var bool|null */
 		$is_development_mode = $option->get( null );
-		$is_development_mode = is_null( $is_development_mode ) ? null : (bool) $is_development_mode;
 
 		if ( is_null( $is_development_mode ) ) {
 			$package_json_path   = __DIR__ . '/../../../../package.json';
