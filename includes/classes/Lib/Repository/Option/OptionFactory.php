@@ -67,13 +67,6 @@ class OptionFactory {
 	}
 
 	/**
-	 * 販売者が署名した同意メッセージを取得または保存するオブジェクトを取得します。
-	 */
-	public function sellerAgreedTermsMessage(): StringOption {
-		return new StringOption( $this->getOptionKeyName( 'seller_agreed_terms_message' ) );
-	}
-
-	/**
 	 * 販売者が利用規約に同意した際の署名を取得または保存するオブジェクトを取得します。
 	 */
 	public function sellerAgreedTermsSignature(): StringOption {
