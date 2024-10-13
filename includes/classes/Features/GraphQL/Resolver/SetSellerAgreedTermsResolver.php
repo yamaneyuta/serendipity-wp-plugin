@@ -17,15 +17,13 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 		/** @var int */
 		$version = $args['version'];
 		/** @var string */
-		$message = $args['message'];
-		/** @var string */
 		$signature = $args['signature'];
 
 		// 管理者権限を持っているかどうかをチェック
 		Judge::checkIsAdministrator();
 
 		// 販売者の署名情報を保存
-		( new SellerAgreedTerms() )->save( $version, $message, $signature );
+		( new SellerAgreedTerms() )->save( $version, $signature );
 
 		return true;
 	}
