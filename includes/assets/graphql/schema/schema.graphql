@@ -31,6 +31,10 @@ type Mutation {
 	# (訪問者が)購入可能なチェーン一覧を設定
 	# ※ 管理者権限以上で使用可
 	setPayableChains(networkCategoryID: Int!, chainIDs: [Int!]!): Boolean!
+
+	# 販売者の利用規約同意情報を設定
+	# ※ 管理者権限以上で使用可
+	setSellerAgreedTerms(version: Int!, message: String!, signature: String!): Boolean!
 }
 
 # 投稿に関する情報
