@@ -39,13 +39,6 @@ class OptionFactory {
 	}
 
 	/**
-	 * 販売者の利用規約同意情報を取得または保存するオブジェクトを取得します。
-	 */
-	public function sellerTermsAgreedInfo(): Option {
-		return $this->createOption( 'seller_terms_agreed_info' );
-	}
-
-	/**
 	 * 指定したネットワークカテゴリで、購入者が支払可能なチェーン一覧を取得または保存するオブジェクトを取得します。
 	 */
 	public function payableChainIDs( NetworkCategory $network_category ): Option {
