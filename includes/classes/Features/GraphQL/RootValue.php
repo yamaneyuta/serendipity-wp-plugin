@@ -4,13 +4,16 @@ namespace Cornix\Serendipity\Core\Features\GraphQL;
 
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AllNetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\CurrentSellerTermsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetPayableChainsResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 
 class RootValue {
 
@@ -30,10 +33,13 @@ class RootValue {
 			// Query
 			'Post'                   => new PostResolver(),
 			'allNetworkCategories'   => new AllNetworkCategoriesResolver(),
+			'currentSellerTerms'     => new CurrentSellerTermsResolver(),
+			'seller'                 => new SellerResolver(),
 
 			// Mutation
 			'issuePurchaseTicket'    => new IssuePurchaseTicketResolver(),
 			'setPayableChains'       => new SetPayableChainsResolver(),
+			'setSellerAgreedTerms'   => new SetSellerAgreedTermsResolver(),
 		);
 
 		$result = array();
