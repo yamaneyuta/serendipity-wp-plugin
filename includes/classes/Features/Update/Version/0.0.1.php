@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
-use Cornix\Serendipity\Core\Lib\Database\Schema\PurchaseTicketTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
@@ -25,16 +25,16 @@ class v001 {
 		( new PayableTokensInitializer() )->initialize();
 
 		global $wpdb;
-		// 購入用チケットテーブルを作成
-		( new PurchaseTicketTable( $wpdb ) )->create();
+		// 請求書情報テーブルを作成
+		( new InvoiceTable( $wpdb ) )->create();
 	}
 
 	public function down() {
 		// 署名用ウォレットの秘密鍵の削除は行わない
 
 		global $wpdb;
-		// 購入用チケットテーブルを削除
-		( new PurchaseTicketTable( $wpdb ) )->drop();
+		// 請求書情報テーブルを削除
+		( new InvoiceTable( $wpdb ) )->drop();
 	}
 }
 

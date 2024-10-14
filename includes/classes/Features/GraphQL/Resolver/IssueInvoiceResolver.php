@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\PurchaseTicket;
+use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\Token;
@@ -40,7 +40,7 @@ class IssueInvoiceResolver extends ResolverBase {
 
 		// 購入用の請求書番号を発行
 		global $wpdb;
-		$invoice_id = ( new PurchaseTicket( $wpdb ) )->issue( $selling_price );
+		$invoice_id = ( new Invoice( $wpdb ) )->issue( $selling_price );
 
 		// ここからテスト用コード -->
 		// 暫定でトークンの数量を決定
