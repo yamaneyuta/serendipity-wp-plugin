@@ -49,4 +49,14 @@ class TokenData {
 
 		return false;
 	}
+
+	public function symbol( int $chain_ID, string $address ): string {
+		foreach ( $this->token_data as $data ) {
+			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID && $data[ self::ADDRESS_INDEX ] === $address ) {
+				return $data[ self::SYMBOL_INDEX ];
+			}
+		}
+
+		throw new \InvalidArgumentException( '[D342C006] symbol not found: ' . $chain_ID . ', ' . $address );
+	}
 }

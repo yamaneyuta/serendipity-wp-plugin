@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
 class Token {
@@ -24,6 +25,10 @@ class Token {
 
 	public function address(): string {
 		return $this->address;
+	}
+
+	public function symbol(): string {
+		return ( new TokenData() )->symbol( $this->chain_ID, $this->address );
 	}
 
 
