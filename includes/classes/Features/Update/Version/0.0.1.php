@@ -6,10 +6,11 @@ namespace Cornix\Serendipity\Core\Features\Update\Version;
 use Cornix\Serendipity\Core\Lib\Database\Schema\PurchaseTicketTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
-use Cornix\Serendipity\Core\Lib\Repository\PayableChainIDs;
+use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SignerPrivateKey;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
+use Cornix\Serendipity\Core\Types\Token;
 
 /**
  * Ver0.0.1(インストール直後に実行されるように一番小さいバージョンで仮作成)
@@ -20,8 +21,8 @@ class v001 {
 		// 署名用ウォレットの秘密鍵を初期化
 		( new PrivateKeyInitializer() )->initialize();
 
-		// 購入者が支払可能なチェーンIDの初期値を設定
-		( new PayableChainIDsInitializer() )->initialize();
+		// 購入者が支払可能なトークンの初期値を設定
+		( new PayableTokensInitializer() )->initialize();
 
 		global $wpdb;
 		// 購入用チケットテーブルを作成
@@ -38,9 +39,9 @@ class v001 {
 }
 
 
-class PayableChainIDsInitializer {
+class PayableTokensInitializer {
 	/**
-	 * 購入者が支払可能なチェーンIDの初期値を設定します。
+	 * 購入者が支払可能なトークンの初期値を設定します。
 	 */
 	public function initialize(): void {
 		$this->initMainnet();
@@ -49,23 +50,32 @@ class PayableChainIDsInitializer {
 	}
 
 	private function initMainnet(): void {
-		// メインネットの場合はEthereumのみ
-		$chain_ids = array( ChainID::ETH_MAINNET );
-		( new PayableChainIDs() )->save( NetworkCategory::mainnet(), $chain_ids );
+		// メインネットの場合はEthereum mainnetのみ
+		$eth = Token::from( ChainID::ETH_MAINNET, Ethers::zeroAddress() );
+		( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
 	}
 
 	private function initTestnet(): void {
 		// テストネットの場合はSepoliaのみ
-		$chain_ids = array( ChainID::SEPOLIA );
-		( new PayableChainIDs() )->save( NetworkCategory::testnet(), $chain_ids );
+		$eth = Token::from( ChainID::SEPOLIA, Ethers::zeroAddress() );
+		( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
 	}
 
 	private function initPrivatenet(): void {
 		// 開発モードの時のみ、プライベートネットの設定を追加
 		if ( ( new Environment() )->isDevelopmentMode() ) {
-			// プライベートネットの場合はL1とL2を模したチェーンIDを設定
-			$chain_ids = array( ChainID::PRIVATENET_L1, ChainID::PRIVATENET_L2 );
-			( new PayableChainIDs() )->save( NetworkCategory::privatenet(), $chain_ids );
+
+			// Privatenet L1
+			{
+				$eth = Token::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress() );
+				( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
+			}
+
+			// Privatenet L2
+			{
+				$matic = Token::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress() );
+				( new PayableTokens() )->save( $matic->chainID(), array( $matic ) );
+			}
 		}
 	}
 }
