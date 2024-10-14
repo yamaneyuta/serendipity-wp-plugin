@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Option\Option;
+use Cornix\Serendipity\Core\Lib\Repository\Option\ArrayOption;
 use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
@@ -16,9 +16,9 @@ class PayableChainIDs {
 	 * optionsテーブルへデータを保存または取得するためのオブジェクトを取得します。
 	 *
 	 * @param NetworkCategory $network_category
-	 * @return Option
+	 * @return ArrayOption
 	 */
-	private function getOption( NetworkCategory $network_category ): Option {
+	private function getOption( NetworkCategory $network_category ): ArrayOption {
 		return ( new OptionFactory() )->payableChainIDs( $network_category );
 	}
 

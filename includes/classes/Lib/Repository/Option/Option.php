@@ -17,7 +17,7 @@ class Option {
 		return get_option( $this->option_key_name, $default );
 	}
 
-	public function update( $value, $autoload = null ): bool {
+	public function update( $value, ?bool $autoload = null ): bool {
 		$success = update_option( $this->option_key_name, $value, $autoload );
 		assert( true === $success );
 		return $success;

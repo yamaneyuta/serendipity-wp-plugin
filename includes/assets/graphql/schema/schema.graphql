@@ -7,10 +7,17 @@ type Query {
 
 	Post(postID: Int!): Post! # 投稿情報を取得
 
+	# 販売者情報を取得
+	seller: Seller!
+
 	# -------------------- 以下、管理者向けクエリ --------------------
 
 	# # 投稿一覧を取得
 	# allPosts: [Post!]!
+
+	# プラグインに含まれている販売者向け利用規約を取得
+	# ※ 管理者権限以上で使用可
+	currentSellerTerms: Terms!
 
 	# 全ネットワークカテゴリ一覧を取得
 	# ※ 投稿編集権限以上で使用可
@@ -24,6 +31,10 @@ type Mutation {
 	# (訪問者が)購入可能なチェーン一覧を設定
 	# ※ 管理者権限以上で使用可
 	setPayableChains(networkCategoryID: Int!, chainIDs: [Int!]!): Boolean!
+
+	# 販売者の利用規約同意情報を設定
+	# ※ 管理者権限以上で使用可
+	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!
 }
 
 # 投稿に関する情報
@@ -66,4 +77,22 @@ type PurchaseTicketInfo {
 	sellerSignatureVersion: Int!	# 販売者の署名バージョン
 	paymentTokenAddress: String!	# 支払いトークンのアドレス
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
+}
+
+# 販売者情報
+type Seller {
+	agreedTerms: AgreedTerms  # 販売者が同意した利用規約(利用規約に同意していない場合はnull)
+}
+
+# 利用規約同意情報
+type AgreedTerms {
+	version: Int!		# 同意した利用規約のバージョン
+	message: String!	# 利用規約に同意する際、ウォレットに表示されたメッセージ
+	signature: String!	# 利用規約に同意する際、ウォレットに表示されたメッセージに対する署名
+}
+
+# 利用規約情報
+type Terms {
+	version: Int!		# 利用規約のバージョン
+	message: String!	# 利用規約同意時のメッセージ(ウォレットに表示されるメッセージ)
 }
