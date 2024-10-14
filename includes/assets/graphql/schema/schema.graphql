@@ -28,10 +28,6 @@ type Mutation {
 	# 支払情報を発行
 	issueInvoice(postID: Int!, chainID: Int!, paymentSymbol: String!): Invoice
 
-	# (訪問者が)購入可能なチェーン一覧を設定
-	# ※ 管理者権限以上で使用可
-	setPayableChains(networkCategoryID: Int!, chainIDs: [Int!]!): Boolean!
-
 	# 販売者の利用規約同意情報を設定
 	# ※ 管理者権限以上で使用可
 	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!

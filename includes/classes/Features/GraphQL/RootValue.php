@@ -12,7 +12,6 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetPayableChainsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 
 class RootValue {
@@ -38,7 +37,6 @@ class RootValue {
 
 			// Mutation
 			'issueInvoice'           => new IssueInvoiceResolver(),
-			'setPayableChains'       => new SetPayableChainsResolver(),
 			'setSellerAgreedTerms'   => new SetSellerAgreedTermsResolver(),
 		);
 
