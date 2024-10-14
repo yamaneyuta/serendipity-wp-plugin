@@ -55,4 +55,23 @@ class PayableTokens {
 		$token_addresses = array_map( fn( $token ) => $token->address(), $tokens );
 		$this->getOption( $chain_ID )->update( $token_addresses, $autoload );
 	}
+
+	/**
+	 * 支払時に使用可能なトークンとして登録済みかどうかを取得します。
+	 *
+	 * @param Token $token
+	 */
+	public function exists( Token $token ): bool {
+		/** @var Token[] */
+		$tokens = $this->get( $token->chainID() );
+
+		$token_address = $token->address();
+		return array_reduce(
+			$tokens,
+			function ( $carry, $t ) use ( $token_address ) {
+				return $carry || $t->address() === $token_address;
+			},
+			false
+		);
+	}
 }
