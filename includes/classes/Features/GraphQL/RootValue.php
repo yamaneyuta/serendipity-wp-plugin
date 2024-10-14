@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AllNetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\CurrentSellerTermsResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssueInvoiceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
@@ -37,7 +37,7 @@ class RootValue {
 			'seller'                 => new SellerResolver(),
 
 			// Mutation
-			'issuePurchaseTicket'    => new IssuePurchaseTicketResolver(),
+			'issueInvoice'           => new IssueInvoiceResolver(),
 			'setPayableChains'       => new SetPayableChainsResolver(),
 			'setSellerAgreedTerms'   => new SetSellerAgreedTermsResolver(),
 		);

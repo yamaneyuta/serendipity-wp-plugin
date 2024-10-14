@@ -25,8 +25,8 @@ type Query {
 }
 
 type Mutation {
-	# 購入用のチケットを発行
-	issuePurchaseTicket(postID: Int!, chainID: Int!, purchaseSymbol: String!): PurchaseTicketInfo
+	# 支払情報を発行
+	issueInvoice(postID: Int!, chainID: Int!, purchaseSymbol: String!): Invoice
 
 	# (訪問者が)購入可能なチェーン一覧を設定
 	# ※ 管理者権限以上で使用可
@@ -71,7 +71,7 @@ type SellingContent {
 	imageCount: Int!		# 画像数
 }
 
-type PurchaseTicketInfo {
+type Invoice {
 	purchaseTicketIdHex: String!	# チケットID(0xプレフィックス付きの16進数)
 	sellerSignature: String!		# 販売者の署名
 	sellerSignatureVersion: Int!	# 販売者の署名バージョン

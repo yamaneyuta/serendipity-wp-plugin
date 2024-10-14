@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
 
-class IssuePurchaseTicketResolver extends ResolverBase {
+class IssueInvoiceResolver extends ResolverBase {
 
 	/**
 	 * #[\Override]
