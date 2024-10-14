@@ -5,7 +5,7 @@ schema {
 
 type Query {
 
-	Post(postID: Int!): Post! # 投稿情報を取得
+	post(postID: Int!): Post! # 投稿情報を取得
 
 	# 販売者情報を取得
 	seller: Seller!

@@ -31,9 +31,9 @@ class RootValue {
 			'SellingPrice'           => new SellingPriceResolver(),
 
 			// Query
-			'Post'                   => new PostResolver(),
 			'allNetworkCategories'   => new AllNetworkCategoriesResolver(),
 			'currentSellerTerms'     => new CurrentSellerTermsResolver(),
+			'post'                   => new PostResolver(),
 			'seller'                 => new SellerResolver(),
 
 			// Mutation
