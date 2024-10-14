@@ -37,8 +37,7 @@ type Mutation {
 type Post {
 	id: Int!
 	title: String!
-	sellingPrice: Price                     # 販売価格
-	sellingNetworkCategory: NetworkCategory # 販売している(=購入可能な)ネットワークカテゴリ
+	sellingPrice: Price             # 販売価格
 	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報
 }
 
