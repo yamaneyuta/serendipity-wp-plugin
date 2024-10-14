@@ -25,12 +25,8 @@ type Query {
 }
 
 type Mutation {
-	# 購入用のチケットを発行
-	issuePurchaseTicket(postID: Int!, chainID: Int!, purchaseSymbol: String!): PurchaseTicketInfo
-
-	# (訪問者が)購入可能なチェーン一覧を設定
-	# ※ 管理者権限以上で使用可
-	setPayableChains(networkCategoryID: Int!, chainIDs: [Int!]!): Boolean!
+	# 支払情報を発行
+	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!): Invoice
 
 	# 販売者の利用規約同意情報を設定
 	# ※ 管理者権限以上で使用可
@@ -54,8 +50,14 @@ type NetworkCategory {
 
 type Chain {
 	id: Int!
-	isPayable: Boolean!	# (訪問者が)支払いに使用可能かどうか
-	# symbol: String!
+}
+
+type Token {
+	chain: Chain!
+	address: String!
+	symbol: String!
+
+	isPayable: Boolean!	# 訪問者が支払に使用可能かどうかの設定
 }
 
 type Price {
@@ -71,15 +73,15 @@ type SellingContent {
 	imageCount: Int!		# 画像数
 }
 
-type PurchaseTicketInfo {
-	purchaseTicketIdHex: String!	# チケットID(0xプレフィックス付きの16進数)
-	sellerSignature: String!		# 販売者の署名
-	sellerSignatureVersion: Int!	# 販売者の署名バージョン
-	paymentTokenAddress: String!	# 支払いトークンのアドレス
+type Invoice {
+	invoiceIdHex: String!
+	seller: Seller!				# 販売者情報
+	paymentToken: Token!		# 支払いトークン
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
 }
 
 # 販売者情報
+# ※ 請求書(支払時情報)取得時に参照されるので、各プロパティがログイン無しのユーザーに閲覧される可能性があることに注意
 type Seller {
 	agreedTerms: AgreedTerms  # 販売者が同意した利用規約(利用規約に同意していない場合はnull)
 }

@@ -8,13 +8,13 @@ use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 
 
 /**
- * 発行した購入用チケットの情報を保存するテーブル
+ * 発行した請求書の情報を保存するテーブル
  */
-class PurchaseTicketTable {
+class InvoiceTable {
 	public function __construct( \wpdb $wpdb ) {
 		$this->wpdb       = $wpdb;
 		$this->mysqli     = ( new MySQLiFactory() )->create( $wpdb );
-		$this->table_name = ( new TableName() )->purchaseTicket();
+		$this->table_name = ( new TableName() )->invoice();
 	}
 
 	private \wpdb $wpdb;
@@ -30,11 +30,11 @@ class PurchaseTicketTable {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`ticket_id`                   varchar(191)        NOT NULL,
+				`id`                   varchar(191)        NOT NULL,
 				`selling_amount_hex`           varchar(191)        NOT NULL,
 				`selling_decimals`             int                 NOT NULL,
 				`selling_symbol`               varchar(191)        NOT NULL,
-				PRIMARY KEY (`ticket_id`)
+				PRIMARY KEY (`id`)
 			) ${charset};
 		SQL;
 
