@@ -23,10 +23,10 @@ class RootValue {
 
 		$resolvers = array(
 			// 非公開
-			'Chain'                => new ChainResolver(),
-			'NetworkCategory'      => new NetworkCategoryResolver(),
-			'SellingContent'       => new SellingContentResolver(),
-			'SellingPrice'         => new SellingPriceResolver(),
+			'chain'                => new ChainResolver(),
+			'networkCategory'      => new NetworkCategoryResolver(),
+			'sellingContent'       => new SellingContentResolver(),
+			'sellingPrice'         => new SellingPriceResolver(),
 			'token'                => new TokenResolver(),
 
 			// Query

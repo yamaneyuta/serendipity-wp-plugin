@@ -24,7 +24,7 @@ class TokenResolver extends ResolverBase {
 		$is_payable_callback = ( new PayableTokens() )->exists( $token );
 
 		return array(
-			'chain'     => $root_value['Chain']( $root_value, array( 'chainID' => $chain_id ) ),
+			'chain'     => $root_value['chain']( $root_value, array( 'chainID' => $chain_id ) ),
 			'address'   => $token->address(),
 			'symbol'    => fn() => $token->symbol(),
 			'isPayable' => $is_payable_callback,

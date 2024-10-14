@@ -24,8 +24,8 @@ class PostResolver extends ResolverBase {
 		return array(
 			'id'             => $post_ID,
 			'title'          => fn() => get_the_title( $post_ID ),
-			'sellingPrice'   => fn() => $root_value['SellingPrice']( $root_value, array( 'postID' => $post_ID ) ),
-			'sellingContent' => fn() => $root_value['SellingContent']( $root_value, array( 'postID' => $post_ID ) ),
+			'sellingPrice'   => fn() => $root_value['sellingPrice']( $root_value, array( 'postID' => $post_ID ) ),
+			'sellingContent' => fn() => $root_value['sellingContent']( $root_value, array( 'postID' => $post_ID ) ),
 			'payableTokens'  => fn() => $this->payableTokens( $root_value, $post_ID ),
 		);
 	}

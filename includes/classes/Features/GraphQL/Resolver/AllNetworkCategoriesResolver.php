@@ -31,7 +31,7 @@ class AllNetworkCategoriesResolver extends ResolverBase {
 
 		return array_map(
 			function ( $network_category ) use ( $root_value ) {
-				return $root_value['NetworkCategory']( $root_value, array( 'networkCategoryID' => $network_category->id() ) );
+				return $root_value['networkCategory']( $root_value, array( 'networkCategoryID' => $network_category->id() ) );
 			},
 			$network_categories
 		);

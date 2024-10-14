@@ -24,7 +24,7 @@ class NetworkCategoryResolver extends ResolverBase {
 		$chain_IDs = ( new ChainData() )->getAllChainID( $network_category );
 		$chains    = array_map(
 			function ( $chain_ID ) use ( $root_value ) {
-				return $root_value['Chain']( $root_value, array( 'chainID' => $chain_ID ) );
+				return $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
 			},
 			$chain_IDs
 		);
