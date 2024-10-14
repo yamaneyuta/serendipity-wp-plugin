@@ -22,7 +22,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		/** @var int */
 		$chain_ID = $args['chainID'];
 		/** @var string */
-		$purchase_symbol = $args['purchaseSymbol'];
+		$payment_symbol = $args['paymentSymbol'];
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
@@ -30,11 +30,11 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 支払おうとしているチェーンIDが有効であることをチェック
 		Judge::checkPayableChainID( $chain_ID );
 		// 支払おうとしているトークンが有効であることをチェック
-		Judge::checkPayableSymbol( $chain_ID, $purchase_symbol );
+		Judge::checkPayableSymbol( $chain_ID, $payment_symbol );
 
 		// 支払用のトークンのコントラクトアドレスを取得
 		$token_data            = new TokenData();
-		$payment_token_address = $token_data->getAddress( $chain_ID, $purchase_symbol );
+		$payment_token_address = $token_data->getAddress( $chain_ID, $payment_symbol );
 		if ( null === $payment_token_address ) {
 			throw new \Exception( '[BDF1883A] Token address not found' );
 		}
