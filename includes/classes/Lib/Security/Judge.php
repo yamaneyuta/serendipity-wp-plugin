@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\PayableChainIDs;
 use Cornix\Serendipity\Core\Lib\Repository\PayableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
+use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 /**
@@ -36,6 +37,19 @@ class Judge {
 	public static function checkPostID( int $post_ID ): void {
 		if ( ! Validator::isPostID( $post_ID ) ) {
 			throw new \InvalidArgumentException( '[C1D3D3A4] Invalid post ID. - post_ID: ' . $post_ID );
+		}
+	}
+
+	/**
+	 * 文字列が16進数表記でない場合は例外をスローします。
+	 *
+	 * @param string $hex
+	 * @param bool   $ignore_case 大文字小文字を区別しない場合はtrue
+	 * @throws \InvalidArgumentException
+	 */
+	public static function checkHex( string $hex, bool $ignore_case = false ): void {
+		if ( ! Validator::isHex( $hex, $ignore_case ) ) {
+			throw new \InvalidArgumentException( '[95E1280E] Invalid hex. - hex: ' . $hex . ', ignore_case: ' . $ignore_case );
 		}
 	}
 
@@ -125,6 +139,23 @@ class Judge {
 			throw new \InvalidArgumentException( '[66BDC040] Invalid address. - address: ' . $address );
 		}
 	}
+
+	/**
+	 * 引数として渡されたバージョンが現在の販売者向け利用規約バージョンと一致しない場合は例外をスローします。
+	 *
+	 * @param int $seller_terms_version
+	 * @return void
+	 * @throws \InvalidArgumentException
+	 */
+	public static function checkCurrentSellerTermsVersion( int $seller_terms_version ): void {
+		if ( ! self::isCurrentSellerTermsVersion( $seller_terms_version ) ) {
+			throw new \InvalidArgumentException( '[93398C5C] Invalid version. seller_terms_version: ' . $seller_terms_version );
+		}
+	}
+	private static function isCurrentSellerTermsVersion( int $seller_terms_version ): bool {
+		$current_version = ( new SellerTerms() )->version();  // 現在の販売者向け利用規約バージョン
+		return $seller_terms_version === $current_version;
+	}
 }
 
 /**
@@ -138,14 +169,15 @@ class Validator {
 	}
 
 	public static function isAmountHex( string $hex ): bool {
-		// 本プラグインにおいてuint256を超える値は扱わない。
+		// 本プラグインにおいてuint256を超える値は扱わない。また、大文字小文字を混在させる必要はないため小文字固定とする。
 		// uint256_max: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-		return self::isValueHex( $hex ) && strlen( $hex ) <= ( 2 + 64 );
+		return self::isHex( $hex, false ) && strlen( $hex ) <= ( 2 + 64 );
 	}
 
-	private static function isValueHex( string $hex ): bool {
-		// 本プラグインでは、`0x`プレフィックスを含む小文字を、数量を表す16進数表記とする。
-		return preg_match( '/^0x[0-9a-f]+$/', $hex ) === 1;
+	public static function isHex( string $hex, bool $ignore_case = false ): bool {
+		// 本プラグインでは、`0x`プレフィックス含む文字列を16進数表記とする。
+		$pattern = $ignore_case ? '/^0x[0-9a-fA-F]+$/' : '/^0x[0-9a-f]+$/';
+		return preg_match( $pattern, $hex ) === 1;
 	}
 
 	public static function isDecimals( int $decimals ): bool {
