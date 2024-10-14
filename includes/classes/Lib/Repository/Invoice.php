@@ -17,7 +17,7 @@ class Invoice {
 	private string $table_name;
 
 	public function issue( Price $selling_price ): string {
-		$invoice_id          = ( new Ulid() )->toUuid();
+		$invoice_id         = ( new Ulid() )->toUuid();
 		$selling_amount_hex = $selling_price->amountHex();
 		$selling_decimals   = $selling_price->decimals();
 		$selling_symbol     = $selling_price->symbol();

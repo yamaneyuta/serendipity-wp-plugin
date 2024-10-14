@@ -10,7 +10,6 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\TokenResolver;
@@ -24,22 +23,21 @@ class RootValue {
 
 		$resolvers = array(
 			// 非公開
-			'Chain'                  => new ChainResolver(),
-			'NetworkCategory'        => new NetworkCategoryResolver(),
-			'SellingContent'         => new SellingContentResolver(),
-			'SellingNetworkCategory' => new SellingNetworkCategoryResolver(),
-			'SellingPrice'           => new SellingPriceResolver(),
-			'token'                  => new TokenResolver(),
+			'Chain'                => new ChainResolver(),
+			'NetworkCategory'      => new NetworkCategoryResolver(),
+			'SellingContent'       => new SellingContentResolver(),
+			'SellingPrice'         => new SellingPriceResolver(),
+			'token'                => new TokenResolver(),
 
 			// Query
-			'allNetworkCategories'   => new AllNetworkCategoriesResolver(),
-			'currentSellerTerms'     => new CurrentSellerTermsResolver(),
-			'post'                   => new PostResolver(),
-			'seller'                 => new SellerResolver(),
+			'allNetworkCategories' => new AllNetworkCategoriesResolver(),
+			'currentSellerTerms'   => new CurrentSellerTermsResolver(),
+			'post'                 => new PostResolver(),
+			'seller'               => new SellerResolver(),
 
 			// Mutation
-			'issueInvoice'           => new IssueInvoiceResolver(),
-			'setSellerAgreedTerms'   => new SetSellerAgreedTermsResolver(),
+			'issueInvoice'         => new IssueInvoiceResolver(),
+			'setSellerAgreedTerms' => new SetSellerAgreedTermsResolver(),
 		);
 
 		$result = array();
