@@ -46,6 +46,9 @@ class SellerAgreedTerms {
 		$option_factory  = new OptionFactory();
 		$version_saved   = $option_factory->sellerAgreedTermsVersion()->update( $version );
 		$signature_saved = $option_factory->sellerAgreedTermsSignature()->update( $signature );
+		// 今後、アップデートでWordPressのユーザーIDとウォレットを紐づけることが発生したときに
+		// マイグレーションを行いやすいように登録ボタンを押下したユーザーIDを保存しておく
+		$option_factory->sellerAgreedTermsUserID()->update( get_current_user_id(), false );  // 普段は使用しないため`autoload`は`false`
 
 		return $version_saved && $signature_saved;
 	}

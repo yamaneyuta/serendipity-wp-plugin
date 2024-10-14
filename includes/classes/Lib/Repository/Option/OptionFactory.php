@@ -63,4 +63,11 @@ class OptionFactory {
 	public function sellerAgreedTermsSignature(): StringOption {
 		return new StringOption( $this->getOptionKeyName( 'seller_agreed_terms_signature' ) );
 	}
+
+	/**
+	 * 販売者が利用規約に同意した際のユーザーIDを取得または保存するオブジェクトを取得します。
+	 */
+	public function sellerAgreedTermsUserID(): IntOption {
+		return new IntOption( $this->getOptionKeyName( 'seller_agreed_terms_user_id' ) );
+	}
 }
