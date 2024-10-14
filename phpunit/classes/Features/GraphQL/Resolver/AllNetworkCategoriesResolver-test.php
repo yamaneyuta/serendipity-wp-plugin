@@ -13,7 +13,6 @@ class AllNetworkCategoriesResolverTest extends IntegrationTestBase {
 					id
 					chains {
 						id
-						isPayable
 					}
 					sellableSymbols
 				}
