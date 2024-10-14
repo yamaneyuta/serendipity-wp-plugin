@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Repository\ChainData;
+use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
+use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
+
 class PostResolver extends ResolverBase {
 
 	/**
@@ -17,15 +21,40 @@ class PostResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		$title_callback           = fn() => get_the_title( $post_ID );
-		$selling_price_callback   = fn() => $root_value['SellingPrice']( $root_value, array( 'postID' => $post_ID ) );
-		$selling_content_callback = fn() => $root_value['SellingContent']( $root_value, array( 'postID' => $post_ID ) );
-
 		return array(
 			'id'             => $post_ID,
-			'title'          => $title_callback,
-			'sellingPrice'   => $selling_price_callback,
-			'sellingContent' => $selling_content_callback,
+			'title'          => fn() => get_the_title( $post_ID ),
+			'sellingPrice'   => fn() => $root_value['SellingPrice']( $root_value, array( 'postID' => $post_ID ) ),
+			'sellingContent' => fn() => $root_value['SellingContent']( $root_value, array( 'postID' => $post_ID ) ),
+			'payableTokens'  => fn() => $this->payableTokens( $root_value, $post_ID ),
 		);
+	}
+
+	/**
+	 * 指定された投稿IDに対して支払いが可能なトークン一覧を取得します。
+	 */
+	private function payableTokens( array $root_value, int $post_ID ) {
+		$widget_attributes = WidgetAttributes::fromPostID( $post_ID );
+		if ( is_null( $widget_attributes ) ) {
+			throw new \InvalidArgumentException( '[AB4A5F57] Widget attributes not found. - postID: ' . $post_ID );
+		}
+		// 投稿に設定されている販売ネットワークカテゴリに属するチェーンID一覧を取得
+		$chain_IDs = ( new ChainData() )->getAllChainID( $widget_attributes->sellingNetworkCategory() );
+
+		$result = array();
+		foreach ( $chain_IDs as $chain_ID ) {
+			$payable_tokens = ( new PayableTokens() )->get( $chain_ID );
+			foreach ( $payable_tokens as $token ) {
+				$result[] = $root_value['token'](
+					$root_value,
+					array(
+						'chainID' => $token->chainID(),
+						'address' => $token->address(),
+					)
+				);
+			}
+		}
+
+		return $result;
 	}
 }

@@ -39,6 +39,7 @@ type Post {
 	title: String!
 	sellingPrice: Price             # 販売価格
 	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報
+	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧
 }
 
 type NetworkCategory {
