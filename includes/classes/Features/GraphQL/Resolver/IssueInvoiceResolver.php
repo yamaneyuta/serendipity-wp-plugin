@@ -38,17 +38,17 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 現時点での販売価格を取得
 		$selling_price = $widget_attributes->sellingPrice();
 
-		// 購入用の請求書番号を発行
-		global $wpdb;
-		$invoice_id = ( new Invoice( $wpdb ) )->issue( $selling_price );
-
 		// ここからテスト用コード -->
 		// 暫定でトークンの数量を決定
 		$payment_amount_hex = '0x' . dechex( 1000000000000000000 );   // 1ETH
 		// <-- ここまでテスト用コード
 
+		// 請求書番号を発行
+		global $wpdb;
+		$invoice_id = ( new Invoice( $wpdb ) )->issue( $selling_price );
+
 		return array(
-			'invoiceIdHex'     => '0x' . str_replace( '-', '', $invoice_id ),
+			'invoiceIdHex'     => $invoice_id->hex(),
 			'seller'           => $root_value['seller']( $root_value, array() ),
 			'paymentToken'     => $root_value['token'](
 				$root_value,

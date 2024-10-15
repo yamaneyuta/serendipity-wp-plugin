@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Types\InvoiceID;
 use Cornix\Serendipity\Core\Types\Price;
-use yamaneyuta\Ulid;
 
 class Invoice {
 	public function __construct( \wpdb $wpdb ) {
@@ -16,8 +16,8 @@ class Invoice {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function issue( Price $selling_price ): string {
-		$invoice_id         = ( new Ulid() )->toUuid();
+	public function issue( Price $selling_price ): InvoiceID {
+		$invoice_id         = InvoiceID::generate();
 		$selling_amount_hex = $selling_price->amountHex();
 		$selling_decimals   = $selling_price->decimals();
 		$selling_symbol     = $selling_price->symbol();
@@ -28,7 +28,7 @@ class Invoice {
 			VALUES (%s, %s, %d, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_id, $selling_amount_hex, $selling_decimals, $selling_symbol );
+		$sql = $this->wpdb->prepare( $sql, $invoice_id->uuid(), $selling_amount_hex, $selling_decimals, $selling_symbol );
 
 		$result = $this->wpdb->query( $sql );
 		assert( false !== $result );
