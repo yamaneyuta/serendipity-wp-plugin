@@ -5,9 +5,10 @@ schema {
 
 type Query {
 
-	post(postID: Int!): Post! # 投稿情報を取得
+	# 投稿情報を取得【ゲスト】
+	post(postID: Int!): Post!
 
-	# 販売者情報を取得
+	# 販売者情報を取得【ゲスト】
 	seller: Seller!
 
 	# -------------------- 以下、管理者向けクエリ --------------------
@@ -15,31 +16,28 @@ type Query {
 	# # 投稿一覧を取得
 	# allPosts: [Post!]!
 
-	# プラグインに含まれている販売者向け利用規約を取得
-	# ※ 管理者権限以上で使用可
+	# プラグインに含まれている販売者向け利用規約を取得【管理者】
 	currentSellerTerms: Terms!
 
-	# 全ネットワークカテゴリ一覧を取得
-	# ※ 投稿編集権限以上で使用可
+	# 全ネットワークカテゴリ一覧を取得【投稿編集者】
 	allNetworkCategories: [NetworkCategory!]!
 }
 
 type Mutation {
-	# 支払情報を発行
+	# 支払情報を発行【ゲスト】
 	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!): Invoice
 
-	# 販売者の利用規約同意情報を設定
-	# ※ 管理者権限以上で使用可
+	# 販売者の利用規約同意情報を設定【管理者】
 	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!
 }
 
 # 投稿に関する情報
 type Post {
-	id: Int!
-	title: String!
-	sellingPrice: Price             # 販売価格
-	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報
-	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧
+	id: Int!						# 投稿ID【ゲスト】
+	title: String!                  # 投稿タイトル【ゲスト】
+	sellingPrice: Price             # 販売価格【ゲスト】
+	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報【ゲスト】
+	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
 }
 
 type NetworkCategory {
@@ -49,15 +47,14 @@ type NetworkCategory {
 }
 
 type Chain {
-	id: Int!
+	id: Int!	# チェーンID【ゲスト】
 }
 
 type Token {
-	chain: Chain!
-	address: String!
-	symbol: String!
-
-	isPayable: Boolean!	# 訪問者が支払に使用可能かどうかの設定
+	chain: Chain!		# トークンが発行されているチェーン【ゲスト】
+	address: String!	# トークンのコントラクトアドレス【ゲスト】
+	symbol: String!     # トークンの通貨シンボル【ゲスト】
+	isPayable: Boolean!	# 訪問者が支払に使用可能かどうかの設定【管理者】
 }
 
 type Price {
