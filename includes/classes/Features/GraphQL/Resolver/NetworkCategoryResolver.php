@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class NetworkCategoryResolver extends ResolverBase {
@@ -19,7 +20,10 @@ class NetworkCategoryResolver extends ResolverBase {
 		$network_category_id = $args['networkCategoryID'];
 		$network_category    = NetworkCategory::from( $network_category_id );
 
-		$sellable_symbols = ( new SellableSymbols() )->get( $network_category );
+		$sellable_symbols_callback = function () use ( $network_category ) {
+			Judge::checkHasEditableRole();  // 投稿編集者権限以上が必要
+			return ( new SellableSymbols() )->get( $network_category );
+		};
 
 		$chain_IDs = ( new ChainData() )->getAllChainID( $network_category );
 		$chains    = array_map(
@@ -32,7 +36,7 @@ class NetworkCategoryResolver extends ResolverBase {
 		return array(
 			'id'              => $network_category_id,
 			'chains'          => $chains,
-			'sellableSymbols' => $sellable_symbols,
+			'sellableSymbols' => $sellable_symbols_callback,
 		);
 	}
 }
