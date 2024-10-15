@@ -42,7 +42,7 @@ type Post {
 
 type NetworkCategory {
 	id: Int!
-	chains: [Chain!]! # このカテゴリに含まれるチェーン一覧
+	chains: [Chain!]! # このカテゴリに含まれるチェーン一覧【管理者】
 	sellableSymbols: [String!]! # 販売価格として設定可能な通貨シンボル一覧【投稿編集者】
 }
 

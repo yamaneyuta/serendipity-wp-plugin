@@ -25,17 +25,19 @@ class NetworkCategoryResolver extends ResolverBase {
 			return ( new SellableSymbols() )->get( $network_category );
 		};
 
-		$chain_IDs = ( new ChainData() )->getAllChainID( $network_category );
-		$chains    = array_map(
-			function ( $chain_ID ) use ( $root_value ) {
-				return $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
-			},
-			$chain_IDs
-		);
+		$chains_callback = function () use ( $root_value, $network_category ) {
+			$chain_IDs = ( new ChainData() )->getAllChainID( $network_category );
+			return array_map(
+				function ( $chain_ID ) use ( $root_value ) {
+					return $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
+				},
+				$chain_IDs
+			);
+		};
 
 		return array(
 			'id'              => $network_category_id,
-			'chains'          => $chains,
+			'chains'          => $chains_callback,
 			'sellableSymbols' => $sellable_symbols_callback,
 		);
 	}
