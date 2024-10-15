@@ -24,7 +24,16 @@ class Judge {
 	 */
 	public static function checkIsAdministrator(): void {
 		if ( ! ( new Access() )->isAdministrator() ) {
-			throw new \LogicException( '[D10C401C] You are not an administrator. current user ID: ' . get_current_user_id() );
+			throw new \LogicException( '[D10C401C] You do not have permission to access this feature. current user ID: ' . get_current_user_id() );
+		}
+	}
+
+	/**
+	 * 現在アクセスしているユーザーが編集者以上の権限を持っていない場合は例外をスローします。
+	 */
+	public static function checkHasEditableRole(): void {
+		if ( ! ( new Access() )->canCurrentUserCreatePost() ) {
+			throw new \LogicException( '[9FB8121B] You do not have permission to access this feature. user ID: ' . get_current_user_id() );
 		}
 	}
 

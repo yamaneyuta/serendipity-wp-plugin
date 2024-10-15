@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
-use Cornix\Serendipity\Core\Lib\Security\Access;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class AllNetworkCategoriesResolver extends ResolverBase {
@@ -15,10 +15,9 @@ class AllNetworkCategoriesResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		// 新規に投稿を作成可能なユーザーの場合のみすべてのネットワークカテゴリ情報を取得可能
-		if ( ! ( new Access() )->canCurrentUserCreatePost() ) {
-			throw new \LogicException( '[3A6EF76B] You do not have permission.' );
-		}
+		// 投稿編集者権限以上が必要
+		// - 編集画面でのネットワーク選択に使用するため
+		Judge::checkHasEditableRole();
 
 		$network_categories = array(
 			NetworkCategory::mainnet(),
