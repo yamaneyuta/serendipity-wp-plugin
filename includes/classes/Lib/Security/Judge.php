@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
-use Cornix\Serendipity\Core\Lib\Repository\ChainData;
-use Cornix\Serendipity\Core\Lib\Repository\PayableChainIDs;
-use Cornix\Serendipity\Core\Lib\Repository\PayableSymbols;
+use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
+use Cornix\Serendipity\Core\Types\Token;
 
 /**
  * 本システムにおいて`check～`は、引数の値を検証し、不正な値の場合は例外をスローする動作を行います。
@@ -22,9 +22,18 @@ class Judge {
 	/**
 	 * 現在アクセスしているユーザーが管理者権限を持っていない場合は例外をスローします。
 	 */
-	public static function checkIsAdministrator(): void {
+	public static function checkHasAdminRole(): void {
 		if ( ! ( new Access() )->isAdministrator() ) {
-			throw new \LogicException( '[D10C401C] You are not an administrator. current user ID: ' . get_current_user_id() );
+			throw new \LogicException( '[D10C401C] You do not have permission to access this feature. current user ID: ' . get_current_user_id() );
+		}
+	}
+
+	/**
+	 * 現在アクセスしているユーザーが編集者以上の権限を持っていない場合は例外をスローします。
+	 */
+	public static function checkHasEditableRole(): void {
+		if ( ! ( new Access() )->canCurrentUserCreatePost() ) {
+			throw new \LogicException( '[9FB8121B] You do not have permission to access this feature. user ID: ' . get_current_user_id() );
 		}
 	}
 
@@ -104,27 +113,27 @@ class Judge {
 	}
 
 	/**
-	 * 購入者が支払可能なチェーンIDでない場合は例外をスローします。
+	 * 購入者が支払可能なトークンでない場合は例外をスローします。
 	 *
-	 * @param int $chain_ID
+	 * @param Token $token
 	 * @throws \InvalidArgumentException
 	 */
-	public static function checkPayableChainID( int $chain_ID ): void {
-		if ( ! Validator::isPayableChainID( $chain_ID ) ) {
-			throw new \InvalidArgumentException( '[AB85623D] Invalid chain ID. - chain_ID: ' . $chain_ID );
+	public static function checkPayableToken( Token $token ): void {
+		if ( ! Validator::isPayableToken( $token ) ) {
+			throw new \InvalidArgumentException( '[30970153] Invalid payable token. - chain id: ' . $token->chainID() . ', address: ' . $token->address() );
 		}
 	}
 
 	/**
-	 * 購入者が支払可能な通貨シンボル(トークン)でない場合は例外をスローします。
+	 * 指定したチェーンID、アドレスのトークンが存在しない場合は例外をスローします。
 	 *
-	 * @param int    $chain_ID チェーンID
-	 * @param string $symbol   通貨シンボル(トークン)
+	 * @param int    $chain_ID
+	 * @param string $address
 	 * @throws \InvalidArgumentException
 	 */
-	public static function checkPayableSymbol( int $chain_ID, string $symbol ): void {
-		if ( ! Validator::isPayableSymbol( $chain_ID, $symbol ) ) {
-			throw new \InvalidArgumentException( '[30970153] Invalid symbol. - chain_ID: ' . $chain_ID . ', symbol: ' . $symbol );
+	public static function checkTokenAddress( int $chain_ID, string $address ): void {
+		if ( ! Validator::isTokenAddress( $chain_ID, $address ) ) {
+			throw new \InvalidArgumentException( '[E6631DF0] Invalid token address. - chain ID: ' . $chain_ID . ', address: ' . $address );
 		}
 	}
 
@@ -207,21 +216,16 @@ class Validator {
 		return in_array( $symbol, $sellable_symbol, true );
 	}
 
-	/** 購入者が支払可能なチェーンIDかどうかを返します。 */
-	public static function isPayableChainID( int $chain_ID ): bool {
-		// 管理者が保存した、購入者が支払可能なチェーンID一覧を取得
-		$network_category  = ( new ChainData() )->getNetworkCategory( $chain_ID );
-		$payable_chain_ids = ( new PayableChainIDs() )->get( $network_category );
+	/** 購入者が支払可能なトークンかどうかを返します。 */
+	public static function isPayableToken( Token $token ): bool {
+		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
+		$payable_tokens = ( new PayableTokens() )->get( $token->chainID() );
 
-		return in_array( $chain_ID, $payable_chain_ids, true );
+		return in_array( $token, $payable_tokens, true );
 	}
 
-	/** 購入者が支払可能なトークンかどうかを返します。 */
-	public static function isPayableSymbol( int $chain_ID, string $symbol ): bool {
-		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
-		$payable_symbols = ( new PayableSymbols() )->get( $chain_ID );
-
-		return in_array( $symbol, $payable_symbols, true );
+	public static function isTokenAddress( int $chain_ID, string $address ): bool {
+		return ( new TokenData() )->exists( $chain_ID, $address );
 	}
 
 	public static function isAddress( string $address ): bool {

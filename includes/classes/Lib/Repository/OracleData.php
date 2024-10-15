@@ -79,11 +79,9 @@ class OracleData {
 	private function getChainID( NetworkCategory $network_category ): int {
 		if ( $network_category === NetworkCategory::mainnet() ) {
 			return ChainID::ETH_MAINNET;
-		}
-		if ( $network_category === NetworkCategory::testnet() ) {
+		} elseif ( $network_category === NetworkCategory::testnet() ) {
 			return ChainID::SEPOLIA;
-		}
-		if ( $network_category === NetworkCategory::privatenet() ) {
+		} elseif ( $network_category === NetworkCategory::privatenet() ) {
 			return ChainID::PRIVATENET_L1;
 		}
 

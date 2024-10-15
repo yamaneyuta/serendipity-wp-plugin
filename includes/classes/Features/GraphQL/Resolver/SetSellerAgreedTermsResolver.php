@@ -20,7 +20,7 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 		$signature = $args['signature'];
 
 		// 管理者権限を持っているかどうかをチェック
-		Judge::checkIsAdministrator();
+		Judge::checkHasAdminRole();
 
 		// 販売者の署名情報を保存
 		( new SellerAgreedTerms() )->save( $version, $signature );

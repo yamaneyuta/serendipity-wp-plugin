@@ -5,9 +5,10 @@ schema {
 
 type Query {
 
-	Post(postID: Int!): Post! # 投稿情報を取得
+	# 投稿情報を取得【ゲスト】
+	post(postID: Int!): Post!
 
-	# 販売者情報を取得
+	# 販売者情報を取得【ゲスト】
 	seller: Seller!
 
 	# -------------------- 以下、管理者向けクエリ --------------------
@@ -15,47 +16,45 @@ type Query {
 	# # 投稿一覧を取得
 	# allPosts: [Post!]!
 
-	# プラグインに含まれている販売者向け利用規約を取得
-	# ※ 管理者権限以上で使用可
+	# プラグインに含まれている販売者向け利用規約を取得【管理者】
 	currentSellerTerms: Terms!
 
-	# 全ネットワークカテゴリ一覧を取得
-	# ※ 投稿編集権限以上で使用可
+	# 全ネットワークカテゴリ一覧を取得【投稿編集者】
 	allNetworkCategories: [NetworkCategory!]!
 }
 
 type Mutation {
-	# 購入用のチケットを発行
-	issuePurchaseTicket(postID: Int!, chainID: Int!, purchaseSymbol: String!): PurchaseTicketInfo
+	# 支払情報を発行【ゲスト】
+	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!): Invoice
 
-	# (訪問者が)購入可能なチェーン一覧を設定
-	# ※ 管理者権限以上で使用可
-	setPayableChains(networkCategoryID: Int!, chainIDs: [Int!]!): Boolean!
-
-	# 販売者の利用規約同意情報を設定
-	# ※ 管理者権限以上で使用可
+	# 販売者の利用規約同意情報を設定【管理者】
 	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!
 }
 
 # 投稿に関する情報
 type Post {
-	id: Int!
-	title: String!
-	sellingPrice: Price                     # 販売価格
-	sellingNetworkCategory: NetworkCategory # 販売している(=購入可能な)ネットワークカテゴリ
-	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報
+	id: Int!						# 投稿ID【ゲスト】
+	title: String!                  # 投稿タイトル【ゲスト】
+	sellingPrice: Price             # 販売価格【ゲスト】
+	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報【ゲスト】
+	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
 }
 
 type NetworkCategory {
 	id: Int!
-	chains: [Chain!]! # このカテゴリに含まれるチェーン一覧
-	sellableSymbols: [String!]! # 販売価格として設定可能な通貨シンボル一覧
+	chains: [Chain!]! # このカテゴリに含まれるチェーン一覧【管理者】
+	sellableSymbols: [String!]! # 販売価格として設定可能な通貨シンボル一覧【投稿編集者】
 }
 
 type Chain {
-	id: Int!
-	isPayable: Boolean!	# (訪問者が)支払いに使用可能かどうか
-	# symbol: String!
+	id: Int!	# チェーンID【ゲスト】
+}
+
+type Token {
+	chain: Chain!		# トークンが発行されているチェーン【ゲスト】
+	address: String!	# トークンのコントラクトアドレス【ゲスト】
+	symbol: String!     # トークンの通貨シンボル【ゲスト】
+	isPayable: Boolean!	# 訪問者が支払に使用可能かどうかの設定【管理者】
 }
 
 type Price {
@@ -71,15 +70,15 @@ type SellingContent {
 	imageCount: Int!		# 画像数
 }
 
-type PurchaseTicketInfo {
-	purchaseTicketIdHex: String!	# チケットID(0xプレフィックス付きの16進数)
-	sellerSignature: String!		# 販売者の署名
-	sellerSignatureVersion: Int!	# 販売者の署名バージョン
-	paymentTokenAddress: String!	# 支払いトークンのアドレス
+type Invoice {
+	invoiceIdHex: String!
+	seller: Seller!				# 販売者情報
+	paymentToken: Token!		# 支払いトークン
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
 }
 
 # 販売者情報
+# ※ 請求書(支払時情報)取得時に参照されるので、各プロパティがログイン無しのユーザーに閲覧される可能性があることに注意
 type Seller {
 	agreedTerms: AgreedTerms  # 販売者が同意した利用規約(利用規約に同意していない場合はnull)
 }

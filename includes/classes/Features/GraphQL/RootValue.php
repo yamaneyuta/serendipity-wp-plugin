@@ -5,15 +5,14 @@ namespace Cornix\Serendipity\Core\Features\GraphQL;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AllNetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\CurrentSellerTermsResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssuePurchaseTicketResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssueInvoiceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingNetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetPayableChainsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetSellerAgreedTermsResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\TokenResolver;
 
 class RootValue {
 
@@ -24,22 +23,21 @@ class RootValue {
 
 		$resolvers = array(
 			// 非公開
-			'Chain'                  => new ChainResolver(),
-			'NetworkCategory'        => new NetworkCategoryResolver(),
-			'SellingContent'         => new SellingContentResolver(),
-			'SellingNetworkCategory' => new SellingNetworkCategoryResolver(),
-			'SellingPrice'           => new SellingPriceResolver(),
+			'chain'                => new ChainResolver(),
+			'networkCategory'      => new NetworkCategoryResolver(),
+			'sellingContent'       => new SellingContentResolver(),
+			'sellingPrice'         => new SellingPriceResolver(),
+			'token'                => new TokenResolver(),
 
 			// Query
-			'Post'                   => new PostResolver(),
-			'allNetworkCategories'   => new AllNetworkCategoriesResolver(),
-			'currentSellerTerms'     => new CurrentSellerTermsResolver(),
-			'seller'                 => new SellerResolver(),
+			'allNetworkCategories' => new AllNetworkCategoriesResolver(),
+			'currentSellerTerms'   => new CurrentSellerTermsResolver(),
+			'post'                 => new PostResolver(),
+			'seller'               => new SellerResolver(),
 
 			// Mutation
-			'issuePurchaseTicket'    => new IssuePurchaseTicketResolver(),
-			'setPayableChains'       => new SetPayableChainsResolver(),
-			'setSellerAgreedTerms'   => new SetSellerAgreedTermsResolver(),
+			'issueInvoice'         => new IssueInvoiceResolver(),
+			'setSellerAgreedTerms' => new SetSellerAgreedTermsResolver(),
 		);
 
 		$result = array();

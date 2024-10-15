@@ -8,6 +8,11 @@ use Elliptic\EC;
 use kornrunner\Keccak;
 
 class Ethers {
+
+	public static function zeroAddress(): string {
+		return '0x0000000000000000000000000000000000000000';
+	}
+
 	/**
 	 * メッセージ及び署名からウォレットアドレスを取得します。
 	 *

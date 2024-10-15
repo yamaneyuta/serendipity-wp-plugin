@@ -18,7 +18,7 @@ class TableName {
 		return ( new Prefix() )->tableName() . $table_name;
 	}
 
-	public function purchaseTicket(): string {
-		return $this->addPrefix( 'purchase_ticket' );
+	public function invoice(): string {
+		return $this->addPrefix( 'invoice' );
 	}
 }
