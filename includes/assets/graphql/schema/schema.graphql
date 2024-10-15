@@ -23,6 +23,7 @@ type Query {
 	networkCategories(filter: NetworkCategoryFilter): [NetworkCategory!]!
 
 	# 全ネットワークカテゴリ一覧を取得【投稿編集者】
+	# TODO: 削除(networkCategoriesに統合)
 	allNetworkCategories: [NetworkCategory!]!
 }
 
