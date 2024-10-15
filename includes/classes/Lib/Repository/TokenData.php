@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\Types\Token;
 
 class TokenData {
 
@@ -36,6 +37,20 @@ class TokenData {
 	}
 
 	private array $token_data;
+
+	/**
+	 * 指定したチェーンに存在するすべてのトークンを取得します。
+	 */
+	public function all( int $chain_ID ): array {
+		/** @var Token[] */
+		$tokens = array();
+		foreach ( $this->token_data as $data ) {
+			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID ) {
+				$tokens[] = new Token( $data[ self::CHAIN_ID_INDEX ], $data[ self::ADDRESS_INDEX ] );
+			}
+		}
+		return $tokens;
+	}
 
 	/**
 	 * 指定したチェーンID、アドレスのトークンが定義されているかどうかを取得します。
