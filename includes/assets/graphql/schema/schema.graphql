@@ -19,6 +19,9 @@ type Query {
 	# プラグインに含まれている販売者向け利用規約を取得【管理者】
 	currentSellerTerms: Terms!
 
+	# ネットワークカテゴリ一覧を取得【投稿編集者】
+	networkCategories(filter: NetworkCategoryFilter): [NetworkCategory!]!
+
 	# 全ネットワークカテゴリ一覧を取得【投稿編集者】
 	allNetworkCategories: [NetworkCategory!]!
 }
@@ -38,6 +41,10 @@ type Post {
 	sellingPrice: Price             # 販売価格【ゲスト】
 	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報【ゲスト】
 	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
+}
+
+input NetworkCategoryFilter {
+	networkCategoryID: Int	# ネットワークカテゴリを1つだけ取得する際に指定
 }
 
 type NetworkCategory {
