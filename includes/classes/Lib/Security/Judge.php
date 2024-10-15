@@ -22,7 +22,7 @@ class Judge {
 	/**
 	 * 現在アクセスしているユーザーが管理者権限を持っていない場合は例外をスローします。
 	 */
-	public static function checkIsAdministrator(): void {
+	public static function checkHasAdminRole(): void {
 		if ( ! ( new Access() )->isAdministrator() ) {
 			throw new \LogicException( '[D10C401C] You do not have permission to access this feature. current user ID: ' . get_current_user_id() );
 		}

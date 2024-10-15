@@ -23,7 +23,7 @@ class TokenResolver extends ResolverBase {
 		$token = Token::from( $chain_id, $address );
 
 		$is_payable_callback = function () use ( $token ) {
-			Judge::checkIsAdministrator();  // 管理者権限が必要
+			Judge::checkHasAdminRole();  // 管理者権限が必要
 			return ( new PayableTokens() )->exists( $token );
 		};
 
