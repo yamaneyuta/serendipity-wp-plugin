@@ -33,13 +33,14 @@ class RootValue {
 			// Query
 			'allNetworkCategories' => new AllNetworkCategoriesResolver(),
 			'currentSellerTerms'   => new CurrentSellerTermsResolver(),
-			'networkCategories'    => new NetworkCategoriesResolver(),
 			'post'                 => new PostResolver(),
 			'seller'               => new SellerResolver(),
 
 			// Mutation
 			'issueInvoice'         => new IssueInvoiceResolver(),
 			'setSellerAgreedTerms' => new SetSellerAgreedTermsResolver(),
+			// React-Adminの都合によりMutation
+			'networkCategories'    => new NetworkCategoriesResolver(),
 		);
 
 		$result = array();
