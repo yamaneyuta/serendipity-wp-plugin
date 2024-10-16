@@ -20,6 +20,7 @@ type Query {
 	currentSellerTerms: Terms!
 
 	# 全ネットワークカテゴリ一覧を取得【投稿編集者】
+	# TODO: 削除(networkCategoriesに統合)
 	allNetworkCategories: [NetworkCategory!]!
 }
 
@@ -29,6 +30,16 @@ type Mutation {
 
 	# 販売者の利用規約同意情報を設定【管理者】
 	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!
+
+	# ----- 以下、React-Admin用 -----
+	# ※ 前提として、GraphQL-CodegenはQueryをuseXXXQueryとしてhooksを定義する。
+	# 　 React-Adminでカスタムプロバイダを使用するにあたり、useXXXQueryではコールバックの引数の値(例:チェーンID)を使用することが難しいため
+	# 　 仕方なくQueryではなくMutationで定義。解決法がわかり次第、Queryに変更する。
+	# 　 -> GraphQL-Codegenの設定やプラグインで解決できれば、それでもよい
+	# ※ 自動生成のメリットが失われるため、GraphQL-Codegenが生成したQueryの型を使ってuseMutationで定義し直すようなことはしない。
+
+	# ネットワークカテゴリ一覧を取得【投稿編集者】
+	networkCategories(filter: NetworkCategoryFilter): [NetworkCategory!]!
 }
 
 # 投稿に関する情報
@@ -40,6 +51,10 @@ type Post {
 	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
 }
 
+input NetworkCategoryFilter {
+	networkCategoryID: Int	# ネットワークカテゴリを1つだけ取得する際に指定
+}
+
 type NetworkCategory {
 	id: Int!
 	chains: [Chain!]! # このカテゴリに含まれるチェーン一覧【管理者】
@@ -48,7 +63,8 @@ type NetworkCategory {
 
 type Chain {
 	id: Int!	# チェーンID【ゲスト】
-	payableTokens: [Token!]!	# 支払いに使用可能なトークン一覧【管理者】
+	payableTokens: [Token!]!	# 支払いに使用可能なトークン一覧【管理者】 TODO: 削除
+	tokens: [Token!]!			# このチェーンに存在するトークン一覧【管理者】
 }
 
 type Token {
