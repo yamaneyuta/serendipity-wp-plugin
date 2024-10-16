@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AddPayableTokensResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AllNetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\CurrentSellerTermsResolver;
@@ -9,6 +10,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssueInvoiceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RemovePayableTokensResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
@@ -37,7 +39,9 @@ class RootValue {
 			'seller'               => new SellerResolver(),
 
 			// Mutation
+			'addPayableTokens'     => new AddPayableTokensResolver(),
 			'issueInvoice'         => new IssueInvoiceResolver(),
+			'removePayableTokens'  => new RemovePayableTokensResolver(),
 			'setSellerAgreedTerms' => new SetSellerAgreedTermsResolver(),
 			// React-Adminの都合によりMutation
 			'networkCategories'    => new NetworkCategoriesResolver(),
