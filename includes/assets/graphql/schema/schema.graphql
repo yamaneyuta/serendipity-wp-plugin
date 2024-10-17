@@ -18,10 +18,6 @@ type Query {
 
 	# プラグインに含まれている販売者向け利用規約を取得【管理者】
 	currentSellerTerms: Terms!
-
-	# 全ネットワークカテゴリ一覧を取得【投稿編集者】
-	# TODO: 削除(networkCategoriesに統合)
-	allNetworkCategories: [NetworkCategory!]!
 }
 
 type Mutation {
