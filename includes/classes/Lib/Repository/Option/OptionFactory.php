@@ -37,10 +37,10 @@ class OptionFactory {
 	}
 
 	/**
-	 * 指定したチェーンIDで、購入者が支払可能なトークン一覧を取得または保存するオブジェクトを取得します。
+	 * 指定したチェーンIDで、購入者が支払可能なトークンアドレス一覧を取得または保存するオブジェクトを取得します。
 	 */
-	public function payableSymbols( int $chain_ID ): ArrayOption {
-		return new ArrayOption( $this->getOptionKeyName( 'payable_symbols_' . $chain_ID ) );
+	public function payableTokenAddresses( int $chain_ID ): ArrayOption {
+		return new ArrayOption( $this->getOptionKeyName( 'payable_token_addresses_' . $chain_ID ) );
 	}
 
 	/**
