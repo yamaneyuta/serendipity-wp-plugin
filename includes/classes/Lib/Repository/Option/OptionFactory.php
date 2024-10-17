@@ -43,23 +43,33 @@ class OptionFactory {
 	}
 
 	/**
+	 * 販売者が同意した利用規約に関する情報を保存する際のキーのプレフィックスを取得します。
+	 */
+	private function sellerAgreedTermsKeyPrefix(): string {
+		return 'seller_agreed_terms_';
+	}
+
+	/**
 	 * 販売者が同意した利用規約のバージョンを取得または保存するオブジェクトを取得します。
 	 */
 	public function sellerAgreedTermsVersion(): IntOption {
-		return new IntOption( $this->getOptionKeyName( 'seller_agreed_terms_version' ) );
+		$prefix = $this->sellerAgreedTermsKeyPrefix();
+		return new IntOption( $this->getOptionKeyName( $prefix . 'version' ) );
 	}
 
 	/**
 	 * 販売者が利用規約に同意した際の署名を取得または保存するオブジェクトを取得します。
 	 */
 	public function sellerAgreedTermsSignature(): StringOption {
-		return new StringOption( $this->getOptionKeyName( 'seller_agreed_terms_signature' ) );
+		$prefix = $this->sellerAgreedTermsKeyPrefix();
+		return new StringOption( $this->getOptionKeyName( $prefix . 'signature' ) );
 	}
 
 	/**
 	 * 販売者が利用規約に同意した際のユーザーIDを取得または保存するオブジェクトを取得します。
 	 */
 	public function sellerAgreedTermsUserID(): IntOption {
-		return new IntOption( $this->getOptionKeyName( 'seller_agreed_terms_user_id' ) );
+		$prefix = $this->sellerAgreedTermsKeyPrefix();
+		return new IntOption( $this->getOptionKeyName( $prefix . 'user_id' ) );
 	}
 }
