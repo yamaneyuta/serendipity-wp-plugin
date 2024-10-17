@@ -35,8 +35,8 @@ class ChainResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'            => $chain_ID,
-			'tokens'        => $tokens_callback,
+			'id'     => $chain_ID,
+			'tokens' => $tokens_callback,
 		);
 	}
 }
