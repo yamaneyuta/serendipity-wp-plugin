@@ -41,20 +41,4 @@ class NetworkCategoryData {
 		}
 		return $chain_ids;
 	}
-
-	/**
-	 * 指定したチェーンIDに対応するネットワークカテゴリを取得します。
-	 * 該当するデータが存在しない場合はnullを返します。
-	 *
-	 * @param int $chain_id
-	 * @return NetworkCategory|null
-	 */
-	public function getNetworkCategory( int $chain_id ): ?NetworkCategory {
-		foreach ( $this->chain_id_data as $data ) {
-			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_id ) {
-				return NetworkCategory::from( $data[ self::NETWORK_CATEGORY_INDEX ] );
-			}
-		}
-		return null;
-	}
 }
