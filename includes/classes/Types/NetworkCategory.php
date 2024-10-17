@@ -67,6 +67,19 @@ final class NetworkCategory {
 		return self::from( self::NETWORK_CATEGORY_ID_PRIVATENET );
 	}
 
+	/**
+	 * すべてのネットワークカテゴリインスタンスを取得します。
+	 *
+	 * @return NetworkCategory[]
+	 */
+	public static function all(): array {
+		return array(
+			self::mainnet(),
+			self::testnet(),
+			self::privatenet(),
+		);
+	}
+
 
 	public function __toString(): string {
 		switch ( $this->id() ) {
