@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository\Option;
 
 use Cornix\Serendipity\Core\Lib\Repository\Name\Prefix;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class OptionFactory {
 
@@ -27,13 +26,6 @@ class OptionFactory {
 	 */
 	public function signerPrivateKey(): ArrayOption {
 		return new ArrayOption( $this->getOptionKeyName( 'signer_private_key' ) );
-	}
-
-	/**
-	 * 指定したネットワークカテゴリで、購入者が支払可能なチェーン一覧を取得または保存するオブジェクトを取得します。
-	 */
-	public function payableChainIDs( NetworkCategory $network_category ): ArrayOption {
-		return new ArrayOption( $this->getOptionKeyName( 'payable_chain_ids_' . $network_category->id() ) );
 	}
 
 	/**
