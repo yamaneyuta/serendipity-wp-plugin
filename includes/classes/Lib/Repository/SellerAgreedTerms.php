@@ -23,7 +23,8 @@ class SellerAgreedTerms {
 	 * 販売者が署名した同意メッセージを取得します。
 	 */
 	public function message(): ?string {
-		return ( new SellerTerms() )->message( $this->version() );
+		$agreed_version = $this->version();
+		return is_null( $agreed_version ) ? null : ( new SellerTerms() )->message( $agreed_version );
 	}
 
 	/**
