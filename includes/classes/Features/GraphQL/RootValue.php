@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AddPayableTokensResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AllNetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\CurrentSellerTermsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssueInvoiceResolver;
@@ -33,7 +32,6 @@ class RootValue {
 			'token'                => new TokenResolver(),
 
 			// Query
-			'allNetworkCategories' => new AllNetworkCategoriesResolver(),
 			'currentSellerTerms'   => new CurrentSellerTermsResolver(),
 			'post'                 => new PostResolver(),
 			'seller'               => new SellerResolver(),

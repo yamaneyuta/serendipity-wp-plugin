@@ -15,7 +15,7 @@ type UsePostSettingResult = ReturnType< typeof usePostSetting >;
 it( '[23C5844D] useSelectableSymbols() - default(mainnet)', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
-		allNetworkCategories: [
+		networkCategories: [
 			{ id: 1, sellableSymbols: [ 'JPY' ] },
 			{ id: 2, sellableSymbols: [ 'USD' ] },
 			{ id: 3, sellableSymbols: [ 'EUR', 'GBP' ] },
@@ -39,7 +39,7 @@ it( '[23C5844D] useSelectableSymbols() - default(mainnet)', async () => {
 it( '[69581160] useSelectableSymbols() - default(testnet)', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
-		allNetworkCategories: [
+		networkCategories: [
 			{ id: 1, sellableSymbols: [ 'JPY' ] },
 			{ id: 2, sellableSymbols: [ 'USD' ] },
 			{ id: 3, sellableSymbols: [ 'EUR', 'GBP' ] },
@@ -63,7 +63,7 @@ it( '[69581160] useSelectableSymbols() - default(testnet)', async () => {
 it( '[B43240DF] useSelectableSymbols() - default(privatenet)', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
-		allNetworkCategories: [
+		networkCategories: [
 			{ id: 1, sellableSymbols: [ 'JPY' ] },
 			{ id: 2, sellableSymbols: [ 'USD' ] },
 			{ id: 3, sellableSymbols: [ 'EUR', 'GBP' ] },
@@ -102,7 +102,7 @@ it( '[1DDC9FA6] useSelectableSymbols(undefined) - loading', async () => {
 it( '[1DDC9FA6] useSelectableSymbols(null) - loading', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
-		allNetworkCategories: [
+		networkCategories: [
 			{ id: 1, sellableSymbols: [ 'JPY' ] },
 			{ id: 2, sellableSymbols: [ 'USD' ] },
 			{ id: 3, sellableSymbols: [ 'EUR', 'GBP' ] },
@@ -143,7 +143,7 @@ it( '[1DDC9FA6] useSelectableSymbols() - loading, invalid network type', async (
 it( '[E9CD00AF] useSelectableSymbols() - []', async () => {
 	// ARRANGE
 	const res: UsePostSettingResult = {
-		allNetworkCategories: [
+		networkCategories: [
 			{ id: 1, sellableSymbols: [] },
 			{ id: 2, sellableSymbols: [] },
 			{ id: 3, sellableSymbols: [] },

@@ -1,6 +1,6 @@
 
-query PostSetting {
-	allNetworkCategories {
+mutation PostSetting {
+	networkCategories {
 		id
 		sellableSymbols
 	}

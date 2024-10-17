@@ -16,7 +16,7 @@ export const useGetSellableSymbolsCallback = () => {
 				return undefined;
 			}
 
-			const selectableSymbols = postSetting.allNetworkCategories.find( ( n ) => n.id === networkCategory.id() )
+			const selectableSymbols = postSetting.networkCategories.find( ( n ) => n.id === networkCategory.id() )
 				?.sellableSymbols;
 
 			// APIの仕様上、selectableSymbolsはundefinedにはならない
