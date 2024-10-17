@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\ChainData;
+use Cornix\Serendipity\Core\Lib\Repository\NetworkCategoryData;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
@@ -26,7 +26,7 @@ class NetworkCategoryResolver extends ResolverBase {
 		};
 
 		$chains_callback = function () use ( $root_value, $network_category ) {
-			$chain_IDs = ( new ChainData() )->getAllChainID( $network_category );
+			$chain_IDs = ( new NetworkCategoryData() )->getAllChainID( $network_category );
 			return array_map(
 				function ( $chain_ID ) use ( $root_value ) {
 					return $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
