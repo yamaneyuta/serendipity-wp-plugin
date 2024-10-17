@@ -194,16 +194,15 @@ class Validator {
 		return 0 <= $decimals;
 	}
 
+	/**
+	 * 指定された文字列が通貨記号として有効な値であるかどうかを返します。
+	 */
 	public static function isSymbol( string $symbol ): bool {
-		// いずれかのネットワークの販売可能なシンボルであればOKとする
-		if ( self::isSellableSymbol( NetworkCategory::mainnet(), $symbol ) ) {
-			return true;
-		}
-		if ( self::isSellableSymbol( NetworkCategory::testnet(), $symbol ) ) {
-			return true;
-		}
-		if ( self::isSellableSymbol( NetworkCategory::privatenet(), $symbol ) ) {
-			return true;
+		foreach ( NetworkCategory::all() as $network_category ) {
+			// いずれかのネットワークの販売可能なシンボルであればOKとする
+			if ( self::isSellableSymbol( $network_category, $symbol ) ) {
+				return true;
+			}
 		}
 		return false;
 	}

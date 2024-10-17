@@ -16,16 +16,15 @@ class NetworkCategoriesResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var array */
-		$filter = $args['filter'] ?? null;
+		$filter                     = $args['filter'] ?? null;
+		$filter_network_category_id = $filter['networkCategoryID'] ?? null;
 
 		Judge::checkHasEditableRole();  // 投稿編集者権限以上が必要
 
-		$network_categories = $this->networkCategories( $filter['networkCategoryID'] ?? null );
+		$network_categories = $this->networkCategories( $filter_network_category_id );
 
 		return array_map(
-			function ( $network_category ) use ( $root_value ) {
-				return $root_value['networkCategory']( $root_value, array( 'networkCategoryID' => $network_category->id() ) );
-			},
+			fn ( $network_category ) => $root_value['networkCategory']( $root_value, array( 'networkCategoryID' => $network_category->id() ) ),
 			$network_categories
 		);
 	}
@@ -39,18 +38,17 @@ class NetworkCategoriesResolver extends ResolverBase {
 	 */
 	private function networkCategories( ?int $network_category_id ) {
 		// フィルタでネットワークカテゴリIDが指定されている場合はそのネットワークカテゴリのみ取得
-		if ( ! is_null( $network_category_id ) ) {
-			return array( NetworkCategory::from( $network_category_id ) );
+		// フィルタが指定されていない場合はすべてのネットワークカテゴリを取得
+		$network_categories = is_null( $network_category_id ) ? NetworkCategory::all() : array( NetworkCategory::from( $network_category_id ) );
+
+		// 開発モードでない場合はプライベートネットを除外
+		if ( ! ( new Environment() )->isDevelopmentMode() ) {
+			$network_categories = array_filter( $network_categories, fn( $network_category ) => $network_category != NetworkCategory::privatenet() );
 		}
 
-		// フィルタが指定されていない場合は全てのネットワークカテゴリを取得
-		$network_categories = array(
-			NetworkCategory::mainnet(),
-			NetworkCategory::testnet(),
-		);
-		// 開発モードの場合はプライベートネットも取得
-		if ( ( new Environment() )->isDevelopmentMode() ) {
-			$network_categories[] = NetworkCategory::privatenet();
+		if ( empty( $network_categories ) ) {
+			// 通常ネットワークカテゴリ一覧が空になることは無い
+			throw new \InvalidArgumentException( '[66C34D5A] Invalid network category ID. - network_category_id: ' . $network_category_id );
 		}
 
 		return $network_categories;
