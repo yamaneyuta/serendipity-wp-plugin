@@ -65,7 +65,6 @@ type NetworkCategory {
 
 type Chain {
 	id: Int!	# チェーンID【ゲスト】
-	payableTokens: [Token!]!	# 支払いに使用可能なトークン一覧【管理者】 TODO: 削除
 	tokens: [Token!]!			# このチェーンに存在するトークン一覧【管理者】
 }
 
