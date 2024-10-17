@@ -41,4 +41,19 @@ class NetworkCategoryData {
 		}
 		return $chain_ids;
 	}
+
+	/**
+	 * 指定されたネットワークカテゴリにおける、OracleのチェーンIDを取得します。
+	 */
+	public function getOracleChainID( NetworkCategory $network_category ): int {
+		if ( $network_category === NetworkCategory::mainnet() ) {
+			return ChainID::ETH_MAINNET;
+		} elseif ( $network_category === NetworkCategory::testnet() ) {
+			return ChainID::SEPOLIA;
+		} elseif ( $network_category === NetworkCategory::privatenet() ) {
+			return ChainID::PRIVATENET_L1;
+		}
+
+		throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_category: ' . $network_category );
+	}
 }
