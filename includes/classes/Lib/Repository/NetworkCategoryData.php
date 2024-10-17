@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
-class ChainData {
+class NetworkCategoryData {
 
 	private const NETWORK_CATEGORY_INDEX = 0;
 	private const CHAIN_ID_INDEX         = 1;
@@ -43,18 +43,17 @@ class ChainData {
 	}
 
 	/**
-	 * 指定したチェーンIDに対応するネットワークカテゴリを取得します。
-	 * 該当するデータが存在しない場合はnullを返します。
-	 *
-	 * @param int $chain_id
-	 * @return NetworkCategory|null
+	 * 指定されたネットワークカテゴリにおける、OracleのチェーンIDを取得します。
 	 */
-	public function getNetworkCategory( int $chain_id ): ?NetworkCategory {
-		foreach ( $this->chain_id_data as $data ) {
-			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_id ) {
-				return NetworkCategory::from( $data[ self::NETWORK_CATEGORY_INDEX ] );
-			}
+	public function getOracleChainID( NetworkCategory $network_category ): int {
+		if ( $network_category === NetworkCategory::mainnet() ) {
+			return ChainID::ETH_MAINNET;
+		} elseif ( $network_category === NetworkCategory::testnet() ) {
+			return ChainID::SEPOLIA;
+		} elseif ( $network_category === NetworkCategory::privatenet() ) {
+			return ChainID::PRIVATENET_L1;
 		}
-		return null;
+
+		throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_category: ' . $network_category );
 	}
 }

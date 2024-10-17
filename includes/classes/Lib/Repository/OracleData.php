@@ -62,7 +62,7 @@ class OracleData {
 	 * @return string[]
 	 */
 	public function getSymbols( NetworkCategory $network_category ): array {
-		$chain_ID = $this->getChainID( $network_category );
+		$chain_ID = ( new NetworkCategoryData() )->getOracleChainID( $network_category );
 		/** @var string[] */
 		$symbols = array();
 		foreach ( $this->oracle_data as $data ) {
@@ -71,20 +71,5 @@ class OracleData {
 			}
 		}
 		return $symbols;
-	}
-
-	/**
-	 * 指定されたネットワークカテゴリにおける、OracleのチェーンIDを取得します。
-	 */
-	private function getChainID( NetworkCategory $network_category ): int {
-		if ( $network_category === NetworkCategory::mainnet() ) {
-			return ChainID::ETH_MAINNET;
-		} elseif ( $network_category === NetworkCategory::testnet() ) {
-			return ChainID::SEPOLIA;
-		} elseif ( $network_category === NetworkCategory::privatenet() ) {
-			return ChainID::PRIVATENET_L1;
-		}
-
-		throw new \InvalidArgumentException( '[4EFECEE5] Invalid network type. - network_category: ' . $network_category );
 	}
 }
