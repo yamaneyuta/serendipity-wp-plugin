@@ -48,7 +48,7 @@ class Blockchain {
 				if ( $err ) {
 					throw $err;
 				}
-				$chain_ID_hex = Hex::fromBigInteger( $res );
+				$chain_ID_hex = Hex::from( $res );
 			}
 		);
 		assert( $chain_ID_hex !== '0x00', '[1BAA2783] Failed to get chain ID.' );
@@ -69,7 +69,7 @@ class Blockchain {
 				if ( $err ) {
 					throw $err;
 				}
-				$block_number_hex = Hex::fromBigInteger( $res );
+				$block_number_hex = Hex::from( $res );
 			}
 		);
 		assert( $block_number_hex !== '0x00', '[C38AC4D1] Failed to get block number.' );
@@ -93,7 +93,7 @@ class Blockchain {
 					throw $err;
 				}
 
-				$balance_hex = Hex::fromBigInteger( $res );
+				$balance_hex = Hex::from( $res );
 			}
 		);
 
