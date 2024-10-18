@@ -14,11 +14,7 @@ class NetworkCategoryDataTest extends WP_UnitTestCase {
 	 */
 	public function getAllChainID() {
 		// ARRANGE
-		// リフレクションを用いてChainIDクラスの定数を取得
-		$reflectionClass = new \ReflectionClass( 'Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID' );
-		$constants       = $reflectionClass->getConstants();
-		/** @var int[] */
-		$all_chainIDs = array_values( $constants );
+		$all_chainIDs = ( new TestAllChainID() )->get();
 
 		// 全てのネットワークカテゴリを取得
 		$all_network_categories = NetworkCategory::all();
