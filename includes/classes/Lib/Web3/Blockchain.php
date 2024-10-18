@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
@@ -48,7 +47,8 @@ class Blockchain {
 			$methods_property->setValue( $eth, $methods );
 		}
 
-		$chain_ID_hex = '0x00';
+		/** @var string|null */
+		$chain_ID_hex = null;
 		$eth->chainId(
 			function ( $err, BigInteger $res ) use ( &$chain_ID_hex ) {
 				if ( $err ) {
@@ -57,7 +57,7 @@ class Blockchain {
 				$chain_ID_hex = Hex::from( $res );
 			}
 		);
-		assert( $chain_ID_hex !== '0x00', '[1BAA2783] Failed to get chain ID.' );
+		assert( ! is_null( $chain_ID_hex ), '[1BAA2783] Failed to get chain ID.' );
 		Judge::checkAmountHex( $chain_ID_hex );
 
 		return $chain_ID_hex;
@@ -67,7 +67,8 @@ class Blockchain {
 	 * ブロック番号を取得します。
 	 */
 	public function getBlockNumberHex(): string {
-		$block_number_hex = '0x00';
+		/** @var string|null */
+		$block_number_hex = null;
 		$this->eth()->blockNumber(
 			function ( $err, BigInteger $res ) use ( &$block_number_hex ) {
 				if ( $err ) {
@@ -76,7 +77,7 @@ class Blockchain {
 				$block_number_hex = Hex::from( $res );
 			}
 		);
-		assert( $block_number_hex !== '0x00', '[C38AC4D1] Failed to get block number.' );
+		assert( ! is_null( $block_number_hex ), '[C38AC4D1] Failed to get block number.' );
 		Judge::checkAmountHex( $block_number_hex );
 
 		return $block_number_hex;
@@ -88,44 +89,21 @@ class Blockchain {
 	public function getBalanceHex( string $address ): string {
 		Judge::checkAddress( $address );
 
-		$balance_hex = '0x00';
+		/** @var string|null */
+		$balance_hex = null;
 		$this->eth()->getBalance(
 			$address,
 			function ( $err, BigInteger $res ) use ( &$balance_hex ) {
 				if ( $err ) {
 					throw $err;
 				}
-
 				$balance_hex = Hex::from( $res );
 			}
 		);
-
+		assert( ! is_null( $balance_hex ), '[72C38938] Failed to get balance.' );
 		Judge::checkAmountHex( $balance_hex );
+
 		return $balance_hex;
-	}
-
-	/**
-	 * このネットワークに接続できるかどうかを取得します。
-	 *
-	 * @return bool 接続可能な場合はtrue
-	 */
-	public function connectable(): bool {
-		try {
-			$this->getBlockNumberHex();
-			return true;
-		} catch ( \Throwable $e ) {
-			return false;
-		}
-	}
-
-	/**
-	 * プライベートネットに接続できるかどうかを取得します。
-	 *
-	 * @return bool プライベートネットに接続可能な場合はtrue
-	 */
-	public static function isPrivatenetConnectable(): bool {
-		$privatenet = new Blockchain( ( new DefaultRpcUrlData() )->getPrivatenetL1() );
-		return $privatenet->connectable();
 	}
 }
 

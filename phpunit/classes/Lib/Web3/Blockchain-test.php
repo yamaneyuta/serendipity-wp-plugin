@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 class BlockchainTest extends IntegrationTestBase {
@@ -24,8 +23,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getChainIDHexDataProvider() {
 		return array(
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL1(), ChainID::PRIVATENET_L1 ),
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL2(), ChainID::PRIVATENET_L2 ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L1 ), ChainID::PRIVATENET_L1 ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ), ChainID::PRIVATENET_L2 ),
 		);
 	}
 
@@ -46,8 +45,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBlockNumberHexDataProvider() {
 		return array(
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL1() ),
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL2() ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L1 ), ChainID::PRIVATENET_L1 ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ), ChainID::PRIVATENET_L2 ),
 		);
 	}
 
@@ -70,29 +69,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBalanceHexDataProvider() {
 		return array(
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL1() ),
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL2() ),
-		);
-	}
-
-	/**
-	 * 指定したRPC URLに接続可能かどうかをテスト
-	 *
-	 * @test
-	 * @testdox [805E948D] Blockchain::connectable() - rpc_url: $rpc_url -> $expected
-	 * @dataProvider rpcURLDataProvider
-	 */
-	public function connectable( string $rpc_url, bool $expected ) {
-		$sut = new Blockchain( $rpc_url );
-
-		$this->assertEquals( $expected, $sut->connectable() );
-	}
-
-	public function rpcURLDataProvider() {
-		return array(
-			array( ( new DefaultRpcUrlData() )->get( ChainID::PRIVATENET_L1 ), true ),
-			array( ( new DefaultRpcUrlData() )->get( ChainID::PRIVATENET_L2 ), true ),
-			array( 'http://localhost', false ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L1 ) ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ) ),
 		);
 	}
 }
