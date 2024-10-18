@@ -23,8 +23,9 @@ class BuiltInRpcUrlData {
 		// - https://tokenswap.exchange/tools/chainlist
 
 		$this->built_in_rpc_data = array(
+			// `https://cloudflare-eth.com`はGitHub Actionsでのテストが通らないため、コメントアウト
 			array( ChainID::ETH_MAINNET, 'https://rpc.ankr.com/eth' ),              // https://www.ankr.com/rpc/eth/
-			array( ChainID::ETH_MAINNET, 'https://cloudflare-eth.com' ),            // https://developers.cloudflare.com/web3/ethereum-gateway/reference/supported-networks/
+			// array( ChainID::ETH_MAINNET, 'https://cloudflare-eth.com' ),            // https://developers.cloudflare.com/web3/ethereum-gateway/reference/supported-networks/
 			array( ChainID::ETH_MAINNET, 'https://ethereum-rpc.publicnode.com' ),   // https://ethereum.publicnode.com/
 
 			array( ChainID::POLYGON_ZK_EVM, 'https://zkevm-rpc.com' ),              // * https://support.polygon.technology/support/solutions/articles/82000893127-how-to-add-zkevm-network-to-metamask-
