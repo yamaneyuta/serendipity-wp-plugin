@@ -18,6 +18,13 @@ class PluginInfo {
 	public function textDomain(): string {
 		return ( new PluginMainFile() )->get( 'TextDomain' );
 	}
+
+	/**
+	 * プラグインの必要なPHPの最低バージョンを取得します。
+	 */
+	public function requiresPHP(): string {
+		return ( new PluginMainFile() )->get( 'Requires PHP' );
+	}
 }
 
 
