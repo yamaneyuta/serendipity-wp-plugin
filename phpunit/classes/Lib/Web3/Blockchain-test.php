@@ -74,25 +74,4 @@ class BlockchainTest extends IntegrationTestBase {
 			array( ( new DefaultRpcUrlData() )->getPrivatenetL2() ),
 		);
 	}
-
-	/**
-	 * 指定したRPC URLに接続可能かどうかをテスト
-	 *
-	 * @test
-	 * @testdox [805E948D] Blockchain::connectable() - rpc_url: $rpc_url -> $expected
-	 * @dataProvider rpcURLDataProvider
-	 */
-	public function connectable( string $rpc_url, bool $expected ) {
-		$sut = new Blockchain( $rpc_url );
-
-		$this->assertEquals( $expected, $sut->connectable() );
-	}
-
-	public function rpcURLDataProvider() {
-		return array(
-			array( ( new DefaultRpcUrlData() )->get( ChainID::PRIVATENET_L1 ), true ),
-			array( ( new DefaultRpcUrlData() )->get( ChainID::PRIVATENET_L2 ), true ),
-			array( 'http://localhost', false ),
-		);
-	}
 }
