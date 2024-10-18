@@ -23,7 +23,14 @@ class PluginInfo {
 	 * プラグインの必要なPHPの最低バージョンを取得します。
 	 */
 	public function requiresPHP(): string {
-		return ( new PluginMainFile() )->get( 'Requires PHP' );
+		return ( new PluginMainFile() )->get( 'RequiresPHP' );
+	}
+
+	/**
+	 * プラグインの必要なWordPressの最低バージョンを取得します。
+	 */
+	public function requiresWP(): string {
+		return ( new PluginMainFile() )->get( 'RequiresWP' );
 	}
 }
 
