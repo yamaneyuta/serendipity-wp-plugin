@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
 
@@ -14,6 +15,7 @@ class EnvironmentTest extends WP_UnitTestCase {
 	 */
 	public function testGet() {
 		// ARRANGE
+		( new OptionUninstaller() )->execute();
 		$option = ( new OptionFactory() )->isDevelopmentMode();
 		$this->assertNull( $option->get( null ) );  // テスト実行前はoptionsテーブルにデータが存在しないことを確認
 

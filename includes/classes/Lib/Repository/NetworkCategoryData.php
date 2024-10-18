@@ -18,7 +18,10 @@ class NetworkCategoryData {
 
 		$this->chain_id_data = array(
 			array( $mainnet, ChainID::ETH_MAINNET ),
+			array( $mainnet, ChainID::POLYGON_ZK_EVM ),
 			array( $testnet, ChainID::SEPOLIA ),
+			array( $testnet, ChainID::POLYGON_ZK_EVM_CARDONA ),
+			array( $testnet, ChainID::SONEIUM_MINATO ),
 			array( $privatenet, ChainID::PRIVATENET_L1 ),
 			array( $privatenet, ChainID::PRIVATENET_L2 ),
 		);
