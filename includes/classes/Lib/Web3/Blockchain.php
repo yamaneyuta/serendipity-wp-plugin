@@ -13,16 +13,22 @@ use Web3\Formatters\BigNumberFormatter;
 use Web3\Methods\EthMethod;
 
 class Blockchain {
-	public function __construct( string $rpc_url ) {
+	public function __construct( string $rpc_url, ?float $timeout = 2 ) {
 		$this->rpc_url = $rpc_url;
+		$this->timeout = $timeout;
 	}
 	private string $rpc_url;
+	private float $timeout;
+
+	private function eth(): Eth {
+		return new Eth( $this->rpc_url, $this->timeout );
+	}
 
 	/**
 	 * チェーンIDを取得します。
 	 */
 	public function getChainIDHex(): string {
-		$eth = new Eth( $this->rpc_url );
+		$eth = $this->eth();
 
 		// Ethオブジェクトの内容を操作することで`eth_chainId`メソッドの追加を行う
 		{
@@ -61,10 +67,8 @@ class Blockchain {
 	 * ブロック番号を取得します。
 	 */
 	public function getBlockNumberHex(): string {
-		$eth = new Eth( $this->rpc_url );
-
 		$block_number_hex = '0x00';
-		$eth->blockNumber(
+		$this->eth()->blockNumber(
 			function ( $err, BigInteger $res ) use ( &$block_number_hex ) {
 				if ( $err ) {
 					throw $err;
@@ -83,10 +87,9 @@ class Blockchain {
 	 */
 	public function getBalanceHex( string $address ): string {
 		Judge::checkAddress( $address );
-		$eth = new Eth( $this->rpc_url );
 
 		$balance_hex = '0x00';
-		$eth->getBalance(
+		$this->eth()->getBalance(
 			$address,
 			function ( $err, BigInteger $res ) use ( &$balance_hex ) {
 				if ( $err ) {
