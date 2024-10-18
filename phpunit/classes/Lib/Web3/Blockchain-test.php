@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\DefaultRpcUrlData;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 class BlockchainTest extends IntegrationTestBase {
@@ -24,8 +23,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getChainIDHexDataProvider() {
 		return array(
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL1(), ChainID::PRIVATENET_L1 ),
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL2(), ChainID::PRIVATENET_L2 ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L1 ), ChainID::PRIVATENET_L1 ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ), ChainID::PRIVATENET_L2 ),
 		);
 	}
 
@@ -46,8 +45,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBlockNumberHexDataProvider() {
 		return array(
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL1() ),
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL2() ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L1 ), ChainID::PRIVATENET_L1 ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ), ChainID::PRIVATENET_L2 ),
 		);
 	}
 
@@ -70,8 +69,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBalanceHexDataProvider() {
 		return array(
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL1() ),
-			array( ( new DefaultRpcUrlData() )->getPrivatenetL2() ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L1 ) ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ) ),
 		);
 	}
 }
