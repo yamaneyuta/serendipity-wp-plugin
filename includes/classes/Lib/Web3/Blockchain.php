@@ -84,6 +84,44 @@ class Blockchain {
 	}
 
 	/**
+	 * ファイナライズされた最新のブロック番号(HEX)。
+	 */
+	public function getFinalizedBlockNumberHex(): string {
+		return $this->getBlockNumberByTag( 'finalized' );
+	}
+
+	/**
+	 * eth_getBlockByNumberの呼び出しを行い、そのブロック番号をHEXで返します
+	 */
+	private function getBlockNumberByTag( string $tag ): string {
+		// @see https://docs.chainstack.com/reference/ethereum-getblockbynumber#parameters
+		// 引数チェック
+		if ( ! in_array( $tag, array( 'latest', 'safe', 'finalized' ) ) ) {
+			throw new \InvalidArgumentException( '[6302BFA5] Invalid tag. tag: ' . $tag );
+		}
+
+		/** @var string|null */
+		$block_number_hex = null;
+		$this->eth()->getBlockByNumber(
+			$tag,
+			false,	// false: トランザクションの詳細を取得しない
+			function ( $err, $res ) use ( &$block_number_hex ) {
+				if ( $err ) {
+					throw $err;
+				}
+
+				$block_number_hex = $res->number; // $res->numberは16進数の文字列
+			}
+		);
+
+		assert( ! is_null( $block_number_hex ), '[D3B8A88E] Failed to get block number.' );
+		Judge::checkHex( $block_number_hex );
+
+		return $block_number_hex;
+	}
+
+
+	/**
 	 * アカウントの残高を取得します。
 	 */
 	public function getBalanceHex( string $address ): string {
