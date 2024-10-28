@@ -73,4 +73,27 @@ class BlockchainTest extends IntegrationTestBase {
 			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ) ),
 		);
 	}
+
+	/**
+	 * ファイナライズされたブロック番号を取得するテスト
+	 *
+	 * @test
+	 * @testdox [DB4609C4] RPC::getFinalizedBlockNumberHex() - rpc_url: $rpc_url
+	 * @dataProvider getFinalizedBlockNumberProvider
+	 */
+	public function getFinalizedBlockNumberHex( string $rpc_url ) {
+		$sut = new Blockchain( $rpc_url );
+
+		$block_number_hex = $sut->getFinalizedBlockNumberHex();
+
+		$this->assertGreaterThanOrEqual( 0, hexdec( $block_number_hex ) );
+	}
+	public function getFinalizedBlockNumberProvider() {
+		return array(
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L1 ) ),
+			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ) ),
+		);
+	}
+
+
 }
