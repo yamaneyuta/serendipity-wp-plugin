@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
-class NetworkCategoryData {
+class NetworkCategoryDefinition {
 
 	private const NETWORK_CATEGORY_INDEX = 0;
 	private const CHAIN_ID_INDEX         = 1;

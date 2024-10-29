@@ -9,9 +9,9 @@ use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 // -> https://ethereum.org/ja/enterprise/#products-and-services
 
 /**
- * 組み込みのRPC URLデータ
+ * 組み込みのRPC URL定義
  */
-class BuiltInRpcUrlData {
+class BuiltInRpcUrlDefinition {
 
 	private const CHAIN_ID_INDEX = 0;
 	private const RPC_URL_INDEX  = 1;

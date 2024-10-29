@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Lib\Repository\TokenData;
+use Cornix\Serendipity\Core\Lib\Repository\TokenDefinition;
 
 class AddPayableTokensResolverTest extends IntegrationTestBase {
 
@@ -41,7 +41,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 登録するトークンアドレスを取得
-		$register_token_address = ( new TokenData() )->all( $chain_ID )[0]->address();
+		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
 
 		// ACT
 		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, array( $register_token_address ) );
@@ -70,7 +70,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 登録するトークンアドレスを取得
-		$register_token_address = ( new TokenData() )->all( $chain_ID )[0]->address();
+		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
 
 		// ACT
 		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, array( $register_token_address ) );
@@ -95,7 +95,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 登録するトークンアドレスを取得
-		$register_token_address = ( new TokenData() )->all( $chain_ID )[0]->address();
+		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
 
 		// ACT
 		// 同じ値を2回登録
@@ -123,7 +123,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 登録するトークンアドレスを取得
-		$register_token_addresses = array_map( fn( $token ) => $token->address(), ( new TokenData() )->all( $chain_ID ) );
+		$register_token_addresses = array_map( fn( $token ) => $token->address(), ( new TokenDefinition() )->all( $chain_ID ) );
 
 		// ACT
 		$this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $register_token_addresses[0] ) );

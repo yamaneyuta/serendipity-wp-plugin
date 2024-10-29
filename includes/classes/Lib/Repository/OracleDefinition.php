@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
-class OracleData {
+class OracleDefinition {
 
 	private const CHAIN_ID_INDEX = 0;
 	private const SYMBOL_INDEX   = 1;
@@ -62,7 +62,7 @@ class OracleData {
 	 * @return string[]
 	 */
 	public function getSymbols( NetworkCategory $network_category ): array {
-		$chain_ID = ( new NetworkCategoryData() )->getOracleChainID( $network_category );
+		$chain_ID = ( new NetworkCategoryDefinition() )->getOracleChainID( $network_category );
 		/** @var string[] */
 		$symbols = array();
 		foreach ( $this->oracle_data as $data ) {

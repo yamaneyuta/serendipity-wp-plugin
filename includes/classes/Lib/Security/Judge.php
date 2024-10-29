@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Security;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
-use Cornix\Serendipity\Core\Lib\Repository\TokenData;
+use Cornix\Serendipity\Core\Lib\Repository\TokenDefinition;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Token;
 
@@ -224,7 +224,7 @@ class Validator {
 	}
 
 	public static function isTokenAddress( int $chain_ID, string $address ): bool {
-		return ( new TokenData() )->exists( $chain_ID, $address );
+		return ( new TokenDefinition() )->exists( $chain_ID, $address );
 	}
 
 	public static function isAddress( string $address ): bool {

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\NetworkCategoryData;
+use Cornix\Serendipity\Core\Lib\Repository\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 
@@ -39,7 +39,7 @@ class PostResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[AB4A5F57] Widget attributes not found. - postID: ' . $post_ID );
 		}
 		// 投稿に設定されている販売ネットワークカテゴリに属するチェーンID一覧を取得
-		$chain_IDs = ( new NetworkCategoryData() )->getAllChainID( $widget_attributes->sellingNetworkCategory() );
+		$chain_IDs = ( new NetworkCategoryDefinition() )->getAllChainID( $widget_attributes->sellingNetworkCategory() );
 
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {

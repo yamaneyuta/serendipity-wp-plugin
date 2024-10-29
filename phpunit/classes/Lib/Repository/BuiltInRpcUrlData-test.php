@@ -2,17 +2,17 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Repository\BuiltInRpcUrlData;
+use Cornix\Serendipity\Core\Lib\Repository\BuiltInRpcUrlDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
-class BuiltInRpcUrlDataTest extends WP_UnitTestCase {
+class BuiltInRpcUrlDefinitionTest extends WP_UnitTestCase {
 	/**
 	 * 処理のテストではなく、実装漏れの確認を行うためのテスト
-	 * BuiltInRpcUrlDataからRPC URLが取得できることを確認
+	 * BuiltInRpcUrlDefinitionからRPC URLが取得できることを確認
 	 *
 	 * @test
-	 * @testdox [0BACB063] BuiltInRpcUrlData::getRpcUrls exists - chain_id: $chain_id
+	 * @testdox [0BACB063] BuiltInRpcUrlDefinition::getRpcUrls exists - chain_id: $chain_id
 	 * @dataProvider allChainIdProvider
 	 */
 	public function getRpcUrlsExists( int $chain_id ) {
@@ -20,7 +20,7 @@ class BuiltInRpcUrlDataTest extends WP_UnitTestCase {
 		// Do nothing.
 
 		// ACT
-		$built_in_rpc_urls = ( new BuiltInRpcUrlData() )->getRpcUrls( $chain_id );
+		$built_in_rpc_urls = ( new BuiltInRpcUrlDefinition() )->getRpcUrls( $chain_id );
 
 		// ASSERT
 		$this->assertGreaterThan( 0, count( $built_in_rpc_urls ) );
@@ -36,7 +36,7 @@ class BuiltInRpcUrlDataTest extends WP_UnitTestCase {
 	 * ビルトインのRPC URLが使用可能かどうかをテスト
 	 *
 	 * @test
-	 * @testdox [33B40E51] BuiltInRpcUrlData::getRpcUrls connectable - chain_id: $chain_id, rpc_url: $rpc_url
+	 * @testdox [33B40E51] BuiltInRpcUrlDefinition::getRpcUrls connectable - chain_id: $chain_id, rpc_url: $rpc_url
 	 * @dataProvider allRpcUrlProvider
 	 */
 	public function getRpcUrlsConnectable( int $chain_id, string $rpc_url ) {
@@ -67,7 +67,7 @@ class BuiltInRpcUrlDataTest extends WP_UnitTestCase {
 		$all_chain_ids = ( new TestAllChainID() )->get();
 		$provider_data = array();
 		foreach ( $all_chain_ids as $chain_id ) {
-			$rpc_urls = ( new BuiltInRpcUrlData() )->getRpcUrls( $chain_id );
+			$rpc_urls = ( new BuiltInRpcUrlDefinition() )->getRpcUrls( $chain_id );
 			foreach ( $rpc_urls as $rpc_url ) {
 				$provider_data[] = array( $chain_id, $rpc_url );
 			}

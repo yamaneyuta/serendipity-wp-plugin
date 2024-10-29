@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Lib\Repository\TokenData;
+use Cornix\Serendipity\Core\Lib\Repository\TokenDefinition;
 use Cornix\Serendipity\Core\Types\Token;
 
 class RemovePayableTokensResolverTest extends IntegrationTestBase {
@@ -42,7 +42,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
-		$register_token_address = ( new TokenData() )->all( $chain_ID )[0]->address();
+		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
 		( new PayableTokens() )->save( $chain_ID, array( Token::from( $chain_ID, $register_token_address ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
@@ -71,7 +71,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
-		$register_token_address = ( new TokenData() )->all( $chain_ID )[0]->address();
+		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
 		( new PayableTokens() )->save( $chain_ID, array( Token::from( $chain_ID, $register_token_address ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
@@ -100,10 +100,10 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
-		$register_token_address = ( new TokenData() )->all( $chain_ID )[0]->address();
+		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
 		( new PayableTokens() )->save( $chain_ID, array( Token::from( $chain_ID, $register_token_address ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
-		$not_registered_token_address = ( new TokenData() )->all( $chain_ID )[1]->address();    // 登録されていないアドレス
+		$not_registered_token_address = ( new TokenDefinition() )->all( $chain_ID )[1]->address();    // 登録されていないアドレス
 
 		// ACT
 		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $not_registered_token_address ) );
@@ -131,7 +131,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 登録するトークンアドレスを取得
-		$register_token_addresses = array_map( fn( $token ) => $token->address(), ( new TokenData() )->all( $chain_ID ) );
+		$register_token_addresses = array_map( fn( $token ) => $token->address(), ( new TokenDefinition() )->all( $chain_ID ) );
 		// 3つ登録
 		$token1 = Token::from( $chain_ID, $register_token_addresses[0] );
 		$token2 = Token::from( $chain_ID, $register_token_addresses[1] );

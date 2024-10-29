@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\Token;
 
-class TokenData {
+class TokenDefinition {
 
 	private const CHAIN_ID_INDEX = 0;
 	private const SYMBOL_INDEX   = 1;
