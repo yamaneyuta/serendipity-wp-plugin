@@ -21,4 +21,14 @@ class Prefix {
 		// 本プラグイン用のテーブルに付与するプレフィックスと同じものをoptionsのキーとして使用する
 		return $this->tableName();
 	}
+
+	/**
+	 * transient(optionsテーブルの一時データ)として格納する際のキー名に付与するプレフィックスを取得します。
+	 *
+	 * @return string
+	 */
+	public function transientKeyName(): string {
+		// optionsテーブルに格納する際のキー名のプレフィックスと同じものをtransientのキーとして使用する
+		return $this->optionKeyName();
+	}
 }
