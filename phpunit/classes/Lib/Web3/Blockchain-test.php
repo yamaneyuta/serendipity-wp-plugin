@@ -94,6 +94,4 @@ class BlockchainTest extends IntegrationTestBase {
 			array( ( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ) ),
 		);
 	}
-
-
 }

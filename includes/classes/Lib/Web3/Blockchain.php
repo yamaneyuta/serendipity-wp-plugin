@@ -84,7 +84,7 @@ class Blockchain {
 	}
 
 	/**
-	 * ファイナライズされた最新のブロック番号(HEX)。
+	 * ファイナライズされた最新のブロック番号(HEX)を取得します。
 	 */
 	public function getFinalizedBlockNumberHex(): string {
 		return $this->getBlockNumberByTag( 'finalized' );
@@ -104,7 +104,7 @@ class Blockchain {
 		$block_number_hex = null;
 		$this->eth()->getBlockByNumber(
 			$tag,
-			false,	// false: トランザクションの詳細を取得しない
+			false,  // false: トランザクションの詳細を取得しない
 			function ( $err, $res ) use ( &$block_number_hex ) {
 				if ( $err ) {
 					throw $err;
