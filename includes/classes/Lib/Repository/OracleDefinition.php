@@ -45,18 +45,6 @@ class OracleDefinition {
 
 
 	/**
-	 * 指定したチェーン、シンボルに対するOracleのコントラクトアドレスを取得します。
-	 */
-	public function getAddress( int $chain_ID, string $symbol ): ?string {
-		foreach ( $this->oracle_data as $data ) {
-			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID && $data[ self::SYMBOL_INDEX ] === $symbol ) {
-				return $data[ self::ADDRESS_INDEX ];
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * 指定したネットワークカテゴリに存在するOracleのシンボル(`XXX/USD`の`XXX`部分)一覧を取得します。
 	 *
 	 * @return string[]
