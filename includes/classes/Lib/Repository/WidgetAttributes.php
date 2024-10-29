@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
+namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;

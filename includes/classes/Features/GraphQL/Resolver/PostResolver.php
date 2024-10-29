@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\NetworkCategoryData;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
+use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 
 class PostResolver extends ResolverBase {
 

@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\Name\ClassName;
-use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes\WidgetAttributes;
+use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
