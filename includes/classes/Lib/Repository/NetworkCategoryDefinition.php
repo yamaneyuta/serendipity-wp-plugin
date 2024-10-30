@@ -47,6 +47,8 @@ class NetworkCategoryDefinition {
 
 	/**
 	 * 指定されたネットワークカテゴリにおける、OracleのチェーンIDを取得します。
+	 *
+	 * @deprecated Oracleを使用するネットワークが複数存在する可能性があるため、このメソッドは非推奨です。
 	 */
 	public function getOracleChainID( NetworkCategory $network_category ): int {
 		if ( $network_category === NetworkCategory::mainnet() ) {

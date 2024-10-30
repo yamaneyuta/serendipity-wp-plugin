@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
@@ -12,9 +13,9 @@ use Web3\Formatters\BigNumberFormatter;
 use Web3\Methods\EthMethod;
 
 class Blockchain {
-	public function __construct( string $rpc_url, ?float $timeout = 2 ) {
+	public function __construct( string $rpc_url ) {
 		$this->rpc_url = $rpc_url;
-		$this->timeout = $timeout;
+		$this->timeout = Config::BLOCKCHAIN_REQUEST_TIMEOUT;
 	}
 	private string $rpc_url;
 	private float $timeout;
