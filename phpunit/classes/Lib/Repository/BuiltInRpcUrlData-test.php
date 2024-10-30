@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Repository\BuiltInRpcUrlDefinition;
-use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 class BuiltInRpcUrlDefinitionTest extends WP_UnitTestCase {
@@ -40,7 +39,7 @@ class BuiltInRpcUrlDefinitionTest extends WP_UnitTestCase {
 	 * @dataProvider allRpcUrlProvider
 	 */
 	public function getRpcUrlsConnectable( int $chain_id, string $rpc_url ) {
-		if ( ! $this->isTestStatus() ) {
+		if ( ! ExternalApiAccess::isTesting() ) {
 			$this->markTestSkipped( '[E8C72D14] Tests are performed only when they match the minimum version of PHP required. current version: ' . phpversion() );
 			return;
 		}
@@ -73,25 +72,5 @@ class BuiltInRpcUrlDefinitionTest extends WP_UnitTestCase {
 			}
 		}
 		return $provider_data;
-	}
-
-	/**
-	 * テストを実施する状態かどうかを判定します。
-	 * ※ CIで外部アクセスのテスト回数を制限するために使用
-	 */
-	private function isTestStatus(): bool {
-		$is_test_php_version = $this->versionEqual( phpversion(), ( new PluginInfo() )->requiresPHP() );
-		$is_test_wp_version  = $this->versionEqual( $GLOBALS['wp_version'], ( new PluginInfo() )->requiresWP() );
-
-		return $is_test_php_version && $is_test_wp_version;
-	}
-	private function versionEqual( string $version1, string $version2 ): bool {
-		$major1 = (int) explode( '.', $version1 )[0];
-		$minor1 = (int) explode( '.', $version1 )[1];
-
-		$major2 = (int) explode( '.', $version2 )[0];
-		$minor2 = (int) explode( '.', $version2 )[1];
-
-		return $major1 == $major2 && $minor1 == $minor2;
 	}
 }
