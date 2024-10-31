@@ -24,6 +24,12 @@ class TokenDefinition {
 			// Sepolia
 			array( ChainID::SEPOLIA, 'ETH', Ethers::zeroAddress(), 18 ),
 
+			// Polygon zkEVMテストネット(L2/Sepolia)
+			array( ChainID::POLYGON_ZK_EVM_CARDONA, 'ETH', Ethers::zeroAddress(), 18 ),
+
+			// Soneiumテストネット(L2/Sepolia)
+			array( ChainID::SONEIUM_MINATO, 'ETH', Ethers::zeroAddress(), 18 ),
+
 			// Privatenet L1
 			array( ChainID::PRIVATENET_L1, 'ETH', Ethers::zeroAddress(), 18 ),
 			array( ChainID::PRIVATENET_L1, 'TUSD', '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', 18 ),
