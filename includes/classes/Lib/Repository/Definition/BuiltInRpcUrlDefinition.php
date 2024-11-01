@@ -1,8 +1,9 @@
 <?php
 
-namespace Cornix\Serendipity\Core\Lib\Repository;
+namespace Cornix\Serendipity\Core\Lib\Repository\Definition;
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Lib\Repository\Environment;
 
 // サイト所有者(販売者)がRPC URLを設定画面で設定するまでの間、一時的に使用するRPC URLを定義。
 // Ethereumの公式ページに載っているサービス等を用いてRPC URLを取得することを推奨。

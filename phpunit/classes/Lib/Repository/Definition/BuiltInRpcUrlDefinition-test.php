@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Repository\BuiltInRpcUrlDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\BuiltInRpcUrlDefinition;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 class BuiltInRpcUrlDefinitionTest extends WP_UnitTestCase {

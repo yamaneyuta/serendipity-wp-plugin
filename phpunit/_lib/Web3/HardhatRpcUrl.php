@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\BuiltInRpcUrlDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\BuiltInRpcUrlDefinition;
 
 /** Hardhatに接続するRPC URLを取得します。 */
 class HardhatRpcUrl {
