@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -38,12 +39,11 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 現時点での販売価格を取得
 		$selling_price = $widget_attributes->sellingPrice();
 
-		// ここからテスト用コード -->
-		// 暫定でトークンの数量を決定
-		$payment_amount_hex = '0x' . dechex( 1000000000000000000 );   // 1ETH
-		// <-- ここまでテスト用コード
+		// 支払うトークンにおける価格を計算
+		// ※ これは`1ETH`等の価格を表現するオブジェクトであり、実際に支払う数量(wei等)ではないことに注意
+		$payment_price = ( new PriceExchange() )->convert( $selling_price, $token->symbol() );
 
-		// 請求書番号を発行
+		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
 		$invoice_id = ( new Invoice( $wpdb ) )->issue( $selling_price );
 
@@ -57,7 +57,7 @@ class IssueInvoiceResolver extends ResolverBase {
 					'address' => $token->address(),
 				)
 			),
-			'paymentAmountHex' => $payment_amount_hex,
+			'paymentAmountHex' => $payment_price->toTokenAmount( $chain_ID ),
 		);
 	}
 }

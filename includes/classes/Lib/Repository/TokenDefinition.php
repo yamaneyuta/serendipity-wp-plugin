@@ -20,9 +20,14 @@ class TokenDefinition {
 		$this->token_data = array(
 			// Mainnet
 			array( ChainID::ETH_MAINNET, 'ETH', Ethers::zeroAddress(), 18 ),
+			array( ChainID::ETH_MAINNET, 'BAT', '0x0D8775F648430679A709E98d2b0Cb6250d2887EF', 18 ),
+			array( ChainID::ETH_MAINNET, 'LINK', '0x514910771AF9Ca656af840dff83E8264EcF986CA', 18 ),
+			array( ChainID::ETH_MAINNET, 'MATIC', '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0', 18 ),
+			array( ChainID::ETH_MAINNET, 'USDC', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6 ),
 
 			// Sepolia
 			array( ChainID::SEPOLIA, 'ETH', Ethers::zeroAddress(), 18 ),
+			array( ChainID::SEPOLIA, 'LINK', '0x779877A7B0D9E8603169DdbD7836e478b4624789', 18 ),
 
 			// Polygon zkEVMテストネット(L2/Sepolia)
 			array( ChainID::POLYGON_ZK_EVM_CARDONA, 'ETH', Ethers::zeroAddress(), 18 ),
@@ -79,5 +84,41 @@ class TokenDefinition {
 		}
 
 		throw new \InvalidArgumentException( '[D342C006] symbol not found: ' . $chain_ID . ', ' . $address );
+	}
+
+	/**
+	 * 指定したチェーンID、シンボルのトークンの小数点以下桁数を取得します。
+	 */
+	public function decimals( int $chain_ID, string $symbol ): int {
+		foreach ( $this->token_data as $data ) {
+			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID && $data[ self::SYMBOL_INDEX ] === $symbol ) {
+				return $data[ self::DECIMALS_INDEX ];
+			}
+		}
+
+		throw new \InvalidArgumentException( '[D342C006] decimals not found: ' . $chain_ID . ', ' . $symbol );
+	}
+
+	/**
+	 * 指定した通貨シンボルの最大小数点以下桁数を取得します。
+	 * ※ ネットワークを跨いだ比較を行い、最大値を取得します。
+	 */
+	public function maxDecimals( string $symbol ): int {
+		/** @var int|null */
+		$max = null;
+		foreach ( $this->token_data as $data ) {
+			if ( $data[ self::SYMBOL_INDEX ] === $symbol ) {
+				if ( is_null( $max ) ) {
+					$max = $data[ self::DECIMALS_INDEX ];
+				} else {
+					$max = max( $max, $data[ self::DECIMALS_INDEX ] );
+				}
+			}
+		}
+
+		if ( null === $max ) {
+			throw new \InvalidArgumentException( '[35BAC9DE] max decimals not found: ' . $symbol );
+		}
+		return $max;
 	}
 }
