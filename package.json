@@ -76,7 +76,7 @@
 	"dependencies": {
 		"@tanstack/react-query": "^4.36.1",
 		"@wordpress/block-editor": "^13.4.0",
-		"@wordpress/blocks": "^13.9.0",
+		"@wordpress/blocks": "^13.10.0",
 		"@wordpress/icons": "^10.9.0",
 		"assert": "^2.1.0",
 		"async-lock": "^1.4.1",
