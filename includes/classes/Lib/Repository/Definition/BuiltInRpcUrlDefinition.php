@@ -24,6 +24,7 @@ class BuiltInRpcUrlDefinition {
 
 		// 参考:
 		// - https://www.ankr.com/rpc/
+		// 　- Rate limits: 1800/min https://www.ankr.com/docs/rpc-service/service-plans/#rate-limits
 		// - https://publicnode.com/
 		// - https://tokenswap.exchange/tools/chainlist
 		$this->data = array(
