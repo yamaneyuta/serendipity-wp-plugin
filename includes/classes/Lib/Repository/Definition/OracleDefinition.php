@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Repository;
+namespace Cornix\Serendipity\Core\Lib\Repository\Definition;
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Lib\Repository\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 

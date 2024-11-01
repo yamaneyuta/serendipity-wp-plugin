@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
-use Cornix\Serendipity\Core\Lib\Repository\OracleDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\OracleDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\RateData;
 use Cornix\Serendipity\Core\Lib\Repository\TokenDefinition;
 use Cornix\Serendipity\Core\Types\Price;
