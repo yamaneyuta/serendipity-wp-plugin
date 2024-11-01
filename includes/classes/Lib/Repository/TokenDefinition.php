@@ -22,6 +22,8 @@ class TokenDefinition {
 			array( ChainID::ETH_MAINNET, 'ETH', Ethers::zeroAddress(), 18 ),
 			array( ChainID::ETH_MAINNET, 'BAT', '0x0D8775F648430679A709E98d2b0Cb6250d2887EF', 18 ),
 			array( ChainID::ETH_MAINNET, 'LINK', '0x514910771AF9Ca656af840dff83E8264EcF986CA', 18 ),
+			array( ChainID::ETH_MAINNET, 'MATIC', '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0', 18 ),
+			array( ChainID::ETH_MAINNET, 'USDC', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6 ),
 
 			// Sepolia
 			array( ChainID::SEPOLIA, 'ETH', Ethers::zeroAddress(), 18 ),
