@@ -51,7 +51,7 @@ class BuiltInRpcUrlDefinition {
 	/**
 	 * 指定したチェーンIDに対応する組み込みのRPC URL一覧を取得します。
 	 */
-	public function getRpcUrls( int $chain_ID ): array {
+	public function getUrls( int $chain_ID ): array {
 		$rpc_urls = array();
 		foreach ( $this->built_in_rpc_data as $rpc_data ) {
 			if ( $rpc_data[ self::CHAIN_ID_INDEX ] === $chain_ID ) {

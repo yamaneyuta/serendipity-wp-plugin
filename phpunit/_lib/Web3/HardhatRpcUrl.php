@@ -6,6 +6,6 @@ use Cornix\Serendipity\Core\Lib\Repository\Definition\BuiltInRpcUrlDefinition;
 /** Hardhatに接続するRPC URLを取得します。 */
 class HardhatRpcUrl {
 	public function get( int $chain_ID ) {
-		return ( new BuiltInRpcUrlDefinition() )->getRpcUrls( $chain_ID )[0];
+		return ( new BuiltInRpcUrlDefinition() )->getUrls( $chain_ID )[0];
 	}
 }
