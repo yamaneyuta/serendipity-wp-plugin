@@ -23,6 +23,13 @@ class BuiltInRpcUrlDefinition {
 		// - https://publicnode.com/
 		// - https://tokenswap.exchange/tools/chainlist
 
+		// プライベートネットのURLを取得する関数
+		$privatenet = function ( int $number ): string {
+			assert( in_array( $number, array( 1, 2 ) ) );
+			$prefix = ( new Environment() )->isDevelopmentMode() ? 'tests-' : '';
+			return "http://{$prefix}privatenet-{$number}.local";
+		};
+
 		$this->built_in_rpc_data = array(
 			// `https://cloudflare-eth.com`はGitHub Actionsでのテストが通らないため、コメントアウト
 			array( ChainID::ETH_MAINNET, 'https://rpc.ankr.com/eth' ),              // https://www.ankr.com/rpc/eth/
@@ -40,8 +47,8 @@ class BuiltInRpcUrlDefinition {
 
 			array( ChainID::SONEIUM_MINATO, 'https://rpc.minato.soneium.org' ), // * https://docs.soneium.org/docs/builders/overview
 
-			array( ChainID::PRIVATENET_L1, $this->privatenet( 1 ) ),
-			array( ChainID::PRIVATENET_L2, $this->privatenet( 2 ) ),
+			array( ChainID::PRIVATENET_L1, $privatenet( 1 ) ),
+			array( ChainID::PRIVATENET_L2, $privatenet( 2 ) ),
 		);
 	}
 
@@ -59,12 +66,5 @@ class BuiltInRpcUrlDefinition {
 			}
 		}
 		return $rpc_urls;
-	}
-
-	/** PrivatenetのRPC URLを取得します。 */
-	private function privatenet( int $number ): string {
-		assert( $number === 1 || $number === 2 );
-		$prefix = ( new Environment() )->isDevelopmentMode() ? 'tests-' : '';
-		return "http://{$prefix}privatenet-{$number}.local";
 	}
 }
