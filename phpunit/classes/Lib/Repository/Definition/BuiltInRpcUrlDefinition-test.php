@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Repository\BuiltInRpcUrlDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\BuiltInRpcUrlDefinition;
 use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 
 class BuiltInRpcUrlDefinitionTest extends WP_UnitTestCase {
@@ -19,7 +19,7 @@ class BuiltInRpcUrlDefinitionTest extends WP_UnitTestCase {
 		// Do nothing.
 
 		// ACT
-		$built_in_rpc_urls = ( new BuiltInRpcUrlDefinition() )->getRpcUrls( $chain_id );
+		$built_in_rpc_urls = ( new BuiltInRpcUrlDefinition() )->getUrls( $chain_id );
 
 		// ASSERT
 		$this->assertGreaterThan( 0, count( $built_in_rpc_urls ) );
@@ -66,7 +66,7 @@ class BuiltInRpcUrlDefinitionTest extends WP_UnitTestCase {
 		$all_chain_ids = ( new TestAllChainID() )->get();
 		$provider_data = array();
 		foreach ( $all_chain_ids as $chain_id ) {
-			$rpc_urls = ( new BuiltInRpcUrlDefinition() )->getRpcUrls( $chain_id );
+			$rpc_urls = ( new BuiltInRpcUrlDefinition() )->getUrls( $chain_id );
 			foreach ( $rpc_urls as $rpc_url ) {
 				$provider_data[] = array( $chain_id, $rpc_url );
 			}

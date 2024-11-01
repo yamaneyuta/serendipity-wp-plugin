@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\NetworkCategoryDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class NetworkCategoryDefinitionTest extends WP_UnitTestCase {

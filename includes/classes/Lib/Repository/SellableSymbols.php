@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\OracleDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\OracleDefinition;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class SellableSymbols {

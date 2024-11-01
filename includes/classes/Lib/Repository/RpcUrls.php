@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
+use Cornix\Serendipity\Core\Lib\Repository\Definition\BuiltInRpcUrlDefinition;
+
 class RpcUrls {
 
 	/**
@@ -17,6 +19,6 @@ class RpcUrls {
 		//
 
 		// 組み込みのRPC URL一覧を返す
-		return ( new BuiltInRpcUrlDefinition() )->getRpcUrls( $chain_ID );
+		return ( new BuiltInRpcUrlDefinition() )->getUrls( $chain_ID );
 	}
 }
