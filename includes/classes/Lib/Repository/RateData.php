@@ -53,7 +53,7 @@ class OracleRate {
 			$contract_address = ( new OracleDefinition() )->address( $chain_ID, $symbol_pair );
 			assert( ! is_null( $contract_address ) );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
 
-			foreach ( ( new RpcUrls() )->get( $chain_ID ) as $rpc_url ) {
+			foreach ( ( new RpcURL() )->get( $chain_ID ) as $rpc_url ) {
 				try {
 					// Oracleに問い合わせ
 					$oracle_client = new OracleClient( $rpc_url, $contract_address );

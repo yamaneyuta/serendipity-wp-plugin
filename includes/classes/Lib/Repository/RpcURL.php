@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Definition\BuiltInRpcUrlDefinition;
 
-class RpcUrls {
+class RpcURL {
 
 	/**
 	 * 指定したチェーンに接続できるRPC URL一覧を取得します。
