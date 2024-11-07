@@ -29,6 +29,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		$chain_ID = $args['chainID'];
 		/** @var string */
 		$token_address = $args['tokenAddress'];
+		/** @var string */
+		$consumer_address = $args['consumerAddress']; // 購入者のアドレス
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
@@ -66,7 +68,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 署名用ウォレットで署名を行うためのメッセージを作成
 		$message = SolidityStrings::valueToHexString( $chain_ID )
 			. SolidityStrings::addressToHexString( $seller_address )
-			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: 購入者のアドレス
+			. SolidityStrings::addressToHexString( $consumer_address )
 			. SolidityStrings::valueToHexString( $invoice_id->hex() )
 			. SolidityStrings::valueToHexString( $post_ID )
 			. SolidityStrings::addressToHexString( $token_address )
