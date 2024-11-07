@@ -22,7 +22,7 @@ type Query {
 
 type Mutation {
 	# 支払情報を発行【ゲスト】
-	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!): Invoice!
+	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!, consumerAddress: String!): Invoice!
 
 	# 販売者の利用規約同意情報を設定【管理者】
 	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!
