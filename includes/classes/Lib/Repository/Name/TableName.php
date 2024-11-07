@@ -21,4 +21,8 @@ class TableName {
 	public function invoice(): string {
 		return $this->addPrefix( 'invoice' );
 	}
+
+	public function invoiceNonce(): string {
+		return $this->addPrefix( 'invoice_nonce' );
+	}
 }
