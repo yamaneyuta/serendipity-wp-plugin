@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
+use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
@@ -27,6 +28,8 @@ class v001 {
 		global $wpdb;
 		// 請求書情報テーブルを作成
 		( new InvoiceTable( $wpdb ) )->create();
+		// 請求書とnonceの紐づきを保存するテーブルを作成
+		( new InvoiceNonceTable( $wpdb ) )->create();
 	}
 
 	public function down() {
@@ -35,6 +38,8 @@ class v001 {
 		global $wpdb;
 		// 請求書情報テーブルを削除
 		( new InvoiceTable( $wpdb ) )->drop();
+		// 請求書とnonceの紐づきを保存するテーブルを削除
+		( new InvoiceNonceTable( $wpdb ) )->drop();
 	}
 }
 

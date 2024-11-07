@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
+use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\Token;
@@ -46,9 +47,11 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
 		$invoice_id = ( new Invoice( $wpdb ) )->issue( $selling_price );
+		$nonce      = ( new InvoiceNonce( $wpdb ) )->new( $invoice_id );
 
 		return array(
 			'invoiceIdHex'     => $invoice_id->hex(),
+			'nonce'            => $nonce,
 			'seller'           => $root_value['seller']( $root_value, array() ),
 			'paymentToken'     => $root_value['token'](
 				$root_value,
