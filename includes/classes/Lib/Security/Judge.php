@@ -198,13 +198,8 @@ class Validator {
 	 * 指定された文字列が通貨記号として有効な値であるかどうかを返します。
 	 */
 	public static function isSymbol( string $symbol ): bool {
-		foreach ( NetworkCategory::all() as $network_category ) {
-			// いずれかのネットワークの販売可能なシンボルであればOKとする
-			if ( self::isSellableSymbol( $network_category, $symbol ) ) {
-				return true;
-			}
-		}
-		return false;
+		// 様々な通貨記号が存在するため、空文字列以外であれば有効とする。
+		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
 	}
 
 	/** 販売価格に使用可能なシンボルかどうかを返します。 */
