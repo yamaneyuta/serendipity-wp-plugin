@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Types\Rate;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\OracleDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\Oracle;
 use Cornix\Serendipity\Core\Types\Price;
 use phpseclib\Math\BigInteger;
 
@@ -16,14 +16,14 @@ class PriceExchangeTest extends IntegrationTestBase {
 	/** @var PriceExchange */
 	private $sut;
 	private $rate_data_stub;
-	private $oracle_definition_stub;
+	private $oracle_stub;
 
 	public function setUp(): void {
 		parent::setUp();
 
-		$this->rate_data_stub         = $this->createMock( RateData::class );
-		$this->oracle_definition_stub = $this->createMock( OracleDefinition::class );
-		$this->sut                    = new PriceExchange( $this->rate_data_stub, $this->oracle_definition_stub );
+		$this->rate_data_stub = $this->createMock( RateData::class );
+		$this->oracle_stub    = $this->createMock( Oracle::class );
+		$this->sut            = new PriceExchange( $this->rate_data_stub, $this->oracle_stub );
 
 		// $this->rate_data_mockのgetメソッドを任意の引数に対して任意の戻り値を返すように設定
 		$this->rate_data_stub->method( 'get' )->willReturnCallback(
@@ -52,7 +52,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 			}
 		);
 
-		$this->oracle_definition_stub->method( 'chainIDs' )->willReturnCallback(
+		$this->oracle_stub->method( 'connectableChainIDs' )->willReturnCallback(
 			function ( SymbolPair $symbol_pair ) {
 				// レートが取得できる時はOracleに定義されていることにする(本来は逆の関係だが、テストなので問題ない)
 				return is_null( $this->rate_data_stub->get( $symbol_pair ) ) ? array() : array( ChainID::ETH_MAINNET );
