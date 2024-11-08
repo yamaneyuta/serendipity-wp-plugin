@@ -68,7 +68,7 @@ class OracleClient {
 	/**
 	 * 最新のデータを取得します。
 	 */
-	private function latestRoundData(): OracleRoundData {
+	public function latestRoundData(): OracleRoundData {
 		/** @var OracleRoundData|null */
 		$result = null;
 		$this->oracle->call(
