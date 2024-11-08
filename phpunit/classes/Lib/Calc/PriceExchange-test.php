@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Types\Rate;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\Oracle;
+use Cornix\Serendipity\Core\Lib\Repository\Oracle;
 use Cornix\Serendipity\Core\Types\Price;
 use phpseclib\Math\BigInteger;
 
