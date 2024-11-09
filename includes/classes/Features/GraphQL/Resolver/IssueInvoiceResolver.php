@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
+use Cornix\Serendipity\Core\Lib\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
 use Cornix\Serendipity\Core\Lib\Repository\SellerAgreedTerms;
@@ -73,7 +74,7 @@ class IssueInvoiceResolver extends ResolverBase {
 			. SolidityStrings::valueToHexString( $post_ID )
 			. SolidityStrings::addressToHexString( $token_address )
 			. SolidityStrings::valueToHexString( $payment_amount_hex )
-			. SolidityStrings::valueToHexString( 0 )  // TODO: 購入者の同意した利用規約バージョン
+			. SolidityStrings::valueToHexString( ( new ConsumerTerms() )->currentVersion() )
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 )  // TODO: アフィリエイターの同意した利用規約バージョン
 			. SolidityStrings::valueToHexString( 0 );  // TODO: アフィリエイト報酬率
