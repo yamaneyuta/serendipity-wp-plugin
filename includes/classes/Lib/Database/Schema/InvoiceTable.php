@@ -22,7 +22,7 @@ class InvoiceTable {
 	private string $table_name;
 
 	/**
-	 * 購入用チケットテーブルを作成します。
+	 * 購入用請求書テーブルを作成します。
 	 */
 	public function create(): void {
 		$charset = $this->wpdb->get_charset_collate();
@@ -43,7 +43,7 @@ class InvoiceTable {
 	}
 
 	/**
-	 * 購入用チケットテーブルを削除します。
+	 * 購入用請求書テーブルを削除します。
 	 */
 	public function drop(): void {
 		$sql = <<<SQL
