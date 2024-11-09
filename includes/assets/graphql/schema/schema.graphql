@@ -5,6 +5,9 @@ schema {
 
 type Query {
 
+	# 購入者の利用規約バージョン【ゲスト】
+	consumerTermsVersion: Int!
+
 	# 投稿情報を取得【ゲスト】
 	post(postID: Int!): Post!
 
