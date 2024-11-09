@@ -38,7 +38,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		// ARRANGE
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice                = HardhatSignerFactory::alice();
-		$seller_terms_version = ( new SellerTerms() )->version();
+		$seller_terms_version = ( new SellerTerms() )->currentVersion();
 		$seller_terms_message = ( new SellerTerms() )->message( $seller_terms_version );
 		$signature            = $alice->signMessage( $seller_terms_message );
 		// 事前チェック
@@ -71,7 +71,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		// ARRANGE
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice                = HardhatSignerFactory::alice();
-		$seller_terms_version = ( new SellerTerms() )->version();
+		$seller_terms_version = ( new SellerTerms() )->currentVersion();
 		$seller_terms_message = ( new SellerTerms() )->message( $seller_terms_version );
 		$signature            = $alice->signMessage( $seller_terms_message );
 		// 事前チェック

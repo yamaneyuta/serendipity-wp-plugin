@@ -63,7 +63,7 @@ class SellerResolverTest extends IntegrationTestBase {
 		// ARRANGE
 		// Aliceが販売者用利用規約に署名しデータを保存
 		$alice                = HardhatSignerFactory::alice();
-		$seller_terms_version = ( new SellerTerms() )->version();
+		$seller_terms_version = ( new SellerTerms() )->currentVersion();
 		$seller_terms_message = ( new SellerTerms() )->message( $seller_terms_version );
 		$signature            = $alice->signMessage( $seller_terms_message );
 		( new SellerAgreedTerms() )->save( $seller_terms_version, $signature );

@@ -11,7 +11,7 @@ class SellerTerms {
 	/**
 	 * このプラグインに同梱されている販売者向け利用規約のバージョンを取得します。
 	 */
-	public function version(): int {
+	public function currentVersion(): int {
 		error_log( '[92FBB7F4] SellerTerms::version() - Not implemented yet' );
 		return 1;
 	}

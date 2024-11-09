@@ -162,7 +162,7 @@ class Judge {
 		}
 	}
 	private static function isCurrentSellerTermsVersion( int $seller_terms_version ): bool {
-		$current_version = ( new SellerTerms() )->version();  // 現在の販売者向け利用規約バージョン
+		$current_version = ( new SellerTerms() )->currentVersion();  // 現在の販売者向け利用規約バージョン
 		return $seller_terms_version === $current_version;
 	}
 }

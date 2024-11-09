@@ -43,7 +43,7 @@ class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
 
 		// Repositoryから取得した値と一致していることを確認
-		$version = ( new SellerTerms() )->version();
+		$version = ( new SellerTerms() )->currentVersion();
 		$message = ( new SellerTerms() )->message( $version );
 		$this->assertEquals( $version, $data['data']['currentSellerTerms']['version'] );
 		$this->assertEquals( $message, $data['data']['currentSellerTerms']['message'] );
