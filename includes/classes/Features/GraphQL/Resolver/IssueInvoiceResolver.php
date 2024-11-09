@@ -76,7 +76,6 @@ class IssueInvoiceResolver extends ResolverBase {
 			. SolidityStrings::valueToHexString( $payment_amount_hex )
 			. SolidityStrings::valueToHexString( ( new ConsumerTerms() )->currentVersion() )
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
-			. SolidityStrings::valueToHexString( 0 )  // TODO: アフィリエイターの同意した利用規約バージョン
 			. SolidityStrings::valueToHexString( 0 );  // TODO: アフィリエイト報酬率
 		// サーバーの署名用ウォレットで署名
 		$signer           = new Signer( ( new SignerPrivateKey() )->get() );
