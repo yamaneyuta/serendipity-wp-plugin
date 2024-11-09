@@ -85,7 +85,6 @@ class IssueInvoiceResolver extends ResolverBase {
 			'invoiceIdHex'     => $invoice_id->hex(),
 			'nonce'            => $nonce,
 			'serverSignature'  => $server_signature,
-			'seller'           => $root_value['seller']( $root_value, array() ),
 			'paymentToken'     => $root_value['token'](
 				$root_value,
 				array(

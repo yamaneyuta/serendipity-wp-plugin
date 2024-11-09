@@ -93,7 +93,6 @@ type Invoice {
 	invoiceIdHex: String!
 	nonce: String!				# 購入者の署名を省略するための乱数
 	serverSignature: String!	# 署名用ウォレットで作成した署名
-	seller: Seller!				# 販売者情報
 	paymentToken: Token!		# 支払いトークン
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
 }
