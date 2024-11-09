@@ -13,7 +13,7 @@ class SellerTerms {
 	 */
 	public function version(): int {
 		error_log( '[92FBB7F4] SellerTerms::version() - Not implemented yet' );
-		return 0;
+		return 1;
 	}
 
 	/**
