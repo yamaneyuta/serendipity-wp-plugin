@@ -60,6 +60,7 @@ input NetworkCategoryFilter {
 type NetworkCategory {
 	id: Int!
 	chains: [Chain!]! # このカテゴリに含まれるチェーン一覧【管理者】
+	# TODO: `sellableSymbols`はネットワークカテゴリに紐づかなくなったため、`Query`に移動する
 	sellableSymbols: [String!]! # 販売価格として設定可能な通貨シンボル一覧【投稿編集者】
 }
 

@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\OracleDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Oracle;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
 use Cornix\Serendipity\Core\Lib\Repository\Transient\TransientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\OracleClient;
@@ -46,11 +46,11 @@ class OracleRate {
 	public function get( SymbolPair $symbol_pair ): ?Rate {
 		// 指定した通貨ペアのOracleがデプロイされているチェーンID一覧を取得
 		// TODO: 本番環境とテスト環境で同じ順でOracleへの問い合わせでよいか確認
-		$chain_IDs = ( new OracleDefinition() )->chainIDs( $symbol_pair );
+		$chain_IDs = ( new Oracle() )->connectableChainIDs( $symbol_pair );
 
 		foreach ( $chain_IDs as $chain_ID ) {
 			// コントラクトアドレスを取得
-			$contract_address = ( new OracleDefinition() )->address( $chain_ID, $symbol_pair );
+			$contract_address = ( new Oracle() )->address( $chain_ID, $symbol_pair );
 			assert( ! is_null( $contract_address ) );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
 
 			foreach ( ( new RpcURL() )->allConnectableURL( $chain_ID ) as $rpc_url ) {

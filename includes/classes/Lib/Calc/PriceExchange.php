@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
-use Cornix\Serendipity\Core\Lib\Repository\Definition\OracleDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Oracle;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\RateData;
 use Cornix\Serendipity\Core\Types\Price;
@@ -11,12 +11,12 @@ use Cornix\Serendipity\Core\Types\SymbolPair;
 use phpseclib\Math\BigInteger;
 
 class PriceExchange {
-	public function __construct( RateData $rate_data = null, OracleDefinition $oracle_definition = null ) {
-		$this->rate_data         = $rate_data ?? new RateData();
-		$this->oracle_definition = $oracle_definition ?? new OracleDefinition();
+	public function __construct( RateData $rate_data = null, Oracle $oracle = null ) {
+		$this->rate_data = $rate_data ?? new RateData();
+		$this->oracle    = $oracle ?? new Oracle();
 	}
 	private RateData $rate_data;
-	private OracleDefinition $oracle_definition;
+	private Oracle $oracle;
 
 	public function convert( Price $price, string $to_symbol ): Price {
 		// 元の価格が0の場合は変換後の値も0
@@ -99,7 +99,7 @@ class PriceExchange {
 	 */
 	private function isConvertible( string $from_symbol, string $to_symbol ): bool {
 		// [FROM]/[TO]のレートまたは[TO]/[FROM]のOracleが存在する場合は変換可能
-		return ! empty( $this->oracle_definition->chainIDs( new SymbolPair( $from_symbol, $to_symbol ) ) ) ||
-			! empty( $this->oracle_definition->chainIDs( new SymbolPair( $to_symbol, $from_symbol ) ) );
+		return ! empty( $this->oracle->connectableChainIDs( new SymbolPair( $from_symbol, $to_symbol ) ) ) ||
+			! empty( $this->oracle->connectableChainIDs( new SymbolPair( $to_symbol, $from_symbol ) ) );
 	}
 }
