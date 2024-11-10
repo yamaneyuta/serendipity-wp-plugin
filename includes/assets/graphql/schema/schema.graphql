@@ -69,7 +69,12 @@ type NetworkCategory {
 
 type Chain {
 	id: Int!	# チェーンID【ゲスト】
+	appContract: AppContract!	# アプリケーションコントラクトの情報【ゲスト】
 	tokens: [Token!]!			# このチェーンに存在するトークン一覧【管理者】
+}
+
+type AppContract {
+	address: String!	# アプリケーションコントラクトアドレス【ゲスト】
 }
 
 type Token {
