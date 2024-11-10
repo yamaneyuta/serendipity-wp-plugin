@@ -85,13 +85,6 @@ class IssueInvoiceResolver extends ResolverBase {
 			'invoiceIdHex'     => $invoice_id->hex(),
 			'nonce'            => $nonce,
 			'serverSignature'  => $server_signature,
-			'paymentToken'     => $root_value['token'](
-				$root_value,
-				array(
-					'chainID' => $token->chainID(),
-					'address' => $token->address(),
-				)
-			),
 			'paymentAmountHex' => $payment_amount_hex,
 		);
 	}
