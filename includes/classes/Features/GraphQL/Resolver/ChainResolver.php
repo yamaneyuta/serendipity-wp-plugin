@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
@@ -16,6 +17,10 @@ class ChainResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
 		$chain_ID = $args['chainID'];
+
+		// `AppContractResolver`の作成を省略してコールバックを定義
+		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
+		$app_contract_callback = fn() => array( 'address' => ( new AppContract() )->address( $chain_ID ) );
 
 		$tokens_callback = function () use ( $root_value, $chain_ID ) {
 			Judge::checkHasAdminRole(); // 管理者権限が必要
@@ -35,8 +40,9 @@ class ChainResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'     => $chain_ID,
-			'tokens' => $tokens_callback,
+			'id'          => $chain_ID,
+			'appContract' => $app_contract_callback,
+			'tokens'      => $tokens_callback,
 		);
 	}
 }

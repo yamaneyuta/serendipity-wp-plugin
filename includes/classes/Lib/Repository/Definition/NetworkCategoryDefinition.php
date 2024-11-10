@@ -30,6 +30,19 @@ class NetworkCategoryDefinition {
 	private array $chain_id_data;
 
 	/**
+	 * 指定されたチェーンIDに対応するネットワークカテゴリを取得します。
+	 */
+	public function get( int $chain_ID ): NetworkCategory {
+		foreach ( $this->chain_id_data as $data ) {
+			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID ) {
+				return NetworkCategory::from( $data[ self::NETWORK_CATEGORY_INDEX ] );
+			}
+		}
+
+		throw new \InvalidArgumentException( '[96897B8A] Invalid chain ID. - chain_ID: ' . $chain_ID );
+	}
+
+	/**
 	 * 指定したネットワークカテゴリに含まれるチェーンID一覧を取得します。
 	 *
 	 * @param NetworkCategory $network_category
