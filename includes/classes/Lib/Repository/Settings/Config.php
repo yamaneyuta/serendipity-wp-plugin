@@ -16,4 +16,9 @@ class Config {
 	 * ブロックチェーンへのリクエストのタイムアウト(秒)
 	 */
 	public const BLOCKCHAIN_REQUEST_TIMEOUT = 10;
+
+	/**
+	 * ブロックチェーンへのリクエストのリトライ間隔(ミリ秒)
+	 */
+	public const BLOCKCHAIN_REQUEST_RETRY_INTERVALS_MS = array( 1000, 2000, 4000 );
 }

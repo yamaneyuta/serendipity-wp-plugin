@@ -12,13 +12,19 @@ use Web3\Eth;
 use Web3\Formatters\BigNumberFormatter;
 use Web3\Methods\EthMethod;
 
+// memo.
+// Ethを継承してリトライを行うクラスを作成する方法は、名前空間やクラス名がEthクラス内部で使用されておりややこしくなるため不採用
+// ここでは各メソッドでリトライオブジェクトを使用するように実装している
+
 class Blockchain {
 	public function __construct( string $rpc_url ) {
 		$this->rpc_url = $rpc_url;
 		$this->timeout = Config::BLOCKCHAIN_REQUEST_TIMEOUT;
+		$this->retryer = new BlockchainRetryer();
 	}
 	private string $rpc_url;
 	private float $timeout;
+	private BlockchainRetryer $retryer;
 
 	private function eth(): Eth {
 		return new Eth( $this->rpc_url, $this->timeout );
@@ -50,12 +56,16 @@ class Blockchain {
 
 		/** @var string|null */
 		$chain_ID_hex = null;
-		$eth->chainId(
-			function ( $err, BigInteger $res ) use ( &$chain_ID_hex ) {
-				if ( $err ) {
-					throw $err;
-				}
-				$chain_ID_hex = Hex::from( $res );
+		$this->retryer->execute(
+			function () use ( $eth, &$chain_ID_hex ) {
+				$eth->chainId(
+					function ( $err, BigInteger $res ) use ( &$chain_ID_hex ) {
+						if ( $err ) {
+							throw $err;
+						}
+						$chain_ID_hex = Hex::from( $res );
+					}
+				);
 			}
 		);
 		assert( ! is_null( $chain_ID_hex ), '[1BAA2783] Failed to get chain ID.' );
@@ -70,12 +80,16 @@ class Blockchain {
 	public function getBlockNumberHex(): string {
 		/** @var string|null */
 		$block_number_hex = null;
-		$this->eth()->blockNumber(
-			function ( $err, BigInteger $res ) use ( &$block_number_hex ) {
-				if ( $err ) {
-					throw $err;
-				}
-				$block_number_hex = Hex::from( $res );
+		$this->retryer->execute(
+			function () use ( &$block_number_hex ) {
+				$this->eth()->blockNumber(
+					function ( $err, BigInteger $res ) use ( &$block_number_hex ) {
+						if ( $err ) {
+							throw $err;
+						}
+						$block_number_hex = Hex::from( $res );
+					}
+				);
 			}
 		);
 		assert( ! is_null( $block_number_hex ), '[C38AC4D1] Failed to get block number.' );
@@ -103,15 +117,19 @@ class Blockchain {
 
 		/** @var string|null */
 		$block_number_hex = null;
-		$this->eth()->getBlockByNumber(
-			$tag,
-			false,  // false: トランザクションの詳細を取得しない
-			function ( $err, $res ) use ( &$block_number_hex ) {
-				if ( $err ) {
-					throw $err;
-				}
+		$this->retryer->execute(
+			function () use ( $tag, &$block_number_hex ) {
+				$this->eth()->getBlockByNumber(
+					$tag,
+					false,  // false: トランザクションの詳細を取得しない
+					function ( $err, $res ) use ( &$block_number_hex ) {
+						if ( $err ) {
+							throw $err;
+						}
 
-				$block_number_hex = $res->number; // $res->numberは16進数の文字列
+						$block_number_hex = $res->number; // $res->numberは16進数の文字列
+					}
+				);
 			}
 		);
 
@@ -130,13 +148,17 @@ class Blockchain {
 
 		/** @var string|null */
 		$balance_hex = null;
-		$this->eth()->getBalance(
-			$address,
-			function ( $err, BigInteger $res ) use ( &$balance_hex ) {
-				if ( $err ) {
-					throw $err;
-				}
-				$balance_hex = Hex::from( $res );
+		$this->retryer->execute(
+			function () use ( $address, &$balance_hex ) {
+				$this->eth()->getBalance(
+					$address,
+					function ( $err, BigInteger $res ) use ( &$balance_hex ) {
+						if ( $err ) {
+							throw $err;
+						}
+						$balance_hex = Hex::from( $res );
+					}
+				);
 			}
 		);
 		assert( ! is_null( $balance_hex ), '[72C38938] Failed to get balance.' );
