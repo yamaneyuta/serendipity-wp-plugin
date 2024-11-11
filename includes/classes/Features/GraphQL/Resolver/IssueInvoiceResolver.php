@@ -67,7 +67,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		$nonce      = ( new InvoiceNonce( $wpdb ) )->new( $invoice_id );
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成
-		$message = SolidityStrings::valueToHexString( $chain_ID )
+		$server_message = SolidityStrings::valueToHexString( $chain_ID )
 			. SolidityStrings::addressToHexString( $seller_address )
 			. SolidityStrings::addressToHexString( $consumer_address )
 			. SolidityStrings::valueToHexString( $invoice_id->hex() )
@@ -79,11 +79,12 @@ class IssueInvoiceResolver extends ResolverBase {
 			. SolidityStrings::valueToHexString( 0 );  // TODO: アフィリエイト報酬率
 		// サーバーの署名用ウォレットで署名
 		$signer           = new Signer( ( new SignerPrivateKey() )->get() );
-		$server_signature = $signer->signMessage( $message );
+		$server_signature = $signer->signMessage( $server_message );
 
 		return array(
 			'invoiceIdHex'     => $invoice_id->hex(),
 			'nonce'            => $nonce,
+			'serverMessage'    => $server_message,
 			'serverSignature'  => $server_signature,
 			'paymentAmountHex' => $payment_amount_hex,
 		);

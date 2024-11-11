@@ -100,6 +100,7 @@ type SellingContent {
 type Invoice {
 	invoiceIdHex: String!
 	nonce: String!				# 購入者の署名を省略するための乱数
+	serverMessage: String!      # サーバーで生成した署名対象メッセージ(クライアント側でコントラクトとの整合性を検証するために使用)
 	serverSignature: String!	# 署名用ウォレットで作成した署名
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
 }
