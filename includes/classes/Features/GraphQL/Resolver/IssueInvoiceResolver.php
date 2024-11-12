@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Lib\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
 use Cornix\Serendipity\Core\Lib\Repository\SellerAgreedTerms;
-use Cornix\Serendipity\Core\Lib\Repository\SignerPrivateKey;
+use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
@@ -78,8 +78,8 @@ class IssueInvoiceResolver extends ResolverBase {
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 );  // TODO: アフィリエイト報酬率
 		// サーバーの署名用ウォレットで署名
-		$signer           = new Signer( ( new SignerPrivateKey() )->get() );
-		$server_signature = $signer->signMessage( $server_message );
+		$server_signer    = new Signer( ( new ServerSignerData() )->getPrivateKey() );
+		$server_signature = $server_signer->signMessage( $server_message );
 
 		return array(
 			'invoiceIdHex'     => $invoice_id->hex(),

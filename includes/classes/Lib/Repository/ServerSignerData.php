@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Option\ArrayOption;
 use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
+use Cornix\Serendipity\Core\Lib\Web3\Signer;
 
 // ■秘密鍵の保存について
 // - `/wp-admin/options.php`での閲覧/編集を防止するため(だけ)にオブジェクト型で保存しています。
@@ -13,23 +14,39 @@ use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
 /**
  * 署名用の秘密鍵を取得または保存するためのクラス
  */
-class SignerPrivateKey {
+class ServerSignerData {
 	public function __construct() {
-		$this->option = ( new OptionFactory() )->signerPrivateKey();
+		$this->option = ( new OptionFactory() )->serverSignerData();
 	}
 	private ArrayOption $option;
+
+	private const FIELD_NAME_PRIVATE_KEY = 'private_key';
+	private const FIELD_NAME_ADDRESS     = 'address';
 
 	/**
 	 * 秘密鍵を取得します。
 	 * 秘密鍵が作成されていない場合は例外をスローします。
 	 */
-	public function get(): string {
-		$obj = $this->option->get( null );
-		if ( is_null( $obj ) ) {
+	public function getPrivateKey(): string {
+		/** @var string|null */
+		$private_key = $this->option->get( null )[ self::FIELD_NAME_PRIVATE_KEY ] ?? null;
+		if ( ! is_string( $private_key ) ) {
 			// プラグイン初期化時に秘密鍵が生成されるため、ここは通らない
 			throw new \Exception( '[D49203A3] The private key has not been set.' );
 		}
-		return $obj['value'];
+		return $private_key;
+	}
+
+	/**
+	 * 署名用ウォレットのアドレスを取得します。
+	 */
+	public function getAddress(): string {
+		/** @var string|null */
+		$address = $this->option->get( null )[ self::FIELD_NAME_ADDRESS ] ?? null;
+		if ( ! is_string( $address ) ) {
+			throw new \Exception( '[F16701F9] The private key has not been set.' );
+		}
+		return $address;
 	}
 
 	/**
@@ -54,6 +71,12 @@ class SignerPrivateKey {
 			throw new \Exception( '[2DD53C18] The private key has already been set.' );
 		}
 
-		$this->option->update( array( 'value' => $private_key ) );
+		// 秘密鍵保存時にアドレスも計算して格納。(署名用ウォレットアドレスの計算を省略することが目的)
+		$this->option->update(
+			array(
+				self::FIELD_NAME_PRIVATE_KEY => $private_key,
+				self::FIELD_NAME_ADDRESS     => ( new Signer( $private_key ) )->address(),
+			)
+		);
 	}
 }

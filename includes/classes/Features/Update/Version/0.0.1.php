@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Lib\Repository\SignerPrivateKey;
+use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 use Cornix\Serendipity\Core\Types\Token;
@@ -91,12 +91,12 @@ class PrivateKeyInitializer {
 	 * 署名用ウォレットの秘密鍵が存在しない場合は生成して保存します。
 	 */
 	public function initialize(): void {
-		$signer_private_key = new SignerPrivateKey();
+		$server_signer_data = new ServerSignerData();
 
-		if ( ! $signer_private_key->exists() ) {
+		if ( ! $server_signer_data->exists() ) {
 			// 秘密鍵を生成して保存
 			$private_key = ( new PrivateKey() )->generate();
-			$signer_private_key->save( $private_key );
+			$server_signer_data->save( $private_key );
 		}
 	}
 }
