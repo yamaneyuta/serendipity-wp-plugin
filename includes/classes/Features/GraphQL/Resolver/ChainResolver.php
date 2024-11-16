@@ -20,7 +20,8 @@ class ChainResolver extends ResolverBase {
 
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
-		$app_contract_callback = fn() => array( 'address' => ( new AppContract() )->address( $chain_ID ) );
+		$app_contract_address  = ( new AppContract() )->address( $chain_ID );
+		$app_contract_callback = fn() => is_null( $app_contract_address ) ? null : array( 'address' => $app_contract_address );
 
 		$tokens_callback = function () use ( $root_value, $chain_ID ) {
 			Judge::checkHasAdminRole(); // 管理者権限が必要

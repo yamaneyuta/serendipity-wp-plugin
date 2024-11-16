@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
@@ -31,11 +32,12 @@ class VerifiableChainsResolver extends ResolverBase {
 		// 投稿の販売ネットワークカテゴリに属する全てのチェーンIDを取得
 		$chain_IDs = ( new NetworkCategoryDefinition() )->getAllChainID( $selling_network_category );
 
-		$result  = array();
-		$rpc_url = new RpcURL();
+		$result       = array();
+		$rpc_url      = new RpcURL();
+		$app_contract = new AppContract();
 		foreach ( $chain_IDs as $chain_ID ) {
-			// RPC URLを取得できるチェーンIDは検証可能なチェーンとして返す
-			if ( ! is_null( $rpc_url->connectableURL( $chain_ID ) ) ) {
+			// RPC URLとコントラクトアドレスを取得できるチェーンIDは検証可能なチェーンとして返す
+			if ( ! is_null( $rpc_url->connectableURL( $chain_ID ) ) && ! is_null( ( $app_contract )->address( $chain_ID ) ) ) {
 				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
 			}
 		}
