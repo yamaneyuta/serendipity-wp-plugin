@@ -20,7 +20,7 @@ class EntryPointTestBase extends WP_UnitTestCase {
 
 	/**
 	 * @test
-	 * @testdox [35783EEB] Hooks登録時にエラーが発生しないことを確認
+	 * @testdox [35783EEB] Verify that no errors occur when registering Hooks
 	 * @dataProvider checkNoExceptionDataProvider
 	 */
 	public function checkNoException( $screen ) {
