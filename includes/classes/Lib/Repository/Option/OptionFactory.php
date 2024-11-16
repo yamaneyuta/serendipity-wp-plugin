@@ -22,10 +22,10 @@ class OptionFactory {
 	}
 
 	/**
-	 * 本プラグインが使用する署名用ウォレットの秘密鍵を取得または保存するオブジェクトを取得します。
+	 * 本プラグインが使用する署名用ウォレットの情報を取得または保存するオブジェクトを取得します。
 	 */
-	public function signerPrivateKey(): ArrayOption {
-		return new ArrayOption( $this->getOptionKeyName( 'signer_private_key' ) );
+	public function serverSignerData(): ArrayOption {
+		return new ArrayOption( $this->getOptionKeyName( 'server_signer_data' ) );
 	}
 
 	/**

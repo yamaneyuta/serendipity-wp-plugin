@@ -14,6 +14,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RemovePayableTokensResolve
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ServerSignerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\TokenResolver;
 
@@ -37,6 +38,7 @@ class RootValue {
 			'currentSellerTerms'   => new CurrentSellerTermsResolver(),
 			'post'                 => new PostResolver(),
 			'seller'               => new SellerResolver(),
+			'serverSigner'         => new ServerSignerResolver(),
 
 			// Mutation
 			'addPayableTokens'     => new AddPayableTokensResolver(),

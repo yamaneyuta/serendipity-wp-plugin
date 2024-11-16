@@ -14,6 +14,9 @@ type Query {
 	# 販売者情報を取得【ゲスト】
 	seller: Seller!
 
+	# 署名用ウォレット情報を取得【ゲスト】
+	serverSigner: ServerSigner!
+
 	# -------------------- 以下、管理者向けクエリ --------------------
 
 	# # 投稿一覧を取得
@@ -103,6 +106,10 @@ type Invoice {
 	serverMessage: String!      # サーバーで生成した署名対象メッセージ(クライアント側でコントラクトとの整合性を検証するために使用)
 	serverSignature: String!	# 署名用ウォレットで作成した署名
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
+}
+
+type ServerSigner {
+	address: String! # 署名用ウォレットアドレス
 }
 
 # 販売者情報
