@@ -17,6 +17,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ServerSignerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\TokenResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\VerifiableChainsResolver;
 
 class RootValue {
 
@@ -39,6 +40,7 @@ class RootValue {
 			'post'                 => new PostResolver(),
 			'seller'               => new SellerResolver(),
 			'serverSigner'         => new ServerSignerResolver(),
+			'verifiableChains'     => new VerifiableChainsResolver(),
 
 			// Mutation
 			'addPayableTokens'     => new AddPayableTokensResolver(),
