@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
+use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
 class ChainResolver extends ResolverBase {
@@ -22,6 +24,17 @@ class ChainResolver extends ResolverBase {
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
 		$app_contract_address  = ( new AppContract() )->address( $chain_ID );
 		$app_contract_callback = fn() => is_null( $app_contract_address ) ? null : array( 'address' => $app_contract_address );
+
+		$confirmations_callback = function () use ( $chain_ID ) {
+			// 権限チェック不要
+
+			// 待機ブロック数を取得(ユーザーによる設定が存在しない場合はデフォルト値を使用)
+			$confirmations = ( new Confirmations() )->get( $chain_ID );
+			if ( is_null( $confirmations ) ) {
+				$confirmations = ( new DefaultValue() )->confirmations( $chain_ID );
+			}
+			return $confirmations;
+		};
 
 		$tokens_callback = function () use ( $root_value, $chain_ID ) {
 			Judge::checkHasAdminRole(); // 管理者権限が必要
@@ -41,9 +54,10 @@ class ChainResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'          => $chain_ID,
-			'appContract' => $app_contract_callback,
-			'tokens'      => $tokens_callback,
+			'id'            => $chain_ID,
+			'appContract'   => $app_contract_callback,
+			'confirmations' => $confirmations_callback,
+			'tokens'        => $tokens_callback,
 		);
 	}
 }
