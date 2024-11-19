@@ -111,9 +111,7 @@ class Blockchain {
 	private function getBlockNumberByTag( string $tag ): string {
 		// @see https://docs.chainstack.com/reference/ethereum-getblockbynumber#parameters
 		// 引数チェック
-		if ( ! in_array( $tag, array( 'latest', 'safe', 'finalized' ) ) ) {
-			throw new \InvalidArgumentException( '[6302BFA5] Invalid tag. tag: ' . $tag );
-		}
+		Judge::checkBlockTagName( $tag );
 
 		/** @var string|null */
 		$block_number_hex = null;
