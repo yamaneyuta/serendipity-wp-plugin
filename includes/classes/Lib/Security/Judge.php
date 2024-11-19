@@ -165,6 +165,18 @@ class Judge {
 		$current_version = ( new SellerTerms() )->currentVersion();  // 現在の販売者向け利用規約バージョン
 		return $seller_terms_version === $current_version;
 	}
+
+	/** 指定した文字列がブロックのタグ名であるかどうかを判定します。 */
+	public static function isBlockTagName( string $block_tag ): bool {
+		// 参考: https://www.alchemy.com/overviews/ethereum-commitment-levels
+		return in_array( $block_tag, array( 'latest', 'safe', 'finalized' ), true );
+	}
+	/** 指定した文字列がブロックのタグ名であることをチェックし、不正な文字列の場合は例外をスローします。 */
+	public static function checkBlockTagName( string $block_tag ): void {
+		if ( ! self::isBlockTagName( $block_tag ) ) {
+			throw new \InvalidArgumentException( '[5B634FE3] Invalid tag. tag: ' . $block_tag );
+		}
+	}
 }
 
 /**

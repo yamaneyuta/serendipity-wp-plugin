@@ -36,6 +36,14 @@ class OptionFactory {
 	}
 
 	/**
+	 * 指定したチェーンIDで、購入完了と判定するための待機ブロック数
+	 * またはブロック位置('safe', 'finalized')を取得または保存するオブジェクトを取得します。
+	 */
+	public function confirmations( int $chain_ID ): StringOption {
+		return new StringOption( $this->getOptionKeyName( 'confirmations_' . $chain_ID ) );
+	}
+
+	/**
 	 * 本プラグインが開発モードで動作しているかどうかを取得または保存するオブジェクトを取得します。
 	 */
 	public function isDevelopmentMode(): BoolOption {
