@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RemovePayableTokensResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RequestPaidContentByNonceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
@@ -45,6 +46,7 @@ class RootValue {
 			// Mutation
 			'addPayableTokens'     => new AddPayableTokensResolver(),
 			'issueInvoice'         => new IssueInvoiceResolver(),
+			'requestPaidContentByNonce' => new RequestPaidContentByNonceResolver(),
 			'removePayableTokens'  => new RemovePayableTokensResolver(),
 			'setSellerAgreedTerms' => new SetSellerAgreedTermsResolver(),
 			// React-Adminの都合によりMutation
