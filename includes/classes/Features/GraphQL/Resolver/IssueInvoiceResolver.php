@@ -5,13 +5,16 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
+use Cornix\Serendipity\Core\Lib\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Lib\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
+use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
 use Cornix\Serendipity\Core\Types\Token;
@@ -80,6 +83,13 @@ class IssueInvoiceResolver extends ResolverBase {
 		// サーバーの署名用ウォレットで署名
 		$server_signer    = new Signer( ( new ServerSignerData() )->getPrivateKey() );
 		$server_signature = $server_signer->signMessage( $server_message );
+
+		// 最後に、有効になったブロック番号が設定されていない場合は設定
+		if ( is_null( ( new BlockNumberActiveSince() )->get( $chain_ID ) ) ) {
+			$url              = ( new RpcURL() )->connectableURL( $chain_ID ); // 接続可能なRPC URL
+			$block_number_hex = ( new Blockchain( $url ) )->getBlockNumberHex(); // 現在の最新ブロック番号
+			( new BlockNumberActiveSince() )->set( $chain_ID, $block_number_hex );
+		}
 
 		return array(
 			'invoiceIdHex'     => $invoice_id->hex(),

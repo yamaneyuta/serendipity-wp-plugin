@@ -29,6 +29,13 @@ class OptionFactory {
 	}
 
 	/**
+	 * 指定されたチェーンが最初に有効になった(≒取引が開始された)ブロック番号を取得または保存するオブジェクトを取得します。
+	 */
+	public function activeSinceBlockNumberHex( int $chain_ID ): StringOption {
+		return new StringOption( $this->getOptionKeyName( 'active_since_block_number_hex_' . $chain_ID ) );
+	}
+
+	/**
 	 * 指定したチェーンIDで、購入者が支払可能なトークンアドレス一覧を取得または保存するオブジェクトを取得します。
 	 */
 	public function payableTokenAddresses( int $chain_ID ): ArrayOption {
