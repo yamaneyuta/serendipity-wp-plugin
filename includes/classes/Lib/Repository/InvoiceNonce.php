@@ -38,11 +38,11 @@ class InvoiceNonce {
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-			(`invoice_id_hex`, `nonce`)
+			(`invoice_id`, `nonce`)
 			VALUES (%s, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_ID->hex(), $nonce );
+		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid(), $nonce );
 
 		$result = $this->wpdb->query( $sql );
 		assert( false !== $result );

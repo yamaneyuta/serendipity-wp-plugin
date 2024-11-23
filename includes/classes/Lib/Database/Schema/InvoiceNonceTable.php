@@ -46,11 +46,11 @@ class InvoiceNonceTable {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`      timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`      timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				`invoice_id_hex`  varchar(191)  NOT NULL,
-				`nonce`           varchar(191)  NOT NULL,
-				PRIMARY KEY (`invoice_id_hex`)
+				`created_at`  timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`updated_at`  timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`invoice_id`  varchar(191)  NOT NULL,
+				`nonce`       varchar(191)  NOT NULL,
+				PRIMARY KEY (`invoice_id`)
 			) ${charset};
 		SQL;
 
