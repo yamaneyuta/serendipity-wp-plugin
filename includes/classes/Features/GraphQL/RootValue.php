@@ -29,28 +29,28 @@ class RootValue {
 
 		$resolvers = array(
 			// 非公開
-			'chain'                => new ChainResolver(),
-			'networkCategory'      => new NetworkCategoryResolver(),
-			'sellingContent'       => new SellingContentResolver(),
-			'sellingPrice'         => new SellingPriceResolver(),
-			'token'                => new TokenResolver(),
+			'chain'                     => new ChainResolver(),
+			'networkCategory'           => new NetworkCategoryResolver(),
+			'sellingContent'            => new SellingContentResolver(),
+			'sellingPrice'              => new SellingPriceResolver(),
+			'token'                     => new TokenResolver(),
 
 			// Query
-			'consumerTermsVersion' => new ConsumerTermsVersionResolver(),
-			'currentSellerTerms'   => new CurrentSellerTermsResolver(),
-			'post'                 => new PostResolver(),
-			'seller'               => new SellerResolver(),
-			'serverSigner'         => new ServerSignerResolver(),
-			'verifiableChains'     => new VerifiableChainsResolver(),
+			'consumerTermsVersion'      => new ConsumerTermsVersionResolver(),
+			'currentSellerTerms'        => new CurrentSellerTermsResolver(),
+			'post'                      => new PostResolver(),
+			'seller'                    => new SellerResolver(),
+			'serverSigner'              => new ServerSignerResolver(),
+			'verifiableChains'          => new VerifiableChainsResolver(),
 
 			// Mutation
-			'addPayableTokens'     => new AddPayableTokensResolver(),
-			'issueInvoice'         => new IssueInvoiceResolver(),
+			'addPayableTokens'          => new AddPayableTokensResolver(),
+			'issueInvoice'              => new IssueInvoiceResolver(),
 			'requestPaidContentByNonce' => new RequestPaidContentByNonceResolver(),
-			'removePayableTokens'  => new RemovePayableTokensResolver(),
-			'setSellerAgreedTerms' => new SetSellerAgreedTermsResolver(),
+			'removePayableTokens'       => new RemovePayableTokensResolver(),
+			'setSellerAgreedTerms'      => new SetSellerAgreedTermsResolver(),
 			// React-Adminの都合によりMutation
-			'networkCategories'    => new NetworkCategoriesResolver(),
+			'networkCategories'         => new NetworkCategoriesResolver(),
 		);
 
 		$result = array();
