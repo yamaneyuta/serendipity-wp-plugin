@@ -42,7 +42,7 @@ class InvoiceNonce {
 			VALUES (%s, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_ID->hex(), $nonce );
+		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid(), $nonce );
 
 		$result = $this->wpdb->query( $sql );
 		assert( false !== $result );

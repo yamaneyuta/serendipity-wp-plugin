@@ -30,9 +30,10 @@ class InvoiceID {
 	}
 
 	/**
-	 * UUID形式で値を取得します。
+	 * ULID形式で値を取得します。
+	 * ※ 基本的にDBに保存する際に使用します。
 	 */
-	public function uuid(): string {
-		return $this->ulid->toUuid();
+	public function ulid(): string {
+		return $this->ulid->toString();
 	}
 }

@@ -28,7 +28,7 @@ class Invoice {
 			VALUES (%s, %s, %d, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_id->uuid(), $selling_amount_hex, $selling_decimals, $selling_symbol );
+		$sql = $this->wpdb->prepare( $sql, $invoice_id->ulid(), $selling_amount_hex, $selling_decimals, $selling_symbol );
 
 		$result = $this->wpdb->query( $sql );
 		assert( false !== $result );
