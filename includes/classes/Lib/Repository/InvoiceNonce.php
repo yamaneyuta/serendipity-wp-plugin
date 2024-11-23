@@ -38,7 +38,7 @@ class InvoiceNonce {
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-			(`invoice_id_hex`, `nonce`)
+			(`invoice_id`, `nonce`)
 			VALUES (%s, %s)
 		SQL;
 
