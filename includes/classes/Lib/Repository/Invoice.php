@@ -35,4 +35,40 @@ class Invoice {
 
 		return $invoice_id;
 	}
+
+	public function get( InvoiceID $invoice_ID ): ?InvoiceData {
+		$sql = <<<SQL
+			SELECT *
+			FROM `{$this->table_name}`
+			WHERE `id` = %s
+		SQL;
+
+		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid() );
+
+		$result = $this->wpdb->get_row( $sql, ARRAY_A );
+
+		return is_array( $result ) ? new InvoiceData( $result ) : null;
+	}
+}
+
+
+/** @internal */
+class InvoiceData {
+	public function __construct( array $data ) {
+		$this->data = $data;
+	}
+
+	private array $data;
+
+	public function postID(): int {
+		return (int) $this->data['post_id'];
+	}
+
+	public function chainID(): int {
+		return (int) $this->data['chain_id'];
+	}
+
+	public function consumerAddress(): string {
+		return $this->data['consumer_address'];
+	}
 }
