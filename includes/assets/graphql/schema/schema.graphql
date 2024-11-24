@@ -51,7 +51,7 @@ type Mutation {
 	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!, consumerAddress: String!): Invoice!
 
 	# 記事の続きを取得【ゲスト】
-	requestPaidContentByNonce(postID: Int!, invoiceID: String!, nonce: String!): PaidContentByNonce!
+	requestPaidContentByNonce(invoiceID: String!, nonce: String!): PaidContentByNonce!
 
 	# 販売者の利用規約同意情報を設定【管理者】
 	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!
