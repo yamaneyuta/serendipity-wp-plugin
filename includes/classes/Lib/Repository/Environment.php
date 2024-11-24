@@ -27,4 +27,11 @@ class Environment {
 
 		return $is_development_mode;
 	}
+
+	/**
+	 * ユニットテスト実施中かどうかを取得します。
+	 */
+	public function isTesting(): bool {
+		return 'testing' === getenv( 'APP_ENV' );
+	}
 }
