@@ -49,4 +49,23 @@ class InvoiceNonce {
 
 		return $nonce;
 	}
+
+	/**
+	 * 指定した請求書IDとnonceの組み合わせが存在するかどうかを取得します。
+	 */
+	public function exists( InvoiceID $invoice_ID, string $nonce ): bool {
+		$sql = <<<SQL
+			SELECT COUNT(*)
+			FROM `{$this->table_name}`
+			WHERE `invoice_id` = %s
+			AND `nonce` = %s
+		SQL;
+
+		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid(), $nonce );
+
+		$count = $this->wpdb->get_var( $sql );
+		assert( is_string( $count ) );
+
+		return '1' === $count;
+	}
 }
