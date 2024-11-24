@@ -47,63 +47,6 @@ class AppClient {
 	}
 }
 
-
-/**
- * @internal
- */
-class AppAbi {
-
-	public function get(): array {
-		$abi_json = <<<JSON
-		{
-			"abi": [
-				{
-					"inputs": [
-						{
-						"internalType": "address",
-						"name": "signer",
-						"type": "address"
-						},
-						{
-						"internalType": "uint64",
-						"name": "postID",
-						"type": "uint64"
-						},
-						{
-						"internalType": "address",
-						"name": "consumer",
-						"type": "address"
-						}
-					],
-					"name": "getPaywallStatus",
-					"outputs": [
-						{
-						"internalType": "bool",
-						"name": "isUnlocked",
-						"type": "bool"
-						},
-						{
-						"internalType": "uint128",
-						"name": "invoiceID",
-						"type": "uint128"
-						},
-						{
-						"internalType": "uint256",
-						"name": "unlockedBlockNumber",
-						"type": "uint256"
-						}
-					],
-					"stateMutability": "view",
-					"type": "function"
-				}
-			]
-		}
-		JSON;
-
-		return json_decode( $abi_json, true )['abi'];
-	}
-}
-
 /**
  * @internal
  */
