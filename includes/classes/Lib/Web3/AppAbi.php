@@ -59,13 +59,13 @@ class AppAbi {
 							{
 								"indexed": true,
 								"internalType": "address",
-								"name": "account",
+								"name": "signer",
 								"type": "address"
 							},
 							{
 								"indexed": true,
 								"internalType": "address",
-								"name": "signer",
+								"name": "consumer",
 								"type": "address"
 							},
 							{
@@ -76,8 +76,14 @@ class AppAbi {
 							},
 							{
 								"indexed": false,
+								"internalType": "uint128",
+								"name": "invoiceID",
+								"type": "uint128"
+							},
+							{
+								"indexed": false,
 								"internalType": "address",
-								"name": "consumer",
+								"name": "account",
 								"type": "address"
 							}
 						],
