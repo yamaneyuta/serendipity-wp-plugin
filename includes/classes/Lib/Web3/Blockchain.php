@@ -164,6 +164,14 @@ class Blockchain {
 
 		return $balance_hex;
 	}
+
+	public function getLogs( ...$args ) {
+		$this->retryer->execute(
+			function () use ( $args ) {
+				$this->eth()->getLogs( ...$args );
+			}
+		);
+	}
 }
 
 /**
