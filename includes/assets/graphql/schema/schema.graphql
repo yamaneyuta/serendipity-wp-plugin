@@ -1,3 +1,19 @@
+# ドメインエラーがあった場合、以下のように戻り値としてunionを返したいが、
+# graphql-phpでunion型を簡単に返す方法がわからないため、戻り値はすべてtypeで定義した型を返す実装となっている。
+# unionを簡単に返す方法が分かれば、リファクタを実施するかどうかを検討する。
+# ※ TypeScript側でunion型を受け取った時に別途`__typename`での判定が必要となり、
+# 　 errorフィールドを無視しづらい記述になるため可能であれば採用したい。
+# 参考: https://quramy.medium.com/graphql-error-%E4%B8%8B%E3%81%8B%E3%82%89%E8%A6%8B%E3%82%8B%E3%81%8B-%E6%A8%AA%E3%81%8B%E3%82%89%E8%A6%8B%E3%82%8B%E3%81%8B-3924880be51f
+#
+# type DomainErrors {
+# 	errorCodes: [String!]!
+# }
+# type Foo {
+#   someField: Int!
+# }
+# union FooResult = Foo | DomainErrors
+#
+
 schema {
 	query: Query
 	mutation: Mutation
@@ -33,6 +49,9 @@ type Query {
 type Mutation {
 	# 支払情報を発行【ゲスト】
 	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!, consumerAddress: String!): Invoice!
+
+	# 記事の続きを取得【ゲスト】
+	requestPaidContentByNonce(invoiceID: String!, nonce: String!): PaidContentByNonce!
 
 	# 販売者の利用規約同意情報を設定【管理者】
 	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!
@@ -111,6 +130,18 @@ type Invoice {
 	serverMessage: String!      # サーバーで生成した署名対象メッセージ(クライアント側でコントラクトとの整合性を検証するために使用)
 	serverSignature: String!	# 署名用ウォレットで作成した署名
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
+}
+
+enum PaidContentByNonceError {
+	INVALID_NONCE
+	INVALID_CHAIN_ID
+	PAYWALL_LOCKED
+	TRANSACTION_UNCONFIRMED
+}
+
+type PaidContentByNonce {
+	content: String # 購入者に提供されるコンテンツ
+	errorCode: PaidContentByNonceError
 }
 
 type ServerSigner {

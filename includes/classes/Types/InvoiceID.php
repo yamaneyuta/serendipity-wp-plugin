@@ -16,6 +16,13 @@ class InvoiceID {
 	private Ulid $ulid;
 
 	/**
+	 * 文字列(HEX/ULID)の請求書IDをオブジェクトに変換します。
+	 */
+	public static function from( string $invoice_ID ): InvoiceID {
+		return new InvoiceID( Ulid::from( $invoice_ID ) );
+	}
+
+	/**
 	 * 新しい請求書IDを生成します。
 	 */
 	public static function generate(): InvoiceID {
@@ -30,9 +37,10 @@ class InvoiceID {
 	}
 
 	/**
-	 * UUID形式で値を取得します。
+	 * ULID形式で値を取得します。
+	 * ※ 基本的にDBに保存する際に使用します。
 	 */
-	public function uuid(): string {
-		return $this->ulid->toUuid();
+	public function ulid(): string {
+		return $this->ulid->toString();
 	}
 }

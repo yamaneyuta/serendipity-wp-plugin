@@ -16,7 +16,7 @@ class Invoice {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function issue( Price $selling_price ): InvoiceID {
+	public function issue( int $post_ID, int $chain_ID, Price $selling_price, string $consumer_address ): InvoiceID {
 		$invoice_id         = InvoiceID::generate();
 		$selling_amount_hex = $selling_price->amountHex();
 		$selling_decimals   = $selling_price->decimals();
@@ -24,15 +24,51 @@ class Invoice {
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-			(`id`, `selling_amount_hex`, `selling_decimals`, `selling_symbol`)
-			VALUES (%s, %s, %d, %s)
+			(`id`, `post_id`, `chain_id`, `selling_amount_hex`, `selling_decimals`, `selling_symbol`, `consumer_address`)
+			VALUES (%s, %d, %d, %s, %d, %s, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_id->uuid(), $selling_amount_hex, $selling_decimals, $selling_symbol );
+		$sql = $this->wpdb->prepare( $sql, $invoice_id->ulid(), $post_ID, $chain_ID, $selling_amount_hex, $selling_decimals, $selling_symbol, $consumer_address );
 
 		$result = $this->wpdb->query( $sql );
 		assert( false !== $result );
 
 		return $invoice_id;
+	}
+
+	public function get( InvoiceID $invoice_ID ): ?InvoiceData {
+		$sql = <<<SQL
+			SELECT *
+			FROM `{$this->table_name}`
+			WHERE `id` = %s
+		SQL;
+
+		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid() );
+
+		$result = $this->wpdb->get_row( $sql, ARRAY_A );
+
+		return is_array( $result ) ? new InvoiceData( $result ) : null;
+	}
+}
+
+
+/** @internal */
+class InvoiceData {
+	public function __construct( array $data ) {
+		$this->data = $data;
+	}
+
+	private array $data;
+
+	public function postID(): int {
+		return (int) $this->data['post_id'];
+	}
+
+	public function chainID(): int {
+		return (int) $this->data['chain_id'];
+	}
+
+	public function consumerAddress(): string {
+		return $this->data['consumer_address'];
 	}
 }
