@@ -9,12 +9,11 @@ use Cornix\Serendipity\Core\Lib\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Lib\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
-use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
+use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
 use Cornix\Serendipity\Core\Types\Token;
@@ -86,8 +85,8 @@ class IssueInvoiceResolver extends ResolverBase {
 
 		// 最後に、有効になったブロック番号が設定されていない場合は設定
 		if ( is_null( ( new BlockNumberActiveSince() )->get( $chain_ID ) ) ) {
-			$url              = ( new RpcURL() )->connectableURL( $chain_ID ); // 接続可能なRPC URL
-			$block_number_hex = ( new BlockchainClient( $url ) )->getBlockNumberHex(); // 現在の最新ブロック番号
+			$blockchain_client = ( new BlockchainClientFactory() )->create( $chain_ID );
+			$block_number_hex  = $blockchain_client->getBlockNumberHex(); // 現在の最新ブロック番号
 			( new BlockNumberActiveSince() )->set( $chain_ID, $block_number_hex );
 		}
 
