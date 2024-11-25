@@ -13,10 +13,10 @@ class OracleEthMainnetDefinitionTest extends WP_UnitTestCase {
 	 * OracleEthMainnetDefinitionに定義されている内容の整合性チェック
 	 *
 	 * @test
-	 * @testdox [F3BF1D88] OracleEthMainnetDefinition::getAddress - base: $base, quote: $quote, expected: $expected
+	 * @testdox [F3BF1D88] OracleEthMainnetDefinition::getAddress - asset_class: $asset_class, base: $base, quote: $quote, expected: $expected
 	 * @dataProvider dataProviderForGetAddress
 	 */
-	public function getAddress( string $base, string $quote, ?string $expected ) {
+	public function getAddress( ?string $asset_class, string $base, string $quote, ?string $expected ) {
 		if ( ! ExternalApiAccess::isTesting() ) {
 			$this->markTestSkipped( '[27C6CC97] Skip external access test.' );
 			return;
@@ -49,6 +49,8 @@ class OracleEthMainnetDefinitionTest extends WP_UnitTestCase {
 			$this->assertNull( $updated_at );
 			$this->assertNull( $description );
 		}
+		// asset_classのチェック
+		$this->assertEquals( $asset_class, $sut->getAssetClass( new SymbolPair( $base, $quote ) ) );
 	}
 	public function dataProviderForGetAddress(): array {
 		try {
@@ -69,13 +71,15 @@ class OracleEthMainnetDefinitionTest extends WP_UnitTestCase {
 			}
 
 			foreach ( $feeds as $feed ) {
+				$asset_class   = $feed['docs']['assetClass'];
 				$base          = $feed['docs']['baseAsset'];
 				$quote         = $feed['docs']['quoteAsset'];
 				$proxy_address = $feed['proxyAddress'];
 				$hidden        = $feed['docs']['hidden'] ?? false;
 
-				$expected = $hidden ? null : $proxy_address;
-				$data[]   = array( $base, $quote, $expected );
+				$asset_class = $hidden ? null : $asset_class;
+				$expected    = $hidden ? null : $proxy_address;
+				$data[]      = array( $asset_class, $base, $quote, $expected );
 			}
 
 			return $data;
