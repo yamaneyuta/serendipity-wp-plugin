@@ -58,6 +58,7 @@ class OracleEthMainnetDefinition extends OracleDefinitionBase {
 			array( 'TUSD', 'ETH', '0x3886BA987236181D98F2401c507Fb8BeA7871dF2', 'Crypto' ),
 			array( 'GBP', 'USD', '0x5c0Ab2d9b5a7ed9f470386e82BB36A3613cDd4b5', 'Fiat' ),
 			array( 'CHF', 'USD', '0x449d117117838fFA61263B61dA6301AA2a88B13A', 'Fiat' ),
+			array( 'EIGEN', 'USD', '0xf2917e602C2dCa458937fad715bb1E465305A4A1', 'Crypto' ),
 			array( 'ENJ', 'ETH', '0x24D9aB51950F3d62E9144fdC2f3135DAA6Ce8D1B', 'Crypto' ),
 			array( 'SUSHI', 'USD', '0xCc70F09A6CC17553b2E31954cD36E4A2d89501f7', 'Crypto' ),
 			array( '1INCH', 'USD', '0xc929ad75B72593967DE83E7F7Cda0493458261D9', 'Crypto' ),
@@ -134,6 +135,17 @@ class OracleEthMainnetDefinition extends OracleDefinitionBase {
 		$filtered = array_filter( $data, fn( $d ) => $d[ self::BASE_SYMBOL_INDEX ] === $base && $d[ self::QUOTE_SYMBOL_INDEX ] === $quote );
 
 		return count( $filtered ) === 1 ? array_values( $filtered )[0][ self::ADDRESS_INDEX ] : null;
+	}
+
+
+	public function getAssetClass( SymbolPair $symbol_pair ): ?string {
+		$data  = $this->data();
+		$base  = $symbol_pair->base();
+		$quote = $symbol_pair->quote();
+
+		$filtered = array_filter( $data, fn( $d ) => $d[ self::BASE_SYMBOL_INDEX ] === $base && $d[ self::QUOTE_SYMBOL_INDEX ] === $quote );
+
+		return count( $filtered ) === 1 ? array_values( $filtered )[0][ self::BASE_SYMBOL_CATEGORY_INDEX ] : null;
 	}
 
 	/** @inheritdoc */
