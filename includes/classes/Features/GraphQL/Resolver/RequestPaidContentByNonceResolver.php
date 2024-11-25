@@ -42,7 +42,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		);
 
 		global $wpdb;
-		if ( ( new InvoiceNonce( $wpdb ) )->exists( InvoiceID::from( $invoice_ID ), $nonce ) ) {
+		if ( ! ( new InvoiceNonce( $wpdb ) )->exists( InvoiceID::from( $invoice_ID ), $nonce ) ) {
 			// nonceが無効な場合はドメインエラーとして返す
 			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
 		}
