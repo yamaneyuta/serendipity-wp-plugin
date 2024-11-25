@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\RpcURL\RpcUrlDefinitionBase;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\RpcURL\AnkrRpcUrlDefinition;
-use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
+use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 
 class RpcUrlTest extends WP_UnitTestCase {
 	/**
@@ -27,7 +27,7 @@ class RpcUrlTest extends WP_UnitTestCase {
 		// 最大3回リトライ
 		for ( $i = 0; $i < 3; $i++ ) {
 			try {
-				$chain_id_hex = ( new Blockchain( $rpc_url ) )->getChainIDHex();
+				$chain_id_hex = ( new BlockchainClient( $rpc_url ) )->getChainIDHex();
 				break;
 			} catch ( \Throwable $e ) {
 				error_log( '[C1A6C165] Failed to connect to RPC URL: ' . $rpc_url . ' - ' . $e->getMessage() );

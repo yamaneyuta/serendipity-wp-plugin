@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
+use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 
 class BlockchainTest extends IntegrationTestBase {
 
@@ -14,7 +14,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @dataProvider getChainIDHexDataProvider
 	 */
 	public function getChainIDHex( string $rpc_url, int $expected ) {
-		$sut = new Blockchain( $rpc_url );
+		$sut = new BlockchainClient( $rpc_url );
 
 		$chain_ID = hexdec( $sut->getChainIDHex() );
 
@@ -36,7 +36,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @dataProvider getBlockNumberHexDataProvider
 	 */
 	public function getBlockNumberHex( string $rpc_url ) {
-		$sut = new Blockchain( $rpc_url );
+		$sut = new BlockchainClient( $rpc_url );
 
 		$block_number_hex = $sut->getBlockNumberHex();
 
@@ -58,7 +58,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @dataProvider getBalanceHexDataProvider
 	 */
 	public function getBalanceHex( string $rpc_url ) {
-		$sut             = new Blockchain( $rpc_url );
+		$sut             = new BlockchainClient( $rpc_url );
 		$hardhat_account = ( new HardhatAccount() )->deployer();    // hardhat デプロイ用アカウント
 
 		$balance_hex = $sut->getBalanceHex( $hardhat_account );
@@ -82,7 +82,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @dataProvider getFinalizedBlockNumberProvider
 	 */
 	public function getFinalizedBlockNumberHex( string $rpc_url ) {
-		$sut = new Blockchain( $rpc_url );
+		$sut = new BlockchainClient( $rpc_url );
 
 		$block_number_hex = $sut->getFinalizedBlockNumberHex();
 
