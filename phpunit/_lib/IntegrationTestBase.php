@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
-use Cornix\Serendipity\Core\Lib\Web3\Blockchain;
+use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 
 /**
  * 結合テストの基底クラス
@@ -398,7 +398,7 @@ class HardhatController {
 
 	private function waitForContractReady( string $rpc_url ) {
 		// コントラクトデプロイ後、特定のアドレスの残高が増えるので、それを確認するまで待機
-		$blockchain = new Blockchain( $rpc_url );
+		$blockchain = new BlockchainClient( $rpc_url );
 		for ( $i = 0; $i < 60; $i++ ) {
 			$balance_hex = $blockchain->getBalanceHex( ( new HardhatAccount() )->marker() );
 			if ( hexdec( $balance_hex ) > 0 ) {
