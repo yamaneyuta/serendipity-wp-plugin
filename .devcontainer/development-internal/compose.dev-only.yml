@@ -46,6 +46,30 @@ services:
     networks:
       - wpnetwork
 
+  block-explorer-1:
+    build:
+      context: ./block-explorer
+      dockerfile: Dockerfile
+    environment:
+      REACT_APP_PROVIDER: "http://privatenet-1.local:80"
+      REACT_APP_WS_PROVIDER: "ws://privatenet-1.local:80"
+    ports:
+      - "10101:3000"
+    networks:
+      - wpnetwork
+
+  block-explorer-2:
+    build:
+      context: ./block-explorer
+      dockerfile: Dockerfile
+    environment:
+      REACT_APP_PROVIDER: "http://privatenet-2.local:80"
+      REACT_APP_WS_PROVIDER: "ws://privatenet-2.local:80"
+    ports:
+      - "10102:3000"
+    networks:
+      - wpnetwork
+
   wp-sandbox-latest:
     # バージョン変更時は他の箇所も変更が必要
     # @see .github/workflows/ci.yml
