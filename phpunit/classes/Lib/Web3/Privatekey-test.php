@@ -2,8 +2,9 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
+use PHPUnit\Framework\TestCase;
 
-class PrivateKeyTest extends IntegrationTestBase {
+class PrivateKeyTest extends TestCase {
 
 	/**
 	 * 秘密鍵はhexの最大64文字列であることを確認(64文字固定ではない)
