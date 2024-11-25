@@ -132,8 +132,16 @@ type Invoice {
 	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
 }
 
+enum PaidContentByNonceError {
+	INVALID_NONCE
+	INVALID_CHAIN_ID
+	PAYWALL_LOCKED
+	TRANSACTION_UNCONFIRMED
+}
+
 type PaidContentByNonce {
-	content: String! # 購入者に提供されるコンテンツ
+	content: String # 購入者に提供されるコンテンツ
+	errorCode: PaidContentByNonceError
 }
 
 type ServerSigner {
