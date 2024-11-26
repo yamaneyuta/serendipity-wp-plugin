@@ -18,10 +18,12 @@ class TableName {
 		return ( new Prefix() )->tableName() . $table_name;
 	}
 
+	/** 発行した請求書情報を記録するテーブル名 */
 	public function invoice(): string {
 		return $this->addPrefix( 'invoice' );
 	}
 
+	/** クライアントと署名無しでやり取りする際に用いるnonceを格納するテーブル名 */
 	public function invoiceNonce(): string {
 		return $this->addPrefix( 'invoice_nonce' );
 	}
