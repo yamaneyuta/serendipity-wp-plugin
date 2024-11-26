@@ -31,10 +31,11 @@ class UnlockPaywallTransferEventTable {
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
 				`invoice_id`    varchar(191)  NOT NULL,
+				`log_index`     int(11)       NOT NULL,
 				`from_address`  varchar(191)  NOT NULL,
 				`to_address`    varchar(191)  NOT NULL,
 				`amount_hex`    varchar(191)  NOT NULL,
-				PRIMARY KEY (`invoice_id`)
+				PRIMARY KEY (`invoice_id`, `log_index`)
 			) ${charset};
 		SQL;
 
