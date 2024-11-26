@@ -5,6 +5,8 @@ namespace Cornix\Serendipity\Core\Features\Update\Version;
 
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransactionTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
@@ -30,6 +32,10 @@ class v001 {
 		( new InvoiceTable( $wpdb ) )->create();
 		// 請求書とnonceの紐づきを保存するテーブルを作成
 		( new InvoiceNonceTable( $wpdb ) )->create();
+		// ペイウォール解除時のトランザクションに関するデータを記録するテーブルを作成
+		( new UnlockPaywallTransactionTable( $wpdb ) )->create();
+		// ペイウォール解除時のトークン転送イベントの内容を記録するテーブルを作成
+		( new UnlockPaywallTransferEventTable( $wpdb ) )->create();
 	}
 
 	public function down() {
@@ -40,6 +46,10 @@ class v001 {
 		( new InvoiceTable( $wpdb ) )->drop();
 		// 請求書とnonceの紐づきを保存するテーブルを削除
 		( new InvoiceNonceTable( $wpdb ) )->drop();
+		// ペイウォール解除時のトランザクションに関するデータを記録するテーブルを削除
+		( new UnlockPaywallTransactionTable( $wpdb ) )->drop();
+		// ペイウォール解除時のトークン転送イベントの内容を記録するテーブルを削除
+		( new UnlockPaywallTransferEventTable( $wpdb ) )->drop();
 	}
 }
 

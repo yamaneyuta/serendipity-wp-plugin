@@ -25,4 +25,14 @@ class TableName {
 	public function invoiceNonce(): string {
 		return $this->addPrefix( 'invoice_nonce' );
 	}
+
+	/** ペイウォール解除時のトランザクションに関するデータを記録するテーブル名 */
+	public function unlockPaywallTransaction(): string {
+		return $this->addPrefix( 'unlock_paywall_transaction' );
+	}
+
+	/** ペイウォール解除時のトークン転送イベントの内容を記録するテーブル名 */
+	public function unlockPaywallTransferEvent(): string {
+		return $this->addPrefix( 'unlock_paywall_transfer_event' );
+	}
 }
