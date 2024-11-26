@@ -15,7 +15,7 @@ class AppAbi {
 	 *
 	 * @var array
 	 */
-	private $topicHashCache = array();
+	private $topic_hash_cache = array();
 
 	public function get(): array {
 		if ( is_null( $this->abi_cache ) ) {
@@ -145,7 +145,7 @@ class AppAbi {
 	 * keccak256("UnlockPaywall(address,address,uint64,address)") のようなハッシュ値
 	 */
 	public function topicHash( string $func_or_event_name ): string {
-		if ( ! array_key_exists( $func_or_event_name, $this->topicHashCache ) ) {
+		if ( ! array_key_exists( $func_or_event_name, $this->topic_hash_cache ) ) {
 			$abi    = $this->get();
 			$target = array_filter( $abi, fn( $item ) => $item['name'] === $func_or_event_name );
 			assert( count( $target ) === 1 );
@@ -155,9 +155,9 @@ class AppAbi {
 
 			$hash = '0x' . Keccak::hash( $func_or_event_name . '(' . implode( ',', $input_types ) . ')', 256 );
 
-			$this->topicHashCache[ $func_or_event_name ] = $hash;
+			$this->topic_hash_cache[ $func_or_event_name ] = $hash;
 		}
 
-		return $this->topicHashCache[ $func_or_event_name ];
+		return $this->topic_hash_cache[ $func_or_event_name ];
 	}
 }
