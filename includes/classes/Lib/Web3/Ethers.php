@@ -30,7 +30,8 @@ class Ethers {
 			return null;
 		}
 
-		$ec         = new EC( 'secp256k1' );
+		$ec = new EC( 'secp256k1' );
+		/** @var \Elliptic\Curve\ShortCurve\Point */
 		$public_key = $ec->recoverPubKey( $message_hash, $sign, $recid );
 
 		return self::computeAddress( $public_key );
@@ -53,59 +54,27 @@ class Ethers {
 	 *
 	 * @see https://github.com/simplito/elliptic-php#verifying-ethereum-signature
 	 */
-	public static function computeAddress( $public_key ): string {
-		return '0x' . self::checksum( substr( Keccak::hash( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ), 256 ), 24 ) );
+	public static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): string {
+		$address = \Web3\Utils::toChecksumAddress( substr( Keccak::hash( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ), 256 ), 24 ) );
+		assert( self::isAddress( $address ), '[D9ADC5E3] Invalid address. ' . $address );
+		return $address;
 	}
 
-
-	/**
-	 * ウォレットアドレスにチェックサムを付与します。
-	 */
-	private static function checksum( string $address ): string {
-		assert( $address === strtolower( $address ) );
-		assert( false === Strings::strpos( $address, '0x' ) );
-		assert( 40 === strlen( $address ) );
-
-		$hash   = Keccak::hash( $address, 256 );
-		$result = '';
-
-		$len = strlen( $address );
-		for ( $i = 0; $i < $len; $i++ ) {
-			$result .= hexdec( $hash[ $i ] ) > 7 ? strtoupper( $address[ $i ] ) : $address[ $i ];
-		}
-
-		return $result;
-	}
 
 	/**
 	 * ウォレットアドレスにチェックサムを付与して返します。
 	 */
 	public static function getAddress( string $address ): string {
-		// `0x`が付いている場合は除去
-		if ( 0 === strpos( $address, '0x' ) ) {
-			$address = substr( $address, 2 );
-		}
-
-		return '0x' . self::checksum( strtolower( $address ) );
+		$result = \Web3\Utils::toChecksumAddress( $address );
+		assert( self::isAddress( $result ), '[A5954271] Invalid address. ' . $result );
+		return $result;
 	}
 
 	/**
 	 * 指定された文字列が正しいウォレットアドレスかどうかを判定します。
 	 */
 	public static function isAddress( string $address ): bool {
-		if ( ! preg_match( '/^0x[a-fA-F0-9]{40}$/', $address ) ) {
-			// 160ビットの16進数でない場合はfalse
-			return false;
-		}
-
-		if ( strtolower( $address ) === $address ) {
-			// 全部小文字の場合はtrue
-			return true;
-		} elseif ( self::getAddress( $address ) === $address ) {
-			// チェックサム付きのアドレスと一致する場合はtrue
-			return true;
-		} else {
-			return false;
-		}
+		// 本アプリでは`0x`プレフィックスを必須とする
+		return Strings::starts_with( $address, '0x' ) && \Web3\Utils::isAddress( $address );
 	}
 }
