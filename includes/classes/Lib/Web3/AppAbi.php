@@ -28,6 +28,12 @@ class AppAbi {
 							{
 								"indexed": true,
 								"internalType": "address",
+								"name": "signer",
+								"type": "address"
+							},
+							{
+								"indexed": true,
+								"internalType": "address",
 								"name": "from",
 								"type": "address"
 							},
@@ -38,7 +44,7 @@ class AppAbi {
 								"type": "address"
 							},
 							{
-								"indexed": true,
+								"indexed": false,
 								"internalType": "address",
 								"name": "token",
 								"type": "address"
@@ -48,46 +54,15 @@ class AppAbi {
 								"internalType": "uint256",
 								"name": "amount",
 								"type": "uint256"
-							}
-						],
-						"name": "EffectivelyTransfer",
-						"type": "event"
-					},
-					{
-						"anonymous": false,
-						"inputs": [
-							{
-								"indexed": true,
-								"internalType": "address",
-								"name": "signer",
-								"type": "address"
-							},
-							{
-								"indexed": true,
-								"internalType": "address",
-								"name": "consumer",
-								"type": "address"
-							},
-							{
-								"indexed": false,
-								"internalType": "uint64",
-								"name": "postID",
-								"type": "uint64"
 							},
 							{
 								"indexed": false,
 								"internalType": "uint128",
 								"name": "invoiceID",
 								"type": "uint128"
-							},
-							{
-								"indexed": false,
-								"internalType": "address",
-								"name": "account",
-								"type": "address"
 							}
 						],
-						"name": "UnlockPaywall",
+						"name": "UnlockPaywallTransfer",
 						"type": "event"
 					},
 					{
