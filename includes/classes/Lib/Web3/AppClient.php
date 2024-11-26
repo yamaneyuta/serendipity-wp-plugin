@@ -10,6 +10,7 @@ use Web3\Contract;
 class AppClient {
 	public function __construct( string $rpc_url, string $contract_address ) {
 		$this->app = ( new ContractFactory() )->create( $rpc_url, ( new AppAbi() )->get(), $contract_address );
+		assert( $this->app->getToAddress() === $contract_address, '[A887DAB2] Contract address mismatch' );
 	}
 	private Contract $app;
 
@@ -44,6 +45,13 @@ class AppClient {
 
 		assert( ! is_null( $result ) );
 		return $result;
+	}
+
+	/**
+	 * 接続するコントラクトアドレスを取得します。
+	 */
+	public function address(): string {
+		return $this->app->getToAddress();
 	}
 }
 
