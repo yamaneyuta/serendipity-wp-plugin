@@ -117,13 +117,13 @@ class AppAbi {
 	/**
 	 * 指定したメソッドまたはイベントのtopic(フィルタ用のハッシュ値)を取得します。
 	 *
-	 * keccak256("UnlockPaywall(address,address,uint64,address)") のようなハッシュ値
+	 * keccak256("UnlockPaywall(address,address,uint64,uint128,address)") のようなハッシュ値
 	 */
 	public function topicHash( string $func_or_event_name ): string {
 		if ( ! array_key_exists( $func_or_event_name, $this->topic_hash_cache ) ) {
 			$abi    = $this->get();
 			$target = array_filter( $abi, fn( $item ) => $item['name'] === $func_or_event_name );
-			assert( count( $target ) === 1 );
+			assert( count( $target ) === 1, '[841A8DFC] Invalid function or event name. ' . $func_or_event_name );
 			$target = array_values( $target )[0];
 
 			$input_types = array_map( fn( $item ) => $item['type'], $target['inputs'] );
