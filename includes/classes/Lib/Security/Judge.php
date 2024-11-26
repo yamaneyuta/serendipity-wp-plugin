@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Token;
 
@@ -235,6 +236,6 @@ class Validator {
 	}
 
 	public static function isAddress( string $address ): bool {
-		return \Web3\Utils::isAddress( $address );
+		return Ethers::isAddress( $address );
 	}
 }
