@@ -62,7 +62,9 @@ class Ethers {
 	 * ウォレットアドレスにチェックサムを付与します。
 	 */
 	private static function checksum( string $address ): string {
+		assert( $address === strtolower( $address ) );
 		assert( false === Strings::strpos( $address, '0x' ) );
+		assert( 40 === strlen( $address ) );
 
 		$hash   = Keccak::hash( $address, 256 );
 		$result = '';
@@ -73,5 +75,37 @@ class Ethers {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * ウォレットアドレスにチェックサムを付与して返します。
+	 */
+	public static function getAddress( string $address ): string {
+		// `0x`が付いている場合は除去
+		if ( 0 === strpos( $address, '0x' ) ) {
+			$address = substr( $address, 2 );
+		}
+
+		return '0x' . self::checksum( strtolower( $address ) );
+	}
+
+	/**
+	 * 指定された文字列が正しいウォレットアドレスかどうかを判定します。
+	 */
+	public static function isAddress( string $address ): bool {
+		if ( ! preg_match( '/^0x[a-fA-F0-9]{40}$/', $address ) ) {
+			// 160ビットの16進数でない場合はfalse
+			return false;
+		}
+
+		if ( strtolower( $address ) === $address ) {
+			// 全部小文字の場合はtrue
+			return true;
+		} elseif ( self::getAddress( $address ) === $address ) {
+			// チェックサム付きのアドレスと一致する場合はtrue
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
