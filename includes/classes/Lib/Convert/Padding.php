@@ -11,7 +11,8 @@ class Padding {
 	 * 用途: イベントのtopics等
 	 */
 	public function toBytes32Hex( string $hex ): string {
-		Judge::checkHex( $hex, true ); // アドレスが引数として渡されることがあるため、大文字小文字を区別しない
+		$hex = strtolower( $hex ); // アドレスが渡される可能性があるため、数値として扱うために小文字にする
+		Judge::checkHex( $hex );
 		assert( strlen( $hex ) <= 66 ); // 0x + 32バイトの16進数のため、66文字まで
 		$hex = str_replace( '0x', '', $hex );
 		$hex = str_pad( $hex, 64, '0', STR_PAD_LEFT );

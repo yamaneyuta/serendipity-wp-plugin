@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Token;
@@ -54,12 +55,11 @@ class Judge {
 	 * 文字列が16進数表記でない場合は例外をスローします。
 	 *
 	 * @param string $hex
-	 * @param bool   $ignore_case 大文字小文字を区別しない場合はtrue
 	 * @throws \InvalidArgumentException
 	 */
-	public static function checkHex( string $hex, bool $ignore_case = false ): void {
-		if ( ! Validator::isHex( $hex, $ignore_case ) ) {
-			throw new \InvalidArgumentException( '[95E1280E] Invalid hex. - hex: ' . $hex . ', ignore_case: ' . $ignore_case );
+	public static function checkHex( string $hex ): void {
+		if ( ! Validator::isHex( $hex ) ) {
+			throw new \InvalidArgumentException( '[95E1280E] Invalid hex. - hex: ' . $hex );
 		}
 	}
 
@@ -193,13 +193,12 @@ class Validator {
 	public static function isAmountHex( string $hex ): bool {
 		// 本プラグインにおいてuint256を超える値は扱わない。また、大文字小文字を混在させる必要はないため小文字固定とする。
 		// uint256_max: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-		return self::isHex( $hex, false ) && strlen( $hex ) <= ( 2 + 64 );
+		return self::isHex( $hex ) && strlen( $hex ) <= ( 2 + 64 );
 	}
 
-	public static function isHex( string $hex, bool $ignore_case = false ): bool {
+	public static function isHex( string $hex ): bool {
 		// 本プラグインでは、`0x`プレフィックス含む文字列を16進数表記とする。
-		$pattern = $ignore_case ? '/^0x[0-9a-fA-F]+$/' : '/^0x[0-9a-f]+$/';
-		return preg_match( $pattern, $hex ) === 1;
+		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
 
 	public static function isDecimals( int $decimals ): bool {
