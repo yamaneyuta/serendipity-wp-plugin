@@ -84,7 +84,7 @@ class BlockchainTest extends IntegrationTestBase {
 	public function getFinalizedBlockNumberHex( string $rpc_url ) {
 		$sut = new BlockchainClient( $rpc_url );
 
-		$block_number_hex = $sut->getFinalizedBlockNumberHex();
+		$block_number_hex = $sut->getBlockNumberHex( 'finalized' );
 
 		$this->assertGreaterThanOrEqual( 0, hexdec( $block_number_hex ) );
 	}

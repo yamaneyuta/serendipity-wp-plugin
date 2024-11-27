@@ -77,7 +77,20 @@ class BlockchainClient {
 	/**
 	 * ブロック番号を取得します。
 	 */
-	public function getBlockNumberHex(): string {
+	public function getBlockNumberHex( string $tag = 'latest' ): string {
+		Judge::checkBlockTagName( $tag );
+
+		if ( $tag === 'latest' ) {
+			return $this->getLatestBlockNumberHex();
+		} else {
+			return $this->getBlockNumberByTag( $tag );
+		}
+	}
+
+	/**
+	 * 最新のブロック番号(HEX)を取得します。
+	 */
+	private function getLatestBlockNumberHex(): string {
 		/** @var string|null */
 		$block_number_hex = null;
 		$this->retryer->execute(
@@ -99,19 +112,10 @@ class BlockchainClient {
 	}
 
 	/**
-	 * ファイナライズされた最新のブロック番号(HEX)を取得します。
-	 */
-	public function getFinalizedBlockNumberHex(): string {
-		return $this->getBlockNumberByTag( 'finalized' );
-	}
-
-	/**
 	 * eth_getBlockByNumberの呼び出しを行い、そのブロック番号をHEXで返します
 	 */
 	private function getBlockNumberByTag( string $tag ): string {
 		// @see https://docs.chainstack.com/reference/ethereum-getblockbynumber#parameters
-		// 引数チェック
-		Judge::checkBlockTagName( $tag );
 
 		/** @var string|null */
 		$block_number_hex = null;
