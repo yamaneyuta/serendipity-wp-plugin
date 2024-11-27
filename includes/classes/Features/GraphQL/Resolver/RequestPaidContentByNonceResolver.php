@@ -108,7 +108,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			$latest_block_number_hex = ( new BlockchainClientFactory() )->create( $chain_ID )->getBlockNumberHex();
 			$latest_block            = new BigInteger( $latest_block_number_hex, 16 );
 			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
-			$reference_block = $latest_block->subtract( ( max( $confirmations - 1, 0 ) ) );
+			$reference_block = $latest_block->subtract( new BigInteger( max( $confirmations - 1, 0 ) ) );
 			return $unlocked_block_number->compare( $reference_block ) <= 0;
 		} elseif ( $confirmations === 'latest' ) {
 			// ペイウォールが解除されたブロック番号が取得できているため、当然待機済みと判定
