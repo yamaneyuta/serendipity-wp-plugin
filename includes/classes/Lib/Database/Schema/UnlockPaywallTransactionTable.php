@@ -32,6 +32,7 @@ class UnlockPaywallTransactionTable {
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
 				`invoice_id`          varchar(191)            NOT NULL,
+				`chain_id`            bigint(20)    unsigned  NOT NULL,
 				`block_number`        bigint(20)    unsigned  NOT NULL,
 				`transaction_hash`    varchar(191)            NOT NULL,
 				PRIMARY KEY (`invoice_id`)
