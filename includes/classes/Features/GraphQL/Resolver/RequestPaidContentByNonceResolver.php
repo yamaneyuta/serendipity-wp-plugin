@@ -59,7 +59,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		if ( is_null( ( new RpcURL() )->connectableURL( $chain_ID ) ) ) {
+		if ( ! ( new RpcURL() )->isConnectable( $chain_ID ) ) {
 			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す
 			// ※ 支払い後、管理者によってチェーンが無効化された場合はここを通るため、例外を投げない
 			return $error_result_callback( self::ERROR_CODE_INVALID_CHAIN_ID );
