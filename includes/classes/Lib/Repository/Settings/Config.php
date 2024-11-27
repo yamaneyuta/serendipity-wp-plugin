@@ -21,4 +21,9 @@ class Config {
 	 * ブロックチェーンへのリクエストのリトライ間隔(ミリ秒)
 	 */
 	public const BLOCKCHAIN_REQUEST_RETRY_INTERVALS_MS = array( 1000, 2000, 4000 );
+
+	/**
+	 * Appコントラクトのクロール処理を行うCronの間隔(秒)
+	 */
+	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 15; // 15分
 }
