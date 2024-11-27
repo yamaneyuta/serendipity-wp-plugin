@@ -5,32 +5,37 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 class PluginInfo {
 
+	public function __construct() {
+		$this->plugin_main_file = new PluginMainFile();
+	}
+	private PluginMainFile $plugin_main_file;
+
 	/**
 	 * プラグインのバージョンを取得します。
 	 */
 	public function version(): string {
-		return ( new PluginMainFile() )->get( 'Version' );
+		return $this->plugin_main_file->get( 'Version' );
 	}
 
 	/**
 	 * プラグインのテキストドメインを取得します。
 	 */
 	public function textDomain(): string {
-		return ( new PluginMainFile() )->get( 'TextDomain' );
+		return $this->plugin_main_file->get( 'TextDomain' );
 	}
 
 	/**
 	 * プラグインの必要なPHPの最低バージョンを取得します。
 	 */
 	public function requiresPHP(): string {
-		return ( new PluginMainFile() )->get( 'RequiresPHP' );
+		return $this->plugin_main_file->get( 'RequiresPHP' );
 	}
 
 	/**
 	 * プラグインの必要なWordPressの最低バージョンを取得します。
 	 */
 	public function requiresWP(): string {
-		return ( new PluginMainFile() )->get( 'RequiresWP' );
+		return $this->plugin_main_file->get( 'RequiresWP' );
 	}
 }
 
