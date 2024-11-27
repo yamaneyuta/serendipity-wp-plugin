@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use phpseclib\Math\BigInteger;
 
 class Hex {
@@ -32,5 +33,22 @@ class Hex {
 	 */
 	public static function isZero( string $hex ): bool {
 		return preg_match( '/^0x0*$/', $hex ) === 1;
+	}
+
+	/**
+	 * 16進数文字列を整数に変換します。
+	 */
+	public static function toInt( string $hex ): int {
+		Judge::checkHex( $hex );
+
+		// 引数の値をBigIntegerに変換
+		$bi_value = new BigInteger( $hex, 16 );
+
+		// PHP_INT_MAXより大きい値は変換不可
+		if ( $bi_value->compare( new BigInteger( PHP_INT_MAX ) ) > 0 ) {
+			throw new \InvalidArgumentException( '[F5776072] The value is too large to convert to an integer. hex: ' . $hex );
+		}
+
+		return intval( $bi_value->toString() );
 	}
 }
