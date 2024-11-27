@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
+use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
@@ -60,6 +61,26 @@ class Judge {
 	public static function checkHex( string $hex ): void {
 		if ( ! Validator::isHex( $hex ) ) {
 			throw new \InvalidArgumentException( '[95E1280E] Invalid hex. - hex: ' . $hex );
+		}
+	}
+
+	/** チェーンIDが正常でない場合は例外をスローします。 */
+	public static function checkChainID( int $chain_ID ): void {
+		if ( ! self::isChainID( $chain_ID ) ) {
+			throw new \InvalidArgumentException( '[84C80B37] Invalid chain ID. - chain ID: ' . $chain_ID );
+		}
+	}
+	/** 指定された値がチェーンIDとして有効かどうかを返します。 */
+	private static function isChainID( int $chain_ID ): bool {
+		// コントラクトがデプロイされているチェーンIDの一覧を取得
+		$deployed_chain_ids = ( new AppContract() )->allChainIDs();
+		return in_array( $chain_ID, $deployed_chain_ids, true );
+	}
+
+	/** ブロック番号が正常でない場合は例外をスローします。 */
+	public static function checkBlockNumber( int $block_number ): void {
+		if ( $block_number < 0 ) {
+			throw new \InvalidArgumentException( '[6CF02DFE] Invalid block number. - block number: ' . $block_number );
 		}
 	}
 
