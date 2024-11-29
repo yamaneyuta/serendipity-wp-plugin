@@ -71,7 +71,7 @@ class Judge {
 		}
 	}
 	/** 指定された値がチェーンIDとして有効かどうかを返します。 */
-	private static function isChainID( int $chain_ID ): bool {
+	public static function isChainID( int $chain_ID ): bool {
 		// コントラクトがデプロイされているチェーンIDの一覧を取得
 		$deployed_chain_ids = ( new AppContract() )->allChainIDs();
 		return in_array( $chain_ID, $deployed_chain_ids, true );
