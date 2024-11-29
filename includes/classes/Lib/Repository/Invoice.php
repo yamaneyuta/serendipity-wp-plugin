@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Types\InvoiceID;
+use Cornix\Serendipity\Core\Types\InvoiceIdType;
 use Cornix\Serendipity\Core\Types\Price;
 
 class Invoice {
@@ -16,8 +16,8 @@ class Invoice {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function issue( int $post_ID, int $chain_ID, Price $selling_price, string $consumer_address ): InvoiceID {
-		$invoice_id         = InvoiceID::generate();
+	public function issue( int $post_ID, int $chain_ID, Price $selling_price, string $consumer_address ): InvoiceIdType {
+		$invoice_id         = InvoiceIdType::generate();
 		$selling_amount_hex = $selling_price->amountHex();
 		$selling_decimals   = $selling_price->decimals();
 		$selling_symbol     = $selling_price->symbol();
@@ -36,7 +36,7 @@ class Invoice {
 		return $invoice_id;
 	}
 
-	public function get( InvoiceID $invoice_ID ): ?InvoiceData {
+	public function get( InvoiceIdType $invoice_ID ): ?InvoiceData {
 		$sql = <<<SQL
 			SELECT *
 			FROM `{$this->table_name}`

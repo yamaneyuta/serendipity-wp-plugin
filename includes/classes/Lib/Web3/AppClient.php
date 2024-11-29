@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\BlockNumberType;
+use Cornix\Serendipity\Core\Types\InvoiceIdType;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
@@ -41,7 +42,7 @@ class AppClient {
 				assert( $invoice_ID instanceof BigInteger );
 				assert( $unlocked_block_number instanceof BigInteger );
 
-				$result = new PaywallStatusResult( $is_unlocked, $invoice_ID, BlockNumberType::from( $unlocked_block_number ) );
+				$result = new PaywallStatusResult( $is_unlocked, InvoiceIdType::from( $invoice_ID ), BlockNumberType::from( $unlocked_block_number ) );
 			}
 		);
 
@@ -61,20 +62,20 @@ class AppClient {
  * @internal
  */
 class PaywallStatusResult {
-	public function __construct( bool $is_unlocked, BigInteger $invoice_ID, BlockNumberType $unlocked_block_number ) {
+	public function __construct( bool $is_unlocked, InvoiceIdType $invoice_ID, BlockNumberType $unlocked_block_number ) {
 		$this->is_unlocked           = $is_unlocked;
 		$this->invoice_ID            = $invoice_ID;
 		$this->unlocked_block_number = $unlocked_block_number;
 	}
 	private bool $is_unlocked;
-	private BigInteger $invoice_ID;
+	private InvoiceIdType $invoice_ID;
 	private BlockNumberType $unlocked_block_number;
 
 	public function isUnlocked(): bool {
 		return $this->is_unlocked;
 	}
 
-	public function invoiceID(): BigInteger {
+	public function invoiceID(): InvoiceIdType {
 		return $this->invoice_ID;
 	}
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Types\InvoiceID;
+use Cornix\Serendipity\Core\Types\InvoiceIdType;
 
 class InvoiceNonce {
 	public function __construct( \wpdb $wpdb ) {
@@ -33,7 +33,7 @@ class InvoiceNonce {
 	/**
 	 * 請求書IDに対応するnonceを新しく生成し、保存します。
 	 */
-	public function new( InvoiceID $invoice_ID ): string {
+	public function new( InvoiceIdType $invoice_ID ): string {
 		$nonce = $this->generateNonce(); // 新しいnonceを生成
 
 		$sql = <<<SQL
@@ -53,7 +53,7 @@ class InvoiceNonce {
 	/**
 	 * 指定した請求書IDとnonceの組み合わせが存在するかどうかを取得します。
 	 */
-	public function exists( InvoiceID $invoice_ID, string $nonce ): bool {
+	public function exists( InvoiceIdType $invoice_ID, string $nonce ): bool {
 		$sql = <<<SQL
 			SELECT COUNT(*)
 			FROM `{$this->table_name}`
