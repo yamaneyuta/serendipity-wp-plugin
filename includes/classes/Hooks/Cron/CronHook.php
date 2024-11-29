@@ -14,7 +14,6 @@ use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
-use phpseclib\Math\BigInteger;
 
 /**
  * wp_cronを利用した処理を登録するクラス。
@@ -91,10 +90,9 @@ class AppContractCrawlCronProcedure {
 
 		// 現時点でクロール対象となる終了ブロック番号を取得(ここまでクロールする)
 		// (ループ中に取得し直すとブロック番号が増えて終了しない可能性が出てくるため、先に取得しておく)
-		$end_block_number_hex_array = array();
+		$end_block_number_array = array();
 		foreach ( $crawlable_chain_ids as $chain_ID ) {
-			$blockchain                              = ( new BlockchainClientFactory() )->create( $chain_ID );
-			$end_block_number_hex_array[ $chain_ID ] = $blockchain->getBlockNumberHex( $block_tag );
+			$end_block_number_array[ $chain_ID ] = ( new BlockchainClientFactory() )->create( $chain_ID )->getBlockNumber( $block_tag );
 		}
 
 		$crawl_failed_chain_ids = array(); // クロールに失敗したチェーンID一覧
@@ -115,22 +113,22 @@ class AppContractCrawlCronProcedure {
 				$blockchain = ( new BlockchainClientFactory() )->create( $chain_ID );
 
 				// チェーンの最後にクロールしたブロック番号を取得
-				$last_crawled_block_hex = ( new CrawledBlockNumber() )->get( $chain_ID, $block_tag );
+				$last_crawled_block = ( new CrawledBlockNumber() )->get( $chain_ID, $block_tag );
 				// クロールが未実行の場合はアクティブになったブロック番号から開始
-				if ( is_null( $last_crawled_block_hex ) ) {
-					$last_crawled_block_hex = ( new BlockNumberActiveSince() )->get( $chain_ID );
+				if ( is_null( $last_crawled_block ) ) {
+					$last_crawled_block = ( new BlockNumberActiveSince() )->get( $chain_ID );
 				}
-				assert( ! is_null( $last_crawled_block_hex ), '[65C6AECC] last_crawled_block_hex is null. - chain_ID: ' . $chain_ID );
+				assert( ! is_null( $last_crawled_block ), '[65C6AECC] last_crawled_block_hex is null. - chain_ID: ' . $chain_ID );
 
 				// クロール開始ブロックは、最後にクロールしたブロック番号+1
-				$from_block_number = ( new BigInteger( $last_crawled_block_hex, 16 ) )->add( new BigInteger( 1, 10 ) );
+				$from_block_number = $last_crawled_block->add( 1 );
 
 				// 取得するブロック数の最大値
 				// TODO: RPC URLに紐づいた最大取得ブロック数を取得するようにする
 				$block_range = ( new DefaultValue() )->getLogsMaxRange( $chain_ID );
 
 				// クロール終了ブロック番号を計算
-				$to_block_number = $from_block_number->add( new BigInteger( $block_range, 10 ) );
+				$to_block_number = $from_block_number->add( $block_range );
 
 				// from >= to の場合は取得するログが存在しないため、クロールをスキップ(次のチェーンへ)
 				if ( $from_block_number->compare( $to_block_number ) >= 0 ) {
@@ -138,20 +136,20 @@ class AppContractCrawlCronProcedure {
 				}
 
 				// クロール終了ブロック番号が最終ブロック番号を超える場合、最終ブロック番号に合わせる
-				if ( $to_block_number->compare( new BigInteger( $end_block_number_hex_array[ $chain_ID ], 16 ) ) > 0 ) {
-					$to_block_number = new BigInteger( $end_block_number_hex_array[ $chain_ID ], 16 );
+				if ( $to_block_number->compare( $end_block_number_array[ $chain_ID ] ) > 0 ) {
+					$to_block_number = $end_block_number_array[ $chain_ID ];
 				}
 
-				// クロール終了ブロック番号が最終ブロック番号に達していない場合、次回もクロールを継続1
-				if ( $to_block_number->compare( new BigInteger( $end_block_number_hex_array[ $chain_ID ], 16 ) ) < 0 ) {
+				// クロール終了ブロック番号が最終ブロック番号に達していない場合、次回もクロールを継続
+				if ( $to_block_number->compare( $end_block_number_array[ $chain_ID ] ) < 0 ) {
 					$is_continue_crawling = true;   // 最後までクロールが完了しないため、次回もクロールを継続
 				}
 
 				try {
 					// クロール実行
-					$crawler->crawl( $chain_ID, Hex::from( $from_block_number ), Hex::from( $to_block_number ) );
+					$crawler->crawl( $chain_ID, $from_block_number, $to_block_number );
 					// クロールしたブロック番号を保存
-					$ret = ( new CrawledBlockNumber() )->set( $chain_ID, $block_tag, Hex::from( $to_block_number ) );
+					$ret = ( new CrawledBlockNumber() )->set( $chain_ID, $block_tag, $to_block_number );
 					assert( $ret === true, '[2DA97333] CrawledBlock::set failed. - chain_ID: ' . $chain_ID );
 				} catch ( \Throwable $e ) {
 					// クロールに失敗したチェーンIDを記録

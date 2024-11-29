@@ -38,9 +38,9 @@ class BlockchainTest extends IntegrationTestBase {
 	public function getBlockNumberHex( string $rpc_url ) {
 		$sut = new BlockchainClient( $rpc_url );
 
-		$block_number_hex = $sut->getBlockNumberHex();
+		$block_number = $sut->getBlockNumber();
 
-		$this->assertGreaterThanOrEqual( 0, hexdec( $block_number_hex ) );
+		$this->assertGreaterThanOrEqual( 0, hexdec( $block_number->hex() ) );
 	}
 
 	public function getBlockNumberHexDataProvider() {
@@ -84,9 +84,9 @@ class BlockchainTest extends IntegrationTestBase {
 	public function getFinalizedBlockNumberHex( string $rpc_url ) {
 		$sut = new BlockchainClient( $rpc_url );
 
-		$block_number_hex = $sut->getBlockNumberHex( 'finalized' );
+		$block_number = $sut->getBlockNumber( 'finalized' );
 
-		$this->assertGreaterThanOrEqual( 0, hexdec( $block_number_hex ) );
+		$this->assertGreaterThanOrEqual( 0, hexdec( $block_number->hex() ) );
 	}
 	public function getFinalizedBlockNumberProvider() {
 		return array(

@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Types\BlockNumberType;
 use Cornix\Serendipity\Core\Types\InvoiceID;
 use phpseclib\Math\BigInteger;
 
@@ -95,7 +96,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	/**
 	 * トランザクションが待機済みかどうかを判定します。
 	 */
-	private function isConfirmed( int $chain_ID, BigInteger $unlocked_block_number ): bool {
+	private function isConfirmed( int $chain_ID, BlockNumberType $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
 		// TODO: ConfirmationsクラスはDefaultValueの値を加味した値を返すようにする
 		$confirmations = ( new Confirmations() )->get( $chain_ID );
@@ -105,10 +106,9 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 		if ( is_int( $confirmations ) ) {
 			// 最新のブロック番号を取得
-			$latest_block_number_hex = ( new BlockchainClientFactory() )->create( $chain_ID )->getBlockNumberHex();
-			$latest_block            = new BigInteger( $latest_block_number_hex, 16 );
+			$latest_block_number = ( new BlockchainClientFactory() )->create( $chain_ID )->getBlockNumber();
 			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
-			$reference_block = $latest_block->subtract( new BigInteger( max( $confirmations - 1, 0 ) ) );
+			$reference_block = $latest_block_number->sub( max( $confirmations - 1, 0 ) );
 			return $unlocked_block_number->compare( $reference_block ) <= 0;
 		} elseif ( $confirmations === 'latest' ) {
 			// ペイウォールが解除されたブロック番号が取得できているため、当然待機済みと判定

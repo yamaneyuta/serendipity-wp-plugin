@@ -86,8 +86,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 最後に、有効になったブロック番号が設定されていない場合は設定
 		if ( is_null( ( new BlockNumberActiveSince() )->get( $chain_ID ) ) ) {
 			$blockchain_client = ( new BlockchainClientFactory() )->create( $chain_ID );
-			$block_number_hex  = $blockchain_client->getBlockNumberHex(); // 現在の最新ブロック番号
-			( new BlockNumberActiveSince() )->set( $chain_ID, $block_number_hex );
+			$block_number      = $blockchain_client->getBlockNumber(); // 現在の最新ブロック番号
+			( new BlockNumberActiveSince() )->set( $chain_ID, $block_number );
 		}
 
 		return array(
