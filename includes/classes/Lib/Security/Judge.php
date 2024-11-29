@@ -59,9 +59,16 @@ class Judge {
 	 * @throws \InvalidArgumentException
 	 */
 	public static function checkHex( string $hex ): void {
-		if ( ! Validator::isHex( $hex ) ) {
+		if ( ! self::isHex( $hex ) ) {
 			throw new \InvalidArgumentException( '[95E1280E] Invalid hex. - hex: ' . $hex );
 		}
+	}
+	/**
+	 * 文字列が16進数表記かどうかを返します。
+	 */
+	public static function isHex( string $hex ): bool {
+		// 本プラグインでは、`0x`プレフィックス含む文字列を16進数表記とする。
+		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
 
 	/** チェーンIDが正常でない場合は例外をスローします。 */
@@ -77,13 +84,6 @@ class Judge {
 		return in_array( $chain_ID, $deployed_chain_ids, true );
 	}
 
-	/** ブロック番号が正常でない場合は例外をスローします。 */
-	public static function checkBlockNumber( int $block_number ): void {
-		if ( $block_number < 0 ) {
-			throw new \InvalidArgumentException( '[6CF02DFE] Invalid block number. - block number: ' . $block_number );
-		}
-	}
-
 	/**
 	 * 数量として有効な16進数表記でない場合は例外をスローします。
 	 *
@@ -91,9 +91,14 @@ class Judge {
 	 * @throws InvalidArgumentException
 	 */
 	public static function checkAmountHex( string $hex ): void {
-		if ( ! Validator::isAmountHex( $hex ) ) {
+		if ( ! self::isAmountHex( $hex ) ) {
 			throw new \InvalidArgumentException( '[9D226886] Invalid hex. - hex: ' . $hex );
 		}
+	}
+	private static function isAmountHex( string $hex ): bool {
+		// 本プラグインにおいてuint256を超える値は扱わない。また、大文字小文字を混在させる必要はないため小文字固定とする。
+		// uint256_max: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+		return self::isHex( $hex ) && strlen( $hex ) <= ( 2 + 64 );
 	}
 
 	/**
@@ -209,17 +214,6 @@ class Validator {
 	public static function isPostID( int $post_ID ): bool {
 		// 投稿の状態を取得できれば有効なIDとみなす。
 		return false !== get_post_status( $post_ID );
-	}
-
-	public static function isAmountHex( string $hex ): bool {
-		// 本プラグインにおいてuint256を超える値は扱わない。また、大文字小文字を混在させる必要はないため小文字固定とする。
-		// uint256_max: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-		return self::isHex( $hex ) && strlen( $hex ) <= ( 2 + 64 );
-	}
-
-	public static function isHex( string $hex ): bool {
-		// 本プラグインでは、`0x`プレフィックス含む文字列を16進数表記とする。
-		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
 
 	public static function isDecimals( int $decimals ): bool {

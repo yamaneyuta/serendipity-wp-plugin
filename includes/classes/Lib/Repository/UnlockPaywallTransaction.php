@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Types\BlockNumberType;
 use Cornix\Serendipity\Core\Types\InvoiceID;
 
 /**
@@ -20,8 +21,7 @@ class UnlockPaywallTransaction {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function save( InvoiceID $invoice_id, int $chain_id, int $block_number, string $transaction_hash ): void {
-		Judge::checkBlockNumber( $block_number );
+	public function save( InvoiceID $invoice_id, int $chain_id, BlockNumberType $block_number, string $transaction_hash ): void {
 		Judge::checkChainID( $chain_id );
 		Judge::checkHex( $transaction_hash );
 
@@ -32,7 +32,7 @@ class UnlockPaywallTransaction {
 			VALUES (%s, %d, %d, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_id->ulid(), $chain_id, $block_number, $transaction_hash );
+		$sql = $this->wpdb->prepare( $sql, $invoice_id->ulid(), $chain_id, $block_number->int(), $transaction_hash );
 
 		$result = $this->wpdb->query( $sql );
 		assert( false !== $result );

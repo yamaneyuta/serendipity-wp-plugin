@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Lib\Repository\UnlockPaywallTransferEvent;
 use Cornix\Serendipity\Core\Lib\Web3\AppAbi;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Types\BlockNumberType;
 use Cornix\Serendipity\Core\Types\InvoiceID;
 use phpseclib\Math\BigInteger;
 use stdClass;
@@ -26,7 +27,7 @@ class AppContractCrawler {
 	private AppAbi $app_abi;
 	private \wpdb $wpdb;
 
-	public function crawl( int $chain_ID, string $from_block, string $to_block ): void {
+	public function crawl( int $chain_ID, BlockNumberType $from_block, BlockNumberType $to_block ): void {
 		// UnlockPaywallTransferイベントのログを取得
 		$transfer_logs = $this->getUnlockPaywallTransferLogs( $chain_ID, $from_block, $to_block );
 		// トランザクション情報をDBに保存
@@ -38,7 +39,7 @@ class AppContractCrawler {
 	/**
 	 * UnlockPaywallTransferイベントのログを取得します。
 	 */
-	private function getUnlockPaywallTransferLogs( int $chain_ID, string $from_block, string $to_block ): array {
+	private function getUnlockPaywallTransferLogs( int $chain_ID, BlockNumberType $from_block, BlockNumberType $to_block ): array {
 		return ( new UnlockPaywallTransferCrawler() )->execute( $chain_ID, $from_block, $to_block );
 	}
 
@@ -71,7 +72,7 @@ class AppContractCrawler {
 			$transaction_repository->save(
 				InvoiceID::from( $invoice_ID_hex ),
 				$chain_ID,
-				Hex::toInt( $block_number_hex ),
+				BlockNumberType::from( $block_number_hex ),
 				$transaction_hash,
 			);
 		}
@@ -142,7 +143,7 @@ class UnlockPaywallTransferCrawler {
 	 *
 	 * @return stdClass[]
 	 */
-	public function execute( int $chain_ID, string $from_block, string $to_block ): array {
+	public function execute( int $chain_ID, BlockNumberType $from_block, BlockNumberType $to_block ): array {
 		$blockchain_client = ( new BlockchainClientFactory() )->create( $chain_ID );
 
 		$contract_address = ( new AppClientFactory() )->create( $chain_ID )->address();
@@ -151,8 +152,8 @@ class UnlockPaywallTransferCrawler {
 		$logs_result = null;
 		$blockchain_client->getLogs(
 			array(
-				'fromBlock' => $from_block,
-				'toBlock'   => $to_block,
+				'fromBlock' => $from_block->hex(),
+				'toBlock'   => $to_block->hex(),
 				'address'   => $contract_address,
 				'topics'    => $this->topics,
 			),
