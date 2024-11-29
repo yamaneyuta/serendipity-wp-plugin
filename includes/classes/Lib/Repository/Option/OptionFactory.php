@@ -36,6 +36,13 @@ class OptionFactory {
 	}
 
 	/**
+	 * 指定されたチェーン、ブロックタグで最後にクロールしたブロック番号を取得または保存するオブジェクトを取得します。
+	 */
+	public function crawledBlockNumberHex( int $chain_ID, string $block_tag ): StringOption {
+		return new StringOption( $this->getOptionKeyName( 'crawled_block_number_hex_' . $block_tag . '_' . $chain_ID ) );
+	}
+
+	/**
 	 * 指定したチェーンIDで、購入者が支払可能なトークンアドレス一覧を取得または保存するオブジェクトを取得します。
 	 */
 	public function payableTokenAddresses( int $chain_ID ): ArrayOption {
