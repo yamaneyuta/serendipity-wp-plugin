@@ -5,14 +5,16 @@ namespace Cornix\Serendipity\Core\Lib\Crawler;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Convert\Padding;
+use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\UnlockPaywallTransaction;
 use Cornix\Serendipity\Core\Lib\Repository\UnlockPaywallTransferEvent;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppAbi;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Types\BlockNumberType;
-use Cornix\Serendipity\Core\Types\InvoiceID;
+use Cornix\Serendipity\Core\Types\InvoiceIdType;
 use phpseclib\Math\BigInteger;
 use stdClass;
 
@@ -56,21 +58,26 @@ class AppContractCrawler {
 			$event_args = $this->app_abi->decodeEventParameters( $unlock_paywall_transfer_log );
 			assert( is_array( $event_args ), '[80A37466] event_args is not array' );
 			/** @var BigInteger */
-			$invoice_ID     = $event_args['invoiceID'];
-			$invoice_ID_hex = Hex::from( $invoice_ID );
+			$invoice_ID_bi = $event_args['invoiceID'];
+			assert( $invoice_ID_bi instanceof BigInteger, '[9A2B802E] invoice_ID is not BigInteger. ' . var_export( $invoice_ID_bi, true ) );
+			$invoice_ID = InvoiceIdType::from( $invoice_ID_bi );
 
 			// 既に保存済みのinvoiceIDの場合はスキップ
-			if ( in_array( $invoice_ID_hex, $saved_invoice_id_hex_array ) ) {
+			if ( in_array( $invoice_ID->hex(), $saved_invoice_id_hex_array ) ) {
 				continue;
 			} else {
-				$saved_invoice_id_hex_array[] = $invoice_ID_hex;
+				$saved_invoice_id_hex_array[] = $invoice_ID->hex();
 			}
 
+			/** @var string */
 			$transaction_hash = $unlock_paywall_transfer_log->transactionHash;
+			assert( Judge::isHex( $transaction_hash ), '[4EF0D70F] transactionHash is not hex. ' . var_export( $transaction_hash, true ) );
+			/** @var string */
 			$block_number_hex = $unlock_paywall_transfer_log->blockNumber;
+			assert( Judge::isHex( $block_number_hex ), '[067CCE00] blockNumber is not hex. ' . var_export( $block_number_hex, true ) );
 
 			$transaction_repository->save(
-				InvoiceID::from( $invoice_ID_hex ),
+				$invoice_ID,
 				$chain_ID,
 				BlockNumberType::from( $block_number_hex ),
 				$transaction_hash,
@@ -99,13 +106,13 @@ class AppContractCrawler {
 			/** @var BigInteger */
 			$amount = $event_args['amount'];
 			/** @var BigInteger */
-			$invoice_ID = $event_args['invoiceID'];
+			$invoice_ID_bi = $event_args['invoiceID'];
 
 			/** @var string */
 			$log_index_hex = $unlock_paywall_transfer_log->logIndex;
 
 			$transfer_event_repository->save(
-				InvoiceID::from( Hex::from( $invoice_ID ) ),
+				InvoiceIdType::from( $invoice_ID_bi ),
 				Hex::toInt( $log_index_hex ),
 				$from,
 				$to,

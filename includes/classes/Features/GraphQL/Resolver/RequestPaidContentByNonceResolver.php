@@ -11,11 +11,11 @@ use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
 use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Types\BlockNumberType;
-use Cornix\Serendipity\Core\Types\InvoiceID;
-use phpseclib\Math\BigInteger;
+use Cornix\Serendipity\Core\Types\InvoiceIdType;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
 
@@ -32,9 +32,12 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var string */
-		$invoice_ID = $args['invoiceID'];
+		$invoice_ID_hex = $args['invoiceID'];
 		/** @var string */
 		$nonce = $args['nonce'];
+
+		Judge::checkHex( $invoice_ID_hex );
+		$invoice_ID = InvoiceIdType::from( $invoice_ID_hex );
 
 		// エラー時の結果を返すコールバック関数
 		$error_result_callback = fn( $error_code ) => array(
@@ -43,15 +46,15 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		);
 
 		global $wpdb;
-		if ( ! ( new InvoiceNonce( $wpdb ) )->exists( InvoiceID::from( $invoice_ID ), $nonce ) ) {
+		if ( ! ( new InvoiceNonce( $wpdb ) )->exists( $invoice_ID, $nonce ) ) {
 			// nonceが無効な場合はドメインエラーとして返す
 			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
 		}
 
-		$invoice_data = ( new Invoice( $wpdb ) )->get( InvoiceID::from( $invoice_ID ) );
+		$invoice_data = ( new Invoice( $wpdb ) )->get( $invoice_ID );
 		if ( is_null( $invoice_data ) ) {
 			// 通常、ここは通らない
-			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID );
+			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID_hex );
 		}
 		$post_ID          = $invoice_data->postID();
 		$chain_ID         = $invoice_data->chainID();

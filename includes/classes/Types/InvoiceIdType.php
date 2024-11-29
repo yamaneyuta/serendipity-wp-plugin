@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Lib\Calc\Hex;
+use phpseclib\Math\BigInteger;
 use yamaneyuta\Ulid;
 
 /**
- * 請求書ID
+ * 請求書IDを表すクラス
  */
-class InvoiceID {
+class InvoiceIdType {
 
 	private function __construct( Ulid $ulid ) {
 		$this->ulid = $ulid;
@@ -17,16 +19,23 @@ class InvoiceID {
 
 	/**
 	 * 文字列(HEX/ULID)の請求書IDをオブジェクトに変換します。
+	 *
+	 * @param string|BigInteger $invoice_ID_val 請求書ID
 	 */
-	public static function from( string $invoice_ID ): InvoiceID {
-		return new InvoiceID( Ulid::from( $invoice_ID ) );
+	public static function from( $invoice_ID_val ): InvoiceIdType {
+		if ( is_string( $invoice_ID_val ) ) {
+			return new InvoiceIdType( Ulid::from( $invoice_ID_val ) );
+		} elseif ( $invoice_ID_val instanceof BigInteger ) {
+			return new InvoiceIdType( Ulid::from( Hex::from( $invoice_ID_val ) ) );
+		}
+		throw new \InvalidArgumentException( '[DEE2905B] Invalid invoice ID. ' . var_export( $invoice_ID_val, true ) );
 	}
 
 	/**
 	 * 新しい請求書IDを生成します。
 	 */
-	public static function generate(): InvoiceID {
-		return new InvoiceID( new Ulid() );
+	public static function generate(): InvoiceIdType {
+		return new InvoiceIdType( new Ulid() );
 	}
 
 	/**
