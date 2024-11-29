@@ -9,9 +9,11 @@ use Web3\Contract;
 
 class AppClient {
 	public function __construct( string $rpc_url, string $contract_address ) {
-		$this->app = ( new ContractFactory() )->create( $rpc_url, ( new AppAbi() )->get(), $contract_address );
+		$this->app              = ( new ContractFactory() )->create( $rpc_url, ( new AppAbi() )->get(), $contract_address );
+		$this->contract_address = $contract_address;
 	}
 	private Contract $app;
+	private string $contract_address;
 
 	public function getPaywallStatus( string $signer_address_hex, int $post_ID, string $consumer_address_hex ): PaywallStatusResult {
 		Judge::checkAddress( $signer_address_hex );
@@ -44,6 +46,13 @@ class AppClient {
 
 		assert( ! is_null( $result ) );
 		return $result;
+	}
+
+	/**
+	 * 接続するコントラクトアドレスを取得します。
+	 */
+	public function address(): string {
+		return $this->contract_address;
 	}
 }
 

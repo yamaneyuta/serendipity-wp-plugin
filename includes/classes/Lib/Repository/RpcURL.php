@@ -68,6 +68,13 @@ class RpcURL {
 		}
 		return null;
 	}
+
+	/**
+	 * 指定したチェーンに接続できるかどうかを取得します。
+	 */
+	public function isConnectable( int $chain_ID ): bool {
+		return ! is_null( $this->connectableURL( $chain_ID ) );
+	}
 }
 
 interface IRpcURL {

@@ -25,7 +25,7 @@ class Oracle {
 	 * 指定したチェーンに接続可能かどうか(RPC URLが取得できるかどうか)を返します。
 	 */
 	private function isConnectable( int $chain_ID ): bool {
-		return $this->rpc_url->connectableURL( $chain_ID ) !== null;
+		return $this->rpc_url->isConnectable( $chain_ID );
 	}
 
 	/**

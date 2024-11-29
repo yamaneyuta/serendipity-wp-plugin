@@ -4,6 +4,7 @@ namespace Cornix\Serendipity\Core\Hooks;
 
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hooks\Page\AdminPageHook;
+use Cornix\Serendipity\Core\Hooks\Cron\CronHook;
 use Cornix\Serendipity\Core\Hooks\Post\ContentFilterHook;
 use Cornix\Serendipity\Core\Hooks\Page\PostEditHook;
 use Cornix\Serendipity\Core\Hooks\Page\ViewPageHook;
@@ -18,6 +19,9 @@ class EntryPoint {
 	public function __construct() {
 
 		( new PluginUpdateHook() )->register();
+
+		// Cronの登録
+		( new CronHook() )->register();
 
 		// GraphQLのAPI登録
 		( new GraphQLHook( new RestProperty() ) )->register();

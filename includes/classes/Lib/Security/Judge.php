@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
+use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Lib\Strings\Strings;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Token;
 
@@ -53,12 +56,31 @@ class Judge {
 	 * 文字列が16進数表記でない場合は例外をスローします。
 	 *
 	 * @param string $hex
-	 * @param bool   $ignore_case 大文字小文字を区別しない場合はtrue
 	 * @throws \InvalidArgumentException
 	 */
-	public static function checkHex( string $hex, bool $ignore_case = false ): void {
-		if ( ! Validator::isHex( $hex, $ignore_case ) ) {
-			throw new \InvalidArgumentException( '[95E1280E] Invalid hex. - hex: ' . $hex . ', ignore_case: ' . $ignore_case );
+	public static function checkHex( string $hex ): void {
+		if ( ! Validator::isHex( $hex ) ) {
+			throw new \InvalidArgumentException( '[95E1280E] Invalid hex. - hex: ' . $hex );
+		}
+	}
+
+	/** チェーンIDが正常でない場合は例外をスローします。 */
+	public static function checkChainID( int $chain_ID ): void {
+		if ( ! self::isChainID( $chain_ID ) ) {
+			throw new \InvalidArgumentException( '[84C80B37] Invalid chain ID. - chain ID: ' . $chain_ID );
+		}
+	}
+	/** 指定された値がチェーンIDとして有効かどうかを返します。 */
+	public static function isChainID( int $chain_ID ): bool {
+		// コントラクトがデプロイされているチェーンIDの一覧を取得
+		$deployed_chain_ids = ( new AppContract() )->allChainIDs();
+		return in_array( $chain_ID, $deployed_chain_ids, true );
+	}
+
+	/** ブロック番号が正常でない場合は例外をスローします。 */
+	public static function checkBlockNumber( int $block_number ): void {
+		if ( $block_number < 0 ) {
+			throw new \InvalidArgumentException( '[6CF02DFE] Invalid block number. - block number: ' . $block_number );
 		}
 	}
 
@@ -192,13 +214,12 @@ class Validator {
 	public static function isAmountHex( string $hex ): bool {
 		// 本プラグインにおいてuint256を超える値は扱わない。また、大文字小文字を混在させる必要はないため小文字固定とする。
 		// uint256_max: 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-		return self::isHex( $hex, false ) && strlen( $hex ) <= ( 2 + 64 );
+		return self::isHex( $hex ) && strlen( $hex ) <= ( 2 + 64 );
 	}
 
-	public static function isHex( string $hex, bool $ignore_case = false ): bool {
+	public static function isHex( string $hex ): bool {
 		// 本プラグインでは、`0x`プレフィックス含む文字列を16進数表記とする。
-		$pattern = $ignore_case ? '/^0x[0-9a-fA-F]+$/' : '/^0x[0-9a-f]+$/';
-		return preg_match( $pattern, $hex ) === 1;
+		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
 
 	public static function isDecimals( int $decimals ): bool {
@@ -235,6 +256,6 @@ class Validator {
 	}
 
 	public static function isAddress( string $address ): bool {
-		return \Web3\Utils::isAddress( $address );
+		return Ethers::isAddress( $address );
 	}
 }

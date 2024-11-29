@@ -36,8 +36,8 @@ class VerifiableChainsResolver extends ResolverBase {
 		$rpc_url      = new RpcURL();
 		$app_contract = new AppContract();
 		foreach ( $chain_IDs as $chain_ID ) {
-			// RPC URLとコントラクトアドレスを取得できるチェーンIDは検証可能なチェーンとして返す
-			if ( ! is_null( $rpc_url->connectableURL( $chain_ID ) ) && ! is_null( ( $app_contract )->address( $chain_ID ) ) ) {
+			// ネットワークに接続可能かつ、アプリケーションのコントラクトアドレスが取得できる場合は検証可能なチェーンとして返す
+			if ( $rpc_url->isConnectable( $chain_ID ) && in_array( $chain_ID, $app_contract->allChainIDs() ) ) {
 				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
 			}
 		}

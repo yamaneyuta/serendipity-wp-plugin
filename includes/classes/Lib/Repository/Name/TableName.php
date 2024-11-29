@@ -18,11 +18,23 @@ class TableName {
 		return ( new Prefix() )->tableName() . $table_name;
 	}
 
+	/** 発行した請求書情報を記録するテーブル名 */
 	public function invoice(): string {
 		return $this->addPrefix( 'invoice' );
 	}
 
+	/** クライアントと署名無しでやり取りする際に用いるnonceを格納するテーブル名 */
 	public function invoiceNonce(): string {
 		return $this->addPrefix( 'invoice_nonce' );
+	}
+
+	/** ペイウォール解除時のトランザクションに関するデータを記録するテーブル名 */
+	public function unlockPaywallTransaction(): string {
+		return $this->addPrefix( 'unlock_paywall_transaction' );
+	}
+
+	/** ペイウォール解除時のトークン転送イベントの内容を記録するテーブル名 */
+	public function unlockPaywallTransferEvent(): string {
+		return $this->addPrefix( 'unlock_paywall_transfer_event' );
 	}
 }

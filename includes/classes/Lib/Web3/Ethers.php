@@ -30,7 +30,8 @@ class Ethers {
 			return null;
 		}
 
-		$ec         = new EC( 'secp256k1' );
+		$ec = new EC( 'secp256k1' );
+		/** @var \Elliptic\Curve\ShortCurve\Point */
 		$public_key = $ec->recoverPubKey( $message_hash, $sign, $recid );
 
 		return self::computeAddress( $public_key );
@@ -53,25 +54,27 @@ class Ethers {
 	 *
 	 * @see https://github.com/simplito/elliptic-php#verifying-ethereum-signature
 	 */
-	public static function computeAddress( $public_key ): string {
-		return '0x' . self::checksum( substr( Keccak::hash( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ), 256 ), 24 ) );
+	public static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): string {
+		$address = \Web3\Utils::toChecksumAddress( substr( Keccak::hash( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ), 256 ), 24 ) );
+		assert( self::isAddress( $address ), '[D9ADC5E3] Invalid address. ' . $address );
+		return $address;
 	}
 
 
 	/**
-	 * ウォレットアドレスにチェックサムを付与します。
+	 * ウォレットアドレスにチェックサムを付与して返します。
 	 */
-	private static function checksum( string $address ): string {
-		assert( false === Strings::strpos( $address, '0x' ) );
-
-		$hash   = Keccak::hash( $address, 256 );
-		$result = '';
-
-		$len = strlen( $address );
-		for ( $i = 0; $i < $len; $i++ ) {
-			$result .= hexdec( $hash[ $i ] ) > 7 ? strtoupper( $address[ $i ] ) : $address[ $i ];
-		}
-
+	public static function getAddress( string $address ): string {
+		$result = \Web3\Utils::toChecksumAddress( $address );
+		assert( self::isAddress( $result ), '[A5954271] Invalid address. ' . $result );
 		return $result;
+	}
+
+	/**
+	 * 指定された文字列が正しいウォレットアドレスかどうかを判定します。
+	 */
+	public static function isAddress( string $address ): bool {
+		// 本アプリでは`0x`プレフィックスを必須とする
+		return Strings::starts_with( $address, '0x' ) && \Web3\Utils::isAddress( $address );
 	}
 }

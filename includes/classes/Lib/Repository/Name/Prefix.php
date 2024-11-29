@@ -15,6 +15,14 @@ class Prefix {
 	}
 
 	/**
+	 * Cronに登録するアクション名に付与するプレフィックスを取得します。
+	 */
+	public function cronActionName(): string {
+		$text_domain = ( new PluginInfo() )->textDomain();
+		return "${text_domain}_";
+	}
+
+	/**
 	 * optionsテーブルに格納する際のキー名に付与するプレフィックスを取得します。
 	 */
 	public function optionKeyName(): string {
