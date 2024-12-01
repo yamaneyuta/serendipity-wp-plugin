@@ -171,9 +171,15 @@ class Judge {
 	 * @throws InvalidArgumentException
 	 */
 	public static function checkAddress( string $address ): void {
-		if ( ! Validator::isAddress( $address ) ) {
+		if ( ! self::isAddress( $address ) ) {
 			throw new \InvalidArgumentException( '[66BDC040] Invalid address. - address: ' . $address );
 		}
+	}
+	/**
+	 * アドレスとして有効な値かどうかを返します。
+	 */
+	public static function isAddress( string $address ): bool {
+		return Ethers::isAddress( $address );
 	}
 
 	/**
@@ -247,9 +253,5 @@ class Validator {
 
 	public static function isTokenAddress( int $chain_ID, string $address ): bool {
 		return ( new TokenDefinition() )->exists( $chain_ID, $address );
-	}
-
-	public static function isAddress( string $address ): bool {
-		return Ethers::isAddress( $address );
 	}
 }
