@@ -101,8 +101,8 @@ class AppContractCrawler {
 			$from = $event_args['from'];
 			// /** @var string */
 			$to = $event_args['to'];
-			// /** @var string */
-			// $token      = $event_args['token'];
+			/** @var string */
+			$token_address = $event_args['token'];
 			/** @var BigInteger */
 			$amount = $event_args['amount'];
 			/** @var BigInteger */
@@ -116,6 +116,7 @@ class AppContractCrawler {
 				Hex::toInt( $log_index_hex ),
 				$from,
 				$to,
+				$token_address,
 				Hex::from( $amount ),
 			);
 		}
