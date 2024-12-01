@@ -37,4 +37,9 @@ class TableName {
 	public function unlockPaywallTransferEvent(): string {
 		return $this->addPrefix( 'unlock_paywall_transfer_event' );
 	}
+
+	/** (支払時に使用する)トークンの情報を記録するテーブル名 */
+	public function token(): string {
+		return $this->addPrefix( 'token' );
+	}
 }

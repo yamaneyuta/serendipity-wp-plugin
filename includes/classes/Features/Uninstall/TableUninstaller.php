@@ -20,7 +20,7 @@ class TableUninstaller {
 
 		// $table_namesの数が多い時はエラー
 		// ※テーブルが追加された時はここがエラーになるので値を修正すること
-		if ( 4 < count( $table_names ) ) {
+		if ( 5 < count( $table_names ) ) {
 			throw new \Exception( '[D6CACCCC] Invalid table names. table_names: ' . json_encode( $table_names ) );
 		}
 
