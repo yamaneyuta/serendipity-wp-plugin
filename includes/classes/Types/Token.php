@@ -11,7 +11,7 @@ class Token {
 	/** @var Token[] */
 	private static array $cache = array();
 
-	public function __construct( int $chain_ID, string $address ) {
+	private function __construct( int $chain_ID, string $address ) {
 		$this->chain_ID = $chain_ID;
 		$this->address  = $address;
 	}

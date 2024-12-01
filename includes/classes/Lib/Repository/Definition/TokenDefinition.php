@@ -57,7 +57,7 @@ class TokenDefinition {
 		$tokens = array();
 		foreach ( $this->token_data as $data ) {
 			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID ) {
-				$tokens[] = new Token( $data[ self::CHAIN_ID_INDEX ], $data[ self::ADDRESS_INDEX ] );
+				$tokens[] = Token::from( $data[ self::CHAIN_ID_INDEX ], $data[ self::ADDRESS_INDEX ] );
 			}
 		}
 		return $tokens;
