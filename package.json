@@ -98,7 +98,7 @@
 		"@storybook/addon-webpack5-compiler-swc": "^1.0.5",
 		"@storybook/blocks": "^8.4.0",
 		"@storybook/react": "^8.4.0",
-		"@storybook/react-webpack5": "^8.4.0",
+		"@storybook/react-webpack5": "^8.4.6",
 		"@storybook/test": "^8.4.0",
 		"@storybook/test-runner": "^0.19.1",
 		"@testing-library/dom": "^10.4.0",
