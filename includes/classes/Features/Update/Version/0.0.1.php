@@ -14,7 +14,7 @@ use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
-use Cornix\Serendipity\Core\Types\Token;
+use Cornix\Serendipity\Core\Types\TokenType;
 
 /**
  * Ver0.0.1(インストール直後に実行されるように一番小さいバージョンで仮作成)
@@ -71,13 +71,13 @@ class PayableTokensInitializer {
 
 	private function initMainnet(): void {
 		// メインネットの場合はEthereum mainnetのみ
-		$eth = Token::from( ChainID::ETH_MAINNET, Ethers::zeroAddress() );
+		$eth = TokenType::from( ChainID::ETH_MAINNET, Ethers::zeroAddress() );
 		( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
 	}
 
 	private function initTestnet(): void {
 		// テストネットの場合はSepoliaのみ
-		$eth = Token::from( ChainID::SEPOLIA, Ethers::zeroAddress() );
+		$eth = TokenType::from( ChainID::SEPOLIA, Ethers::zeroAddress() );
 		( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
 	}
 
@@ -87,13 +87,13 @@ class PayableTokensInitializer {
 
 			// Privatenet L1
 			{
-				$eth = Token::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress() );
+				$eth = TokenType::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress() );
 				( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
 			}
 
 			// Privatenet L2
 			{
-				$matic = Token::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress() );
+				$matic = TokenType::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress() );
 				( new PayableTokens() )->save( $matic->chainID(), array( $matic ) );
 			}
 		}

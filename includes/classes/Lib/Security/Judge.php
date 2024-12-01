@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
-use Cornix\Serendipity\Core\Types\Token;
+use Cornix\Serendipity\Core\Types\TokenType;
 
 /**
  * 本システムにおいて`check～`は、引数の値を検証し、不正な値の場合は例外をスローする動作を行います。
@@ -142,10 +142,10 @@ class Judge {
 	/**
 	 * 購入者が支払可能なトークンでない場合は例外をスローします。
 	 *
-	 * @param Token $token
+	 * @param TokenType $token
 	 * @throws \InvalidArgumentException
 	 */
-	public static function checkPayableToken( Token $token ): void {
+	public static function checkPayableToken( TokenType $token ): void {
 		if ( ! Validator::isPayableToken( $token ) ) {
 			throw new \InvalidArgumentException( '[30970153] Invalid payable token. - chain id: ' . $token->chainID() . ', address: ' . $token->address() );
 		}
@@ -238,7 +238,7 @@ class Validator {
 	}
 
 	/** 購入者が支払可能なトークンかどうかを返します。 */
-	public static function isPayableToken( Token $token ): bool {
+	public static function isPayableToken( TokenType $token ): bool {
 		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
 		$payable_tokens = ( new PayableTokens() )->get( $token->chainID() );
 
