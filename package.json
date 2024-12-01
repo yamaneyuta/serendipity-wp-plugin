@@ -114,7 +114,7 @@
 		"@wordpress/scripts": "^27.9.0",
 		"@yamaneyuta/serendipity-dev-conf": "github:yamaneyuta/serendipity-dev-conf#0.8.3",
 		"@yamaneyuta/serendipity-dev-export-license": "github:yamaneyuta/serendipity-dev-export-license#0.8.6",
-		"@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.9",
+		"@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.10",
 		"@yamaneyuta/serendipity-lib-js-price-format": "github:yamaneyuta/serendipity-lib-js-price-format#0.8.5",
 		"concurrently": "^8.2.2",
 		"eslint-plugin-storybook": "^0.10.1",
