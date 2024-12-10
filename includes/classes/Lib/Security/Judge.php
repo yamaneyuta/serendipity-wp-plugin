@@ -108,9 +108,13 @@ class Judge {
 	 * @throws InvalidArgumentException
 	 */
 	public static function checkDecimals( int $decimals ): void {
-		if ( ! Validator::isDecimals( $decimals ) ) {
+		if ( ! self::isDecimals( $decimals ) ) {
 			throw new \InvalidArgumentException( '[24FF24F8] Invalid decimals. - decimals: ' . $decimals );
 		}
+	}
+	public static function isDecimals( int $decimals ): bool {
+		// 小数点以下の桁数は0以上。
+		return 0 <= $decimals;
 	}
 
 	/**
@@ -120,10 +124,15 @@ class Judge {
 	 * @throws InvalidArgumentException
 	 */
 	public static function checkSymbol( string $symbol ): void {
-		if ( ! Validator::isSymbol( $symbol ) ) {
+		if ( ! self::isSymbol( $symbol ) ) {
 			throw new \InvalidArgumentException( '[925BB232] Invalid symbol. - symbol: ' . $symbol );
 		}
 	}
+	public static function isSymbol( string $symbol ): bool {
+		// 様々な通貨記号が存在するため、空文字列以外であれば有効とする。
+		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
+	}
+
 
 	/**
 	 * 販売価格に使用可能な通貨シンボルでない場合は例外をスローします。
@@ -220,19 +229,6 @@ class Validator {
 	public static function isPostID( int $post_ID ): bool {
 		// 投稿の状態を取得できれば有効なIDとみなす。
 		return false !== get_post_status( $post_ID );
-	}
-
-	public static function isDecimals( int $decimals ): bool {
-		// 小数点以下の桁数は0以上。
-		return 0 <= $decimals;
-	}
-
-	/**
-	 * 指定された文字列が通貨記号として有効な値であるかどうかを返します。
-	 */
-	public static function isSymbol( string $symbol ): bool {
-		// 様々な通貨記号が存在するため、空文字列以外であれば有効とする。
-		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
 	}
 
 	/** 販売価格に使用可能なシンボルかどうかを返します。 */
