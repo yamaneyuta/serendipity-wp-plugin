@@ -38,4 +38,77 @@ class TokenData {
 			throw new \Exception( '[7217F4B3] Failed to add token data.' );
 		}
 	}
+
+	/**
+	 * 指定されたチェーンのトークンデータ一覧を取得します。
+	 * チェーンIDが指定されない場合、全てのトークンデータを取得します。
+	 *
+	 * @param int|null $chain_ID チェーンID
+	 * @return TokenDataRecord[]
+	 */
+	public function get( ?int $chain_ID = null ): array {
+		$sql = <<<SQL
+			SELECT `chain_id`, `token_address`, `symbol`, `decimals`
+			FROM `{$this->table_name}`
+		SQL;
+
+		if ( ! is_null( $chain_ID ) ) {
+			$sql .= $this->wpdb->prepare( ' WHERE `chain_id` = %d', $chain_ID );
+		}
+
+		$result = $this->wpdb->get_results( $sql );
+		if ( false === $result ) {
+			throw new \Exception( '[CA8FE52D] Failed to get token data.' );
+		}
+
+		$records = array();
+		foreach ( $result as $row ) {
+			$chain_ID      = (int) $row->chain_id;
+			$token_address = (string) $row->token_address;
+			$symbol        = (string) $row->symbol;
+			$decimals      = (int) $row->decimals;
+
+			assert( Judge::isChainID( $chain_ID ), '[C4D50120] Invalid chain ID. ' . $chain_ID );
+			assert( Judge::isAddress( $token_address ), '[6535A6C3] Invalid contract address. ' . $token_address );
+			assert( Judge::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
+			assert( Judge::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
+
+			$records[] = new TokenDataRecord( $chain_ID, $token_address, $symbol, $decimals );
+		}
+
+		return $records;
+	}
+}
+
+class TokenDataRecord {
+	public function __construct( int $chain_ID, string $contract_address, string $symbol, int $decimals ) {
+		Judge::checkChainID( $chain_ID );
+		Judge::checkAddress( $contract_address );
+
+		$this->chain_ID         = $chain_ID;
+		$this->contract_address = $contract_address;
+		$this->symbol           = $symbol;
+		$this->decimals         = $decimals;
+	}
+
+	private int $chain_ID;
+	private string $contract_address;
+	private string $symbol;
+	private int $decimals;
+
+	public function chainID(): int {
+		return $this->chain_ID;
+	}
+
+	public function contractAddress(): string {
+		return $this->contract_address;
+	}
+
+	public function symbol(): string {
+		return $this->symbol;
+	}
+
+	public function decimals(): int {
+		return $this->decimals;
+	}
 }
