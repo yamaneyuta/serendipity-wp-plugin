@@ -24,6 +24,8 @@ class TokenData {
 		$token_client = ( new TokenClientFactory() )->create( $chain_ID, $contract_address );
 		$symbol       = $token_client->symbol();
 		$decimals     = $token_client->decimals();
+		Judge::checkSymbol( $symbol );
+		Judge::checkDecimals( $decimals );
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
