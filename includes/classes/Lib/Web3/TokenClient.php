@@ -46,7 +46,8 @@ class TokenClient {
 				if ( $err ) {
 					throw $err;
 				}
-				assert( is_string( $res[0] ) );
+				assert( is_string( $res[0] ?? null ), '[20FD9BCD] symbol is not string.' );
+				assert( 0 < strlen( $res[0] ), '[6F010DF1] symbol is empty.' );
 				$result = $res[0];
 			}
 		);
