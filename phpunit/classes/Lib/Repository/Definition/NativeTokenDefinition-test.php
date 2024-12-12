@@ -47,4 +47,43 @@ class NativeTokenDefinitionTest extends WP_UnitTestCase {
 		// ASSERT
 		// Do nothing
 	}
+
+
+	/**
+	 * 処理のテストではなく、実装漏れの確認を行うためのテスト
+	 * すべてのチェーンIDでネイティブトークンの小数点以下桁数が定義されているかどうかをチェックする
+	 *
+	 * @test
+	 * @testdox [5D83E426] NativeTokenDefinition::getDecimals - chainID: $chain_ID
+	 * @dataProvider getDataProvider
+	 */
+	public function getDecimals( int $chain_ID ) {
+		// ARRANGE
+		// Do nothing
+
+		// ACT
+		$native_decimals = ( new NativeTokenDefinition() )->getDecimals( $chain_ID );
+
+		// ASSERT
+		$this->assertTrue( Judge::isDecimals( $native_decimals ) );
+	}
+
+
+	/**
+	 * チェーンIDが不正な場合の小数点以下桁数取得テスト
+	 *
+	 * @test
+	 * @testdox [40DB72AC] NativeTokenDefinition::getDecimals - invalid chainID
+	 */
+	public function getDecimalsWithInvalidChainID() {
+		// ARRANGE
+		$invalid_chain_ID = PHP_INT_MAX;    // 無効なチェーンID
+		$this->expectExceptionMessage( '[2ADC7FBE]' );  // 例外が発生することを確認
+
+		// ACT
+		( new NativeTokenDefinition() )->getDecimals( $invalid_chain_ID );
+
+		// ASSERT
+		// Do nothing
+	}
 }
