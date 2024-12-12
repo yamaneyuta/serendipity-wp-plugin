@@ -2,8 +2,9 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\TokenType;
 
 class RemovePayableTokensResolverTest extends IntegrationTestBase {
@@ -42,7 +43,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
-		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
+		$register_token_address = Ethers::zeroAddress(); // ETH
 		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
@@ -71,7 +72,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
-		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
+		$register_token_address = Ethers::zeroAddress(); // ETH
 		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
@@ -100,10 +101,10 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
-		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
+		$register_token_address = Ethers::zeroAddress(); // ETH
 		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
-		$not_registered_token_address = ( new TokenDefinition() )->all( $chain_ID )[1]->address();    // 登録されていないアドレス
+		$not_registered_token_address = '0x0000000000000000000000000000000000000001'; // 登録されていない適当なアドレス
 
 		// ACT
 		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $not_registered_token_address ) );
@@ -130,16 +131,18 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
-		// 登録するトークンアドレスを取得
-		$register_token_addresses = array_map( fn( $token ) => $token->address(), ( new TokenDefinition() )->all( $chain_ID ) );
+		// ERC20トークンを登録する準備
+		( new TokenData() )->add( $chain_ID, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
+		( new TokenData() )->add( $chain_ID, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
+		$GLOBALS['wpdb']->query( 'COMMIT' );
 		// 3つ登録
-		$token1 = TokenType::from( $chain_ID, $register_token_addresses[0] );
-		$token2 = TokenType::from( $chain_ID, $register_token_addresses[1] );
-		$token3 = TokenType::from( $chain_ID, $register_token_addresses[2] );
+		$token1 = TokenType::from( $chain_ID, '0x0000000000000000000000000000000000000000' ); // ETH
+		$token2 = TokenType::from( $chain_ID, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
+		$token3 = TokenType::from( $chain_ID, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
 		( new PayableTokens() )->save( $chain_ID, array( $token1, $token2, $token3 ) );
 
 		// ACT
-		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $register_token_addresses[1], $register_token_addresses[2] ) );
+		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $token1->address(), $token2->address() ) );
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドが存在しない
@@ -147,7 +150,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		$tokens = ( new PayableTokens() )->get( $chain_ID );
 		$this->assertEquals( 1, count( $tokens ) ); // 3つ登録後2つ削除したので1つだけ残っている
 		$this->assertEquals( $chain_ID, $tokens[0]->chainID() );
-		$this->assertEquals( $register_token_addresses[0], $tokens[0]->address() );
+		$this->assertEquals( $token3->address(), $tokens[0]->address() );
 	}
 
 
