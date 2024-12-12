@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 
 require_once 'includes/classes/Lib/Repository/RateData.php';
 
@@ -14,7 +15,7 @@ class TokenDataTest extends IntegrationTestBase {
 	 *
 	 * @test
 	 * @testdox [F6B98ADD] TokenData::add - host: $host
-	 * @dataProvider addTestDataProvider
+	 * @dataProvider hostDataProvider
 	 */
 	public function addTest( string $host ): void {
 		// ARRANGE
@@ -36,14 +37,36 @@ class TokenDataTest extends IntegrationTestBase {
 		$this->assertEquals( 'TUSD', $result[0]->symbol() );
 		$this->assertEquals( 18, $result[0]->decimals() );
 	}
-	public function addTestDataProvider() {
+	public function hostDataProvider() {
 		$hosts = ( new TestDBHosts() )->get();
 		return array_map(
-			function ( $host ) {
-				return array( $host );
-			},
+			fn( string $host ) => array( $host ),
 			$hosts
 		);
+	}
+
+	/**
+	 * アドレスゼロのトークンは追加できないことを確認するテスト
+	 *
+	 * @test
+	 * @testdox [A3D3D3D3] TokenData::add - invalid address - host: $host
+	 * @dataProvider hostDataProvider
+	 */
+	public function addInvalidAddressTest( string $host ) {
+		// ARRANGE
+		$wpdb = WpdbFactory::create( $host );
+		( new TokenTable( $wpdb ) )->drop();
+		( new TokenTable( $wpdb ) )->create();
+
+		// ACT
+		$token_data = new TokenData( $wpdb );
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( '[02B46A5C]' );
+		$token_data->add( ChainID::PRIVATENET_L1, Ethers::zeroAddress() ); // ネイティブトークンは追加できないことを確認
+		$wpdb->query( 'COMMIT' );
+
+		// ASSERT
+		// Do nothing
 	}
 
 	/**
@@ -51,7 +74,7 @@ class TokenDataTest extends IntegrationTestBase {
 	 *
 	 * @test
 	 * @testdox [534AF70D] TokenData::get - host: $host
-	 * @dataProvider getTestDataProvider
+	 * @dataProvider hostDataProvider
 	 */
 	public function getTest( string $host ): void {
 		// ARRANGE
@@ -89,14 +112,5 @@ class TokenDataTest extends IntegrationTestBase {
 		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[1]->chainID() );
 		$this->assertContains( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', array_map( fn( $ret ) => $ret->contractAddress(), $result_l2 ) );
 		$this->assertContains( '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', array_map( fn( $ret ) => $ret->contractAddress(), $result_l2 ) );
-	}
-	public function getTestDataProvider() {
-		$hosts = ( new TestDBHosts() )->get();
-		return array_map(
-			function ( $host ) {
-				return array( $host );
-			},
-			$hosts
-		);
 	}
 }
