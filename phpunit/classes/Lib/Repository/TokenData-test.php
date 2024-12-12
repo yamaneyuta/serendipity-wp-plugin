@@ -5,112 +5,101 @@ use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\Types\TokenType;
 
 require_once 'includes/classes/Lib/Repository/RateData.php';
 
 class TokenDataTest extends IntegrationTestBase {
 
 	/**
-	 * データをテーブルに追加するテスト
+	 * データを追加するテスト
 	 *
 	 * @test
-	 * @testdox [F6B98ADD] TokenData::add - host: $host
-	 * @dataProvider hostDataProvider
+	 * @testdox [555F5C5C] TokenData::add
 	 */
-	public function addTest( string $host ): void {
+	public function addTest(): void {
 		// ARRANGE
-		$wpdb = WpdbFactory::create( $host );
-		( new TokenTable( $wpdb ) )->drop();
-		( new TokenTable( $wpdb ) )->create();
+		( new TokenTable() )->drop();
+		( new TokenTable() )->create();
+		$sut         = new TokenData();
+		$prev_result = $sut->get( ChainID::PRIVATENET_L1 );   // データ追加前の状態を取得
 
 		// ACT
-		$token_data = new TokenData( $wpdb );
-		$token_data->add( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
-		$wpdb->query( 'COMMIT' );
+		$sut->add( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
 
-		$result = $token_data->get();
+		$result = $sut->get( ChainID::PRIVATENET_L1 );
+		$added  = array_values( array_diff( $result, $prev_result ) );
 
 		// ASSERT
-		$this->assertEquals( 1, count( $result ) );
-		$this->assertEquals( ChainID::PRIVATENET_L1, $result[0]->chainID() );
-		$this->assertEquals( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $result[0]->address() );
-		$this->assertEquals( 'TUSD', $result[0]->symbol() );
-		$this->assertEquals( 18, $result[0]->decimals() );
-	}
-	public function hostDataProvider() {
-		$hosts = ( new TestDBHosts() )->get();
-		return array_map(
-			fn( string $host ) => array( $host ),
-			$hosts
-		);
+		$this->assertEquals( 1, count( $added ) );
+		$this->assertEquals( ChainID::PRIVATENET_L1, $added[0]->chainID() );
+		$this->assertEquals( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $added[0]->address() );
+		$this->assertEquals( 'TUSD', $added[0]->symbol() );
+		$this->assertEquals( 18, $added[0]->decimals() );
 	}
 
 	/**
 	 * アドレスゼロのトークンは追加できないことを確認するテスト
 	 *
 	 * @test
-	 * @testdox [DCE5177B] TokenData::add - invalid address - host: $host
-	 * @dataProvider hostDataProvider
+	 * @testdox [0945E1FD] TokenData::add - invalid address
 	 */
-	public function addInvalidAddressTest( string $host ) {
+	public function addInvalidAddressTest() {
 		// ARRANGE
-		$wpdb = WpdbFactory::create( $host );
-		( new TokenTable( $wpdb ) )->drop();
-		( new TokenTable( $wpdb ) )->create();
+		( new TokenTable() )->drop();
+		( new TokenTable() )->create();
 
 		// ACT
-		$token_data = new TokenData( $wpdb );
+		$sut = new TokenData();
 		$this->expectException( InvalidArgumentException::class );
-		$this->expectExceptionMessage( '[02B46A5C]' );
-		$token_data->add( ChainID::PRIVATENET_L1, Ethers::zeroAddress() ); // ネイティブトークンは追加できないことを確認
-		$wpdb->query( 'COMMIT' );
+		$this->expectExceptionMessage( '[6006664F]' );
+		$sut->add( ChainID::PRIVATENET_L1, Ethers::zeroAddress() ); // ネイティブトークンは追加できないことを確認
 
 		// ASSERT
 		// Do nothing
 	}
 
 	/**
-	 * データをテーブルから取得するテスト
+	 * トークンデータを取得するテスト
 	 *
 	 * @test
-	 * @testdox [534AF70D] TokenData::get - host: $host
-	 * @dataProvider hostDataProvider
+	 * @testdox [A64474BC] TokenData::get
 	 */
-	public function getTest( string $host ): void {
+	public function getTest(): void {
 		// ARRANGE
-		$wpdb = WpdbFactory::create( $host );
-		( new TokenTable( $wpdb ) )->drop();
-		( new TokenTable( $wpdb ) )->create();
+		( new TokenTable() )->drop();
+		( new TokenTable() )->create();
 
 		// ACT
-		$token_data = new TokenData( $wpdb );
+		$token_data = new TokenData();
 		$token_data->add( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
 		$token_data->add( ChainID::PRIVATENET_L2, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
 		$token_data->add( ChainID::PRIVATENET_L2, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
-		$wpdb->query( 'COMMIT' );
 
-		$result_all = $token_data->get();
 		$result_eth = $token_data->get( ChainID::ETH_MAINNET );     // イーサリアムメインネットのトークン情報(追加していないため0件)
 		$result_l1  = $token_data->get( ChainID::PRIVATENET_L1 );    // プライベートネットL1のトークン情報(1件)
 		$result_l2  = $token_data->get( ChainID::PRIVATENET_L2 );    // プライベートネットL2のトークン情報(2件)
 
 		// ASSERT
-		$this->assertEquals( 3, count( $result_all ) );
-		$result_all_l1 = array_filter( $result_all, fn( $ret ) => $ret->chainID() === ChainID::PRIVATENET_L1 );
-		$result_all_l2 = array_filter( $result_all, fn( $ret ) => $ret->chainID() === ChainID::PRIVATENET_L2 );
-		$this->assertEquals( 1, count( $result_all_l1 ) );
-		$this->assertEquals( 2, count( $result_all_l2 ) );
+		// 結果からコントラクトアドレス一覧を取得するコールバック
+		$get_addresses = fn( array $result ) => array_map( fn( TokenType $ret ) => $ret->address(), $result );
 
-		$this->assertEquals( 0, count( $result_eth ) );
+		$this->assertEquals( 0 + 1, count( $result_eth ) ); // 0件 + ネイティブトークン
+		$this->assertEquals( ChainID::ETH_MAINNET, $result_eth[0]->chainID() );
+		$this->assertContains( Ethers::zeroAddress(), $get_addresses( $result_eth ) );
 
-		$this->assertEquals( 1, count( $result_l1 ) );
+		$this->assertEquals( 1 + 1, count( $result_l1 ) ); // 1件 + ネイティブトークン
 		$this->assertEquals( ChainID::PRIVATENET_L1, $result_l1[0]->chainID() );
-		$this->assertEquals( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $result_l1[0]->address() );
+		$this->assertEquals( ChainID::PRIVATENET_L1, $result_l1[1]->chainID() );
+		$this->assertContains( Ethers::zeroAddress(), $get_addresses( $result_l1 ) );
+		$this->assertContains( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $get_addresses( $result_l1 ) );
 
-		$this->assertEquals( 2, count( $result_l2 ) );
+		$this->assertEquals( 2 + 1, count( $result_l2 ) ); // 2件 + ネイティブトークン
 		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[0]->chainID() );
 		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[1]->chainID() );
-		$this->assertContains( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', array_map( fn( $ret ) => $ret->address(), $result_l2 ) );
-		$this->assertContains( '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', array_map( fn( $ret ) => $ret->address(), $result_l2 ) );
+		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[2]->chainID() );
+		$this->assertContains( Ethers::zeroAddress(), $get_addresses( $result_l2 ) );
+		$this->assertContains( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $get_addresses( $result_l2 ) );
+		$this->assertContains( '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', $get_addresses( $result_l2 ) );
 	}
 }
