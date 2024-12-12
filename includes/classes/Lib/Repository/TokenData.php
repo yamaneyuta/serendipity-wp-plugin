@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClientFactory;
 
 class TokenData {
@@ -19,6 +20,10 @@ class TokenData {
 	public function add( int $chain_ID, string $contract_address ): void {
 		Judge::checkChainID( $chain_ID );
 		Judge::checkAddress( $contract_address );
+		if ( $contract_address === Ethers::zeroAddress() ) {
+			// アドレスゼロはテーブルに保存しない(NativeTokenSymbolDefinitionで定義する)ため例外を投げる
+			throw new \InvalidArgumentException( '[02B46A5C] Contract address is zero address.' );
+		}
 
 		// コントラクトからsymbolとdecimalsを取得して保存する
 		$token_client = ( new TokenClientFactory() )->create( $chain_ID, $contract_address );
