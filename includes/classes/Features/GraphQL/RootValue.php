@@ -19,6 +19,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ServerSignerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\TokenResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\VerifiableChainsResolver;
+use Cornix\Serendipity\Core\Lib\Logger\Logger;
 
 class RootValue {
 
@@ -59,11 +60,7 @@ class RootValue {
 				try {
 					return $resolver->resolve( $root_value, $args );
 				} catch ( \Throwable $e ) {
-					if ( 'testing' !== getenv( 'APP_ENV' ) ) {
-						// TODO: use logger
-						error_log( $e->getMessage() );
-						error_log( $e->getTraceAsString() );
-					}
+					Logger::error( $e );
 					throw $e;
 				}
 			};

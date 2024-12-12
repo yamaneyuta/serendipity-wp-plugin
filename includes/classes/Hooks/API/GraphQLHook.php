@@ -4,6 +4,7 @@ namespace Cornix\Serendipity\Core\Hooks\API;
 
 use Cornix\Serendipity\Core\Features\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
+use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use GraphQL\GraphQL;
 
@@ -49,9 +50,19 @@ class GraphQLHook {
 		$schema     = ( new PluginSchema() )->get();
 		$root_value = ( new RootValue() )->get();
 
-		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values );
-		$output = $result->toArray();
+		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values )
+			// https://webonyx.github.io/graphql-php/error-handling/#custom-error-handling-and-formatting
+			->setErrorsHandler(
+				function ( array $errors, callable $formatter ): array {
+					foreach ( $errors as $error ) {
+						// エラーログを出力
+						Logger::error( $error );
+					}
+					return array_map( $formatter, $errors );
+				}
+			)
+			->toArray();
 
-		return $output;
+		return $result;
 	}
 }
