@@ -79,9 +79,13 @@ class Judge {
 	}
 	/** 指定された値がチェーンIDとして有効かどうかを返します。 */
 	public static function isChainID( int $chain_ID ): bool {
-		// コントラクトがデプロイされているチェーンIDの一覧を取得
-		$deployed_chain_ids = ( new AppContract() )->allChainIDs();
-		return in_array( $chain_ID, $deployed_chain_ids, true );
+		// ChainIDクラスに定義されている定数のいずれかであるかを確認
+		$reflectionClass = new \ReflectionClass( 'Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID' );
+		$constants       = $reflectionClass->getConstants();
+		/** @var int[] */
+		$all_chainIDs = array_values( $constants );
+
+		return in_array( $chain_ID, $all_chainIDs, true );
 	}
 
 	/**
