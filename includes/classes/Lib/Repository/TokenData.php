@@ -25,6 +25,8 @@ class TokenData {
 			throw new \InvalidArgumentException( '[02B46A5C] Contract address is zero address.' );
 		}
 
+		// TODO: アドレスのバイトコードを取得し、存在しない場合はエラーとする処理をここに追加
+
 		// コントラクトからsymbolとdecimalsを取得して保存する
 		$token_client = ( new TokenClientFactory() )->create( $chain_ID, $contract_address );
 		$symbol       = $token_client->symbol();
