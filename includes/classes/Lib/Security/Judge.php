@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
-use Cornix\Serendipity\Core\Types\Token;
+use Cornix\Serendipity\Core\Types\TokenType;
 
 /**
  * 本システムにおいて`check～`は、引数の値を検証し、不正な値の場合は例外をスローする動作を行います。
@@ -108,9 +108,13 @@ class Judge {
 	 * @throws InvalidArgumentException
 	 */
 	public static function checkDecimals( int $decimals ): void {
-		if ( ! Validator::isDecimals( $decimals ) ) {
+		if ( ! self::isDecimals( $decimals ) ) {
 			throw new \InvalidArgumentException( '[24FF24F8] Invalid decimals. - decimals: ' . $decimals );
 		}
+	}
+	public static function isDecimals( int $decimals ): bool {
+		// 小数点以下の桁数は0以上。
+		return 0 <= $decimals;
 	}
 
 	/**
@@ -120,10 +124,15 @@ class Judge {
 	 * @throws InvalidArgumentException
 	 */
 	public static function checkSymbol( string $symbol ): void {
-		if ( ! Validator::isSymbol( $symbol ) ) {
+		if ( ! self::isSymbol( $symbol ) ) {
 			throw new \InvalidArgumentException( '[925BB232] Invalid symbol. - symbol: ' . $symbol );
 		}
 	}
+	public static function isSymbol( string $symbol ): bool {
+		// 様々な通貨記号が存在するため、空文字列以外であれば有効とする。
+		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
+	}
+
 
 	/**
 	 * 販売価格に使用可能な通貨シンボルでない場合は例外をスローします。
@@ -142,10 +151,10 @@ class Judge {
 	/**
 	 * 購入者が支払可能なトークンでない場合は例外をスローします。
 	 *
-	 * @param Token $token
+	 * @param TokenType $token
 	 * @throws \InvalidArgumentException
 	 */
-	public static function checkPayableToken( Token $token ): void {
+	public static function checkPayableToken( TokenType $token ): void {
 		if ( ! Validator::isPayableToken( $token ) ) {
 			throw new \InvalidArgumentException( '[30970153] Invalid payable token. - chain id: ' . $token->chainID() . ', address: ' . $token->address() );
 		}
@@ -171,9 +180,15 @@ class Judge {
 	 * @throws InvalidArgumentException
 	 */
 	public static function checkAddress( string $address ): void {
-		if ( ! Validator::isAddress( $address ) ) {
+		if ( ! self::isAddress( $address ) ) {
 			throw new \InvalidArgumentException( '[66BDC040] Invalid address. - address: ' . $address );
 		}
+	}
+	/**
+	 * アドレスとして有効な値かどうかを返します。
+	 */
+	public static function isAddress( string $address ): bool {
+		return Ethers::isAddress( $address );
 	}
 
 	/**
@@ -216,19 +231,6 @@ class Validator {
 		return false !== get_post_status( $post_ID );
 	}
 
-	public static function isDecimals( int $decimals ): bool {
-		// 小数点以下の桁数は0以上。
-		return 0 <= $decimals;
-	}
-
-	/**
-	 * 指定された文字列が通貨記号として有効な値であるかどうかを返します。
-	 */
-	public static function isSymbol( string $symbol ): bool {
-		// 様々な通貨記号が存在するため、空文字列以外であれば有効とする。
-		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
-	}
-
 	/** 販売価格に使用可能なシンボルかどうかを返します。 */
 	public static function isSellableSymbol( NetworkCategory $network_category, string $symbol ): bool {
 		// 販売可能なシンボル一覧を取得
@@ -238,7 +240,7 @@ class Validator {
 	}
 
 	/** 購入者が支払可能なトークンかどうかを返します。 */
-	public static function isPayableToken( Token $token ): bool {
+	public static function isPayableToken( TokenType $token ): bool {
 		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
 		$payable_tokens = ( new PayableTokens() )->get( $token->chainID() );
 
@@ -247,9 +249,5 @@ class Validator {
 
 	public static function isTokenAddress( int $chain_ID, string $address ): bool {
 		return ( new TokenDefinition() )->exists( $chain_ID, $address );
-	}
-
-	public static function isAddress( string $address ): bool {
-		return Ethers::isAddress( $address );
 	}
 }

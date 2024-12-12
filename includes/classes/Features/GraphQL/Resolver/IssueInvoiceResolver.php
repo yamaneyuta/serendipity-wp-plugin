@@ -16,7 +16,7 @@ use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
-use Cornix\Serendipity\Core\Types\Token;
+use Cornix\Serendipity\Core\Types\TokenType;
 
 class IssueInvoiceResolver extends ResolverBase {
 
@@ -38,7 +38,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 		// 指定されたトークンアドレスが支払可能な設定になっているかどうかをチェック
-		$token = Token::from( $chain_ID, $token_address );
+		$token = TokenType::from( $chain_ID, $token_address );
 		Judge::checkPayableToken( $token );
 
 		// 販売者情報を取得

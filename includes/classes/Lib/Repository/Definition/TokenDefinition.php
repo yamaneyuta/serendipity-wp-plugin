@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository\Definition;
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Types\Token;
+use Cornix\Serendipity\Core\Types\TokenType;
 
 class TokenDefinition {
 
@@ -53,11 +53,11 @@ class TokenDefinition {
 	 * 指定したチェーンに存在するすべてのトークンを取得します。
 	 */
 	public function all( int $chain_ID ): array {
-		/** @var Token[] */
+		/** @var TokenType[] */
 		$tokens = array();
 		foreach ( $this->token_data as $data ) {
 			if ( $data[ self::CHAIN_ID_INDEX ] === $chain_ID ) {
-				$tokens[] = new Token( $data[ self::CHAIN_ID_INDEX ], $data[ self::ADDRESS_INDEX ] );
+				$tokens[] = TokenType::from( $data[ self::CHAIN_ID_INDEX ], $data[ self::ADDRESS_INDEX ] );
 			}
 		}
 		return $tokens;
