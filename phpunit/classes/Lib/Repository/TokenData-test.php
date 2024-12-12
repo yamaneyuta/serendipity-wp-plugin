@@ -33,7 +33,7 @@ class TokenDataTest extends IntegrationTestBase {
 		// ASSERT
 		$this->assertEquals( 1, count( $result ) );
 		$this->assertEquals( ChainID::PRIVATENET_L1, $result[0]->chainID() );
-		$this->assertEquals( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $result[0]->contractAddress() );
+		$this->assertEquals( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $result[0]->address() );
 		$this->assertEquals( 'TUSD', $result[0]->symbol() );
 		$this->assertEquals( 18, $result[0]->decimals() );
 	}
@@ -49,7 +49,7 @@ class TokenDataTest extends IntegrationTestBase {
 	 * アドレスゼロのトークンは追加できないことを確認するテスト
 	 *
 	 * @test
-	 * @testdox [A3D3D3D3] TokenData::add - invalid address - host: $host
+	 * @testdox [DCE5177B] TokenData::add - invalid address - host: $host
 	 * @dataProvider hostDataProvider
 	 */
 	public function addInvalidAddressTest( string $host ) {
@@ -105,12 +105,12 @@ class TokenDataTest extends IntegrationTestBase {
 
 		$this->assertEquals( 1, count( $result_l1 ) );
 		$this->assertEquals( ChainID::PRIVATENET_L1, $result_l1[0]->chainID() );
-		$this->assertEquals( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $result_l1[0]->contractAddress() );
+		$this->assertEquals( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $result_l1[0]->address() );
 
 		$this->assertEquals( 2, count( $result_l2 ) );
 		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[0]->chainID() );
 		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[1]->chainID() );
-		$this->assertContains( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', array_map( fn( $ret ) => $ret->contractAddress(), $result_l2 ) );
-		$this->assertContains( '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', array_map( fn( $ret ) => $ret->contractAddress(), $result_l2 ) );
+		$this->assertContains( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', array_map( fn( $ret ) => $ret->address(), $result_l2 ) );
+		$this->assertContains( '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', array_map( fn( $ret ) => $ret->address(), $result_l2 ) );
 	}
 }

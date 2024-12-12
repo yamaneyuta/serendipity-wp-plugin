@@ -5,8 +5,8 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
 class ChainResolver extends ResolverBase {
@@ -49,7 +49,7 @@ class ChainResolver extends ResolverBase {
 						)
 					);
 				},
-				( new TokenDefinition() )->all( $chain_ID )
+				( new TokenData() )->get( $chain_ID )
 			);
 		};
 

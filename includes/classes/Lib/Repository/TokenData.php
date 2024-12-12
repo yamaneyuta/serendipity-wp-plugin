@@ -7,10 +7,11 @@ use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClientFactory;
+use Cornix\Serendipity\Core\Types\TokenType;
 
 class TokenData {
-	public function __construct( \wpdb $wpdb ) {
-		$this->wpdb       = $wpdb;
+	public function __construct( ?\wpdb $wpdb = null ) {
+		$this->wpdb       = $wpdb ?? $GLOBALS['wpdb'];
 		$this->table_name = ( new TableName() )->token();
 	}
 
@@ -52,17 +53,29 @@ class TokenData {
 	 * 指定されたチェーンのトークンデータ一覧を取得します。
 	 * チェーンIDが指定されない場合、全てのトークンデータを取得します。
 	 *
-	 * @param int|null $chain_ID チェーンID
-	 * @return TokenDataRecord[]
+	 * @param int|null    $chain_ID チェーンID
+	 * @param string|null $address トークンアドレス
+	 * @return TokenType[]
 	 */
-	public function get( ?int $chain_ID = null ): array {
+	public function get( ?int $chain_ID = null, ?string $address = null ): array {
 		$sql = <<<SQL
 			SELECT `chain_id`, `token_address`, `symbol`, `decimals`
 			FROM `{$this->table_name}`
 		SQL;
 
+		// 条件がある場合はWHERE句を追加
+		$wheres = array();
 		if ( ! is_null( $chain_ID ) ) {
-			$sql .= $this->wpdb->prepare( ' WHERE `chain_id` = %d', $chain_ID );
+			Judge::checkChainID( $chain_ID );
+			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
+		}
+		if ( ! is_null( $address ) ) {
+			Judge::checkAddress( $address );
+			assert( $address !== Ethers::zeroAddress(), '[D2733384] Contract address is zero address.' );
+			$wheres[] = $this->wpdb->prepare( '`token_address` = %s', $address );
+		}
+		if ( ! empty( $wheres ) ) {
+			$sql .= ' WHERE ' . implode( ' AND ', $wheres );
 		}
 
 		$result = $this->wpdb->get_results( $sql );
@@ -82,42 +95,9 @@ class TokenData {
 			assert( Judge::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
 			assert( Judge::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
 
-			$records[] = new TokenDataRecord( $chain_ID, $token_address, $symbol, $decimals );
+			$records[] = TokenType::from( $chain_ID, $token_address, $symbol, $decimals );
 		}
 
 		return $records;
-	}
-}
-
-class TokenDataRecord {
-	public function __construct( int $chain_ID, string $contract_address, string $symbol, int $decimals ) {
-		Judge::checkChainID( $chain_ID );
-		Judge::checkAddress( $contract_address );
-
-		$this->chain_ID         = $chain_ID;
-		$this->contract_address = $contract_address;
-		$this->symbol           = $symbol;
-		$this->decimals         = $decimals;
-	}
-
-	private int $chain_ID;
-	private string $contract_address;
-	private string $symbol;
-	private int $decimals;
-
-	public function chainID(): int {
-		return $this->chain_ID;
-	}
-
-	public function contractAddress(): string {
-		return $this->contract_address;
-	}
-
-	public function symbol(): string {
-		return $this->symbol;
-	}
-
-	public function decimals(): int {
-		return $this->decimals;
 	}
 }
