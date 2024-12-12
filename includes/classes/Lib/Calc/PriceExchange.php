@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
 use Cornix\Serendipity\Core\Lib\Repository\Oracle;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\RateData;
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Types\Price;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 use phpseclib\Math\BigInteger;
@@ -70,7 +70,7 @@ class PriceExchange {
 			$rate = $this->rate_data->get( new SymbolPair( $to_symbol, $from_symbol ) );
 			assert( null !== $rate );
 			// 除算を行った結果、変換後の最小単位が求められるように、まずは変換後の必要な桁数を取得
-			$to_decimals_max = ( new TokenDefinition() )->maxDecimals( $to_symbol );
+			$to_decimals_max = $this->getMaxDecimals( $to_symbol );
 
 			$price_amount_hex = $price->amountHex();
 			$price_decimals   = $price->decimals();
@@ -86,6 +86,16 @@ class PriceExchange {
 
 			return new Price( Hex::from( $result_amount ), $result_decimals, $to_symbol );
 		}
+	}
+
+	/**
+	 * 指定した通貨シンボルの最大小数点以下桁数を取得します。
+	 * ※ ネットワークを跨いだ比較を行い、最大値を取得します。
+	 */
+	private function getMaxDecimals( string $symbol ): int {
+		$token_data = ( new TokenData() )->get( null, null, $symbol );
+		$decimals   = array_map( fn( $token ) => $token->decimals(), $token_data );
+		return max( $decimals );
 	}
 
 	/**
