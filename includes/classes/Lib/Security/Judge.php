@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
-use Cornix\Serendipity\Core\Lib\Repository\AppContract;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
@@ -165,19 +163,6 @@ class Judge {
 	}
 
 	/**
-	 * 指定したチェーンID、アドレスのトークンが存在しない場合は例外をスローします。
-	 *
-	 * @param int    $chain_ID
-	 * @param string $address
-	 * @throws \InvalidArgumentException
-	 */
-	public static function checkTokenAddress( int $chain_ID, string $address ): void {
-		if ( ! Validator::isTokenAddress( $chain_ID, $address ) ) {
-			throw new \InvalidArgumentException( '[E6631DF0] Invalid token address. - chain ID: ' . $chain_ID . ', address: ' . $address );
-		}
-	}
-
-	/**
 	 * アドレスとして有効な値でない場合は例外をスローします。
 	 *
 	 * @param string $address アドレス(ウォレットアドレス/コントラクトアドレス)
@@ -249,9 +234,5 @@ class Validator {
 		$payable_tokens = ( new PayableTokens() )->get( $token->chainID() );
 
 		return in_array( $token, $payable_tokens, true );
-	}
-
-	public static function isTokenAddress( int $chain_ID, string $address ): bool {
-		return ( new TokenDefinition() )->exists( $chain_ID, $address );
 	}
 }

@@ -43,10 +43,10 @@ class TokenType {
 
 
 	public static function from( int $chain_ID, string $address, ?string $symbol = null, ?int $decimals = null ): TokenType {
-		if ( is_null( self::$cache[ $chain_ID ][ $address ] ?? null ) ) {
-			// トークンのアドレスとして有効かどうかをチェック
-			Judge::checkTokenAddress( $chain_ID, $address );
+		assert( Judge::isChainID( $chain_ID ), '[C3892CBA] Invalid chain ID. chain id: ' . $chain_ID );
+		assert( Judge::isAddress( $address ), '[3CFFAA37] Invalid address. chain id: ' . $chain_ID . ', address: ' . $address );
 
+		if ( is_null( self::$cache[ $chain_ID ][ $address ] ?? null ) ) {
 			if ( Ethers::zeroAddress() === $address ) {
 				$symbol   = ( new NativeTokenDefinition() )->getSymbol( $chain_ID );
 				$decimals = ( new NativeTokenDefinition() )->getDecimals( $chain_ID );
