@@ -24,16 +24,7 @@ class RpcUrlTest extends WP_UnitTestCase {
 		// // Do nothing.
 
 		// ACT
-		// 最大3回リトライ
-		for ( $i = 0; $i < 3; $i++ ) {
-			try {
-				$chain_id_hex = ( new BlockchainClient( $rpc_url ) )->getChainIDHex();
-				break;
-			} catch ( \Throwable $e ) {
-				error_log( '[C1A6C165] Failed to connect to RPC URL: ' . $rpc_url . ' - ' . $e->getMessage() );
-				sleep( 1 );
-			}
-		}
+		$chain_id_hex = ( new BlockchainClient( $rpc_url ) )->getChainIDHex();
 
 		// ASSERT
 		$this->assertEquals( Hex::from( $chain_id ), $chain_id_hex );
