@@ -41,6 +41,17 @@ class TokenType {
 		return $this->decimals;
 	}
 
+	public function __toString() {
+		return json_encode(
+			array(
+				'chain_ID' => $this->chain_ID,
+				'address'  => $this->address,
+				'symbol'   => $this->symbol,
+				'decimals' => $this->decimals,
+			)
+		);
+	}
+
 
 	public static function from( int $chain_ID, string $address, ?string $symbol = null, ?int $decimals = null ): TokenType {
 		assert( Judge::isChainID( $chain_ID ), '[C3892CBA] Invalid chain ID. chain id: ' . $chain_ID );
