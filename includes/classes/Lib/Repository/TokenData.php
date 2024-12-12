@@ -36,9 +36,9 @@ class TokenData {
 	 * @param null|string $address アドレスでフィルタする場合に指定
 	 * @return TokenType[] ネイティブトークンやERC20の情報一覧
 	 */
-	public function get( ?int $chain_ID = null, ?string $address = null ): array {
+	public function get( ?int $chain_ID = null, ?string $address = null, ?string $symbol = null ): array {
 		// テーブルに保存されている、ネイティブトークンを除くトークンデータ一覧を取得
-		$contract_tokens = ( new TokenTable() )->select( $chain_ID, $address );
+		$contract_tokens = ( new TokenTable() )->select( $chain_ID, $address, $symbol );
 
 		// 一旦、定義されているチェーンのネイティブトークンをすべて取得(以後の処理でフィルタリングする)
 		$native_tokens = array_map( fn( $chain_ID ) => TokenType::from( $chain_ID, Ethers::zeroAddress() ), ( new ChainIDs() )->get() );
@@ -49,6 +49,10 @@ class TokenData {
 		// アドレスが指定されている場合は、そのアドレスでフィルタ
 		if ( ! is_null( $address ) ) {
 			$native_tokens = array_filter( $native_tokens, fn( $token ) => $token->address() === $address );
+		}
+		// 通貨シンボルが指定されている場合は、そのシンボルでフィルタ
+		if ( ! is_null( $symbol ) ) {
+			$native_tokens = array_filter( $native_tokens, fn( $token ) => $token->symbol() === $symbol );
 		}
 
 		// マージして返す

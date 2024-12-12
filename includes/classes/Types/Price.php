@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Types;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use phpseclib\Math\BigInteger;
 
@@ -43,7 +43,12 @@ class Price {
 	 */
 	public function toTokenAmount( int $chain_ID ): string {
 		// そのトークン1単位における小数点以下桁数。ETHであれば18。
-		$token_decimals = ( new TokenDefinition() )->decimals( $chain_ID, $this->symbol );
+		$tokens = ( new TokenData() )->get( $chain_ID, null, $this->symbol );
+		if ( 1 !== count( $tokens ) ) {
+			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID . ', symbol: ' . $this->symbol . ', count: ' . count( $tokens ) );
+		}
+
+		$token_decimals = $tokens[0]->decimals();
 
 		// 補正する小数点以下桁数。現在の値が0.01ETHの場合、Priceとしての小数点以下は2だが、
 		// ETH自体の小数点以下桁数が18なので、補正する桁数は18-2=16。
