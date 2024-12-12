@@ -6,6 +6,8 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
+    ports:
+      - "32801:3306"
     networks:
       - wpnetwork
 
@@ -15,6 +17,8 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
+    ports:
+      - "32802:3306"
     networks:
       - wpnetwork
 
@@ -24,6 +28,8 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
+    ports:
+      - "32800:3306"
     networks:
       - wpnetwork
 
@@ -33,6 +39,8 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
+    ports:
+      - "32901:3306"
     networks:
       - wpnetwork
 
@@ -42,6 +50,8 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
+    ports:
+      - "32902:3306"
     networks:
       - wpnetwork
 
@@ -51,6 +61,8 @@ services:
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
+    ports:
+      - "32900:3306"
     networks:
       - wpnetwork
 
