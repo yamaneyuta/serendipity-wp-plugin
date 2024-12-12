@@ -24,4 +24,22 @@ class NativeTokenDefinition {
 				throw new \InvalidArgumentException( '[398C040E] Invalid chain ID. - ' . $chain_ID );
 		}
 	}
+
+	/**
+	 * 対象のチェーンIDで使用されているネイティブトークンの小数点以下の桁数を取得します。
+	 */
+	public function getDecimals( int $chain_ID ): int {
+		switch ( $chain_ID ) {
+			case ChainID::ETH_MAINNET:
+			case ChainID::POLYGON_ZK_EVM:
+			case ChainID::SEPOLIA:
+			case ChainID::POLYGON_ZK_EVM_CARDONA:
+			case ChainID::SONEIUM_MINATO:
+			case ChainID::PRIVATENET_L1:
+			case ChainID::PRIVATENET_L2:
+				return 18;
+			default:
+				throw new \InvalidArgumentException( '[2ADC7FBE] Invalid chain ID. - ' . $chain_ID );
+		}
+	}
 }
