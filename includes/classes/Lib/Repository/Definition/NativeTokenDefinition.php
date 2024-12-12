@@ -5,11 +5,11 @@ namespace Cornix\Serendipity\Core\Lib\Repository\Definition;
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 
-class NativeTokenSymbolDefinition {
+class NativeTokenDefinition {
 	/**
 	 * 対象のチェーンIDで使用されているネイティブトークンのシンボルを取得します。
 	 */
-	public function get( int $chain_ID ): string {
+	public function getSymbol( int $chain_ID ): string {
 		switch ( $chain_ID ) {
 			case ChainID::ETH_MAINNET:
 			case ChainID::POLYGON_ZK_EVM:

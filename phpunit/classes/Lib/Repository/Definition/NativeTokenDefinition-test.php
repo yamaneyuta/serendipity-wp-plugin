@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\Definition\NativeTokenSymbolDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\NativeTokenDefinition;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
-class NativeTokenSymbolDefinitionTest extends WP_UnitTestCase {
+class NativeTokenDefinitionTest extends WP_UnitTestCase {
 	/**
 	 * 処理のテストではなく、実装漏れの確認を行うためのテスト
 	 * すべてのチェーンIDでネイティブトークンのシンボルが定義されているかどうかをチェックする
 	 *
 	 * @test
-	 * @testdox [58A17BA6] NativeTokenSymbolDefinition::get - chainID: $chain_ID
+	 * @testdox [58A17BA6] NativeTokenDefinition::getSymbol - chainID: $chain_ID
 	 * @dataProvider getDataProvider
 	 */
-	public function get( int $chain_ID ) {
+	public function getSymbol( int $chain_ID ) {
 		// ARRANGE
 		// Do nothing
 
 		// ACT
-		$native_symbol = ( new NativeTokenSymbolDefinition() )->get( $chain_ID );
+		$native_symbol = ( new NativeTokenDefinition() )->getSymbol( $chain_ID );
 
 		// ASSERT
 		$this->assertTrue( Judge::isSymbol( $native_symbol ) );
@@ -31,18 +31,18 @@ class NativeTokenSymbolDefinitionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * チェーンIDが不正な場合のテスト
+	 * チェーンIDが不正な場合の通貨シンボル取得テスト
 	 *
 	 * @test
-	 * @testdox [4333F684] NativeTokenSymbolDefinition::get - invalid chainID
+	 * @testdox [4333F684] NativeTokenDefinition::getSymbol - invalid chainID
 	 */
-	public function getWithInvalidChainID() {
+	public function getSymbolWithInvalidChainID() {
 		// ARRANGE
 		$invalid_chain_ID = PHP_INT_MAX;    // 無効なチェーンID
 		$this->expectExceptionMessage( '[398C040E]' );  // 例外が発生することを確認
 
 		// ACT
-		( new NativeTokenSymbolDefinition() )->get( $invalid_chain_ID );
+		( new NativeTokenDefinition() )->getSymbol( $invalid_chain_ID );
 
 		// ASSERT
 		// Do nothing
