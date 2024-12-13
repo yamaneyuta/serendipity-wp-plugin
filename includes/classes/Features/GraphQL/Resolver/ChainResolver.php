@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -53,11 +54,23 @@ class ChainResolver extends ResolverBase {
 			);
 		};
 
+		$network_category_callback = function () use ( $root_value, $chain_ID ) {
+			Judge::checkHasAdminRole(); // 管理者権限が必要
+
+			return $root_value['networkCategory'](
+				$root_value,
+				array(
+					'networkCategoryID' => ( new NetworkCategoryDefinition() )->get( $chain_ID )->id(),
+				)
+			);
+		};
+
 		return array(
-			'id'            => $chain_ID,
-			'appContract'   => $app_contract_callback,
-			'confirmations' => $confirmations_callback,
-			'tokens'        => $tokens_callback,
+			'id'              => $chain_ID,
+			'appContract'     => $app_contract_callback,
+			'confirmations'   => $confirmations_callback,
+			'tokens'          => $tokens_callback,
+			'networkCategory' => $network_category_callback,
 		);
 	}
 }
