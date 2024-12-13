@@ -102,6 +102,7 @@ type Chain {
 	appContract: AppContract	# このチェーンにデプロイされているアプリケーションコントラクトの情報【ゲスト】
 	confirmations: String!		# ブロック確認数("1"などの10進数の文字列または"finalized"などのブロック位置)【ゲスト】
 	tokens: [Token!]!			# このチェーンに存在するトークン一覧【管理者】
+	networkCategory: NetworkCategory! # このチェーンが属するネットワークカテゴリ【管理者】
 }
 
 type AppContract {
