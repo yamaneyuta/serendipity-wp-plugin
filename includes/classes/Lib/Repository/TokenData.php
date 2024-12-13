@@ -30,6 +30,15 @@ class TokenData {
 	}
 
 	/**
+	 * トークンデータをすべて取得します。
+	 *
+	 * @return TokenType[] ネイティブトークンやERC20の情報一覧
+	 */
+	public function all(): array {
+		return $this->get();
+	}
+
+	/**
 	 * トークンデータ一覧を取得します。
 	 *
 	 * @param null|int    $chain_ID チェーンIDでフィルタする場合に指定

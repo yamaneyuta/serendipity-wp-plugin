@@ -42,6 +42,10 @@ type Query {
 	# # 投稿一覧を取得
 	# allPosts: [Post!]!
 
+	# このサイトに登録されているトークン一覧【管理者】
+	# (ネイティブトークン + 管理者が追加したERC20トークン)
+	tokens: [Token!]!
+
 	# プラグインに含まれている販売者向け利用規約を取得【管理者】
 	currentSellerTerms: Terms!
 }
