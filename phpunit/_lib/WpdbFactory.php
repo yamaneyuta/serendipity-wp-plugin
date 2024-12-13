@@ -9,15 +9,16 @@ class WpdbFactory {
 	 * @return wpdb
 	 */
 	public static function create( string $host ): wpdb {
+		assert( strpos( $host, 'mysql' ) !== false || strpos( $host, 'mariadb' ) !== false );
 		if ( $host === $GLOBALS['wpdb']->dbhost ) {
 			return $GLOBALS['wpdb'];
 		}
 
-		// phpcsでフォーマットを行うと'WordPress'が'WordPress'に変換されるためphpcs:ignoreを指定
+		// phpcs:ignore
+		// phpcsでフォーマットを行うと'wordPress'が'WordPress'に変換されるためphpcs:ignoreを指定(上の行も、この行のコメントが書き換えられないように指定)
 		$wpdb = new wpdb( 'root', 'password', 'wordpress', $host ); // phpcs:ignore
-		assert( strpos( $host, 'mysql' ) !== false || strpos( $host, 'mariadb' ) !== false );
-		$wpdb->is_mysql = true;
-		$wpdb->charset  = 'utf8mb4';
+		assert( $wpdb->is_mysql === true );
+		assert( $wpdb->charset === 'utf8mb4' );
 
 		return $wpdb;
 	}

@@ -56,7 +56,7 @@ class PayableTokens {
 
 		// 保存時はトークンアドレスのみ保存
 		/** @var string[] */
-		$token_addresses = array_map( fn( $token ) => $token->address(), $tokens );
+		$token_addresses = array_values( array_map( fn( $token ) => $token->address(), $tokens ) );
 		$this->getPayableTokenAddressesOption( $chain_ID )->update( $token_addresses, $autoload );
 	}
 

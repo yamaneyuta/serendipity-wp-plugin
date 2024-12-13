@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Lib\Repository\Environment;
+
 /**
  * ネットワークカテゴリを表すクラス
  */
@@ -73,11 +75,17 @@ final class NetworkCategory {
 	 * @return NetworkCategory[]
 	 */
 	public static function all(): array {
-		return array(
+		$is_development_mode = ( new Environment() )->isDevelopmentMode();
+
+		$result = array(
 			self::mainnet(),
 			self::testnet(),
-			self::privatenet(),
 		);
+		if ( $is_development_mode ) {
+			$result[] = self::privatenet();
+		}
+
+		return $result;
 	}
 
 

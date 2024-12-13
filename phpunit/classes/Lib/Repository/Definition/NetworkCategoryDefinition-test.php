@@ -18,6 +18,7 @@ class NetworkCategoryDefinitionTest extends WP_UnitTestCase {
 
 		// 全てのネットワークカテゴリを取得
 		$all_network_categories = NetworkCategory::all();
+		assert( in_array( NetworkCategory::privatenet(), $all_network_categories, true ) ); // テスト中はプライベートネットも含まれる
 
 		// ACT
 		// NetworkCategoryDefinitionクラスから、全ネットワークカテゴリのチェーンIDを取得

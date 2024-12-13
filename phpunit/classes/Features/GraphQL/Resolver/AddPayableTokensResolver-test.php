@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\TokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 
 class AddPayableTokensResolverTest extends IntegrationTestBase {
 
@@ -35,23 +35,25 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 * @dataProvider requestValidUsersProvider
 	 */
 	public function requestAddPayableTokensSuccess( string $user_type ) {
-		$chain_ID = ChainID::PRIVATENET_L1;
+		$chain_ID      = ChainID::PRIVATENET_L1;
+		$token_address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // TUSD
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
-		// 登録するトークンアドレスを取得
-		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
+		// トークンテーブルにERC20トークンを追加
+		( new TokenData() )->add( $chain_ID, $token_address );
+		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
-		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, array( $register_token_address ) );
+		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, array( $token_address ) );
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
 		// 登録された内容を確認
 		$tokens = ( new PayableTokens() )->get( $chain_ID );
 		$this->assertEquals( 1, count( $tokens ) );
-		$this->assertEquals( $register_token_address, $tokens[0]->address() );
+		$this->assertEquals( $token_address, $tokens[0]->address() );
 		$this->assertEquals( $chain_ID, $tokens[0]->chainID() );
 	}
 
@@ -64,16 +66,18 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 * @dataProvider requestInvalidUsersProvider
 	 */
 	public function requestAddPayableTokensFail( string $user_type ) {
-		$chain_ID = ChainID::PRIVATENET_L1;
+		$chain_ID      = ChainID::PRIVATENET_L1;
+		$token_address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // TUSD
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
-		// 登録するトークンアドレスを取得
-		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
+		// トークンテーブルにERC20トークンを追加
+		( new TokenData() )->add( $chain_ID, $token_address );
+		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
-		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, array( $register_token_address ) );
+		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, array( $token_address ) );
 
 		// ASSERT
 		$this->assertTrue( isset( $data['errors'] ) ); // エラーフィールドが存在する
@@ -89,18 +93,20 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 * @testdox [D5356E66][GraphQL] Add payable tokens duplicate
 	 */
 	public function requestAddPayableTokensDuplicate() {
-		$chain_ID = ChainID::PRIVATENET_L1;
+		$chain_ID      = ChainID::PRIVATENET_L1;
+		$token_address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // TUSD
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
-		// 登録するトークンアドレスを取得
-		$register_token_address = ( new TokenDefinition() )->all( $chain_ID )[0]->address();
+		// トークンテーブルにERC20トークンを追加
+		( new TokenData() )->add( $chain_ID, $token_address );
+		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
 		// 同じ値を2回登録
-		$this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $register_token_address ) );
-		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $register_token_address ) );
+		$this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $token_address ) );
+		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $token_address ) );
 
 		// ASSERT
 		$this->assertTrue( isset( $data['errors'] ) ); // エラーフィールドが存在する
@@ -114,26 +120,29 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 * 複数のアドレスを追加することができることを確認
 	 *
 	 * @test
-	 * @testdox [3A56A576][GraphQL] Add payable tokens multiple
+	 * @testdox [5BCC8BB7][GraphQL] Add payable tokens multiple
 	 */
 	public function requestAddPayableTokensMultiple() {
-		$chain_ID = ChainID::PRIVATENET_L1;
+		$chain_ID       = ChainID::PRIVATENET_L1;
+		$token_address1 = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // TUSD
+		$token_address2 = '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853'; // TJPY
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
-		// 登録するトークンアドレスを取得
-		$register_token_addresses = array_map( fn( $token ) => $token->address(), ( new TokenDefinition() )->all( $chain_ID ) );
+		// トークンテーブルにERC20トークンを追加
+		( new TokenData() )->add( $chain_ID, $token_address1 );
+		( new TokenData() )->add( $chain_ID, $token_address2 );
+		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
-		$this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $register_token_addresses[0] ) );
-		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $register_token_addresses[1], $register_token_addresses[2] ) );
+		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $token_address1, $token_address2 ) );
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドが存在しない
 		// DBの内容を確認
 		$tokens = ( new PayableTokens() )->get( $chain_ID );
-		$this->assertEquals( 3, count( $tokens ) ); // 1回目、2回目の合計3つ登録されている
+		$this->assertEquals( 2, count( $tokens ) ); // 2つ登録されている
 	}
 
 

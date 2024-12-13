@@ -9,6 +9,10 @@ use wpdb;
 class MySQLiFactory {
 
 	public function create( wpdb $wpdb ): mysqli {
+		if ( $wpdb->dbh ) {
+			return $wpdb->dbh;
+		}
+
 		assert( strlen( $wpdb->dbhost ) > 0 );
 		assert( strlen( $wpdb->dbuser ) > 0 );
 		assert( strlen( $wpdb->dbpassword ) > 0 );

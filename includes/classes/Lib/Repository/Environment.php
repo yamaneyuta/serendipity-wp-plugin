@@ -13,6 +13,12 @@ class Environment {
 
 	/**
 	 * 開発モードかどうかを取得します。
+	 *
+	 * 通常操作において、以下の状態の場合はtrueを返します。
+	 * - localhost:8888等、開発用WordPressへアクセスしている時
+	 * - テスト(phpunit)実行時
+	 * また、以下の状態の場合はfalseを返します。
+	 * - 本番環境での運用時(zipファイルからインストールした場合)
 	 */
 	public function isDevelopmentMode(): bool {
 		$option = ( new OptionFactory() )->isDevelopmentMode();

@@ -41,9 +41,11 @@ class RemovePayableTokensResolver extends ResolverBase {
 		}
 
 		// 保存するトークンオブジェクトの配列を作成
-		$new_payable_tokens = array_filter(
-			$current_payable_tokens,
-			fn( $token ) => ! in_array( $token->address(), $token_addresses )
+		$new_payable_tokens = array_values(
+			array_filter(
+				$current_payable_tokens,
+				fn( $token ) => ! in_array( $token->address(), $token_addresses )
+			)
 		);
 		assert( count( $new_payable_tokens ) === count( $current_payable_tokens ) - count( $token_addresses ) );
 

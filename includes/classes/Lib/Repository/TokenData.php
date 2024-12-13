@@ -3,114 +3,61 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClientFactory;
+use Cornix\Serendipity\Core\Types\TokenType;
 
 class TokenData {
-	public function __construct( \wpdb $wpdb ) {
-		$this->wpdb       = $wpdb;
-		$this->table_name = ( new TableName() )->token();
-	}
-
-	private \wpdb $wpdb;
-	private string $table_name;
 
 	public function add( int $chain_ID, string $contract_address ): void {
-		Judge::checkChainID( $chain_ID );
-		Judge::checkAddress( $contract_address );
+		assert( Judge::isChainID( $chain_ID ), '[0BB33181] Invalid chain ID. - ' . $chain_ID );
+		assert( Judge::isAddress( $contract_address ), '[A80ECABD] Invalid address. - ' . $contract_address );
+		if ( Ethers::zeroAddress() === $contract_address ) {
+			throw new \InvalidArgumentException( '[6006664F] Address is zero. - ' . $contract_address );
+		}
 
-		// コントラクトからsymbolとdecimalsを取得して保存する
+		// TODO: アドレスのバイトコードを取得し、存在しない場合はエラーとする処理をここに追加
+
+		// コントラクトからsymbolとdecimalsを取得
 		$token_client = ( new TokenClientFactory() )->create( $chain_ID, $contract_address );
 		$symbol       = $token_client->symbol();
 		$decimals     = $token_client->decimals();
-		Judge::checkSymbol( $symbol );
-		Judge::checkDecimals( $decimals );
 
-		$sql = <<<SQL
-			INSERT INTO `{$this->table_name}`
-			(`chain_id`, `token_address`, `symbol`, `decimals`)
-			VALUES (%d, %s, %s, %d)
-		SQL;
-
-		$sql = $this->wpdb->prepare( $sql, $chain_ID, $contract_address, $symbol, $decimals );
-
-		$result = $this->wpdb->query( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[7217F4B3] Failed to add token data.' );
-		}
+		// テーブルにレコードを追加
+		( new TokenTable() )->insert( $chain_ID, $contract_address, $symbol, $decimals );
 	}
 
 	/**
-	 * 指定されたチェーンのトークンデータ一覧を取得します。
-	 * チェーンIDが指定されない場合、全てのトークンデータを取得します。
+	 * トークンデータ一覧を取得します。
 	 *
-	 * @param int|null $chain_ID チェーンID
-	 * @return TokenDataRecord[]
+	 * @param null|int    $chain_ID チェーンIDでフィルタする場合に指定
+	 * @param null|string $address アドレスでフィルタする場合に指定
+	 * @return TokenType[] ネイティブトークンやERC20の情報一覧
 	 */
-	public function get( ?int $chain_ID = null ): array {
-		$sql = <<<SQL
-			SELECT `chain_id`, `token_address`, `symbol`, `decimals`
-			FROM `{$this->table_name}`
-		SQL;
+	public function get( ?int $chain_ID = null, ?string $address = null, ?string $symbol = null ): array {
+		// テーブルに保存されている、ネイティブトークンを除くトークンデータ一覧を取得
+		$contract_tokens = ( new TokenTable() )->select( $chain_ID, $address, $symbol );
 
+		// 一旦、定義されているチェーンのネイティブトークンをすべて取得(以後の処理でフィルタリングする)
+		$native_tokens = array_map( fn( $chain_ID ) => TokenType::from( $chain_ID, Ethers::zeroAddress() ), ( new ChainIDs() )->get() );
+		// チェーンIDが指定されている場合は、そのチェーンIDでフィルタ
 		if ( ! is_null( $chain_ID ) ) {
-			$sql .= $this->wpdb->prepare( ' WHERE `chain_id` = %d', $chain_ID );
+			$native_tokens = array_filter( $native_tokens, fn( $token ) => $token->chainID() === $chain_ID );
+		}
+		// アドレスが指定されている場合は、そのアドレスでフィルタ
+		if ( ! is_null( $address ) ) {
+			$native_tokens = array_filter( $native_tokens, fn( $token ) => $token->address() === $address );
+		}
+		// 通貨シンボルが指定されている場合は、そのシンボルでフィルタ
+		if ( ! is_null( $symbol ) ) {
+			$native_tokens = array_filter( $native_tokens, fn( $token ) => $token->symbol() === $symbol );
 		}
 
-		$result = $this->wpdb->get_results( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[CA8FE52D] Failed to get token data.' );
-		}
+		// マージして返す
+		$result = array_merge( array_values( $contract_tokens ), array_values( $native_tokens ) );
 
-		$records = array();
-		foreach ( $result as $row ) {
-			$chain_ID      = (int) $row->chain_id;
-			$token_address = (string) $row->token_address;
-			$symbol        = (string) $row->symbol;
-			$decimals      = (int) $row->decimals;
-
-			assert( Judge::isChainID( $chain_ID ), '[C4D50120] Invalid chain ID. ' . $chain_ID );
-			assert( Judge::isAddress( $token_address ), '[6535A6C3] Invalid contract address. ' . $token_address );
-			assert( Judge::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
-			assert( Judge::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
-
-			$records[] = new TokenDataRecord( $chain_ID, $token_address, $symbol, $decimals );
-		}
-
-		return $records;
-	}
-}
-
-class TokenDataRecord {
-	public function __construct( int $chain_ID, string $contract_address, string $symbol, int $decimals ) {
-		Judge::checkChainID( $chain_ID );
-		Judge::checkAddress( $contract_address );
-
-		$this->chain_ID         = $chain_ID;
-		$this->contract_address = $contract_address;
-		$this->symbol           = $symbol;
-		$this->decimals         = $decimals;
-	}
-
-	private int $chain_ID;
-	private string $contract_address;
-	private string $symbol;
-	private int $decimals;
-
-	public function chainID(): int {
-		return $this->chain_ID;
-	}
-
-	public function contractAddress(): string {
-		return $this->contract_address;
-	}
-
-	public function symbol(): string {
-		return $this->symbol;
-	}
-
-	public function decimals(): int {
-		return $this->decimals;
+		return $result;
 	}
 }

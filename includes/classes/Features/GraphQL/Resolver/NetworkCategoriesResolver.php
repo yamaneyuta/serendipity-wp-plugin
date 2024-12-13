@@ -41,11 +41,6 @@ class NetworkCategoriesResolver extends ResolverBase {
 		// フィルタが指定されていない場合はすべてのネットワークカテゴリを取得
 		$network_categories = is_null( $network_category_id ) ? NetworkCategory::all() : array( NetworkCategory::from( $network_category_id ) );
 
-		// 開発モードでない場合はプライベートネットを除外
-		if ( ! ( new Environment() )->isDevelopmentMode() ) {
-			$network_categories = array_filter( $network_categories, fn( $network_category ) => $network_category != NetworkCategory::privatenet() );
-		}
-
 		if ( empty( $network_categories ) ) {
 			// 通常ネットワークカテゴリ一覧が空になることは無い
 			throw new \InvalidArgumentException( '[66C34D5A] Invalid network category ID. - network_category_id: ' . $network_category_id );
