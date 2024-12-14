@@ -46,6 +46,11 @@ class PluginSchema {
 	 * キャッシュファイルが古い場合は削除します。
 	 */
 	private function deleteCacheFileIfOutdated( string $cache_file_path ) {
+		if ( ! file_exists( $cache_file_path ) ) {
+			// キャッシュファイルが存在しない場合は削除の必要なし
+			return;
+		}
+
 		$cache_file_mtime     = filemtime( $cache_file_path );
 		$graphql_schema_mtime = filemtime( $this->graphqlSchemaPath() );
 
