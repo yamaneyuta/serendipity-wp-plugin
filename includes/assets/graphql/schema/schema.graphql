@@ -42,10 +42,6 @@ type Query {
 	# # 投稿一覧を取得
 	# allPosts: [Post!]!
 
-	# このサイトに登録されているトークン一覧【管理者】
-	# (ネイティブトークン + 管理者が追加したERC20トークン)
-	tokens: [Token!]!
-
 	# プラグインに含まれている販売者向け利用規約を取得【管理者】
 	currentSellerTerms: Terms!
 }
@@ -73,6 +69,10 @@ type Mutation {
 	# 　 -> GraphQL-Codegenの設定やプラグインで解決できれば、それでもよい
 	# ※ 自動生成のメリットが失われるため、GraphQL-Codegenが生成したQueryの型を使ってuseMutationで定義し直すようなことはしない。
 
+	# このサイトに登録されているトークン一覧【管理者】
+	# (ネイティブトークン + 管理者が追加したERC20トークン)
+	tokens(filter: TokensFilter): [Token!]!
+	
 	# ネットワークカテゴリ一覧を取得【投稿編集者】
 	networkCategories(filter: NetworkCategoryFilter): [NetworkCategory!]!
 }
@@ -84,6 +84,11 @@ type Post {
 	sellingPrice: Price             # 販売価格【ゲスト】
 	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報【ゲスト】
 	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
+}
+
+input TokensFilter {
+	chainID: Int
+	address: String
 }
 
 input NetworkCategoryFilter {
