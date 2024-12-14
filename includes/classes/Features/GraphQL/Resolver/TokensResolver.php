@@ -19,7 +19,13 @@ class TokensResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		Judge::checkHasAdminRole();  // 管理者権限が必要
 
-		$tokens = ( new TokenData() )->all();
+		$filter = $args['filter'] ?? null;
+		/** @var int|null */
+		$filter_chain_ID = $filter['chainID'] ?? null;
+		/** @var string|null */
+		$filter_address = $filter['address'] ?? null;
+
+		$tokens = ( new TokenData() )->get( $filter_chain_ID, $filter_address );
 		return array_map(
 			fn( $token ) => $root_value['token'](
 				$root_value,
