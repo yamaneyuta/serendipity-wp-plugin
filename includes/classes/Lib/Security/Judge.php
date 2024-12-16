@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
-use Cornix\Serendipity\Core\Lib\Repository\ChainIDs;
+use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
@@ -78,7 +78,7 @@ class Judge {
 	}
 	/** 指定された値がチェーンIDとして有効かどうかを返します。 */
 	public static function isChainID( int $chain_ID ): bool {
-		return in_array( $chain_ID, ( new ChainIDs() )->get(), true );
+		return in_array( $chain_ID, ( new ChainData() )->allIDs(), true );
 	}
 
 	/**

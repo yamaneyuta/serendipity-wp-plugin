@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
+use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
-use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 
 class VerifiableChainsResolver extends ResolverBase {
@@ -32,12 +32,11 @@ class VerifiableChainsResolver extends ResolverBase {
 		// 投稿の販売ネットワークカテゴリに属する全てのチェーンIDを取得
 		$chain_IDs = ( new NetworkCategoryDefinition() )->getAllChainID( $selling_network_category );
 
-		$result       = array();
-		$rpc_url      = new RpcURL();
-		$app_contract = new AppContract();
+		$result                 = array();
+		$app_deployed_chain_IDs = ( new AppContract() )->allChainIDs();
 		foreach ( $chain_IDs as $chain_ID ) {
-			// ネットワークに接続可能かつ、アプリケーションのコントラクトアドレスが取得できる場合は検証可能なチェーンとして返す
-			if ( $rpc_url->isConnectable( $chain_ID ) && in_array( $chain_ID, $app_contract->allChainIDs() ) ) {
+			// アプリケーションコントラクトがデプロイされており、チェーンに接続可能な場合、検証可能なチェーンとして返す
+			if ( in_array( $chain_ID, $app_deployed_chain_IDs ) && ( new ChainData() )->get( $chain_ID )->isConnectable() ) {
 				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
 			}
 		}

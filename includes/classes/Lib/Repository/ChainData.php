@@ -4,8 +4,43 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
+use Cornix\Serendipity\Core\Types\ChainType;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
+/**
+ * チェーンの情報を取得するクラス
+ */
+class ChainData {
+	/**
+	 * 定義されているすべてのチェーンIDを取得します。
+	 *
+	 * @return int[]
+	 */
+	public function allIDs(): array {
+		return ( new ChainIDs() )->get();
+	}
+
+	/**
+	 * 定義されているすべてのチェーン情報を取得します
+	 *
+	 * @return ChainType[]
+	 */
+	public function all(): array {
+		return array_map(
+			fn( $chain_ID ) => $this->get( $chain_ID ),
+			( new ChainIDs() )->get(),
+		);
+	}
+
+	/**
+	 * 指定したチェーンIDの情報を取得します。
+	 */
+	public function get( int $chain_ID ): ChainType {
+		return ChainType::from( $chain_ID );
+	}
+}
+
+/** @internal */
 class ChainIDs {
 	public function __construct( Environment $environment = null ) {
 		if ( self::$environment !== $environment ) {
