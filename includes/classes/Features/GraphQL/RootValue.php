@@ -44,7 +44,6 @@ class RootValue {
 			'post'                      => new PostResolver(),
 			'seller'                    => new SellerResolver(),
 			'serverSigner'              => new ServerSignerResolver(),
-			'tokens'                    => new TokensResolver(),
 			'verifiableChains'          => new VerifiableChainsResolver(),
 
 			// Mutation
@@ -56,6 +55,7 @@ class RootValue {
 			// React-Adminの都合によりMutation
 			'networkCategories'         => new NetworkCategoriesResolver(),
 			'chains'                    => new ChainsResolver(),
+			'tokens'                    => new TokensResolver(),
 		);
 
 		$result = array();
