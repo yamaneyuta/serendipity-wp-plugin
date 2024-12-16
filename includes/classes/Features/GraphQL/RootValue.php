@@ -4,6 +4,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL;
 
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AddPayableTokensResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ConsumerTermsVersionResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\CurrentSellerTermsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssueInvoiceResolver;
@@ -54,6 +55,7 @@ class RootValue {
 			'setSellerAgreedTerms'      => new SetSellerAgreedTermsResolver(),
 			// React-Adminの都合によりMutation
 			'networkCategories'         => new NetworkCategoriesResolver(),
+			'chains'                    => new ChainsResolver(),
 		);
 
 		$result = array();
