@@ -6,6 +6,22 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
+/**
+ * チェーンの情報を取得するクラス
+ */
+class ChainData {
+	/**
+	 * 定義されているすべてのチェーンIDを取得します。
+	 *
+	 * @return int[]
+	 */
+	public function allIDs(): array {
+		$chainIDs = ( new ChainIDs() )->get();
+		return $chainIDs;
+	}
+}
+
+/** @internal */
 class ChainIDs {
 	public function __construct( Environment $environment = null ) {
 		if ( self::$environment !== $environment ) {

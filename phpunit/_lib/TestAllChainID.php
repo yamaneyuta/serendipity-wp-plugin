@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\ChainIDs;
+use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 
 /** ChainIDクラスに定義されているチェーンID一覧を取得するためのクラス */
 class TestAllChainID {
@@ -12,6 +12,6 @@ class TestAllChainID {
 	 * @return int[]
 	 */
 	public function get(): array {
-		return ( new ChainIDs() )->get();
+		return ( new ChainData() )->allIDs();
 	}
 }

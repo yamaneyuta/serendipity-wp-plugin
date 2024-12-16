@@ -50,7 +50,7 @@ class TokenData {
 		$contract_tokens = ( new TokenTable() )->select( $chain_ID, $address, $symbol );
 
 		// 一旦、定義されているチェーンのネイティブトークンをすべて取得(以後の処理でフィルタリングする)
-		$native_tokens = array_map( fn( $chain_ID ) => TokenType::from( $chain_ID, Ethers::zeroAddress() ), ( new ChainIDs() )->get() );
+		$native_tokens = array_map( fn( $chain_ID ) => TokenType::from( $chain_ID, Ethers::zeroAddress() ), ( new ChainData() )->allIDs() );
 		// チェーンIDが指定されている場合は、そのチェーンIDでフィルタ
 		if ( ! is_null( $chain_ID ) ) {
 			$native_tokens = array_filter( $native_tokens, fn( $token ) => $token->chainID() === $chain_ID );
