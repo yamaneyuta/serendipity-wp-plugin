@@ -72,7 +72,10 @@ type Mutation {
 	# このサイトに登録されているトークン一覧【管理者】
 	# (ネイティブトークン + 管理者が追加したERC20トークン)
 	tokens(filter: TokensFilter): [Token!]!
-	
+
+	# チェーン一覧を取得【管理者】
+	chains(filter: ChainsFilter): [Chain!]!
+
 	# ネットワークカテゴリ一覧を取得【投稿編集者】
 	networkCategories(filter: NetworkCategoryFilter): [NetworkCategory!]!
 }
@@ -89,6 +92,10 @@ type Post {
 input TokensFilter {
 	chainID: Int
 	address: String
+}
+
+input ChainsFilter {
+	isConnectable: Boolean	# サーバーから接続可能なチェーンのみ取得する場合にtrueを指定
 }
 
 input NetworkCategoryFilter {
