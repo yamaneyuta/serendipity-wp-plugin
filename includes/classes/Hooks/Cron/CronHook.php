@@ -2,15 +2,14 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\Cron;
 
-use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Crawler\AppContractCrawler;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\BlockNumberActiveSince;
+use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\CrawledBlockNumber;
 use Cornix\Serendipity\Core\Lib\Repository\Name\CronActionName;
 use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
-use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
@@ -182,8 +181,8 @@ class AppContractCrawlableChainIDs {
 		$deployed_chain_ids = ( new AppContract() )->allChainIDs();
 
 		// 接続可能なチェーンに絞り込み
-		$rpc_url               = new RpcURL();
-		$connectable_chain_ids = array_filter( $deployed_chain_ids, fn( $chain_id ) => $rpc_url->isConnectable( $chain_id ) );
+		$chain_data            = new ChainData();
+		$connectable_chain_ids = array_filter( $deployed_chain_ids, fn( $chain_id ) => $chain_data->get( $chain_id )->isConnectable() );
 
 		// 取引が開始された(=請求書を発行した)ブロックが存在するチェーンに絞り込み
 		$active_since     = new BlockNumberActiveSince();

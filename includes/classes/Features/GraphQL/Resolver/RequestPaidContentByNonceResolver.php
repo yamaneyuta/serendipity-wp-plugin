@@ -5,10 +5,10 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Post\ContentFilter;
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
+use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
-use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -63,7 +63,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		if ( ! ( new RpcURL() )->isConnectable( $chain_ID ) ) {
+		if ( ! ( new ChainData() )->get( $chain_ID )->isConnectable() ) {
 			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す
 			// ※ 支払い後、管理者によってチェーンが無効化された場合はここを通るため、例外を投げない
 			return $error_result_callback( self::ERROR_CODE_INVALID_CHAIN_ID );
