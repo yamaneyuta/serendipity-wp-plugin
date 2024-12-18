@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ConsumerTermsVersionResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\CurrentSellerTermsResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\GetERC20InfoResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\IssueInvoiceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
@@ -51,6 +52,7 @@ class RootValue {
 			'issueInvoice'              => new IssueInvoiceResolver(),
 			'requestPaidContentByNonce' => new RequestPaidContentByNonceResolver(),
 			'removePayableTokens'       => new RemovePayableTokensResolver(),
+			'getERC20Info'              => new GetERC20InfoResolver(),
 			'setSellerAgreedTerms'      => new SetSellerAgreedTermsResolver(),
 			// React-Adminの都合によりMutation
 			'networkCategories'         => new NetworkCategoriesResolver(),

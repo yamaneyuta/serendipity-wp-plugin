@@ -61,6 +61,8 @@ type Mutation {
 	# 対象のチェーンで支払いに使用可能なトークンを削除【管理者】
 	removePayableTokens(chainID: Int!, tokenAddresses: [String!]!): Boolean!
 
+	# ERC20トークン情報をブロックチェーンから取得【管理者】
+	getERC20Info(chainID: Int!, address: String!): ERC20Info!
 
 	# ----- 以下、React-Admin用 -----
 	# ※ 前提として、GraphQL-CodegenはQueryをuseXXXQueryとしてhooksを定義する。
@@ -119,6 +121,11 @@ type Chain {
 
 type AppContract {
 	address: String!	# アプリケーションコントラクトアドレス【ゲスト】
+}
+
+type ERC20Info {
+	symbol: String!		# トークンの通貨シンボル【管理者】
+	rateExchangeable: Boolean!	# レート変換可能かどうか【管理者】
 }
 
 type Token {
