@@ -64,6 +64,9 @@ type Mutation {
 	# ERC20トークン情報をブロックチェーンから取得【管理者】
 	getERC20Info(chainID: Int!, address: String!): ERC20Info!
 
+	# ERC20トークンを登録【管理者】
+	registerERC20Token(chainID: Int!, address: String!): Boolean!
+
 	# ----- 以下、React-Admin用 -----
 	# ※ 前提として、GraphQL-CodegenはQueryをuseXXXQueryとしてhooksを定義する。
 	# 　 React-Adminでカスタムプロバイダを使用するにあたり、useXXXQueryではコールバックの引数の値(例:チェーンID)を使用することが難しいため

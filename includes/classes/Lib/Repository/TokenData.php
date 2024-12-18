@@ -25,6 +25,9 @@ class TokenData {
 		$symbol       = $token_client->symbol();
 		$decimals     = $token_client->decimals();
 
+		Judge::checkSymbol( $symbol );
+		Judge::checkDecimals( $decimals );
+
 		// テーブルにレコードを追加
 		( new TokenTable() )->insert( $chain_ID, $contract_address, $symbol, $decimals );
 	}
