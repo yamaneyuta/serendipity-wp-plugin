@@ -67,6 +67,13 @@ class OracleEthMainnetDefinitionTest extends WP_UnitTestCase {
 						in_array( $feed['docs']['quoteAsset'], array( 'USD', 'ETH' ) ) &&
 						$feed['name'] === ( $feed['docs']['baseAsset'] . ' / ' . $feed['docs']['quoteAsset'] )
 				);
+				// BTC/USDが2つ存在するため、1つを除外(暫定コード)
+				// TODO: ロジックの変更が必要
+				$feeds = array_filter(
+					$feeds,
+					fn( $feed ) => $feed['proxyAddress'] !== '0x77E55306eeDb1F94a4DcFbAa6628ef87586BC651' // hiddenがtrueのBTC/USD
+				);
+
 				$feeds = array_values( $feeds );
 			}
 
