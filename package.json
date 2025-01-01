@@ -99,7 +99,7 @@
 		"@storybook/react": "^8.4.6",
 		"@storybook/react-webpack5": "^8.4.6",
 		"@storybook/test": "^8.4.6",
-		"@storybook/test-runner": "^0.20.0",
+		"@storybook/test-runner": "^0.21.0",
 		"@testing-library/dom": "^10.4.0",
 		"@testing-library/react": "^16.0.1",
 		"@types/async-lock": "^1.4.2",
