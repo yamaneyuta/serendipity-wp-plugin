@@ -21,9 +21,21 @@ class RegisterERC20TokenResolver extends ResolverBase {
 		$chain_ID = $args['chainID'];
 		/** @var string */
 		$address = $args['address'];
+		/** @var bool */
+		$is_payable = $args['isPayable'];
 
 		// ERC20トークンを登録
 		( new TokenData() )->add( $chain_ID, $address );
+		// 支払可能状態を更新
+		if ( $is_payable ) {
+			$root_value['addPayableTokens'](
+				$root_value,
+				array(
+					'chainID'        => $chain_ID,
+					'tokenAddresses' => array( $address ),
+				)
+			);
+		}
 
 		return true;
 	}
