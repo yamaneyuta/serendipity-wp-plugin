@@ -65,7 +65,7 @@ type Mutation {
 	getERC20Info(chainID: Int!, address: String!): ERC20Info!
 
 	# ERC20トークンを登録【管理者】
-	registerERC20Token(chainID: Int!, address: String!): Boolean!
+	registerERC20Token(chainID: Int!, address: String!, isPayable: Boolean!): Boolean!
 
 	# ----- 以下、React-Admin用 -----
 	# ※ 前提として、GraphQL-CodegenはQueryをuseXXXQueryとしてhooksを定義する。
