@@ -8,7 +8,7 @@ namespace Cornix\Serendipity\Core\Types;
  */
 final class RpcUrlProviderType {
 
-	// 各RPC URL提供者を定義。値は特に意味を持たないが、重複しないようにすること。
+	// 各RPC URL提供者を定義。値はoptionsのキーとなるため、変更しないでください。
 	private const PRIVATE = 'private';  // プライベートネットの提供者(このマシン)
 	private const ANKR    = 'ankr';
 	private const SONEIUM = 'soneium';
@@ -18,11 +18,16 @@ final class RpcUrlProviderType {
 	}
 	/**
 	 * RPC URLの提供者の名前を保持
-	 * ※ 以下の2つを行うために定義。
+	 * ※ 以下の項目を実現するために定義。
 	 * 　　- if文等の判定で`==`が誤って記載された時にfalseとなるようにする
 	 * 　　- エラーログなどに出力できるように__toStringで用いる
+	 * 　　- 利用規約に同意したかどうかをDBに記録する際のキーとして利用
 	 */
 	private string $name;
+
+	public function name(): string {
+		return $this->name;
+	}
 
 	public function __toString(): string {
 		return $this->name;
