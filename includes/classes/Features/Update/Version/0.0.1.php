@@ -11,10 +11,12 @@ use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
+use Cornix\Serendipity\Core\Lib\Repository\RpcUserSettings;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 use Cornix\Serendipity\Core\Types\TokenType;
+use InvalidArgumentException;
 
 /**
  * Ver0.0.1(インストール直後に実行されるように一番小さいバージョンで仮作成)
@@ -27,6 +29,9 @@ class v001 {
 
 		// 購入者が支払可能なトークンの初期値を設定
 		( new PayableTokensInitializer() )->initialize();
+
+		// RPCの設定を初期化
+		( new RpcSettingsInitializer() )->initialize();
 
 		global $wpdb;
 		// 請求書情報テーブルを作成
@@ -96,6 +101,49 @@ class PayableTokensInitializer {
 				$matic = TokenType::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress() );
 				( new PayableTokens() )->save( $matic->chainID(), array( $matic ) );
 			}
+		}
+	}
+}
+
+class RpcSettingsInitializer {
+	/**
+	 * RPCの設定を初期化します。
+	 */
+	public function initialize(): void {
+		// 開発モード時はプライベートネットのRPC URLをユーザー設定として登録
+		if ( ( new Environment() )->isDevelopmentMode() ) {
+			$this->registerPrivatenetRpcUrl( ChainID::PRIVATENET_L1 );
+			$this->registerPrivatenetRpcUrl( ChainID::PRIVATENET_L2 );
+		}
+	}
+
+	private function registerPrivatenetRpcUrl( int $chain_ID ): void {
+		$rpc_url = $this->getPrivatenetRpcURL( $chain_ID );
+		( new RpcUserSettings() )->setRpcURL( $chain_ID, $rpc_url );
+	}
+
+
+	/**
+	 * 指定されたチェーンIDに対応するプライベートネットのRPC URLを取得します。
+	 *
+	 * @param int $chain_ID
+	 */
+	private function getPrivatenetRpcURL( int $chain_ID ): ?string {
+
+		// プライベートネットのURLを取得する関数
+		$privatenet = function ( int $number ): string {
+			assert( in_array( $number, array( 1, 2 ) ) );
+			$prefix = ( new Environment() )->isTesting() ? 'tests-' : '';
+			return "http://{$prefix}privatenet-{$number}.local";
+		};
+
+		switch ( $chain_ID ) {
+			case ChainID::PRIVATENET_L1:
+				return $privatenet( 1 );
+			case ChainID::PRIVATENET_L2:
+				return $privatenet( 2 );
+			default:
+				throw new \InvalidArgumentException( '[AC32E587] Invalid chain ID. ' . $chain_ID );
 		}
 	}
 }

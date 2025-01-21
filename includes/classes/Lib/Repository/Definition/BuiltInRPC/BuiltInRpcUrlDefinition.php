@@ -3,7 +3,6 @@
 namespace Cornix\Serendipity\Core\Lib\Repository\Definition\BuiltInRPC;
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Types\RpcUrlProviderType;
 
 /**
@@ -12,20 +11,19 @@ use Cornix\Serendipity\Core\Types\RpcUrlProviderType;
 class BuiltInRpcUrlDefinition {
 	public function __construct() {
 		$this->data = array(
-			RpcUrlProviderType::ankr()    => new AnkrRpcUrls(),
-			RpcUrlProviderType::soneium() => new SoneiumRpcUrls(),
-			RpcUrlProviderType::private() => new PrivateRpcUrls(),
+			RpcUrlProviderType::ankr()->name()    => new AnkrRpcUrls(),
+			RpcUrlProviderType::soneium()->name() => new SoneiumRpcUrls(),
 		);
 	}
 
-	/** @var array<RpcUrlProviderType,RpcUrlsBase> */
+	/** @var array<string,RpcUrlsBase> */
 	private array $data;
 
 	/**
 	 * 指定したRPCプロバイダとチェーンIDに対応する、RPC URLを取得します。
 	 */
 	public function get( RpcUrlProviderType $rpc_url_provider_type, int $chain_ID ): ?string {
-		$rpc_urls = $this->data[ $rpc_url_provider_type ] ?? null;
+		$rpc_urls = $this->data[ $rpc_url_provider_type->name() ] ?? null;
 		if ( is_null( $rpc_urls ) ) {
 			throw new \Exception( '[B92D665F] RPC URL provider not found: ' . $rpc_url_provider_type );
 		}
@@ -85,33 +83,6 @@ class SoneiumRpcUrls extends RpcUrlsBase {
 			// testnet
 			case ChainID::SONEIUM_MINATO:
 				return 'https://rpc.minato.soneium.org';  // https://docs.soneium.org/docs/builders/overview
-			default:
-				return null;
-		}
-	}
-}
-
-/**
- * @internal
- */
-class PrivateRpcUrls extends RpcUrlsBase {
-	/**
-	 * 指定したチェーンIDに対応するRPC URLを取得します。
-	 */
-	public function get( int $chain_ID ): ?string {
-
-		// プライベートネットのURLを取得する関数
-		$privatenet = function ( int $number ): string {
-			assert( in_array( $number, array( 1, 2 ) ) );
-			$prefix = ( new Environment() )->isTesting() ? 'tests-' : '';
-			return "http://{$prefix}privatenet-{$number}.local";
-		};
-
-		switch ( $chain_ID ) {
-			case ChainID::PRIVATENET_L1:
-				return $privatenet( 1 );
-			case ChainID::PRIVATENET_L2:
-				return $privatenet( 2 );
 			default:
 				return null;
 		}

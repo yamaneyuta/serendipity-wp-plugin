@@ -36,15 +36,15 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		( new GraphQLHook( $this->crateRestPropertyStub() ) )->register();
 		do_action( 'rest_api_init' );
 
-		// Hardhatの初期化
-		( new HardhatController() )->setUp();
-
 		// admin_initの代わりにPluginUpdateHookを呼び出す
 		// ⇒Optionsテーブルが初期化されているので、プラグインの初期インストール処理が実行される
 		$current_screen = get_current_screen();
 		set_current_screen( 'index.php' );
 		( new PluginUpdateHook() )->addActionAdminInit();
 		set_current_screen( $current_screen ?? '' );
+
+		// Hardhatの初期化
+		( new HardhatController() )->setUp();
 	}
 
 	// #[\Override]
