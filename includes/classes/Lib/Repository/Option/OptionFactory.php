@@ -94,4 +94,13 @@ class OptionFactory {
 		$prefix = $this->sellerAgreedTermsKeyPrefix();
 		return new IntOption( $this->getOptionKeyName( $prefix . 'user_id' ) );
 	}
+
+	/**
+	 * ユーザーが設定したRPC URLを取得または保存するオブジェクトを取得します。
+	 *
+	 * @param int $chain_ID
+	 */
+	public function rpcUrl( int $chain_ID ): StringOption {
+		return new StringOption( $this->getOptionKeyName( 'rpc_url_' . $chain_ID ) );
+	}
 }
