@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository\Option;
 
 use Cornix\Serendipity\Core\Lib\Repository\Name\Prefix;
+use Cornix\Serendipity\Core\Types\RpcUrlProviderType;
 
 class OptionFactory {
 
@@ -102,5 +103,14 @@ class OptionFactory {
 	 */
 	public function rpcUrl( int $chain_ID ): StringOption {
 		return new StringOption( $this->getOptionKeyName( 'rpc_url_' . $chain_ID ) );
+	}
+
+	/**
+	 * 指定したRPC URL提供者の利用規約に同意したかどうかを取得または保存するオブジェクトを取得します。
+	 *
+	 * @param RpcUrlProviderType $rpc_url_provider
+	 */
+	public function agreedRpcProviderTerms( RpcUrlProviderType $rpc_url_provider ): BoolOption {
+		return new BoolOption( $this->getOptionKeyName( 'agreed_rpc_provider_terms_' . $rpc_url_provider->name() ) );
 	}
 }
