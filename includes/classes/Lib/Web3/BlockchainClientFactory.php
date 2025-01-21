@@ -11,7 +11,7 @@ class BlockchainClientFactory {
 	 */
 	public function create( int $chain_ID ): BlockchainClient {
 		// チェーンに接続するためのRPC URLを取得
-		$rpc_url = ( new RpcURL() )->connectableURL( $chain_ID );
+		$rpc_url = ( new RpcURL() )->get( $chain_ID );
 		if ( is_null( $rpc_url ) ) {
 			throw new \Exception( '[4513DF1F] RPC URL is not found.' );
 		}

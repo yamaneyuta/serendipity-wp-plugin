@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\Oracle;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
 use Cornix\Serendipity\Core\Lib\Repository\Transient\TransientFactory;
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\OracleClient;
 use Cornix\Serendipity\Core\Types\Rate;
 use Cornix\Serendipity\Core\Types\SymbolPair;
@@ -53,18 +53,17 @@ class OracleRate {
 			$contract_address = ( new Oracle() )->address( $chain_ID, $symbol_pair );
 			assert( ! is_null( $contract_address ) );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
 
-			foreach ( ( new RpcURL() )->allConnectableURL( $chain_ID ) as $rpc_url ) {
-				try {
-					// Oracleに問い合わせ
-					$oracle_client = new OracleClient( $rpc_url, $contract_address );
-					$decimals      = $oracle_client->decimals();
-					$answer_hex    = Hex::from( $oracle_client->latestAnswer() );
+			$rpc_url = ( new RpcURL() )->get( $chain_ID );
+			if ( Judge::isUrl( $rpc_url ) ) {
+				// 以下、$rpc_urlがURLであることが保証される
+				/** @var string $rpc_url */
 
-					return new Rate( $symbol_pair, $answer_hex, $decimals );
-				} catch ( \Throwable $e ) {
-					Logger::error( $e );
-					continue;
-				}
+				// Oracleに問い合わせ
+				$oracle_client = new OracleClient( $rpc_url, $contract_address );
+				$decimals      = $oracle_client->decimals();
+				$answer_hex    = Hex::from( $oracle_client->latestAnswer() );
+
+				return new Rate( $symbol_pair, $answer_hex, $decimals );
 			}
 		}
 

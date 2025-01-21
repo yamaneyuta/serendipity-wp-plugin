@@ -12,7 +12,7 @@ class AppClientFactory {
 	 */
 	public function create( int $chain_ID ): AppClient {
 		// チェーンに接続するためのRPC URLを取得
-		$rpc_url = ( new RpcURL() )->connectableURL( $chain_ID );
+		$rpc_url = ( new RpcURL() )->get( $chain_ID );
 		if ( is_null( $rpc_url ) ) {
 			throw new \Exception( '[49ACED7A] RPC URL is not found.' );
 		}

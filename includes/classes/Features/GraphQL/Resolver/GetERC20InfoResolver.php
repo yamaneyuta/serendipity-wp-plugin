@@ -40,7 +40,8 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[84752B42] chainID is not connectable. chain id: ' . $chain_ID );
 		}
 
-		$rpc_url      = ( new RpcURL() )->connectableURL( $chain_ID );
+		$rpc_url = ( new RpcURL() )->get( $chain_ID );
+		assert( Judge::isUrl( $rpc_url ) ); // チェーンに接続できるかどうかを上で確認しているため、ここは必ず取得できる
 		$token_client = new TokenClient( $rpc_url, $address );
 
 		$symbol = $token_client->symbol();

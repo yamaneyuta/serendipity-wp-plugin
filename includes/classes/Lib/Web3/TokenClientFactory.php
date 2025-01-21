@@ -14,7 +14,7 @@ class TokenClientFactory {
 		assert( Judge::isAddress( $contract_address ), '[EAC4D25B] Invalid contract address. ' . $contract_address );
 
 		// チェーンに接続するためのRPC URLを取得
-		$rpc_url = ( new RpcURL() )->connectableURL( $chain_ID );
+		$rpc_url = ( new RpcURL() )->get( $chain_ID );
 		assert( ! is_null( $rpc_url ), '[2CF9717C] RPC URL is not found.' );
 
 		return new TokenClient( $rpc_url, $contract_address );

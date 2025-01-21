@@ -29,6 +29,6 @@ class ChainType {
 	 * サーバーからこのチェーンに接続することが可能かどうかを取得します。
 	 */
 	public function isConnectable(): bool {
-		return ! is_null( ( new RpcURL() )->connectableURL( $this->chain_ID ) );
+		return ! is_null( ( new RpcURL() )->get( $this->chain_ID ) );
 	}
 }
