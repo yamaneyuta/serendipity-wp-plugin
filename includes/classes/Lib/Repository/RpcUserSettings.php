@@ -54,7 +54,7 @@ class RpcUserSettings {
 	 *
 	 * @param RpcUrlProviderType $rpc_url_provider
 	 */
-	public function isAgreedTerms( RpcUrlProviderType $rpc_url_provider ): bool {
+	public function getIsAgreedTerms( RpcUrlProviderType $rpc_url_provider ): bool {
 		return $this->agreed_rpc_provider_terms->get( $rpc_url_provider );
 	}
 }

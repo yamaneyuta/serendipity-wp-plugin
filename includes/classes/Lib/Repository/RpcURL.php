@@ -28,7 +28,7 @@ class RpcURL {
 			// 指定されたチェーンで接続するRPCプロバイダを取得
 			$rpc_provider = ( new BuiltInRpcProviderDefinition() )->get( $chain_ID );
 
-			if ( $user_settings->isAgreedTerms( $rpc_provider ) ) {
+			if ( $user_settings->getIsAgreedTerms( $rpc_provider ) ) {
 				// 利用規約に同意している場合は組み込みのRPC URLを返す
 				// ※ nullの場合もあることに注意
 				return ( new BuiltInRpcUrlDefinition() )->get( $rpc_provider, $chain_ID );
