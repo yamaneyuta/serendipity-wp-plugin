@@ -66,6 +66,22 @@ class RpcUrlUserSettings {
 		assert( is_null( $rpc_url ) || Judge::isUrl( $rpc_url ), '[523BCB32] Invalid RPC URL. - rpc_url: ' . var_export( $rpc_url, true ) );
 		return $rpc_url;
 	}
+
+	/**
+	 * 指定したチェーンのRPC URLを設定します。
+	 * RPC URLを削除する場合はnullを指定します。
+	 *
+	 * @param int         $chain_ID
+	 * @param string|null $rpc_url
+	 */
+	public function set( int $chain_ID, ?string $rpc_url ): void {
+		$rpc_option = ( new OptionFactory() )->rpcURL( $chain_ID );
+		if ( is_null( $rpc_url ) ) {
+			$rpc_option->delete();
+		} else {
+			$rpc_option->update( $rpc_url );
+		}
+	}
 }
 
 /**

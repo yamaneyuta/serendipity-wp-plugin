@@ -22,4 +22,10 @@ class Option {
 		assert( true === $success );
 		return $success;
 	}
+
+	public function delete(): bool {
+		$success = delete_option( $this->option_key_name );
+		assert( true === $success );
+		return $success;
+	}
 }
