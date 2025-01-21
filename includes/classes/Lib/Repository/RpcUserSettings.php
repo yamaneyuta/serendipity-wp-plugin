@@ -29,6 +29,17 @@ class RpcUserSettings {
 	}
 
 	/**
+	 * 指定されたチェーンIDに対応する、ユーザーが設定したRPC URLを設定します。
+	 * RPC URLを削除する場合はnullを指定します。
+	 *
+	 * @param int         $chain_ID
+	 * @param string|null $rpc_url
+	 */
+	public function setRpcURL( int $chain_ID, ?string $rpc_url ): void {
+		$this->rpc_url_user_settings->set( $chain_ID, $rpc_url );
+	}
+
+	/**
 	 * ユーザーが設定したRPC URLを使用する設定かどうかを取得します。
 	 *
 	 * @param int $chain_ID
