@@ -57,6 +57,16 @@ class RpcUserSettings {
 	public function getIsAgreedTerms( RpcUrlProviderType $rpc_url_provider ): bool {
 		return $this->agreed_rpc_provider_terms->get( $rpc_url_provider );
 	}
+
+	/**
+	 * 指定されたRPC URL提供者の利用規約に同意したかどうかを設定します。
+	 *
+	 * @param RpcUrlProviderType $rpc_url_provider
+	 * @param bool               $is_agreed
+	 */
+	public function setIsAgreedTerms( RpcUrlProviderType $rpc_url_provider, bool $is_agreed ): void {
+		$this->agreed_rpc_provider_terms->set( $rpc_url_provider, $is_agreed );
+	}
 }
 
 
@@ -112,5 +122,15 @@ class AgreedRpcProviderTerms {
 		assert( is_bool( $is_agreed ) );    // デフォルト引数をbool型で渡しているため、必ずbool型で返ってくる
 
 		return $is_agreed;
+	}
+
+	/**
+	 * 指定したRPC URL提供者の利用規約に同意したかどうかを設定します。
+	 *
+	 * @param RpcUrlProviderType $rpc_url_provider
+	 * @param bool               $is_agreed
+	 */
+	public function set( RpcUrlProviderType $rpc_url_provider, bool $is_agreed ): void {
+		( new OptionFactory() )->agreedRpcProviderTerms( $rpc_url_provider )->update( $is_agreed );
 	}
 }
