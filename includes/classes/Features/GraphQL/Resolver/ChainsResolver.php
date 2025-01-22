@@ -19,11 +19,23 @@ class ChainsResolver extends ResolverBase {
 		Judge::checkHasAdminRole();  // 管理者権限が必要
 
 		$filter = $args['filter'] ?? null;
+		/** @var int|null */
+		$filter_chain_ID = $filter['chainID'] ?? null;
 		/** @var bool|null */
 		$filter_is_connectable = $filter['isConnectable'] ?? null;
 
 		// チェーン一覧を取得
 		$chains = ( new ChainData() )->all();
+
+		// チェーンIDでフィルタする場合
+		if ( isset( $filter_chain_ID ) ) {
+			$chains = array_values(
+				array_filter(
+					$chains,
+					fn( $chain ) => $chain->id() === $filter_chain_ID
+				)
+			);
+		}
 
 		// 接続可能なチェーンIDでの絞り込みが指定されている場合はチェーンID一覧をフィルタリング
 		if ( isset( $filter_is_connectable ) ) {
