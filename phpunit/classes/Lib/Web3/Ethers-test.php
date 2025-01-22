@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
-use PHPUnit\Framework\TestCase;
 
-class EthersTest extends TestCase {
+class EthersTest extends IntegrationTestBase {
 
 	/**
 	 * ゼロアドレスが160ビットの16進数であることを確認
@@ -21,7 +20,7 @@ class EthersTest extends TestCase {
 		// Do nothing
 
 		// ASSERT
-		$this->assertRegExp( '/^0x0{40}$/', Ethers::zeroAddress() );
+		$this->assertMatchesRegularExpression( '/^0x0{40}$/', Ethers::zeroAddress() );
 	}
 
 	/**

@@ -2,9 +2,8 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
-use PHPUnit\Framework\TestCase;
 
-class PrivateKeyTest extends TestCase {
+class PrivateKeyTest extends IntegrationTestBase {
 
 	/**
 	 * 秘密鍵はhexの最大64文字列であることを確認(64文字固定ではない)
@@ -20,6 +19,6 @@ class PrivateKeyTest extends TestCase {
 		$private_key = $sut->generate();
 
 		// ASSERT
-		$this->assertRegExp( '/^[0-9a-f]{1,64}$/', $private_key );
+		$this->assertMatchesRegularExpression( '/^[0-9a-f]{1,64}$/', $private_key );
 	}
 }

@@ -5,7 +5,7 @@ use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
 
-class AppContractTest extends WP_UnitTestCase {
+class AppContractTest extends IntegrationTestBase {
 
 	private function createEnvironmentStub( $is_development_mode ) {
 		$environment_stub = $this->createMock( Environment::class );
@@ -72,9 +72,9 @@ class AppContractTest extends WP_UnitTestCase {
 		// ASSERT
 		// 開発モードがONの場合は、Appコントラクトのアドレスが取得できる
 		$this->assertIsString( $ret1 );
-		$this->assertRegExp( '/^0x[0-9a-fA-F]{40}$/', $ret1 );
+		$this->assertMatchesRegularExpression( '/^0x[0-9a-fA-F]{40}$/', $ret1 );
 		$this->assertIsString( $ret2 );
-		$this->assertRegExp( '/^0x[0-9a-fA-F]{40}$/', $ret2 );
+		$this->assertMatchesRegularExpression( '/^0x[0-9a-fA-F]{40}$/', $ret2 );
 	}
 
 	/**

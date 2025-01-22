@@ -145,6 +145,27 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	protected function createTestPostContent( WidgetAttributes $widget_attributes ): string {
 		return ( new TestPostContent( $widget_attributes ) )->create();
 	}
+
+	// ----- PHPUnitの差異を吸収 -----
+
+	/**
+	 * Add assertMatchesRegularExpression() method for phpunit >= 8.0 < 9.0 for compatibility with PHP 7.2.
+	 *
+	 * @see https://github.com/sebastianbergmann/phpunit/issues/4174
+	 */
+	public static function assertMatchesRegularExpression( string $pattern, string $string, string $message = '' ): void {
+		if ( method_exists( parent::class, 'assertMatchesRegularExpression' ) ) {
+			/** @disregard P1013 Undefined method */
+			parent::assertMatchesRegularExpression( $pattern, $string, $message );
+		} else {
+			parent::assertRegExp( $pattern, $string, $message );
+		}
+	}
+	public static function assertRegExp( string $pattern, string $string, string $message = '' ): void {
+		// assertRegExpは新しいPHPUnitでは非推奨のため、ここでは例外を投げるように変更。
+		// (強制的にassertMatchesRegularExpressionを使用させるため)
+		throw new \Exception( '[8BC03F79] assertRegExp is deprecated. Please use assertMatchesRegularExpression.' );
+	}
 }
 
 /**

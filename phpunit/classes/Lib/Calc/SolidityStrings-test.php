@@ -5,7 +5,7 @@ use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use phpseclib\Math\BigInteger;
 
-class SolidityStringsTest extends WP_UnitTestCase {
+class SolidityStringsTest extends IntegrationTestBase {
 
 	/**
 	 * 数値をHEXに変換するテスト
@@ -24,7 +24,7 @@ class SolidityStringsTest extends WP_UnitTestCase {
 		// ASSERT
 		$this->assertEquals( $ret, $expected );
 		$this->assertEquals( strlen( $ret ) % 2, 0 );     // 結果は偶数桁
-		$this->assertRegExp( '/^0x[0-9a-f]+$/', $ret ); // 16進数文字列はすべて小文字
+		$this->assertMatchesRegularExpression( '/^0x[0-9a-f]+$/', $ret ); // 16進数文字列はすべて小文字
 	}
 	public function valueToHexStringDataProvider(): array {
 		return array(
@@ -70,7 +70,7 @@ class SolidityStringsTest extends WP_UnitTestCase {
 
 		// ASSERT
 		$this->assertEquals( $ret, $expected );
-		$this->assertRegExp( '/^0x[0-9a-f]{40}$/', $ret );  // 16進数文字列はすべて小文字
+		$this->assertMatchesRegularExpression( '/^0x[0-9a-f]{40}$/', $ret );  // 16進数文字列はすべて小文字
 	}
 	public function addressToHexStringDataProvider(): array {
 		return array(
