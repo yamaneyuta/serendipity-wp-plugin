@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 
 /**
@@ -26,9 +27,16 @@ class ChainType {
 	}
 
 	/**
+	 * ネットワークカテゴリを取得します。
+	 */
+	public function networkCategory(): NetworkCategory {
+		return ( new NetworkCategoryDefinition() )->get( $this->chain_ID );
+	}
+
+	/**
 	 * サーバーからこのチェーンに接続することが可能かどうかを取得します。
 	 */
 	public function isConnectable(): bool {
-		return ! is_null( ( new RpcURL() )->connectableURL( $this->chain_ID ) );
+		return ! is_null( ( new RpcURL() )->get( $this->chain_ID ) );
 	}
 }

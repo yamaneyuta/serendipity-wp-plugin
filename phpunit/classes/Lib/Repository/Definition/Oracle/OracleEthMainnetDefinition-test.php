@@ -2,9 +2,10 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Lib\Repository\Definition\BuiltInRPC\BuiltInRpcUrlDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\Oracle\OracleEthMainnetDefinition;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\RpcURL\AnkrRpcUrlDefinition;
 use Cornix\Serendipity\Core\Lib\Web3\OracleClient;
+use Cornix\Serendipity\Core\Types\RpcUrlProviderType;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 
 class OracleEthMainnetDefinitionTest extends WP_UnitTestCase {
@@ -23,8 +24,9 @@ class OracleEthMainnetDefinitionTest extends WP_UnitTestCase {
 		}
 
 		// ARRANGE
+		// Ankrが提供するメインネットのRPC URLを取得(Ankrでなくても良い)
+		$rpc_url = ( new BuiltInRpcUrlDefinition() )->get( RpcUrlProviderType::ankr(), ChainID::ETH_MAINNET );
 		$sut     = new OracleEthMainnetDefinition();
-		$rpc_url = ( new AnkrRpcUrlDefinition() )->get( ChainID::ETH_MAINNET );
 
 		// ACT
 		$result = $sut->getAddress( new SymbolPair( $base, $quote ) );

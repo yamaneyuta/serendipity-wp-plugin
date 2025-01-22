@@ -70,6 +70,13 @@ class Judge {
 		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
 
+	/**
+	 * 文字列がURLの形式かどうかを返します。
+	 */
+	public static function isUrl( string $url ): bool {
+		return filter_var( $url, FILTER_VALIDATE_URL ) !== false && Strings::starts_with( $url, 'http' );
+	}
+
 	/** チェーンIDが正常でない場合は例外をスローします。 */
 	public static function checkChainID( int $chain_ID ): void {
 		if ( ! self::isChainID( $chain_ID ) ) {

@@ -8,6 +8,6 @@ use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 class HardhatRpcUrl {
 	public function get( int $chain_ID ): string {
 		assert( $chain_ID === ChainID::PRIVATENET_L1 || $chain_ID === ChainID::PRIVATENET_L2 );
-		return ( new RpcURL() )->connectableURL( $chain_ID );
+		return ( new RpcURL() )->get( $chain_ID );
 	}
 }
