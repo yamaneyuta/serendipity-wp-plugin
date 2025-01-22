@@ -100,7 +100,8 @@ input TokensFilter {
 }
 
 input ChainsFilter {
-	isConnectable: Boolean	# サーバーから接続可能なチェーンのみ取得する場合にtrueを指定
+	chainID: Int
+	isConnectable: Boolean	# サーバーから接続可能なチェーンのみ取得する場合にtrueを指定(トークン登録画面で使用)
 }
 
 input NetworkCategoryFilter {
