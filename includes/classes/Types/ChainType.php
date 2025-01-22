@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 
 /**
@@ -23,6 +24,13 @@ class ChainType {
 	 */
 	public function id(): int {
 		return $this->chain_ID;
+	}
+
+	/**
+	 * ネットワークカテゴリを取得します。
+	 */
+	public function networkCategory(): NetworkCategory {
+		return ( new NetworkCategoryDefinition() )->get( $this->chain_ID );
 	}
 
 	/**
