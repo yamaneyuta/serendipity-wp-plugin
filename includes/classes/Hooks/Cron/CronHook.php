@@ -6,12 +6,12 @@ use Cornix\Serendipity\Core\Lib\Crawler\AppContractCrawler;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\BlockNumberActiveSince;
-use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\CrawledBlockNumber;
 use Cornix\Serendipity\Core\Lib\Repository\Name\CronActionName;
 use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 
 /**
@@ -180,12 +180,13 @@ class AppContractCrawlableChainIDs {
 		// アプリケーションがデプロイされているチェーンID一覧を取得
 		$deployed_chain_ids = ( new AppContract() )->allChainIDs();
 
-		// 接続可能なチェーンに絞り込み
-		$chain_data            = new ChainData();
-		$connectable_chain_ids = array_filter( $deployed_chain_ids, fn( $chain_id ) => $chain_data->get( $chain_id )->isConnectable() );
+		// RPC URLが取得可能なチェーンに絞り込み
+		$rpc_url_setting       = new RpcUrlSetting();
+		$connectable_chain_ids = array_filter( $deployed_chain_ids, fn( $chain_id ) => $rpc_url_setting->isRegistered( $chain_id ) );
 
 		// 取引が開始された(=請求書を発行した)ブロックが存在するチェーンに絞り込み
-		$active_since     = new BlockNumberActiveSince();
+		$active_since = new BlockNumberActiveSince();
+		// TODO: BlockNumberActiveSince::existsメソッドを追加し、それを利用するように変更
 		$active_chain_ids = array_filter( $connectable_chain_ids, fn( $chain_id ) => ! is_null( $active_since->get( $chain_id ) ) );
 
 		return array_values( $active_chain_ids );
