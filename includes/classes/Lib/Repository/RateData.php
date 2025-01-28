@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Repository\Oracle;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Repository\Transient\TransientFactory;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\OracleClient;
@@ -53,11 +54,8 @@ class OracleRate {
 			$contract_address = ( new Oracle() )->address( $chain_ID, $symbol_pair );
 			assert( ! is_null( $contract_address ) );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
 
-			$rpc_url = ( new RpcURL() )->get( $chain_ID );
-			if ( Judge::isUrl( $rpc_url ) ) {
-				// 以下、$rpc_urlがURLであることが保証される
-				/** @var string $rpc_url */
-
+			$rpc_url = ( new RpcUrlSetting() )->get( $chain_ID );
+			if ( is_string( $rpc_url ) && Judge::isUrl( $rpc_url ) ) {
 				// Oracleに問い合わせ
 				$oracle_client = new OracleClient( $rpc_url, $contract_address );
 				$decimals      = $oracle_client->decimals();

@@ -11,8 +11,8 @@ use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Lib\Repository\RpcUserSettings;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 use Cornix\Serendipity\Core\Types\TokenType;
@@ -119,7 +119,7 @@ class RpcSettingsInitializer {
 
 	private function registerPrivatenetRpcUrl( int $chain_ID ): void {
 		$rpc_url = $this->getPrivatenetRpcURL( $chain_ID );
-		( new RpcUserSettings() )->setRpcURL( $chain_ID, $rpc_url );
+		( new RpcUrlSetting() )->set( $chain_ID, $rpc_url );
 	}
 
 

@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 require_once 'includes/classes/Lib/Repository/RateData.php';
 
+use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\RateData;
 use Cornix\Serendipity\Core\Lib\Repository\RateTransient;
 use Cornix\Serendipity\Core\Lib\Repository\OracleRate;
-use Cornix\Serendipity\Core\Lib\Repository\RpcUserSettings;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\Rate;
-use Cornix\Serendipity\Core\Types\RpcUrlProviderType;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 
 class RateDataTest extends IntegrationTestBase {
@@ -146,7 +146,7 @@ class RateDataTest extends IntegrationTestBase {
 		// ARRANGE
 		$rate_data   = new RateData();
 		$symbol_pair = new SymbolPair( 'ETH', 'USD' );
-		( new RpcUserSettings() )->setIsAgreedTerms( RpcUrlProviderType::ankr(), true );  // ankrの利用規約に同意し、本番環境に接続できるようにする
+		( new RpcUrlSetting() )->set( ChainID::ETH_MAINNET, TestRpcUrl::ETH_MAINNET );  // テスト用のRPC URLを登録
 
 		// ACT
 		$result = $rate_data->get( $symbol_pair );  // Oracleから取得される
