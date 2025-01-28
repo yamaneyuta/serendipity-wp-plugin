@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\Oracle;
-use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
@@ -35,13 +34,14 @@ class GetERC20InfoResolver extends ResolverBase {
 			// ERC20トークンの情報を取得するResolverのため、アドレスゼロも不許可
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
-		if ( ! ( new ChainData() )->get( $chain_ID )->isConnectable() ) {
-			// 接続できないチェーンIDが指定された場合も例外を投げる
+		// 設定からRPC URLを取得
+		$rpc_url = ( new RpcUrlSetting() )->get( $chain_ID );
+		if ( is_null( $rpc_url ) ) {
+			// RPC URLが取得できない(=接続できない)チェーンIDが指定された場合は例外を投げる
 			throw new \InvalidArgumentException( '[84752B42] chainID is not connectable. chain id: ' . $chain_ID );
 		}
+		assert( Judge::isUrl( $rpc_url ) );
 
-		$rpc_url = ( new RpcURL() )->get( $chain_ID );
-		assert( Judge::isUrl( $rpc_url ) ); // チェーンに接続できるかどうかを上で確認しているため、ここは必ず取得できる
 		$token_client = new TokenClient( $rpc_url, $address );
 
 		$symbol = $token_client->symbol();
