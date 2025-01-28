@@ -1,14 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Repository;
+namespace Cornix\Serendipity\Core\Lib\Repository\Settings;
 
 use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
-class Confirmations {
+/**
+ * ユーザーが(管理画面で)設定した待機ブロック数を取得または設定するクラス
+ */
+class ConfirmationsSetting {
 	/**
-	 * 指定したチェーンの待機ブロックを取得します。
+	 * 指定したチェーンの待機ブロック数(ユーザーが設定した値)を取得します。
 	 *
 	 * @return int|string|null
 	 */
@@ -24,7 +27,7 @@ class Confirmations {
 	}
 
 	/**
-	 * 指定したチェーンの待機ブロックを設定します。
+	 * 指定したチェーンの待機ブロック数(ユーザーが設定した値)を設定します。
 	 *
 	 * @param int        $chain_ID
 	 * @param int|string $confirmations
