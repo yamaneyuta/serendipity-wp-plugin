@@ -44,16 +44,16 @@ class RpcUrlSettingTest extends IntegrationTestBase {
 	 */
 	public function set() {
 		// ARRANGE
-		$sut = new RpcUrlSetting();
-		$chain_ID = ChainID::ETH_MAINNET;	// 登録するチェーンID(今回はメインネット。何でもよい)
-		$url = 'http://example.com';		// RPC URL(ダミー)
-		$this->assertNull( $sut->get( $chain_ID ) );	// 登録前はnullであることを確認
+		$sut      = new RpcUrlSetting();
+		$chain_ID = ChainID::ETH_MAINNET;   // 登録するチェーンID(今回はメインネット。何でもよい)
+		$url      = 'http://example.com';        // RPC URL(ダミー)
+		$this->assertNull( $sut->get( $chain_ID ) );    // 登録前はnullであることを確認
 
 		// ACT
-		$sut->set( $chain_ID, $url );		// RPC URLを登録
+		$sut->set( $chain_ID, $url );       // RPC URLを登録
 
 		// ASSERT
-		$this->assertNotNull( $sut->get( $chain_ID ) );			// 登録後はnullでないことを確認
-		$this->assertEquals( $url, $sut->get( $chain_ID ) );	// 登録したRPC URLが取得できること
+		$this->assertNotNull( $sut->get( $chain_ID ) );         // 登録後はnullでないことを確認
+		$this->assertEquals( $url, $sut->get( $chain_ID ) );    // 登録したRPC URLが取得できること
 	}
 }
