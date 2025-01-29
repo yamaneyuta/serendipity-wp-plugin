@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\ConfirmationsSetting;
+use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
@@ -28,13 +27,8 @@ class ChainResolver extends ResolverBase {
 
 		$confirmations_callback = function () use ( $chain_ID ) {
 			// 権限チェック不要
-
-			// 待機ブロック数を取得(ユーザーによる設定が存在しない場合はデフォルト値を使用)
-			$confirmations = ( new ConfirmationsSetting() )->get( $chain_ID );
-			if ( is_null( $confirmations ) ) {
-				$confirmations = ( new DefaultValue() )->confirmations( $chain_ID );
-			}
-			return $confirmations;
+			// 待機ブロック数を返す
+			return ( new Confirmations() )->get( $chain_ID );
 		};
 
 		$tokens_callback = function () use ( $root_value, $chain_ID ) {

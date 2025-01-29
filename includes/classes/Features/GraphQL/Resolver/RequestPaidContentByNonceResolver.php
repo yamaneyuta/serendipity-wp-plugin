@@ -5,11 +5,10 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Post\ContentFilter;
 use Cornix\Serendipity\Core\Lib\Post\PostContent;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\ConfirmationsSetting;
+use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
@@ -101,11 +100,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( int $chain_ID, BlockNumberType $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		// TODO: ConfirmationsクラスはDefaultValueの値を加味した値を返すようにする
-		$confirmations = ( new ConfirmationsSetting() )->get( $chain_ID );
-		if ( is_null( $confirmations ) ) {
-			$confirmations = ( new DefaultValue() )->confirmations( $chain_ID );
-		}
+		$confirmations = ( new Confirmations() )->get( $chain_ID );
 
 		if ( is_int( $confirmations ) ) {
 			// 最新のブロック番号を取得
