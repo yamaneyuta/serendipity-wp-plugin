@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\RpcURL;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
@@ -29,6 +30,11 @@ class ChainResolver extends ResolverBase {
 			// 権限チェック不要
 			// 待機ブロック数を返す
 			return ( new Confirmations() )->get( $chain_ID );
+		};
+
+		$rpc_url_callback = function () use ( $chain_ID ) {
+			Judge::checkHasAdminRole(); // 管理者権限が必要
+			return ( new RpcURL() )->get( $chain_ID );
 		};
 
 		$tokens_callback = function () use ( $root_value, $chain_ID ) {
@@ -63,6 +69,7 @@ class ChainResolver extends ResolverBase {
 			'id'              => $chain_ID,
 			'appContract'     => $app_contract_callback,
 			'confirmations'   => $confirmations_callback,
+			'rpcURL'          => $rpc_url_callback,
 			'tokens'          => $tokens_callback,
 			'networkCategory' => $network_category_callback,
 		);

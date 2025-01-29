@@ -119,6 +119,7 @@ type Chain {
 	id: Int!	# チェーンID【ゲスト】
 	appContract: AppContract	# このチェーンにデプロイされているアプリケーションコントラクトの情報【ゲスト】
 	confirmations: String!		# ブロック確認数("1"などの10進数の文字列または"finalized"などのブロック位置)【ゲスト】
+	rpcURL: String				# RPC URL(ユーザーが管理画面で登録した値)【管理者】
 	tokens: [Token!]!			# このチェーンに存在するトークン一覧【管理者】
 	networkCategory: NetworkCategory! # このチェーンが属するネットワークカテゴリ【管理者】
 }
