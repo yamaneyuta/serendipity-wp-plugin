@@ -42,4 +42,9 @@ class TableName {
 	public function token(): string {
 		return $this->addPrefix( 'token' );
 	}
+
+	/** Oracleの定義を記録するテーブル名 */
+	public function oracle(): string {
+		return $this->addPrefix( 'oracle' );
+	}
 }
