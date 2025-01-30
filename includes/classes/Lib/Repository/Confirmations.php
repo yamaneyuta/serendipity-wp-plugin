@@ -26,10 +26,10 @@ class Confirmations {
 	/**
 	 * 指定したチェーンの待機ブロック数(ユーザーが設定した値)を設定します。
 	 *
-	 * @param int        $chain_ID
-	 * @param int|string $confirmations
+	 * @param int             $chain_ID
+	 * @param int|string|null $confirmations
 	 */
-	public function set( int $chain_ID, $confirmations ): bool {
-		return ( new ConfirmationsSetting() )->set( $chain_ID, $confirmations );
+	public function set( int $chain_ID, $confirmations ): void {
+		( new ConfirmationsSetting() )->set( $chain_ID, $confirmations );
 	}
 }

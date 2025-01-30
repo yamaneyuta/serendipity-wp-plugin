@@ -28,16 +28,20 @@ class ConfirmationsSetting {
 
 	/**
 	 * 指定したチェーンの待機ブロック数(ユーザーが設定した値)を設定します。
+	 * 待機ブロック数を削除する場合はnullを指定します。
 	 *
-	 * @param int        $chain_ID
-	 * @param int|string $confirmations
+	 * @param int             $chain_ID
+	 * @param int|string|null $confirmations
 	 */
-	public function set( int $chain_ID, $confirmations ): bool {
-		if ( ! is_int( $confirmations ) && ! Judge::isBlockTagName( $confirmations ) ) {
-			// 待機ブロックがint型でもブロックタグ名でもない場合は例外をスロー
-			throw new \InvalidArgumentException( "[67FE810C] confirmations is not int or block tag name. confirmations: {$confirmations}" );
+	public function set( int $chain_ID, $confirmations ): void {
+		if ( ! is_null( $confirmations ) && ! is_int( $confirmations ) && ! Judge::isBlockTagName( $confirmations ) ) {
+			// 待機ブロックがnullでもint型でもブロックタグ名でもない場合は例外をスロー
+			throw new \InvalidArgumentException( "[67FE810C] confirmations is not null or int or block tag name. confirmations: {$confirmations}" );
 		}
 
-		return ( new OptionFactory() )->confirmations( $chain_ID )->update( $confirmations );
+		$option = ( new OptionFactory() )->confirmations( $chain_ID );
+
+		$ret = is_null( $confirmations ) ? $option->delete() : $option->update( (string) $confirmations );
+		assert( $ret );
 	}
 }
