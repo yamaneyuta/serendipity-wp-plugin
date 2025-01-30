@@ -19,6 +19,8 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ServerSignerResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetConfirmationsResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetRpcUrlResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\TokenResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\TokensResolver;
@@ -56,6 +58,8 @@ class RootValue {
 			'getERC20Info'              => new GetERC20InfoResolver(),
 			'registerERC20Token'        => new RegisterERC20TokenResolver(),
 			'setSellerAgreedTerms'      => new SetSellerAgreedTermsResolver(),
+			'setRpcUrl'                 => new SetRpcUrlResolver(),
+			'setConfirmations'          => new SetConfirmationsResolver(),
 			// React-Adminの都合によりMutation
 			'networkCategories'         => new NetworkCategoriesResolver(),
 			'chains'                    => new ChainsResolver(),

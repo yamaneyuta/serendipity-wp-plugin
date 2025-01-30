@@ -67,6 +67,15 @@ type Mutation {
 	# ERC20トークンを登録【管理者】
 	registerERC20Token(chainID: Int!, address: String!, isPayable: Boolean!): Boolean!
 
+	# RPC URLを設定【管理者】
+	# ※ ユーザーが設定したRPC URLを削除する場合はurlにnullを指定
+	setRpcUrl(chainID: Int!, rpcURL: String): Boolean!
+
+	# ブロック確認数を設定【管理者】
+	# ※ ブロック確認数を削除する場合(既定値に戻す場合)はconfirmationsにnullを指定
+	setConfirmations(chainID: Int!, confirmations: String): Boolean!
+
+
 	# ----- 以下、React-Admin用 -----
 	# ※ 前提として、GraphQL-CodegenはQueryをuseXXXQueryとしてhooksを定義する。
 	# 　 React-Adminでカスタムプロバイダを使用するにあたり、useXXXQueryではコールバックの引数の値(例:チェーンID)を使用することが難しいため
