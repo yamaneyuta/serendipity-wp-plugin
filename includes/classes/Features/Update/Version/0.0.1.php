@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\Update\Version;
 
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\OracleTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
@@ -38,6 +39,8 @@ class v001 {
 		( new InvoiceTable( $wpdb ) )->create();
 		// 請求書とnonceの紐づきを保存するテーブルを作成
 		( new InvoiceNonceTable( $wpdb ) )->create();
+		// Oracleの情報を記録するテーブルを作成
+		( new OracleTable( $wpdb ) )->create();
 		// トークンの情報を記録するテーブルを作成
 		( new TokenTable( $wpdb ) )->create();
 		// ペイウォール解除時のトランザクションに関するデータを記録するテーブルを作成
@@ -54,6 +57,8 @@ class v001 {
 		( new InvoiceTable( $wpdb ) )->drop();
 		// 請求書とnonceの紐づきを保存するテーブルを削除
 		( new InvoiceNonceTable( $wpdb ) )->drop();
+		// Oracleの情報を記録するテーブルを削除
+		( new OracleTable( $wpdb ) )->drop();
 		// トークンの情報を記録するテーブルを削除
 		( new TokenTable( $wpdb ) )->drop();
 		// ペイウォール解除時のトランザクションに関するデータを記録するテーブルを削除
