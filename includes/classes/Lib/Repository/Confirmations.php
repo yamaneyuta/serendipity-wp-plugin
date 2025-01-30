@@ -3,38 +3,33 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\ConfirmationsSetting;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 
+/**
+ * チェーンIDに対する待機ブロック数を取得するクラス
+ */
 class Confirmations {
 	/**
-	 * 指定したチェーンの待機ブロックを取得します。
+	 * 指定したチェーンの待機ブロック数を取得します。
+	 * ユーザーが設定した値があればその値を、設定されていなければデフォルト値を返します。
 	 *
-	 * @return int|string|null
+	 * @return int|string
 	 */
 	public function get( int $chain_ID ) {
-		$confirmations = ( new OptionFactory() )->confirmations( $chain_ID )->get();
-		if ( is_null( $confirmations ) ) {
-			return null;
-		} elseif ( Judge::isBlockTagName( $confirmations ) ) {
-			return $confirmations;
-		} else {
-			return (int) $confirmations;
-		}
+		$confirmations = ( new ConfirmationsSetting() )->get( $chain_ID );
+
+		// 設定が存在しない場合はデフォルト値を返す
+		return is_null( $confirmations ) ? ( new DefaultValue() )->confirmations( $chain_ID ) : $confirmations;
 	}
 
 	/**
-	 * 指定したチェーンの待機ブロックを設定します。
+	 * 指定したチェーンの待機ブロック数(ユーザーが設定した値)を設定します。
 	 *
-	 * @param int        $chain_ID
-	 * @param int|string $confirmations
+	 * @param int             $chain_ID
+	 * @param int|string|null $confirmations
 	 */
-	public function set( int $chain_ID, $confirmations ): bool {
-		if ( ! is_int( $confirmations ) && ! Judge::isBlockTagName( $confirmations ) ) {
-			// 待機ブロックがint型でもブロックタグ名でもない場合は例外をスロー
-			throw new \InvalidArgumentException( "[67FE810C] confirmations is not int or block tag name. confirmations: {$confirmations}" );
-		}
-
-		return ( new OptionFactory() )->confirmations( $chain_ID )->update( $confirmations );
+	public function set( int $chain_ID, $confirmations ): void {
+		( new ConfirmationsSetting() )->set( $chain_ID, $confirmations );
 	}
 }

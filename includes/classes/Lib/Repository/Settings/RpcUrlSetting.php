@@ -27,6 +27,7 @@ class RpcUrlSetting {
 	 *
 	 * @param int $chain_ID
 	 * @return bool
+	 * @deprecated TODO: この処理をRpcUrlクラスへ移動する
 	 */
 	public function isRegistered( int $chain_ID ): bool {
 		return ! is_null( $this->get( $chain_ID ) );
