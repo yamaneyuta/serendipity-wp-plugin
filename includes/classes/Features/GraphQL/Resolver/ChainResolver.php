@@ -29,7 +29,9 @@ class ChainResolver extends ResolverBase {
 		$confirmations_callback = function () use ( $chain_ID ) {
 			// 権限チェック不要
 			// 待機ブロック数を返す
-			return ( new Confirmations() )->get( $chain_ID );
+			$confirmations = ( new Confirmations() )->get( $chain_ID );
+			// string型にして返す(GraphQLの定義した型に変換)
+			return (string) $confirmations;
 		};
 
 		$rpc_url_callback = function () use ( $chain_ID ) {
