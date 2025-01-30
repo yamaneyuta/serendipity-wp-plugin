@@ -22,10 +22,10 @@ class RpcURL {
 	/**
 	 * 指定したチェーンのRPC URLを設定します。
 	 *
-	 * @param int    $chain_ID
-	 * @param string $rpc_url
+	 * @param int         $chain_ID
+	 * @param string|null $rpc_url
 	 */
-	public function set( int $chain_ID, string $rpc_url ): void {
+	public function set( int $chain_ID, ?string $rpc_url ): void {
 		( new RpcUrlSetting() )->set( $chain_ID, $rpc_url );
 	}
 }
