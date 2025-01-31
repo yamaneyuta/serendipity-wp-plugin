@@ -13,9 +13,9 @@ class RpcURL {
 	 * 指定したチェーンのRPC URLを取得します。
 	 * ユーザーが設定した値がなければnullを返します。
 	 *
-	 * @return int|null
+	 * @return string|null
 	 */
-	public function get( int $chain_ID ) {
+	public function get( int $chain_ID ): ?string {
 		return ( new RpcUrlSetting() )->get( $chain_ID );
 	}
 
