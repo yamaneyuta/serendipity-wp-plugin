@@ -21,7 +21,7 @@ class Oracle {
 		);
 
 		// 接続可能(RPC URLが設定済み)なチェーンIDに絞り込み
-		$chain_IDs = array_filter( $chain_IDs, fn( $chain_ID ) => ( new RpcURL() )->isRegistered( $chain_ID ) );
+		$chain_IDs = array_filter( $chain_IDs, fn( $chain_ID ) => ( new RPC() )->isUrlRegistered( $chain_ID ) );
 
 		// 重複を削除し、インデックスを振り直した配列を返す
 		return array_values( array_unique( $chain_IDs ) );
