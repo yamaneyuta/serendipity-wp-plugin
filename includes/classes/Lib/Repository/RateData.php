@@ -47,15 +47,15 @@ class OracleRate {
 		// TODO: 本番環境とテスト環境で同じ順でOracleへの問い合わせでよいか確認
 		$chain_IDs = ( new Oracle() )->connectableChainIDs( $symbol_pair );
 
-		$rpc_url = new RpcURL();
+		$rpc = new RPC();
 		foreach ( $chain_IDs as $chain_ID ) {
 			// コントラクトアドレスを取得
 			$contract_address = ( new Oracle() )->address( $chain_ID, $symbol_pair );
 			assert( ! is_null( $contract_address ) );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
 
-			if ( $rpc_url->isRegistered( $chain_ID ) ) {
+			if ( $rpc->isUrlRegistered( $chain_ID ) ) {
 				// Oracleに問い合わせ
-				$oracle_client = new OracleClient( $rpc_url->get( $chain_ID ), $contract_address );
+				$oracle_client = new OracleClient( $rpc->getURL( $chain_ID ), $contract_address );
 				$decimals      = $oracle_client->decimals();
 				$answer_hex    = Hex::from( $oracle_client->latestAnswer() );
 

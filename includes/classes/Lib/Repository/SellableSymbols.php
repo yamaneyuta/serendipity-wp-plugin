@@ -21,11 +21,11 @@ class SellableSymbols {
 		$oracles = ( new OracleTable() )->select();
 
 		// RPC URLが設定されているチェーンIDのoracleに絞り込み
-		$rpc_url = new RpcUrl();
+		$rpc     = new RPC();
 		$oracles = array_filter(
 			$oracles,
-			function ( $oracle ) use ( $rpc_url ) {
-				return $rpc_url->isRegistered( $oracle->chainID() );
+			function ( $oracle ) use ( $rpc ) {
+				return $rpc->isUrlRegistered( $oracle->chainID() );
 			}
 		);
 
