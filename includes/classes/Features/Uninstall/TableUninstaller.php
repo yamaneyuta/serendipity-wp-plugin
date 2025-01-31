@@ -18,11 +18,9 @@ class TableUninstaller {
 
 		$table_names = $wpdb->get_col( $sql );
 
-		// $table_namesの数が多い時はエラー
+		// $table_namesの数が正しいかどうかをチェック
 		// ※テーブルが追加された時はここがエラーになるので値を修正すること
-		if ( 5 < count( $table_names ) ) {
-			throw new \Exception( '[D6CACCCC] Invalid table names. table_names: ' . json_encode( $table_names ) );
-		}
+		assert( 6 === count( $table_names ), 'Invalid table names. table_names: ' . json_encode( $table_names ) );
 
 		foreach ( $table_names as $table_name ) {
 			assert( 0 === Strings::strpos( $table_name, $table_name_prefix ) );
