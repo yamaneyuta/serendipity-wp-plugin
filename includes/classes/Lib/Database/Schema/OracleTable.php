@@ -27,7 +27,8 @@ class OracleTable {
 	 * テーブルを作成します。
 	 */
 	public function create(): void {
-		$charset = $this->wpdb->get_charset_collate();
+		$charset         = $this->wpdb->get_charset_collate();
+		$unique_key_name = "uq_{$this->table_name}_C269159C";
 
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
@@ -35,7 +36,8 @@ class OracleTable {
 				`oracle_address` varchar(191)            NOT NULL,
 				`base_symbol`    varchar(191)            NOT NULL,
 				`quote_symbol`   varchar(191)            NOT NULL,
-				PRIMARY KEY (`chain_id`, `oracle_address`)
+				PRIMARY KEY (`chain_id`, `oracle_address`),
+				UNIQUE KEY `{$unique_key_name}` (`chain_id`, `base_symbol`, `quote_symbol`)
 			) ${charset};
 		SQL;
 
