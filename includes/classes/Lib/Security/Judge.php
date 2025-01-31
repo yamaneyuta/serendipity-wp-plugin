@@ -137,21 +137,6 @@ class Judge {
 		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
 	}
 
-
-	/**
-	 * 販売価格に使用可能な通貨シンボルでない場合は例外をスローします。
-	 *
-	 * @param NetworkCategory $network_category ネットワークカテゴリ
-	 * @param string          $symbol 通貨シンボル
-	 * @throws InvalidArgumentException
-	 * @deprecated 現在未使用のため暫定的にマーク
-	 */
-	public static function checkSellableSymbol( NetworkCategory $network_category, string $symbol ): void {
-		if ( ! Validator::isSellableSymbol( $network_category, $symbol ) ) {
-			throw new \InvalidArgumentException( '[CA216343] Invalid selling symbol. - network_category: ' . $network_category . ', symbol: ' . $symbol );
-		}
-	}
-
 	/**
 	 * 購入者が支払可能なトークンでない場合は例外をスローします。
 	 *
@@ -220,14 +205,6 @@ class Validator {
 	public static function isPostID( int $post_ID ): bool {
 		// 投稿の状態を取得できれば有効なIDとみなす。
 		return false !== get_post_status( $post_ID );
-	}
-
-	/** 販売価格に使用可能なシンボルかどうかを返します。 */
-	public static function isSellableSymbol( NetworkCategory $network_category, string $symbol ): bool {
-		// 販売可能なシンボル一覧を取得
-		$sellable_symbol = ( new SellableSymbols() )->get( $network_category );
-
-		return in_array( $symbol, $sellable_symbol, true );
 	}
 
 	/** 購入者が支払可能なトークンかどうかを返します。 */
