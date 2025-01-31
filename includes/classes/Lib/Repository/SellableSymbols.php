@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Oracle;
+use Cornix\Serendipity\Core\Lib\Database\Schema\OracleTable;
+use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class SellableSymbols {
@@ -14,14 +15,32 @@ class SellableSymbols {
 	 * @return string[]
 	 */
 	public function get( NetworkCategory $network_category ): array {
-		// TODO: 引数を削除
-		// 法定通貨シンボル一覧を取得
-		$oracle_symbols = ( new Oracle() )->connectableFiatSymbols();
-		// USDを追加
-		$oracle_symbols[] = 'USD';
+		// 方針: Oracleテーブルに登録されているbase及びquoteの通貨シンボルは販売可能な通貨シンボルとして扱う。
+		// 　　　その上で、現時点で販売価格として設定できるものはRPC URLが設定されているものとする。
 
-		// TODO: トークンを販売価格として指定できる設定がされている場合はETH等を追加
+		// テーブルに登録されているOracle情報をすべて取得
+		$oracles = ( new OracleTable() )->select();
 
-		return $oracle_symbols;
+		// RPC URLが設定されているチェーンIDのoracleに絞り込み
+		$rpc_url_setting = new RpcUrlSetting();
+		$oracles         = array_filter(
+			$oracles,
+			function ( $oracle ) use ( $rpc_url_setting ) {
+				return $rpc_url_setting->isRegistered( $oracle->chainID() );
+			}
+		);
+
+		// baseとquoteの通貨シンボルを取得
+		$symbols = array();
+		foreach ( $oracles as $oracle ) {
+			$symbols[] = $oracle->baseSymbol();
+			$symbols[] = $oracle->quoteSymbol();
+		}
+
+		// 重複を削除
+		$symbols = array_unique( $symbols );
+
+		// インデックスを振り直した配列を返す
+		return array_values( $symbols );
 	}
 }
