@@ -8,7 +8,8 @@ use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 class HardhatRpcUrl {
 	public function get( int $chain_ID ): string {
 		assert( $chain_ID === ChainID::PRIVATENET_L1 || $chain_ID === ChainID::PRIVATENET_L2 );
-		assert( ( new RpcUrlSetting() )->isRegistered( $chain_ID ) );
-		return ( new RpcUrlSetting() )->get( $chain_ID );
+		$hardhat_rpc_url = ( new RpcUrlSetting() )->get( $chain_ID );
+		assert( ! is_null( $hardhat_rpc_url ) );
+		return $hardhat_rpc_url;
 	}
 }

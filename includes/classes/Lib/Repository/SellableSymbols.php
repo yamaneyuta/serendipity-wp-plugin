@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Database\Schema\OracleTable;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class SellableSymbols {
@@ -22,11 +21,11 @@ class SellableSymbols {
 		$oracles = ( new OracleTable() )->select();
 
 		// RPC URLが設定されているチェーンIDのoracleに絞り込み
-		$rpc_url_setting = new RpcUrlSetting();
-		$oracles         = array_filter(
+		$rpc_url = new RpcUrl();
+		$oracles = array_filter(
 			$oracles,
-			function ( $oracle ) use ( $rpc_url_setting ) {
-				return $rpc_url_setting->isRegistered( $oracle->chainID() );
+			function ( $oracle ) use ( $rpc_url ) {
+				return $rpc_url->isRegistered( $oracle->chainID() );
 			}
 		);
 

@@ -28,4 +28,14 @@ class RpcURL {
 	public function set( int $chain_ID, ?string $rpc_url ): void {
 		( new RpcUrlSetting() )->set( $chain_ID, $rpc_url );
 	}
+
+	/**
+	 * 指定したチェーンIDのRPC URLが登録されているかどうかを取得します。
+	 *
+	 * @param int $chain_ID
+	 * @return bool
+	 */
+	public function isRegistered( int $chain_ID ): bool {
+		return ! is_null( $this->get( $chain_ID ) );
+	}
 }

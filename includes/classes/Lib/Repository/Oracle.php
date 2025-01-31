@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Definition\Oracle\OracleDefinitionBase;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\Oracle\OracleEthMainnetDefinition;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 
 class Oracle {
@@ -22,7 +21,7 @@ class Oracle {
 	 * 指定したチェーンに接続可能かどうか(RPC URLが取得できるかどうか)を返します。
 	 */
 	private function isConnectable( int $chain_ID ): bool {
-		return ( new RpcUrlSetting() )->isRegistered( $chain_ID );
+		return ( new RpcURL() )->isRegistered( $chain_ID );
 	}
 
 	/**

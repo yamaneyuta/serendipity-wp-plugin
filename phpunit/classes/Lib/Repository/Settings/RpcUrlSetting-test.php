@@ -23,7 +23,6 @@ class RpcUrlSettingTest extends IntegrationTestBase {
 		$rpc_url = $sut->get( $chain_ID );  // チェーンIDに対応するRPC URLを取得
 
 		// ASSERT
-		$this->assertEquals( $is_privatenet, $sut->isRegistered( $chain_ID ) ); // プライベートネットの場合はRPC URLが登録済みであること
 		$this->assertEquals( $is_privatenet, ! is_null( $rpc_url ) );   // プライベートネットの場合はRPC URLが取得できること
 	}
 	public function getDataProvider() {
