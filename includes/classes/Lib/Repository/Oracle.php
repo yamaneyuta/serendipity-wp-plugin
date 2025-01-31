@@ -18,23 +18,17 @@ class Oracle {
 	private array $oracle_defs;
 
 	/**
-	 * 指定したチェーンに接続可能かどうか(RPC URLが取得できるかどうか)を返します。
-	 */
-	private function isConnectable( int $chain_ID ): bool {
-		return ( new RpcURL() )->isRegistered( $chain_ID );
-	}
-
-	/**
 	 * 指定した通貨ペアのOracleがデプロイされている接続可能なチェーンID一覧を取得します。
 	 *
 	 * @return int[]
 	 */
 	public function connectableChainIDs( SymbolPair $symbol_pair ): array {
 		$chain_IDs = array();
+		$rpc_url   = new RpcURL();
 		foreach ( $this->oracle_defs as $oracle_def ) {
 			$chain_ID = $oracle_def->chainID();
-			if ( ! $this->isConnectable( $chain_ID ) ) {
-				continue;
+			if ( ! $rpc_url->isRegistered( $chain_ID ) ) {
+				continue; // RPC URLが未登録(接続不可)の場合はスキップ
 			}
 
 			if ( ! is_null( $oracle_def->getAddress( $symbol_pair ) ) ) {
