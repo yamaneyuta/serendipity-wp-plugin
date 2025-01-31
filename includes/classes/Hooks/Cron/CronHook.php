@@ -9,9 +9,9 @@ use Cornix\Serendipity\Core\Lib\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Lib\Repository\CrawledBlockNumber;
 use Cornix\Serendipity\Core\Lib\Repository\Name\CronActionName;
 use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
+use Cornix\Serendipity\Core\Lib\Repository\RPC;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 
 /**
@@ -181,8 +181,8 @@ class AppContractCrawlableChainIDs {
 		$deployed_chain_ids = ( new AppContract() )->allChainIDs();
 
 		// RPC URLが取得可能なチェーンに絞り込み
-		$rpc_url_setting       = new RpcUrlSetting();
-		$connectable_chain_ids = array_filter( $deployed_chain_ids, fn( $chain_id ) => $rpc_url_setting->isRegistered( $chain_id ) );
+		$rpc                   = new RPC();
+		$connectable_chain_ids = array_filter( $deployed_chain_ids, fn( $chain_id ) => $rpc->isUrlRegistered( $chain_id ) );
 
 		// 取引が開始された(=請求書を発行した)ブロックが存在するチェーンに絞り込み
 		$active_since = new BlockNumberActiveSince();

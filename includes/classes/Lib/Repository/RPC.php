@@ -8,14 +8,14 @@ use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 /**
  * チェーンIDに対するRPC URLを取得するクラス
  */
-class RpcURL {
+class RPC {
 	/**
 	 * 指定したチェーンのRPC URLを取得します。
 	 * ユーザーが設定した値がなければnullを返します。
 	 *
-	 * @return int|null
+	 * @return string|null
 	 */
-	public function get( int $chain_ID ) {
+	public function getURL( int $chain_ID ): ?string {
 		return ( new RpcUrlSetting() )->get( $chain_ID );
 	}
 
@@ -25,7 +25,17 @@ class RpcURL {
 	 * @param int         $chain_ID
 	 * @param string|null $rpc_url
 	 */
-	public function set( int $chain_ID, ?string $rpc_url ): void {
+	public function setURL( int $chain_ID, ?string $rpc_url ): void {
 		( new RpcUrlSetting() )->set( $chain_ID, $rpc_url );
+	}
+
+	/**
+	 * 指定したチェーンIDのRPC URLが登録されているかどうかを取得します。
+	 *
+	 * @param int $chain_ID
+	 * @return bool
+	 */
+	public function isUrlRegistered( int $chain_ID ): bool {
+		return ! is_null( $this->getURL( $chain_ID ) );
 	}
 }

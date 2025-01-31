@@ -3,27 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Definition\Oracle\OracleDefinitionBase;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\Oracle\OracleEthMainnetDefinition;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
+use Cornix\Serendipity\Core\Lib\Database\Schema\OracleTable;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 
 class Oracle {
-
-	public function __construct() {
-		$this->oracle_defs = array(
-			new OracleEthMainnetDefinition(),
-		);
-	}
-	/** @var OracleDefinitionBase[] */
-	private array $oracle_defs;
-
-	/**
-	 * 指定したチェーンに接続可能かどうか(RPC URLが取得できるかどうか)を返します。
-	 */
-	private function isConnectable( int $chain_ID ): bool {
-		return ( new RpcUrlSetting() )->isRegistered( $chain_ID );
-	}
 
 	/**
 	 * 指定した通貨ペアのOracleがデプロイされている接続可能なチェーンID一覧を取得します。
@@ -31,43 +14,26 @@ class Oracle {
 	 * @return int[]
 	 */
 	public function connectableChainIDs( SymbolPair $symbol_pair ): array {
-		$chain_IDs = array();
-		foreach ( $this->oracle_defs as $oracle_def ) {
-			$chain_ID = $oracle_def->chainID();
-			if ( ! $this->isConnectable( $chain_ID ) ) {
-				continue;
-			}
+		// oracleテーブルに登録されている情報から、baseとquoteが一致するもののチェーンID一覧を取得
+		$chain_IDs = array_map(
+			fn( $oracle ) => $oracle->chainID(),
+			( new OracleTable() )->select( null, null, $symbol_pair->base(), $symbol_pair->quote() )
+		);
 
-			if ( ! is_null( $oracle_def->getAddress( $symbol_pair ) ) ) {
-				$chain_IDs[] = $chain_ID;
-			}
-		}
-		return $chain_IDs;
+		// 接続可能(RPC URLが設定済み)なチェーンIDに絞り込み
+		$chain_IDs = array_filter( $chain_IDs, fn( $chain_ID ) => ( new RPC() )->isUrlRegistered( $chain_ID ) );
+
+		// 重複を削除し、インデックスを振り直した配列を返す
+		return array_values( array_unique( $chain_IDs ) );
 	}
 
 	/**
 	 * 指定したチェーン、通貨ペアのOracleコントラクトのアドレスを取得します。
 	 */
 	public function address( int $chain_ID, SymbolPair $symbol_pair ): ?string {
-		array_filter( $this->oracle_defs, fn( $def ) => $def->chainID() === $chain_ID );
-		return count( $this->oracle_defs ) === 0 ? null : array_values( $this->oracle_defs )[0]->getAddress( $symbol_pair );
-	}
+		$oracles = ( new OracleTable() )->select( $chain_ID, null, $symbol_pair->base(), $symbol_pair->quote() );
+		assert( count( $oracles ) <= 1 );
 
-	/**
-	 * レートを取得可能な法定通貨シンボル一覧を取得します。
-	 *
-	 * @return string[]
-	 */
-	public function connectableFiatSymbols(): array {
-		$result = array();
-		foreach ( $this->oracle_defs as $oracle_def ) {
-			if ( ! $this->isConnectable( $oracle_def->chainID() ) ) {
-				continue;
-			}
-			$result = array_merge( $result, $oracle_def->fiatSymbols() );
-		}
-
-		// 重複を削除
-		return array_values( array_unique( $result ) );
+		return count( $oracles ) === 0 ? null : $oracles[0]->oracleAddress();
 	}
 }
