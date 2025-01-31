@@ -52,22 +52,4 @@ class Oracle {
 		array_filter( $this->oracle_defs, fn( $def ) => $def->chainID() === $chain_ID );
 		return count( $this->oracle_defs ) === 0 ? null : array_values( $this->oracle_defs )[0]->getAddress( $symbol_pair );
 	}
-
-	/**
-	 * レートを取得可能な法定通貨シンボル一覧を取得します。
-	 *
-	 * @return string[]
-	 */
-	public function connectableFiatSymbols(): array {
-		$result = array();
-		foreach ( $this->oracle_defs as $oracle_def ) {
-			if ( ! $this->isConnectable( $oracle_def->chainID() ) ) {
-				continue;
-			}
-			$result = array_merge( $result, $oracle_def->fiatSymbols() );
-		}
-
-		// 重複を削除
-		return array_values( array_unique( $result ) );
-	}
 }
