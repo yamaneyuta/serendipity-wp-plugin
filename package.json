@@ -90,7 +90,7 @@
 		"@graphql-codegen/client-preset": "^4.5.1",
 		"@graphql-codegen/typescript-react-query": "^6.1.0",
 		"@storybook/addon-coverage": "^1.0.5",
-		"@storybook/addon-essentials": "^8.4.7",
+		"@storybook/addon-essentials": "^8.5.2",
 		"@storybook/addon-interactions": "^8.4.7",
 		"@storybook/addon-links": "^8.4.7",
 		"@storybook/addon-onboarding": "^8.4.7",
