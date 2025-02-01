@@ -101,7 +101,7 @@
 		"@storybook/test": "^8.4.7",
 		"@storybook/test-runner": "^0.21.0",
 		"@testing-library/dom": "^10.4.0",
-		"@testing-library/react": "^16.1.0",
+		"@testing-library/react": "^16.2.0",
 		"@types/async-lock": "^1.4.2",
 		"@types/js-yaml": "^4.0.9",
 		"@types/license-checker": "^25.0.6",
