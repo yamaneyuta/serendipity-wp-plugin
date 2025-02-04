@@ -50,6 +50,8 @@ class v001 {
 
 		// oracleテーブルの初期値を設定
 		( new OracleTableRecordInitializer( $wpdb ) )->initialize();
+		// tokenテーブルの初期値を設定
+		( new TokenTableRecordInitializer( $wpdb ) )->initialize();
 	}
 
 	public function down() {
@@ -204,5 +206,33 @@ class OracleTableRecordInitializer {
 		$oracle_table->insert( ChainID::ETH_MAINNET, '0xe25277fF4bbF9081C75Ab0EB13B4A13a721f3E13', 'SGD', 'USD' );
 		// Crypto
 		$oracle_table->insert( ChainID::ETH_MAINNET, '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', 'ETH', 'USD' );
+	}
+}
+
+
+class TokenTableRecordInitializer {
+	private $wpdb;
+
+	public function __construct( $wpdb ) {
+		$this->wpdb = $wpdb;
+	}
+
+	/**
+	 * トークンテーブルの初期値を設定します。
+	 */
+	public function initialize(): void {
+		$token_table = new TokenTable( $this->wpdb );
+
+		// メインネットのネイティブトークンを登録
+		$token_table->insert( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18 );
+
+		// テストネットのネイティブトークンを登録
+		$token_table->insert( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18 );
+
+		// 開発モード時はプライベートネットのネイティブトークンを登録
+		if ( ( new Environment() )->isDevelopmentMode() ) {
+			$token_table->insert( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 );
+			$token_table->insert( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18 );
+		}
 	}
 }
