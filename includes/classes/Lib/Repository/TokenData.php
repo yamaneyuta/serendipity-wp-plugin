@@ -39,7 +39,7 @@ class TokenData {
 	 * @param null|string $address アドレスでフィルタする場合に指定
 	 * @return TokenType[] ネイティブトークンやERC20の情報一覧
 	 */
-	public function get( ?int $chain_ID = null, ?string $address = null, ?string $symbol = null ): array {
+	public function select( ?int $chain_ID = null, ?string $address = null, ?string $symbol = null ): array {
 		// テーブルに保存されているトークンデータ一覧を取得
 		return ( new TokenTable() )->select( $chain_ID, $address, $symbol );
 	}

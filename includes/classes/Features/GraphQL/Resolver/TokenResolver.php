@@ -20,7 +20,7 @@ class TokenResolver extends ResolverBase {
 		/** @var string */
 		$address = $args['address'];
 
-		$token = ( new TokenData() )->get( $chain_id, $address )[0];
+		$token = ( new TokenData() )->select( $chain_id, $address )[0];
 
 		$is_payable_callback = function () use ( $token ) {
 			Judge::checkHasAdminRole();  // 管理者権限が必要

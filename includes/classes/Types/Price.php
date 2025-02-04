@@ -43,7 +43,7 @@ class Price {
 	 */
 	public function toTokenAmount( int $chain_ID ): string {
 		// そのトークン1単位における小数点以下桁数。ETHであれば18。
-		$tokens = ( new TokenData() )->get( $chain_ID, null, $this->symbol );
+		$tokens = ( new TokenData() )->select( $chain_ID, null, $this->symbol );
 		if ( 1 !== count( $tokens ) ) {
 			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID . ', symbol: ' . $this->symbol . ', count: ' . count( $tokens ) );
 		}

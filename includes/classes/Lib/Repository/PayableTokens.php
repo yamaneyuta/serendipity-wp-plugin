@@ -33,7 +33,7 @@ class PayableTokens {
 		$token_addresses = $this->getPayableTokenAddressesOption( $chain_ID )->get( array() );
 
 		// Tokenオブジェクトに変換
-		return array_map( fn( $token_address ) => ( new TokenData() )->get( $chain_ID, $token_address )[0], $token_addresses );
+		return array_map( fn( $token_address ) => ( new TokenData() )->select( $chain_ID, $token_address )[0], $token_addresses );
 	}
 
 	/**

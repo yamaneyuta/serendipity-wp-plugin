@@ -25,7 +25,7 @@ class TokensResolver extends ResolverBase {
 		/** @var string|null */
 		$filter_address = $filter['address'] ?? null;
 
-		$tokens = ( new TokenData() )->get( $filter_chain_ID, $filter_address );
+		$tokens = ( new TokenData() )->select( $filter_chain_ID, $filter_address );
 		return array_map(
 			fn( $token ) => $root_value['token'](
 				$root_value,
