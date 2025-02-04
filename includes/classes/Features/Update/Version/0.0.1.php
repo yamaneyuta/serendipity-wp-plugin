@@ -50,6 +50,8 @@ class v001 {
 
 		// oracleテーブルの初期値を設定
 		( new OracleTableRecordInitializer( $wpdb ) )->initialize();
+		// tokenテーブルの初期値を設定
+		( new TokenTableRecordInitializer( $wpdb ) )->initialize();
 	}
 
 	public function down() {
@@ -77,38 +79,20 @@ class PayableTokensInitializer {
 	 * 購入者が支払可能なトークンの初期値を設定します。
 	 */
 	public function initialize(): void {
-		$this->initMainnet();
-		$this->initTestnet();
-		$this->initPrivatenet();
-	}
+		$payable_tokens = new PayableTokens();
 
-	private function initMainnet(): void {
-		// メインネットの場合はEthereum mainnetのみ
-		$eth = TokenType::from( ChainID::ETH_MAINNET, Ethers::zeroAddress() );
-		( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
-	}
+		// メインネット
+		$payable_tokens->save( ChainID::ETH_MAINNET, array( TokenType::from( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18 ) ) );
 
-	private function initTestnet(): void {
-		// テストネットの場合はSepoliaのみ
-		$eth = TokenType::from( ChainID::SEPOLIA, Ethers::zeroAddress() );
-		( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
-	}
+		// テストネット
+		$payable_tokens->save( ChainID::SEPOLIA, array( TokenType::from( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18 ) ) );
 
-	private function initPrivatenet(): void {
-		// 開発モードの時のみ、プライベートネットの設定を追加
+		// 開発モード時はプライベートネットも設定
 		if ( ( new Environment() )->isDevelopmentMode() ) {
-
 			// Privatenet L1
-			{
-				$eth = TokenType::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress() );
-				( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
-			}
-
+			$payable_tokens->save( ChainID::PRIVATENET_L1, array( TokenType::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 ) ) );
 			// Privatenet L2
-			{
-				$matic = TokenType::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress() );
-				( new PayableTokens() )->save( $matic->chainID(), array( $matic ) );
-			}
+			$payable_tokens->save( ChainID::PRIVATENET_L2, array( TokenType::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18 ) ) );
 		}
 	}
 }
@@ -204,5 +188,33 @@ class OracleTableRecordInitializer {
 		$oracle_table->insert( ChainID::ETH_MAINNET, '0xe25277fF4bbF9081C75Ab0EB13B4A13a721f3E13', 'SGD', 'USD' );
 		// Crypto
 		$oracle_table->insert( ChainID::ETH_MAINNET, '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', 'ETH', 'USD' );
+	}
+}
+
+
+class TokenTableRecordInitializer {
+	private $wpdb;
+
+	public function __construct( $wpdb ) {
+		$this->wpdb = $wpdb;
+	}
+
+	/**
+	 * トークンテーブルの初期値を設定します。
+	 */
+	public function initialize(): void {
+		$token_table = new TokenTable( $this->wpdb );
+
+		// メインネットのネイティブトークンを登録
+		$token_table->insert( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18 );
+
+		// テストネットのネイティブトークンを登録
+		$token_table->insert( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18 );
+
+		// 開発モード時はプライベートネットのネイティブトークンを登録
+		if ( ( new Environment() )->isDevelopmentMode() ) {
+			$token_table->insert( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 );
+			$token_table->insert( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18 );
+		}
 	}
 }

@@ -93,7 +93,7 @@ class PriceExchange {
 	 * ※ ネットワークを跨いだ比較を行い、最大値を取得します。
 	 */
 	private function getMaxDecimals( string $symbol ): int {
-		$token_data = ( new TokenData() )->get( null, null, $symbol );
+		$token_data = ( new TokenData() )->select( null, null, $symbol );
 		$decimals   = array_map( fn( $token ) => $token->decimals(), $token_data );
 		return max( $decimals );
 	}
