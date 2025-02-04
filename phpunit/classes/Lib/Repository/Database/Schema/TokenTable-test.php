@@ -44,13 +44,13 @@ class TokenTableTest extends IntegrationTestBase {
 	}
 
 	/**
-	 * アドレスゼロのトークンは追加できないことを確認するテスト
+	 * アドレスゼロのトークンでも追加できることを確認するテスト
 	 *
 	 * @test
-	 * @testdox [DCE5177B] TokenData::add - invalid address - host: $host
+	 * @testdox [DCE5177B] TokenData::add - zero address - host: $host
 	 * @dataProvider hostDataProvider
 	 */
-	public function addInvalidAddressTest( string $host ) {
+	public function addZeroAddressTest( string $host ) {
 		// ARRANGE
 		$wpdb        = WpdbFactory::create( $host );
 		$token_table = new TokenTable( $wpdb );
@@ -58,12 +58,15 @@ class TokenTableTest extends IntegrationTestBase {
 		$token_table->create();
 
 		// ACT
-		$this->expectException( InvalidArgumentException::class );
-		$this->expectExceptionMessage( '[02B46A5C]' );
-		$token_table->insert( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 ); // ネイティブトークンは追加できないことを確認
+		$token_table->insert( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 );
 
 		// ASSERT
-		// Do nothing
+		$result = $token_table->select();
+		$this->assertEquals( 1, count( $result ) );
+		$this->assertEquals( ChainID::PRIVATENET_L1, $result[0]->chainID() );
+		$this->assertEquals( Ethers::zeroAddress(), $result[0]->address() );
+		$this->assertEquals( 'ETH', $result[0]->symbol() );
+		$this->assertEquals( 18, $result[0]->decimals() );
 	}
 
 	/**
