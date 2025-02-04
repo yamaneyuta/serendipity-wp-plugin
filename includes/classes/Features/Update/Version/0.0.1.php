@@ -79,38 +79,20 @@ class PayableTokensInitializer {
 	 * 購入者が支払可能なトークンの初期値を設定します。
 	 */
 	public function initialize(): void {
-		$this->initMainnet();
-		$this->initTestnet();
-		$this->initPrivatenet();
-	}
+		$payable_tokens = new PayableTokens();
 
-	private function initMainnet(): void {
-		// メインネットの場合はEthereum mainnetのみ
-		$eth = TokenType::from( ChainID::ETH_MAINNET, Ethers::zeroAddress() );
-		( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
-	}
+		// メインネット
+		$payable_tokens->save( ChainID::ETH_MAINNET, array( TokenType::from( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18 ) ) );
 
-	private function initTestnet(): void {
-		// テストネットの場合はSepoliaのみ
-		$eth = TokenType::from( ChainID::SEPOLIA, Ethers::zeroAddress() );
-		( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
-	}
+		// テストネット
+		$payable_tokens->save( ChainID::SEPOLIA, array( TokenType::from( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18 ) ) );
 
-	private function initPrivatenet(): void {
-		// 開発モードの時のみ、プライベートネットの設定を追加
+		// 開発モード時はプライベートネットも設定
 		if ( ( new Environment() )->isDevelopmentMode() ) {
-
 			// Privatenet L1
-			{
-				$eth = TokenType::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress() );
-				( new PayableTokens() )->save( $eth->chainID(), array( $eth ) );
-			}
-
+			$payable_tokens->save( ChainID::PRIVATENET_L1, array( TokenType::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 ) ) );
 			// Privatenet L2
-			{
-				$matic = TokenType::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress() );
-				( new PayableTokens() )->save( $matic->chainID(), array( $matic ) );
-			}
+			$payable_tokens->save( ChainID::PRIVATENET_L2, array( TokenType::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18 ) ) );
 		}
 	}
 }

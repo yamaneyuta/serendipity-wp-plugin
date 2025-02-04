@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository\Definition;
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 
+/** @deprecated */
 class NativeTokenDefinition {
 	/**
 	 * 対象のチェーンIDで使用されているネイティブトークンのシンボルを取得します。

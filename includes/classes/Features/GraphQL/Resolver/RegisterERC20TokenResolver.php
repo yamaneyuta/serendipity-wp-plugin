@@ -24,6 +24,8 @@ class RegisterERC20TokenResolver extends ResolverBase {
 		/** @var bool */
 		$is_payable = $args['isPayable'];
 
+		// TODO: トークンのバイトコードを取得し、存在しない場合はエラーとする処理をここに追加
+
 		// ERC20トークンを登録
 		( new TokenData() )->add( $chain_ID, $address );
 		// 支払可能状態を更新
