@@ -25,7 +25,8 @@ class InvoiceTable {
 	 * 購入用請求書テーブルを作成します。
 	 */
 	public function create(): void {
-		$charset = $this->wpdb->get_charset_collate();
+		$charset    = $this->wpdb->get_charset_collate();
+		$index_name = "idx_{$this->table_name}_2D6F4376";
 
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
@@ -39,7 +40,8 @@ class InvoiceTable {
 				`selling_symbol`      varchar(191)            NOT NULL,
 				`seller_address`      varchar(191)            NOT NULL,
 				`consumer_address`    varchar(191)            NOT NULL,
-				PRIMARY KEY (`id`)
+				PRIMARY KEY (`id`),
+				KEY `{$index_name}` (`created_at`)
 			) ${charset};
 		SQL;
 
