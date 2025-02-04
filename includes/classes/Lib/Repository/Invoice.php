@@ -16,7 +16,7 @@ class Invoice {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function issue( int $post_ID, int $chain_ID, Price $selling_price, string $consumer_address ): InvoiceIdType {
+	public function issue( int $post_ID, int $chain_ID, Price $selling_price, string $seller_address, string $consumer_address ): InvoiceIdType {
 		$invoice_id         = InvoiceIdType::generate();
 		$selling_amount_hex = $selling_price->amountHex();
 		$selling_decimals   = $selling_price->decimals();
@@ -24,14 +24,14 @@ class Invoice {
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-			(`id`, `post_id`, `chain_id`, `selling_amount_hex`, `selling_decimals`, `selling_symbol`, `consumer_address`)
-			VALUES (%s, %d, %d, %s, %d, %s, %s)
+			(`id`, `post_id`, `chain_id`, `selling_amount_hex`, `selling_decimals`, `selling_symbol`, `seller_address`, `consumer_address`)
+			VALUES (%s, %d, %d, %s, %d, %s, %s, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_id->ulid(), $post_ID, $chain_ID, $selling_amount_hex, $selling_decimals, $selling_symbol, $consumer_address );
+		$sql = $this->wpdb->prepare( $sql, $invoice_id->ulid(), $post_ID, $chain_ID, $selling_amount_hex, $selling_decimals, $selling_symbol, $seller_address, $consumer_address );
 
 		$result = $this->wpdb->query( $sql );
-		assert( false !== $result );
+		assert( 1 === $result );
 
 		return $invoice_id;
 	}

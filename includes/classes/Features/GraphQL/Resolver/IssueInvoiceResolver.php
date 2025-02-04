@@ -65,7 +65,7 @@ class IssueInvoiceResolver extends ResolverBase {
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
-		$invoice_id = ( new Invoice( $wpdb ) )->issue( $post_ID, $chain_ID, $selling_price, $consumer_address );
+		$invoice_id = ( new Invoice( $wpdb ) )->issue( $post_ID, $chain_ID, $selling_price, $seller_address, $consumer_address );
 		$nonce      = ( new InvoiceNonce( $wpdb ) )->new( $invoice_id );
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成
