@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Types\TokenType;
 
 class TokenData {
 
-	public function add( int $chain_ID, string $contract_address ): void {
+	public function addERC20( int $chain_ID, string $contract_address ): void {
 		assert( Judge::isChainID( $chain_ID ), '[0BB33181] Invalid chain ID. - ' . $chain_ID );
 		assert( Judge::isAddress( $contract_address ), '[A80ECABD] Invalid address. - ' . $contract_address );
 		if ( Ethers::zeroAddress() === $contract_address ) {

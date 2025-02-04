@@ -25,7 +25,7 @@ class TokenDataTest extends IntegrationTestBase {
 		$prev_result = $sut->select( ChainID::PRIVATENET_L1 );   // データ追加前の状態を取得
 
 		// ACT
-		$sut->add( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
+		$sut->addERC20( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
 
 		$result = $sut->select( ChainID::PRIVATENET_L1 );
 		$added  = array_values( array_diff( $result, $prev_result ) );
@@ -53,7 +53,7 @@ class TokenDataTest extends IntegrationTestBase {
 		$sut = new TokenData();
 		$this->expectException( InvalidArgumentException::class );
 		$this->expectExceptionMessage( '[6006664F]' );
-		$sut->add( ChainID::PRIVATENET_L1, Ethers::zeroAddress() ); // ネイティブトークンは追加できないことを確認
+		$sut->addERC20( ChainID::PRIVATENET_L1, Ethers::zeroAddress() ); // ネイティブトークンは追加できないことを確認
 
 		// ASSERT
 		// Do nothing
@@ -72,9 +72,9 @@ class TokenDataTest extends IntegrationTestBase {
 
 		// ACT
 		$token_data = new TokenData();
-		$token_data->add( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
-		$token_data->add( ChainID::PRIVATENET_L2, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
-		$token_data->add( ChainID::PRIVATENET_L2, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
+		$token_data->addERC20( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
+		$token_data->addERC20( ChainID::PRIVATENET_L2, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
+		$token_data->addERC20( ChainID::PRIVATENET_L2, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
 
 		$result_eth = $token_data->select( ChainID::ETH_MAINNET );     // イーサリアムメインネットのトークン情報(追加していないため0件)
 		$result_l1  = $token_data->select( ChainID::PRIVATENET_L1 );    // プライベートネットL1のトークン情報(1件)

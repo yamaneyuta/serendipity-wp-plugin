@@ -27,7 +27,7 @@ class RegisterERC20TokenResolver extends ResolverBase {
 		// TODO: トークンのバイトコードを取得し、存在しない場合はエラーとする処理をここに追加
 
 		// ERC20トークンを登録
-		( new TokenData() )->add( $chain_ID, $address );
+		( new TokenData() )->addERC20( $chain_ID, $address );
 		// 支払可能状態を更新
 		if ( $is_payable ) {
 			$root_value['addPayableTokens'](

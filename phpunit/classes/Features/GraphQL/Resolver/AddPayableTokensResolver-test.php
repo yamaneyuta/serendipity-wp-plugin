@@ -42,7 +42,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// トークンテーブルにERC20トークンを追加
-		( new TokenData() )->add( $chain_ID, $token_address );
+		( new TokenData() )->addERC20( $chain_ID, $token_address );
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
@@ -73,7 +73,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// トークンテーブルにERC20トークンを追加
-		( new TokenData() )->add( $chain_ID, $token_address );
+		( new TokenData() )->addERC20( $chain_ID, $token_address );
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
@@ -100,7 +100,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// トークンテーブルにERC20トークンを追加
-		( new TokenData() )->add( $chain_ID, $token_address );
+		( new TokenData() )->addERC20( $chain_ID, $token_address );
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
@@ -131,8 +131,8 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// トークンテーブルにERC20トークンを追加
-		( new TokenData() )->add( $chain_ID, $token_address1 );
-		( new TokenData() )->add( $chain_ID, $token_address2 );
+		( new TokenData() )->addERC20( $chain_ID, $token_address1 );
+		( new TokenData() )->addERC20( $chain_ID, $token_address2 );
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
