@@ -36,6 +36,7 @@ class InvoiceTable {
 				`selling_amount_hex`  varchar(191)            NOT NULL,
 				`selling_decimals`    int                     NOT NULL,
 				`selling_symbol`      varchar(191)            NOT NULL,
+				`seller_address`      varchar(191)            NOT NULL,
 				`consumer_address`    varchar(191)            NOT NULL,
 				PRIMARY KEY (`id`)
 			) ${charset};
