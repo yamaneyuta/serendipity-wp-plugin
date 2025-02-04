@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Database\Schema;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\NativeTokenDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\TokenType;
 
 /**
@@ -107,21 +105,13 @@ class TokenTable {
 	}
 
 	/**
-	 * テーブルにトークン(ネイティブトークンは除く)を追加します。
+	 * テーブルにトークンを追加します。
 	 */
 	public function insert( int $chain_ID, string $contract_address, string $symbol, int $decimals ): void {
 		Judge::checkChainID( $chain_ID );
 		Judge::checkAddress( $contract_address );
 		Judge::checkSymbol( $symbol );
 		Judge::checkDecimals( $decimals );
-		if ( $contract_address === Ethers::zeroAddress() ) {
-			// アドレスゼロはテーブルに保存しない(NativeTokenSymbolDefinitionで定義する)ため例外を投げる
-			throw new \InvalidArgumentException( '[02B46A5C] Contract address is zero address.' );
-		}
-		if ( $symbol === ( new NativeTokenDefinition() )->getSymbol( $chain_ID ) ) {
-			// ネイティブトークンと同じシンボルはテーブルに保存しないため例外を投げる
-			throw new \InvalidArgumentException( '[3A0C783C] Symbol is same as native token. - ' . $symbol );
-		}
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
