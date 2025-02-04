@@ -41,13 +41,7 @@ class AddPayableTokensResolver extends ResolverBase {
 
 		// 追加するトークンオブジェクトの配列を作成
 		$add_tokens = array_map(
-			function ( $token_address ) use ( $chain_ID ) {
-				$tokens = ( new TokenData() )->select( $chain_ID, $token_address );
-				if ( 1 !== count( $tokens ) ) {
-					throw new \InvalidArgumentException( "[88C0AC3E] Token not found: chain_ID: {$chain_ID}, token_address: {$token_address}, count: " . count( $tokens ) );
-				}
-				return $tokens[0];
-			},
+			fn ( $token_address ) => ( new TokenData() )->get( $chain_ID, $token_address ),
 			$token_addresses
 		);
 

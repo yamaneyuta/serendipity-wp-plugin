@@ -39,7 +39,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 		// 指定されたトークンアドレスが支払可能な設定になっているかどうかをチェック
-		$token = ( new TokenData() )->select( $chain_ID, $token_address )[0];
+		$token = ( new TokenData() )->get( $chain_ID, $token_address );
 		Judge::checkPayableToken( $token );
 
 		// 販売者情報を取得

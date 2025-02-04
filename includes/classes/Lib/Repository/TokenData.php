@@ -43,4 +43,15 @@ class TokenData {
 		// テーブルに保存されているトークンデータ一覧を取得
 		return ( new TokenTable() )->select( $chain_ID, $address, $symbol );
 	}
+
+	/**
+	 * トークンデータを取得します。
+	 */
+	public function get( int $chain_ID, string $address ): TokenType {
+		$tokens = $this->select( $chain_ID, $address );
+		if ( 1 !== count( $tokens ) ) {
+			throw new \InvalidArgumentException( "[E6876786] Invalid token data. - chainID: {$chain_ID}, address: {$address}, count: " . count( $tokens ) );
+		}
+		return $tokens[0];
+	}
 }
