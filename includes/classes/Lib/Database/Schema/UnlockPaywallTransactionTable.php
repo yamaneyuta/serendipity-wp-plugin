@@ -26,16 +26,19 @@ class UnlockPaywallTransactionTable {
 	 * テーブルを作成します。
 	 */
 	public function create(): void {
-		$charset = $this->wpdb->get_charset_collate();
+		$charset    = $this->wpdb->get_charset_collate();
+		$index_name = "idx_{$this->table_name}_1D00B82F";
 
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
+				`created_at`          timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`invoice_id`          varchar(191)            NOT NULL,
 				`chain_id`            bigint(20)    unsigned  NOT NULL,
 				`block_number`        bigint(20)    unsigned  NOT NULL,
 				`transaction_hash`    varchar(191)            NOT NULL,
-				PRIMARY KEY (`invoice_id`)
+				PRIMARY KEY (`invoice_id`),
+				KEY `{$index_name}` (`created_at`)
 			) ${charset};
 		SQL;
 
