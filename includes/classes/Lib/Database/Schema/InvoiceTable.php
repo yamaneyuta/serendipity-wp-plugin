@@ -30,6 +30,7 @@ class InvoiceTable {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
+				`created_at`          timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`id`                  varchar(191)            NOT NULL,
 				`post_id`			  bigint(20)    unsigned  NOT NULL,
 				`chain_id`            bigint(20)    unsigned  NOT NULL,

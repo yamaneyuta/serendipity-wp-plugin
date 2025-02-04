@@ -31,6 +31,7 @@ class UnlockPaywallTransactionTable {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
+				`created_at`          timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`invoice_id`          varchar(191)            NOT NULL,
 				`chain_id`            bigint(20)    unsigned  NOT NULL,
 				`block_number`        bigint(20)    unsigned  NOT NULL,
