@@ -20,7 +20,7 @@ class TableUninstaller {
 
 		// $table_namesの数が正しいかどうかをチェック(CIの時は0となるため、0も許容)
 		// ※テーブルが追加された時はここがエラーになるので値を修正すること
-		assert( in_array( count( $table_names ), array( 0, 6 ), true ), 'Invalid table names. table_names: ' . json_encode( $table_names ) );
+		assert( in_array( count( $table_names ), array( 0, 7 ), true ), '[449E8AD5] Invalid table names. table_names: ' . json_encode( $table_names ) );
 
 		foreach ( $table_names as $table_name ) {
 			assert( 0 === Strings::strpos( $table_name, $table_name_prefix ) );
