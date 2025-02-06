@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
-use Cornix\Serendipity\Core\Lib\Database\Schema\AppContractTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\OracleTable;
@@ -48,15 +47,11 @@ class v001 {
 		( new UnlockPaywallTransactionTable( $wpdb ) )->create();
 		// ペイウォール解除時のトークン転送イベントの内容を記録するテーブルを作成
 		( new UnlockPaywallTransferEventTable( $wpdb ) )->create();
-		// アプリケーションコントラクトテーブルを作成
-		( new AppContractTable( $wpdb ) )->create();
 
 		// oracleテーブルの初期値を設定
 		( new OracleTableRecordInitializer( $wpdb ) )->initialize();
 		// tokenテーブルの初期値を設定
 		( new TokenTableRecordInitializer( $wpdb ) )->initialize();
-		// app_contractテーブルの初期値を設定
-		( new AppContractTableRecordInitializer( $wpdb ) )->initialize();
 	}
 
 	public function down() {
@@ -75,8 +70,6 @@ class v001 {
 		( new UnlockPaywallTransactionTable( $wpdb ) )->drop();
 		// ペイウォール解除時のトークン転送イベントの内容を記録するテーブルを削除
 		( new UnlockPaywallTransferEventTable( $wpdb ) )->drop();
-		// アプリケーションコントラクトテーブルを削除
-		( new AppContractTable( $wpdb ) )->drop();
 	}
 }
 
@@ -222,36 +215,6 @@ class TokenTableRecordInitializer {
 		if ( ( new Environment() )->isDevelopmentMode() ) {
 			$token_table->insert( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 );
 			$token_table->insert( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18 );
-		}
-	}
-}
-
-class AppContractTableRecordInitializer {
-	private $wpdb;
-
-	public function __construct( $wpdb ) {
-		$this->wpdb = $wpdb;
-	}
-
-	/**
-	 * app_contractテーブルの初期値を設定します。
-	 */
-	public function initialize(): void {
-
-		// 初期データの挿入
-		$initial_data = array(
-			ChainID::ETH_MAINNET => Ethers::zeroAddress(),  // TODO: アプリケーションコントラクトアドレスをデプロイ後に設定
-			ChainID::SEPOLIA     => Ethers::zeroAddress(),  // TODO: アプリケーションコントラクトアドレスをデプロイ後に設定
-		);
-		// 開発モード時はプライベートネットのアプリケーションコントラクトアドレスを設定
-		if ( ( new Environment() )->isDevelopmentMode() ) {
-			$initial_data[ ChainID::PRIVATENET_L1 ] = '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318';
-			$initial_data[ ChainID::PRIVATENET_L2 ] = '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318';
-		}
-
-		$app_contract_table = new AppContractTable( $this->wpdb );
-		foreach ( $initial_data as $chain_id => $address ) {
-			$app_contract_table->insert( $chain_id, $address );
 		}
 	}
 }
