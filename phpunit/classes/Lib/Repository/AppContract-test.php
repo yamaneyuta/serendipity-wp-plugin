@@ -55,26 +55,26 @@ class AppContractTest extends IntegrationTestBase {
 	}
 
 	/**
-	 * 開発モードがONの場合、プライベートネットワークのAppコントラクトアドレスが取得できることを確認
+	 * 開発モードがONの場合、プライベートネットワークのAppコントラクト情報が取得できることを確認
 	 *
 	 * @test
 	 * @testdox [4F71C839] AppContract::address() - is development mode
 	 */
-	public function address_isDevelopmentMode() {
+	public function get_isDevelopmentMode() {
 		// ARRANGE
 		$environment_stub = $this->createEnvironmentStub( true ); // 開発モードON
 		$sut              = new AppContract( $environment_stub );
 
 		// ACT
-		$ret1 = $sut->address( ChainID::PRIVATENET_L1 );
-		$ret2 = $sut->address( ChainID::PRIVATENET_L2 );
+		$ret1 = $sut->get( ChainID::PRIVATENET_L1 );
+		$ret2 = $sut->get( ChainID::PRIVATENET_L2 );
 
 		// ASSERT
 		// 開発モードがONの場合は、Appコントラクトのアドレスが取得できる
-		$this->assertIsString( $ret1 );
-		$this->assertMatchesRegularExpression( '/^0x[0-9a-fA-F]{40}$/', $ret1 );
-		$this->assertIsString( $ret2 );
-		$this->assertMatchesRegularExpression( '/^0x[0-9a-fA-F]{40}$/', $ret2 );
+		$this->assertEquals( ChainID::PRIVATENET_L1, $ret1->chainID() );
+		$this->assertMatchesRegularExpression( '/^0x[0-9a-fA-F]{40}$/', $ret1->address() );
+		$this->assertEquals( ChainID::PRIVATENET_L2, $ret2->chainID() );
+		$this->assertMatchesRegularExpression( '/^0x[0-9a-fA-F]{40}$/', $ret2->address() );
 	}
 
 	/**
@@ -89,8 +89,8 @@ class AppContractTest extends IntegrationTestBase {
 		$sut              = new AppContract( $environment_stub );
 
 		// ACT
-		$ret1 = $sut->address( ChainID::PRIVATENET_L1 );
-		$ret2 = $sut->address( ChainID::PRIVATENET_L2 );
+		$ret1 = $sut->get( ChainID::PRIVATENET_L1 );
+		$ret2 = $sut->get( ChainID::PRIVATENET_L2 );
 
 		// ASSERT
 		// 開発モードがOFFの場合は、Appコントラクトのアドレスが取得できない
