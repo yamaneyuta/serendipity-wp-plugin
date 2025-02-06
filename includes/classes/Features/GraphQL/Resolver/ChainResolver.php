@@ -23,8 +23,8 @@ class ChainResolver extends ResolverBase {
 
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
-		$app_contract_address  = ( new AppContract() )->address( $chain_ID );
-		$app_contract_callback = fn() => is_null( $app_contract_address ) ? null : array( 'address' => $app_contract_address );
+		$app_contract          = ( new AppContract() )->get( $chain_ID );
+		$app_contract_callback = fn() => is_null( $app_contract ) ? null : array( 'address' => $app_contract->address() );
 
 		$confirmations_callback = function () use ( $chain_ID ) {
 			// 権限チェック不要

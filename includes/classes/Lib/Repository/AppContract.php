@@ -28,16 +28,6 @@ class AppContract {
 	}
 
 	/**
-	 * 指定されたチェーンIDに対応するアプリケーションのコントラクトアドレスを取得します。
-	 *
-	 * @deprecated
-	 */
-	public function address( int $chain_ID ): ?string {
-		$app_contract = $this->get( $chain_ID );
-		return $app_contract ? $app_contract->address() : null;
-	}
-
-	/**
 	 * 指定されたチェーンIDに対応するアプリケーションのコントラクト情報を取得します。
 	 *
 	 * @param int $chain_ID
