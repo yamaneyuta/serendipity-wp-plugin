@@ -16,18 +16,6 @@ class AppContract {
 	private AppContractDefinition $definition;
 
 	/**
-	 * アプリケーションがデプロイされているチェーンIDをすべて取得します。
-	 *
-	 * @return int[]
-	 */
-	public function allChainIDs(): array {
-		return array_map(
-			fn( AppContractType $app_contract ) => $app_contract->chainID(),
-			$this->definition->all()
-		);
-	}
-
-	/**
 	 * 指定されたチェーンIDに対応するアプリケーションのコントラクト情報を取得します。
 	 *
 	 * @param int $chain_ID

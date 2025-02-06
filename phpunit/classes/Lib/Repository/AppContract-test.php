@@ -15,46 +15,6 @@ class AppContractTest extends IntegrationTestBase {
 	}
 
 	/**
-	 * 開発モードがONの場合、プライベートネットワークのチェーンIDが含まれることを確認
-	 *
-	 * @test
-	 * @testdox [E9D43FA1] AppContract::allChainIDs() - is development mode
-	 */
-	public function allChainIDs_isDevelopmentMode() {
-		// ARRANGE
-		$environment_stub = $this->createEnvironmentStub( true ); // 開発モードON
-		$sut              = new AppContract( $environment_stub );
-
-		// ACT
-		$ret = $sut->allChainIDs();
-
-		// ASSERT
-		// 開発モードがONの場合は、プライベートネットワークのチェーンIDも含まれる
-		$this->assertTrue( in_array( ChainID::PRIVATENET_L1, $ret ) );
-		$this->assertTrue( in_array( ChainID::PRIVATENET_L2, $ret ) );
-	}
-
-	/**
-	 * 開発モードがOFFの場合、プライベートネットワークのチェーンIDが含まれないことを確認
-	 *
-	 * @test
-	 * @testdox [8443AA9F] AppContract::allChainIDs() - is not development mode
-	 */
-	public function allChainIDs_isNotDevelopmentMode() {
-		// ARRANGE
-		$environment_stub = $this->createEnvironmentStub( false );  // 開発モードOFF
-		$sut              = new AppContract( $environment_stub );
-
-		// ACT
-		$ret = $sut->allChainIDs();
-
-		// ASSERT
-		// 開発モードがOFFの場合は、プライベートネットワークのチェーンIDは含まれない
-		$this->assertFalse( in_array( ChainID::PRIVATENET_L1, $ret ) );
-		$this->assertFalse( in_array( ChainID::PRIVATENET_L2, $ret ) );
-	}
-
-	/**
 	 * 開発モードがONの場合、プライベートネットワークのAppコントラクト情報が取得できることを確認
 	 *
 	 * @test
