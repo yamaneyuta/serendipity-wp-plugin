@@ -18,11 +18,11 @@ class AppClientFactory {
 		}
 
 		// チェーンにデプロイされているAppコントラクトのアドレスを取得
-		$contract_address = ( new AppContract() )->address( $chain_ID );
-		if ( is_null( $contract_address ) ) {
+		$app_contract = ( new AppContract() )->get( $chain_ID );
+		if ( is_null( $app_contract ) ) {
 			throw new \Exception( '[6D37E8B3] Contract address is not found. - ' . $chain_ID );
 		}
 
-		return new AppClient( $rpc_url, $contract_address );
+		return new AppClient( $rpc_url, $app_contract->address() );
 	}
 }
