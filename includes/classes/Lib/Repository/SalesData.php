@@ -63,11 +63,11 @@ class SalesData {
 					)
 				) as handling_fee_amount_hex,
 				tk.symbol as token_symbol,
-				tk.token_address as token_address,
+				tk.address as token_address,
 				tk.decimals as token_decimals
 			FROM `{$this->invoice_table_name}` AS inv
 			INNER JOIN `{$this->transaction_table_name}` AS tx ON inv.id = tx.invoice_id
-			LEFT JOIN `{$this->token_table_name}` AS tk ON inv.chain_id = tk.chain_id AND inv.payment_token_address = tk.token_address
+			LEFT JOIN `{$this->token_table_name}` AS tk ON inv.chain_id = tk.chain_id AND inv.payment_token_address = tk.address
 		SQL;
 
 		$records = $this->wpdb->get_results( $sql, ARRAY_A );
