@@ -36,10 +36,10 @@ class TokenTable {
 				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`chain_id`       bigint(20)    unsigned  NOT NULL,
-				`token_address`  varchar(191)            NOT NULL,
+				`address`        varchar(191)            NOT NULL,
 				`symbol`         varchar(191)            NOT NULL,
 				`decimals`       int(11)                 NOT NULL,
-				PRIMARY KEY (`chain_id`, `token_address`)
+				PRIMARY KEY (`chain_id`, `address`)
 			) ${charset};
 		SQL;
 
@@ -58,7 +58,7 @@ class TokenTable {
 	 */
 	public function select( ?int $chain_ID = null, ?string $contract_address = null, ?string $symbol = null ): array {
 		$sql = <<<SQL
-			SELECT `chain_id`, `token_address`, `symbol`, `decimals`
+			SELECT `chain_id`, `address`, `symbol`, `decimals`
 			FROM `{$this->table_name}`
 		SQL;
 
@@ -70,7 +70,7 @@ class TokenTable {
 		}
 		if ( ! is_null( $contract_address ) ) {
 			Judge::checkAddress( $contract_address );
-			$wheres[] = $this->wpdb->prepare( '`token_address` = %s', $contract_address );
+			$wheres[] = $this->wpdb->prepare( '`address` = %s', $contract_address );
 		}
 		if ( ! is_null( $symbol ) ) {
 			Judge::checkSymbol( $symbol );
@@ -88,17 +88,17 @@ class TokenTable {
 
 		$records = array();
 		foreach ( $result as $row ) {
-			$chain_ID      = (int) $row->chain_id;
-			$token_address = (string) $row->token_address;
-			$symbol        = (string) $row->symbol;
-			$decimals      = (int) $row->decimals;
+			$chain_ID = (int) $row->chain_id;
+			$address  = (string) $row->address;
+			$symbol   = (string) $row->symbol;
+			$decimals = (int) $row->decimals;
 
 			assert( Judge::isChainID( $chain_ID ), '[C4D50120] Invalid chain ID. ' . $chain_ID );
-			assert( Judge::isAddress( $token_address ), '[6535A6C3] Invalid contract address. ' . $token_address );
+			assert( Judge::isAddress( $address ), '[6535A6C3] Invalid contract address. ' . $address );
 			assert( Judge::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
 			assert( Judge::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
 
-			$records[] = TokenType::from( $chain_ID, $token_address, $symbol, $decimals );
+			$records[] = TokenType::from( $chain_ID, $address, $symbol, $decimals );
 		}
 
 		return $records;
@@ -115,7 +115,7 @@ class TokenTable {
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-			(`chain_id`, `token_address`, `symbol`, `decimals`)
+			(`chain_id`, `address`, `symbol`, `decimals`)
 			VALUES (%d, %s, %s, %d)
 		SQL;
 
