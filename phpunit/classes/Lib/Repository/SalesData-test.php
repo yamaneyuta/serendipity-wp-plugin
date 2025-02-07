@@ -1,6 +1,10 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransactionTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\SalesData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -8,17 +12,19 @@ use Cornix\Serendipity\Core\Lib\Security\Judge;
 class SalesDataTest extends IntegrationTestBase {
 
 	/**
-	 * SalesData::selectで売上データを取得できることを確認
+	 * 各データベースのバージョンでSalesData::selectで売上データを取得できることを確認
 	 * 取得したデータの各項目の形式が正しいことを確認
 	 *
 	 * @test
-	 * @testdox [87F7BA82] SalesData::select
+	 * @testdox [87F7BA82] SalesData::select - host: $host
+	 * @dataProvider selectDataProvider
 	 */
-	public function select() {
+	public function select( string $host ) {
 		// ARRANGE
-		global $wpdb;
+		$wpdb = WpdbFactory::create( $host );
+		( new SalesDataTablesInitializer( $wpdb ) )->initialize();    // テーブルを初期化
 		$this->insertTableData( $wpdb );
-		$sut = new SalesData();
+		$sut = new SalesData( $wpdb );
 
 		// ACT
 		$results = $sut->select();
@@ -65,6 +71,10 @@ class SalesDataTest extends IntegrationTestBase {
 		$this->assertEquals( $payment_price->decimals(), $payment_token->decimals() );      // 支払い時の通貨は支払いトークンの通貨と一致
 	}
 
+	public function selectDataProvider() {
+		return ( new TestPattern() )->createDBHostMatrix();   // 各DBでテスト
+	}
+
 	/**
 	 * 以下の内容で履歴を記録します。
 	 * 　　販売者: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
@@ -86,6 +96,43 @@ class SalesDataTest extends IntegrationTestBase {
 		// unlock_paywall_transfer_eventテーブルへデータ挿入
 		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:04', '01JKFB56B8PQQ261K5VZDCE5DH', '0', '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318', '0x0000000000000000000000000000000000000000', '0x1610e9a9d064' );
 		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:05', '01JKFB56B8PQQ261K5VZDCE5DH', '1', '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0x0000000000000000000000000000000000000000', '0x08888a5cab96f0' );
+	}
+}
+
+/**
+ * テストで使用するテーブルを初期化するクラス
+ */
+class SalesDataTablesInitializer {
+	public function __construct( wpdb $wpdb ) {
+		$this->wpdb = $wpdb;
+	}
+
+	private wpdb $wpdb;
+
+	public function initialize() {
+		$wpdb = $this->wpdb;
+
+		// テーブルを再作成
+		$tables = array(
+			new TokenTable( $wpdb ),
+			new InvoiceTable( $wpdb ),
+			new UnlockPaywallTransactionTable( $wpdb ),
+			new UnlockPaywallTransferEventTable( $wpdb ),
+		);
+		foreach ( $tables as $table ) {
+			$table->drop();
+			$table->create();
+		}
+
+		// テストで使用するトークンデータを挿入
+		$token_table_name = ( new TableName() )->token();
+		$ret              = $wpdb->query(
+			<<<SQL
+				INSERT INTO `{$token_table_name}` (chain_id, address, symbol, decimals)
+				VALUES (31337, '0x0000000000000000000000000000000000000000', 'ETH', 18);
+			SQL
+		);
+		assert( 1 === $ret, '[86B116D3]' . $wpdb->last_error );
 	}
 }
 
