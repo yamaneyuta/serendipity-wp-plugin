@@ -12,8 +12,8 @@ use Cornix\Serendipity\Core\Types\AppContractType;
  */
 class AppContractDefinition {
 
-	public function __construct( Environment $environment ) {
-		$this->environment = $environment;
+	public function __construct( Environment $environment = null ) {
+		$this->environment = $environment ?? new Environment();
 	}
 
 	private Environment $environment;
