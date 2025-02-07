@@ -129,10 +129,12 @@ class SalesDataTablesInitializer {
 		$ret              = $wpdb->query(
 			<<<SQL
 				INSERT INTO `{$token_table_name}` (chain_id, address, symbol, decimals)
-				VALUES (31337, '0x0000000000000000000000000000000000000000', 'ETH', 18);
+				VALUES
+					(31337, '0x0000000000000000000000000000000000000000', 'ETH', 18),
+					( 1337, '0x0000000000000000000000000000000000000000', 'ETH', 18);
 			SQL
 		);
-		assert( 1 === $ret, '[86B116D3]' . $wpdb->last_error );
+		assert( 2 === $ret, '[86B116D3]' . $wpdb->last_error );
 	}
 }
 
