@@ -59,7 +59,7 @@ class SalesData {
 					WHERE invoice_id = inv.id AND EXISTS (
 						SELECT 1
 						FROM `{$app_contract_table_name}` AS app
-						WHERE to_address = app.address
+						WHERE chain_id = inv.chain_id AND to_address = app.address
 					)
 				) as handling_fee_amount_hex,
 				tk.symbol as token_symbol,
@@ -100,7 +100,8 @@ class AppContractTmpTable {
 			CREATE TEMPORARY TABLE `{$table_name}` (
 				`chain_id`  bigint(20)    unsigned  NOT NULL,
 				`address`   varchar(191)            NOT NULL,
-				PRIMARY KEY (`chain_id`)
+				PRIMARY KEY (`chain_id`),
+				KEY `idx_{$table_name}_92D7958C` (`address`)
 			) {$charset}
 		SQL
 		);
