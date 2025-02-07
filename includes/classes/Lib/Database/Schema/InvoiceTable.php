@@ -31,15 +31,17 @@ class InvoiceTable {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`          timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`id`                  varchar(191)            NOT NULL,
-				`post_id`			  bigint(20)    unsigned  NOT NULL,
-				`chain_id`            bigint(20)    unsigned  NOT NULL,
-				`selling_amount_hex`  varchar(191)            NOT NULL,
-				`selling_decimals`    int                     NOT NULL,
-				`selling_symbol`      varchar(191)            NOT NULL,
-				`seller_address`      varchar(191)            NOT NULL,
-				`consumer_address`    varchar(191)            NOT NULL,
+				`created_at`             timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`id`                     varchar(191)            NOT NULL,
+				`post_id`			     bigint(20)    unsigned  NOT NULL,
+				`chain_id`               bigint(20)    unsigned  NOT NULL,
+				`selling_amount_hex`     varchar(191)            NOT NULL,
+				`selling_decimals`       int                     NOT NULL,
+				`selling_symbol`         varchar(191)            NOT NULL,
+				`seller_address`         varchar(191)            NOT NULL,
+				`payment_token_address`  varchar(191)            NOT NULL,
+				`payment_amount_hex`     varchar(191)            NOT NULL,
+				`consumer_address`       varchar(191)            NOT NULL,
 				PRIMARY KEY (`id`),
 				KEY `{$index_name}` (`created_at`)
 			) ${charset};
