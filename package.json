@@ -109,7 +109,7 @@
 		"@types/react-dom": "^18.3.5",
 		"@types/wordpress__block-editor": "^11.5.16",
 		"@types/wordpress__blocks": "^12.5.17",
-		"@wordpress/env": "^10.17.0",
+		"@wordpress/env": "^10.19.0",
 		"@wordpress/scripts": "^27.9.0",
 		"@yamaneyuta/serendipity-dev-conf": "github:yamaneyuta/serendipity-dev-conf#0.8.3",
 		"@yamaneyuta/serendipity-dev-export-license": "github:yamaneyuta/serendipity-dev-export-license#0.8.6",
