@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\SalesData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Types\SalesDataType;
 
 class SalesDataTest extends IntegrationTestBase {
 
@@ -71,6 +72,32 @@ class SalesDataTest extends IntegrationTestBase {
 		$this->assertEquals( $payment_price->decimals(), $payment_token->decimals() );      // 支払い時の通貨は支払いトークンの通貨と一致
 	}
 
+	/**
+	 * 各データベースのバージョンでSalesData::selectで売上データを複数件取得できることを確認
+	 *
+	 * @test
+	 * @testdox [0AAF9A7C] SalesData::select (2 rows) - host: $host
+	 * @dataProvider selectDataProvider
+	 */
+	public function selectMultiRecords( string $host ) {
+		// ARRANGE
+		$wpdb = WpdbFactory::create( $host );
+		( new SalesDataTablesInitializer( $wpdb ) )->initialize();    // テーブルを初期化
+		$this->insertTableData( $wpdb );    // 1件目のデータを挿入
+		$this->insertTableData2( $wpdb );   // 2件目のデータを挿入
+		$sut = new SalesData( $wpdb );
+
+		// ACT
+		$results = $sut->select();  // 全件取得
+
+		// ASSERT
+		$this->assertIsArray( $results );
+		$this->assertGreaterThanOrEqual( 2, count( $results ) );
+		$invoice_ids = array_map( fn( SalesDataType $sales_data ) => $sales_data->invoiceID(), $results );
+		$this->assertContains( '01JKFB56B8PQQ261K5VZDCE5DH', $invoice_ids );    // 1件目のデータのinvoice_idが含まれていること
+		$this->assertContains( '01JKFZQE7YDYVHG97BBXWY4WTJ', $invoice_ids );    // 2件目のデータのinvoice_idが含まれていること
+	}
+
 	public function selectDataProvider() {
 		return ( new TestPattern() )->createDBHostMatrix();   // 各DBでテスト
 	}
@@ -96,6 +123,29 @@ class SalesDataTest extends IntegrationTestBase {
 		// unlock_paywall_transfer_eventテーブルへデータ挿入
 		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:04', '01JKFB56B8PQQ261K5VZDCE5DH', '0', '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318', '0x0000000000000000000000000000000000000000', '0x1610e9a9d064' );
 		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:05', '01JKFB56B8PQQ261K5VZDCE5DH', '1', '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0x0000000000000000000000000000000000000000', '0x08888a5cab96f0' );
+	}
+
+	/**
+	 * 以下の内容で履歴を記録します。
+	 * 　　販売者: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+	 * 　　投稿ID: 49
+	 * 　　販売価格: 1,000JPY
+	 * 　　購入者: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+	 * 　　購入トークン: ETH
+	 * 　　請求書ID: 01JKFZQE7YDYVHG97BBXWY4WTJ
+	 */
+	private function insertTableData2( wpdb $wpdb ): void {
+		$sales_test_data = new SalesTestData( $wpdb );
+
+		// invoiceテーブルへデータ挿入
+		$sales_test_data->insertInvoiceData( '2025-02-07 10:36:48', '01JKFZQE7YDYVHG97BBXWY4WTJ', '49', '31337', '0x3e8', '0', 'JPY', '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0x0000000000000000000000000000000000000000', '0x087f79088eac8e', '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC' );
+
+		// unlock_paywall_transactionテーブルへデータ挿入
+		$sales_test_data->insertTransactionData( '2025-02-07 10:50:25', '01JKFZQE7YDYVHG97BBXWY4WTJ', '31337', '2068', '0xe6355e851a760d4bb2c283f59fc0cc6af03d983341671ba9789b475ab6d2c4ce' );
+
+		// unlock_paywall_transfer_eventテーブルへデータ挿入
+		$sales_test_data->insertTransferEventData( '2025-02-07 10:50:25', '01JKFZQE7YDYVHG97BBXWY4WTJ', '0', '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC', '0x8A791620dd6260079BF849Dc5567aDC3F2FdC318', '0x0000000000000000000000000000000000000000', '0x15c135d8777c' );
+		$sales_test_data->insertTransferEventData( '2025-02-07 10:50:25', '01JKFZQE7YDYVHG97BBXWY4WTJ', '1', '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC', '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0x0000000000000000000000000000000000000000', '0x0869b7d2b63512' );
 	}
 }
 
