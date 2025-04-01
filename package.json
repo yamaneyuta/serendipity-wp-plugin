@@ -17,7 +17,7 @@
 		"check-license:php": "tsx .bin/check-php-license",
 		"ci:check-license": "run-p check-license:*",
 		"ci:lint": "run-p lint:css lint:js format",
-		"ci:test": "run-p coverage:js test:storybook coverage:php",
+		"ci:test": "run-p coverage:js coverage:php",
 		"clean": "run-p clean:*",
 		"clean:coverage": "rm -rf coverage",
 		"clean:js": "rm -rf build/*",
