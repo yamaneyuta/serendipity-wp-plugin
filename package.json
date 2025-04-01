@@ -91,7 +91,7 @@
 		"@graphql-codegen/typescript-react-query": "^6.1.0",
 		"@storybook/addon-coverage": "^1.0.5",
 		"@storybook/addon-essentials": "^8.5.3",
-		"@storybook/addon-interactions": "^8.5.3",
+		"@storybook/addon-interactions": "^8.6.11",
 		"@storybook/addon-links": "^8.5.3",
 		"@storybook/addon-onboarding": "^8.5.3",
 		"@storybook/addon-webpack5-compiler-swc": "^1.0.6",
