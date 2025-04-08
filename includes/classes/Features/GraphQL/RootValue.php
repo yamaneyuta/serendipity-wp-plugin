@@ -15,6 +15,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RegisterERC20TokenResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RemovePayableTokensResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RequestPaidContentByNonceResolver;
+use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SalesHistoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingContentResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellingPriceResolver;
@@ -64,6 +65,7 @@ class RootValue {
 			'networkCategories'         => new NetworkCategoriesResolver(),
 			'chains'                    => new ChainsResolver(),
 			'tokens'                    => new TokensResolver(),
+			'salesHistories'            => new SalesHistoriesResolver(),
 		);
 
 		$result = array();
