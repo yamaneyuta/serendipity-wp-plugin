@@ -48,7 +48,7 @@ type Query {
 
 type Mutation {
 	# 支払情報を発行【ゲスト】
-	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!, consumerAddress: String!): Invoice!
+	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!, consumerAddress: String!): IssuedInvoice!
 
 	# 記事の続きを取得【ゲスト】
 	requestPaidContentByNonce(invoiceID: String!, nonce: String!): PaidContentByNonce!
@@ -165,7 +165,8 @@ type SellingContent {
 	imageCount: Int!		# 画像数
 }
 
-type Invoice {
+# 発行された請求書情報
+type IssuedInvoice {
 	invoiceIdHex: String!
 	nonce: String!				# 購入者の署名を省略するための乱数
 	serverMessage: String!      # サーバーで生成した署名対象メッセージ(クライアント側でコントラクトとの整合性を検証するために使用)
