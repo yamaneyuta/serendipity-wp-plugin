@@ -70,9 +70,9 @@ class SalesData {
 			LEFT JOIN `{$this->token_table_name}` AS tk ON inv.chain_id = tk.chain_id AND inv.payment_token_address = tk.address
 		SQL;
 
-		if( !is_null( $invoice_id ) ) {
+		if ( ! is_null( $invoice_id ) ) {
 			$sql .= ' WHERE inv.id = %s';
-			$sql = $this->wpdb->prepare( $sql, $invoice_id );
+			$sql  = $this->wpdb->prepare( $sql, $invoice_id );
 		}
 
 		$records = $this->wpdb->get_results( $sql, ARRAY_A );

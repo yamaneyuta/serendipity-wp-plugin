@@ -16,13 +16,13 @@ class SalesHistoriesResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var array */
-		$filter                     = $args['filter'] ?? null;
+		$filter = $args['filter'] ?? null;
 		/** @var string */
-		$invoice_id				= $args['invoiceID'] ?? null;
+		$invoice_id = $args['invoiceID'] ?? null;
 
 		Judge::checkHasAdminRole(); // 管理者権限が必要
 
-		$sales_data_records = (new SalesData())->select( $invoice_id );
+		$sales_data_records = ( new SalesData() )->select( $invoice_id );
 
 		$ret = array_map(
 			fn ( $sales_data ) => array(
