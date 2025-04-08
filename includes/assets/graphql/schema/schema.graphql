@@ -165,6 +165,26 @@ type SellingContent {
 	imageCount: Int!		# 画像数
 }
 
+# 請求書情報
+type Invoice {
+	id: String!	# 請求書ID
+	createdAt: String!	# 請求書作成日時
+	chain: Chain!	# 取引チェーン
+	post: Post!	# 投稿情報
+	sellingPrice: Price!	# 請求書が発行された時の販売価格
+}
+
+# 購入者が支払を行った際のトランザクション情報
+type UnlockPaywallTransaction {
+	chain: Chain!		# 取引チェーン
+	blockNumber: Int!	# 取引が行われたブロック番号
+	transactionHash: String!	# トランザクションハッシュ
+	sellerAddress: String!		# 販売者のアドレス
+	consumerAddress: String!	# 購入者のアドレス
+	sellerProfitPrice: Price!	# 売上金額
+	handlingFeePrice: Price!	# 手数料
+}
+
 # 発行された請求書情報
 type IssuedInvoice {
 	invoiceIdHex: String!
@@ -211,10 +231,8 @@ type Terms {
 
 # 販売履歴(1件分)
 type SalesHistory {
-	invoiceID: String!	# 請求書ID
-	invoiceCreatedAt: String!	# 請求書作成日時
-	post: Post!	# 投稿情報
-	sellingPrice: Price!	# 販売価格
+	invoice: Invoice!	# 請求書情報
+	unlockPaywallTransaction: UnlockPaywallTransaction!	# 購入者が支払を行った際のトランザクション情報
 
 	# テストのため、以下を一時的にコメントアウト
 	# sellerProfit: Price!	# 売上金額
