@@ -98,7 +98,7 @@ type Mutation {
 type Post {
 	id: Int!						# 投稿ID【ゲスト】
 	title: String!                  # 投稿タイトル【ゲスト】
-	sellingPrice: Price             # 販売価格【ゲスト】
+	sellingPrice: Price             # 現在の販売価格【ゲスト】
 	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報【ゲスト】
 	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
 }
