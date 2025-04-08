@@ -92,6 +92,9 @@ type Mutation {
 
 	# ネットワークカテゴリ一覧を取得【投稿編集者】
 	networkCategories(filter: NetworkCategoryFilter): [NetworkCategory!]!
+
+	# 履歴一覧を取得【管理者】
+	salesHistories(filter: SalesHistoriesFilter): [SalesHistory!]!
 }
 
 # 投稿に関する情報
@@ -203,4 +206,28 @@ type AgreedTerms {
 type Terms {
 	version: Int!		# 利用規約のバージョン
 	message: String!	# 利用規約同意時のメッセージ(ウォレットに表示されるメッセージ)
+}
+
+# 販売履歴(1件分)
+type SalesHistory {
+	invoiceID: String!	# 請求書ID
+	invoiceCreatedAt: String!	# 請求書作成日時
+	post: Post!	# 投稿情報
+	sellingPrice: Price!	# 販売価格
+
+	# テストのため、以下を一時的にコメントアウト
+	# sellerProfit: Price!	# 売上金額
+	# handlingFee: Price!		# 手数料
+	# sellerAddress: String!	# 販売者のアドレス
+	# consumerAddress: String!	# 購入者のアドレス
+	# chainID: Int!	# チェーンID
+	# transactionHash: String!	# トランザクションハッシュ
+}
+
+# 販売履歴フィルタ
+input SalesHistoriesFilter {
+	invoiceID: String	# 請求書ID
+	# TODO: 必要なフィルタを実装
+	# postID: Int	# 投稿ID
+	# chainID: Int	# チェーンID
 }
