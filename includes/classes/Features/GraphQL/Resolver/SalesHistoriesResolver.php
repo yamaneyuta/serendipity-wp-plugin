@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\SalesData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class SalesHistoriesResolver extends ResolverBase {
 
@@ -26,39 +25,63 @@ class SalesHistoriesResolver extends ResolverBase {
 
 		$ret = array_map(
 			fn ( $sales_data ) => array(
-				/*
-					invoiceID: String!	# 請求書ID
-					invoiceCreatedAt: String!	# 請求書作成日時
-					postID: Int!	# 投稿ID
-					postTitle: String!	# 投稿タイトル
-					sellingPrice: Price!	# 販売価格
-					sellerProfit: Price!	# 売上金額
-					handlingFee: Price!		# 手数料
-					sellerAddress: String!	# 販売者のアドレス
-					consumerAddress: String!	# 購入者のアドレス
-					chainID: Int!	# チェーンID
-					transactionHash: String!	# トランザクションハッシュ
-				*/
-				'invoiceID' => $sales_data->invoiceID(),
-				'invoiceCreatedAt' => $sales_data->createdAt()->format( 'c' ),
-				'post' => function() use ( $root_value, $sales_data ) {
-					return $root_value['post'](
-						$root_value,
-						array(
-							'postID' => $sales_data->postID(),
-						)
-					);
-				},
+				'invoice'                  => array(
+					'id'           => $sales_data->invoiceID(),
+					'createdAt'    => $sales_data->createdAt()->format( 'c' ),
+					'chain'        => function () use ( $root_value, $sales_data ) {
+						return $root_value['chain'](
+							$root_value,
+							array(
+								'chainID' => $sales_data->chainID(),
+							)
+						);
+					},
+					'post'         => function () use ( $root_value, $sales_data ) {
+						return $root_value['post'](
+							$root_value,
+							array(
+								'postID' => $sales_data->postID(),
+							)
+						);
+					},
+					// 販売価格は請求書に記載されている価格を返す
+					// ※ Postの販売価格は現在の販売価格であり、取引時の価格とは異なる場合があるため
+					'sellingPrice' => array(
+						'amountHex' => $sales_data->sellingPrice()->amountHex(),
+						'decimals'  => $sales_data->sellingPrice()->decimals(),
+						'symbol'    => $sales_data->sellingPrice()->symbol(),
+					),
+				),
 
-				// TODO: 以下の販売価格は現在の販売価格のため、sales_dataから取得する
-				'sellingPrice' => function() use ( $root_value, $sales_data ) {
-					return $root_value['sellingPrice'](
-						$root_value,
-						array(
-							'postID' => $sales_data->postID(),
-						)
-					);
-				}
+				'unlockPaywallTransaction' => array(
+					'chain'             => function () use ( $root_value, $sales_data ) {
+						return $root_value['chain'](
+							$root_value,
+							array(
+								'chainID' => $sales_data->chainID(),
+							)
+						);
+					},
+					'blockNumber'       => $sales_data->blockNumber(),
+					'transactionHash'   => $sales_data->transactionHash(),
+					'sellerAddress'     => $sales_data->sellerAddress(),
+					'consumerAddress'   => $sales_data->consumerAddress(),
+					// 'paymentPrice' => array(
+					// 'amountHex' => $sales_data->paymentPrice()->amountHex(),
+					// 'decimals'  => $sales_data->paymentPrice()->decimals(),
+					// 'symbol'    => $sales_data->paymentPrice()->symbol(),
+					// ),
+					'sellerProfitPrice' => array(
+						'amountHex' => $sales_data->sellerProfitPrice()->amountHex(),
+						'decimals'  => $sales_data->sellerProfitPrice()->decimals(),
+						'symbol'    => $sales_data->sellerProfitPrice()->symbol(),
+					),
+					'handlingFeePrice'  => array(
+						'amountHex' => $sales_data->handlingFeePrice()->amountHex(),
+						'decimals'  => $sales_data->handlingFeePrice()->decimals(),
+						'symbol'    => $sales_data->handlingFeePrice()->symbol(),
+					),
+				),
 			),
 			$sales_data_records
 		);
