@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
 use Cornix\Serendipity\Core\Lib\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
@@ -38,7 +39,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 		// 指定されたトークンアドレスが支払可能な設定になっているかどうかをチェック
-		$token = TokenType::from( $chain_ID, $token_address );
+		$token = ( new TokenData() )->get( $chain_ID, $token_address );
 		Judge::checkPayableToken( $token );
 
 		// 販売者情報を取得
@@ -65,7 +66,7 @@ class IssueInvoiceResolver extends ResolverBase {
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
-		$invoice_id = ( new Invoice( $wpdb ) )->issue( $post_ID, $chain_ID, $selling_price, $consumer_address );
+		$invoice_id = ( new Invoice( $wpdb ) )->issue( $post_ID, $chain_ID, $selling_price, $seller_address, $token_address, $payment_amount_hex, $consumer_address );
 		$nonce      = ( new InvoiceNonce( $wpdb ) )->new( $invoice_id );
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成

@@ -32,11 +32,13 @@ class OracleTable {
 
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
+				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`chain_id`       bigint(20)    unsigned  NOT NULL,
-				`oracle_address` varchar(191)            NOT NULL,
+				`address`        varchar(191)            NOT NULL,
 				`base_symbol`    varchar(191)            NOT NULL,
 				`quote_symbol`   varchar(191)            NOT NULL,
-				PRIMARY KEY (`chain_id`, `oracle_address`),
+				PRIMARY KEY (`chain_id`, `address`),
 				UNIQUE KEY `{$unique_key_name}` (`chain_id`, `base_symbol`, `quote_symbol`)
 			) ${charset};
 		SQL;
@@ -55,9 +57,9 @@ class OracleTable {
 	 * @param string|null $quote_symbol クォートシンボル
 	 * @return OracleType[]
 	 */
-	public function select( ?int $chain_ID = null, ?string $oracle_address = null, ?string $base_symbol = null, ?string $quote_symbol = null ): array {
+	public function select( ?int $chain_ID = null, ?string $address = null, ?string $base_symbol = null, ?string $quote_symbol = null ): array {
 		$sql = <<<SQL
-			SELECT `chain_id`, `oracle_address`, `base_symbol`, `quote_symbol`
+			SELECT `chain_id`, `address`, `base_symbol`, `quote_symbol`
 			FROM `{$this->table_name}`
 		SQL;
 
@@ -67,9 +69,9 @@ class OracleTable {
 			Judge::checkChainID( $chain_ID );
 			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
 		}
-		if ( ! is_null( $oracle_address ) ) {
-			Judge::checkAddress( $oracle_address );
-			$wheres[] = $this->wpdb->prepare( '`oracle_address` = %s', $oracle_address );
+		if ( ! is_null( $address ) ) {
+			Judge::checkAddress( $address );
+			$wheres[] = $this->wpdb->prepare( '`address` = %s', $address );
 		}
 		if ( ! is_null( $base_symbol ) ) {
 			Judge::checkSymbol( $base_symbol );
@@ -91,17 +93,17 @@ class OracleTable {
 
 		$records = array();
 		foreach ( $result as $row ) {
-			$chain_ID       = (int) $row->chain_id;
-			$oracle_address = (string) $row->oracle_address;
-			$base_symbol    = (string) $row->base_symbol;
-			$quote_symbol   = (string) $row->quote_symbol;
+			$chain_ID     = (int) $row->chain_id;
+			$address      = (string) $row->address;
+			$base_symbol  = (string) $row->base_symbol;
+			$quote_symbol = (string) $row->quote_symbol;
 
 			assert( Judge::isChainID( $chain_ID ), '[75C4111A] Invalid chain ID. ' . $chain_ID );
-			assert( Judge::isAddress( $oracle_address ), '[6286F3EC] Invalid oracle address. ' . $oracle_address );
+			assert( Judge::isAddress( $address ), '[6286F3EC] Invalid oracle address. ' . $address );
 			assert( Judge::isSymbol( $base_symbol ), '[7F884B25] Invalid base symbol. ' . $base_symbol );
 			assert( Judge::isSymbol( $quote_symbol ), '[9A0090FB] Invalid quote symbol. ' . $quote_symbol );
 
-			$records[] = OracleType::from( $chain_ID, $oracle_address, $base_symbol, $quote_symbol );
+			$records[] = OracleType::from( $chain_ID, $address, $base_symbol, $quote_symbol );
 		}
 
 		return $records;
@@ -110,19 +112,19 @@ class OracleTable {
 	/**
 	 * テーブルにOracleを追加します。
 	 */
-	public function insert( int $chain_ID, string $oracle_address, string $base_symbol, string $quote_symbol ): void {
+	public function insert( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ): void {
 		Judge::checkChainID( $chain_ID );
-		Judge::checkAddress( $oracle_address );
+		Judge::checkAddress( $address );
 		Judge::checkSymbol( $base_symbol );
 		Judge::checkSymbol( $quote_symbol );
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
-			(`chain_id`, `oracle_address`, `base_symbol`, `quote_symbol`)
+			(`chain_id`, `address`, `base_symbol`, `quote_symbol`)
 			VALUES (%d, %s, %s, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $chain_ID, $oracle_address, $base_symbol, $quote_symbol );
+		$sql = $this->wpdb->prepare( $sql, $chain_ID, $address, $base_symbol, $quote_symbol );
 
 		$result = $this->wpdb->query( $sql );
 		if ( false === $result ) {

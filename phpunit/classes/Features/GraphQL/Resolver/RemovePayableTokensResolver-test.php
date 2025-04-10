@@ -44,7 +44,8 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
 		$register_token_address = Ethers::zeroAddress(); // ETH
-		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address ) ) );
+
+		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
 		// ACT
@@ -73,7 +74,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
 		$register_token_address = Ethers::zeroAddress(); // ETH
-		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address ) ) );
+		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
 		// ACT
@@ -102,7 +103,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
 		$register_token_address = Ethers::zeroAddress(); // ETH
-		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address ) ) );
+		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 		$not_registered_token_address = '0x0000000000000000000000000000000000000001'; // 登録されていない適当なアドレス
 
@@ -132,13 +133,13 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// ERC20トークンを登録する準備
-		( new TokenData() )->add( $chain_ID, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
-		( new TokenData() )->add( $chain_ID, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
+		( new TokenData() )->addERC20( $chain_ID, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
+		( new TokenData() )->addERC20( $chain_ID, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 		// 3つ登録
-		$token1 = TokenType::from( $chain_ID, '0x0000000000000000000000000000000000000000' ); // ETH
-		$token2 = TokenType::from( $chain_ID, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
-		$token3 = TokenType::from( $chain_ID, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
+		$token1 = TokenType::from( $chain_ID, '0x0000000000000000000000000000000000000000', 'ETH', 18 );
+		$token2 = TokenType::from( $chain_ID, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', 'TUSD', 18 );
+		$token3 = TokenType::from( $chain_ID, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', 'TJPY', 18 );
 		( new PayableTokens() )->save( $chain_ID, array( $token1, $token2, $token3 ) );
 
 		// ACT

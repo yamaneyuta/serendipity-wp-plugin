@@ -48,7 +48,7 @@ type Query {
 
 type Mutation {
 	# 支払情報を発行【ゲスト】
-	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!, consumerAddress: String!): Invoice!
+	issueInvoice(postID: Int!, chainID: Int!, tokenAddress: String!, consumerAddress: String!): IssuedInvoice!
 
 	# 記事の続きを取得【ゲスト】
 	requestPaidContentByNonce(invoiceID: String!, nonce: String!): PaidContentByNonce!
@@ -92,13 +92,16 @@ type Mutation {
 
 	# ネットワークカテゴリ一覧を取得【投稿編集者】
 	networkCategories(filter: NetworkCategoryFilter): [NetworkCategory!]!
+
+	# 履歴一覧を取得【管理者】
+	salesHistories(filter: SalesHistoriesFilter): [SalesHistory!]!
 }
 
 # 投稿に関する情報
 type Post {
 	id: Int!						# 投稿ID【ゲスト】
 	title: String!                  # 投稿タイトル【ゲスト】
-	sellingPrice: Price             # 販売価格【ゲスト】
+	sellingPrice: Price             # 現在の販売価格【ゲスト】
 	sellingContent: SellingContent  # 販売対象の投稿内容に関する情報【ゲスト】
 	payableTokens: [Token!]!		# 支払いに使用可能なトークン一覧【ゲスト】
 }
@@ -162,7 +165,28 @@ type SellingContent {
 	imageCount: Int!		# 画像数
 }
 
+# 請求書情報
 type Invoice {
+	id: String!	# 請求書ID
+	createdAt: String!	# 請求書作成日時
+	chain: Chain!	# 取引チェーン
+	post: Post!	# 投稿情報
+	sellingPrice: Price!	# 請求書が発行された時の販売価格
+}
+
+# 購入者が支払を行った際のトランザクション情報
+type UnlockPaywallTransaction {
+	chain: Chain!		# 取引チェーン
+	blockNumber: Int!	# 取引が行われたブロック番号
+	transactionHash: String!	# トランザクションハッシュ
+	sellerAddress: String!		# 販売者のアドレス
+	consumerAddress: String!	# 購入者のアドレス
+	sellerProfitPrice: Price!	# 売上金額
+	handlingFeePrice: Price!	# 手数料
+}
+
+# 発行された請求書情報
+type IssuedInvoice {
 	invoiceIdHex: String!
 	nonce: String!				# 購入者の署名を省略するための乱数
 	serverMessage: String!      # サーバーで生成した署名対象メッセージ(クライアント側でコントラクトとの整合性を検証するために使用)
@@ -203,4 +227,26 @@ type AgreedTerms {
 type Terms {
 	version: Int!		# 利用規約のバージョン
 	message: String!	# 利用規約同意時のメッセージ(ウォレットに表示されるメッセージ)
+}
+
+# 販売履歴(1件分)
+type SalesHistory {
+	invoice: Invoice!	# 請求書情報
+	unlockPaywallTransaction: UnlockPaywallTransaction!	# 購入者が支払を行った際のトランザクション情報
+
+	# テストのため、以下を一時的にコメントアウト
+	# sellerProfit: Price!	# 売上金額
+	# handlingFee: Price!		# 手数料
+	# sellerAddress: String!	# 販売者のアドレス
+	# consumerAddress: String!	# 購入者のアドレス
+	# chainID: Int!	# チェーンID
+	# transactionHash: String!	# トランザクションハッシュ
+}
+
+# 販売履歴フィルタ
+input SalesHistoriesFilter {
+	invoiceID: String	# 請求書ID
+	# TODO: 必要なフィルタを実装
+	# postID: Int	# 投稿ID
+	# chainID: Int	# チェーンID
 }

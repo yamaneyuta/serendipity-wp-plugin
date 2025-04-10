@@ -32,11 +32,10 @@ class VerifiableChainsResolver extends ResolverBase {
 		// 投稿の販売ネットワークカテゴリに属する全てのチェーンIDを取得
 		$chain_IDs = ( new NetworkCategoryDefinition() )->getAllChainID( $selling_network_category );
 
-		$result                 = array();
-		$app_deployed_chain_IDs = ( new AppContract() )->allChainIDs();
+		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {
 			// アプリケーションコントラクトがデプロイされており、RPC URLが登録されている場合、検証可能なチェーンとして返す
-			if ( in_array( $chain_ID, $app_deployed_chain_IDs ) && ( new RPC() )->isUrlRegistered( $chain_ID ) ) {
+			if ( ! is_null( ( new AppContract() )->get( $chain_ID ) ) && ( new RPC() )->isUrlRegistered( $chain_ID ) ) {
 				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
 			}
 		}

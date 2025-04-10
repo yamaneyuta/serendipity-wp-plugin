@@ -3,10 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
-use Cornix\Serendipity\Core\Lib\Repository\Definition\NativeTokenDefinition;
-use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 
 class TokenType {
 
@@ -53,28 +50,17 @@ class TokenType {
 	}
 
 
-	public static function from( int $chain_ID, string $address, ?string $symbol = null, ?int $decimals = null ): TokenType {
-		assert( Judge::isChainID( $chain_ID ), '[C3892CBA] Invalid chain ID. chain id: ' . $chain_ID );
-		assert( Judge::isAddress( $address ), '[3CFFAA37] Invalid address. chain id: ' . $chain_ID . ', address: ' . $address );
+	public static function from( int $chain_ID, string $address, string $symbol, int $decimals ): TokenType {
+		$cache_key = $chain_ID . $address;
 
-		if ( is_null( self::$cache[ $chain_ID ][ $address ] ?? null ) ) {
-			if ( Ethers::zeroAddress() === $address ) {
-				$symbol   = ( new NativeTokenDefinition() )->getSymbol( $chain_ID );
-				$decimals = ( new NativeTokenDefinition() )->getDecimals( $chain_ID );
-			}
-
-			// TODO: TokenTypeクラスとTokenDataの相互呼び出しが複雑になっているのでリファクタしたい
-			if ( is_null( $symbol ) || is_null( $decimals ) ) {
-				$tokens = ( new TokenData() )->get( $chain_ID, $address );
-				if ( count( $tokens ) !== 1 ) {
-					throw new \InvalidArgumentException( '[CB075A2E] Invalid token. chain id: ' . $chain_ID . ', address: ' . $address . ', count: ' . count( $tokens ) );
-				}
-				return $tokens[0];
-			}
-
-			self::$cache[ $chain_ID ][ $address ] = new TokenType( $chain_ID, $address, $symbol, $decimals );
+		if ( ! isset( self::$cache[ $cache_key ] ) ) {
+			Judge::checkChainID( $chain_ID );
+			Judge::checkAddress( $address );
+			Judge::checkSymbol( $symbol );
+			Judge::checkDecimals( $decimals );
+			self::$cache[ $cache_key ] = new TokenType( $chain_ID, $address, $symbol, $decimals );
 		}
 
-		return self::$cache[ $chain_ID ][ $address ];
+		return self::$cache[ $cache_key ];
 	}
 }

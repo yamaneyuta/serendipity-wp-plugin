@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
+use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Types\TokenType;
 
 class AddPayableTokensResolver extends ResolverBase {
 
@@ -41,7 +41,7 @@ class AddPayableTokensResolver extends ResolverBase {
 
 		// 追加するトークンオブジェクトの配列を作成
 		$add_tokens = array_map(
-			fn( $token_address ) => TokenType::from( $chain_ID, $token_address ),
+			fn ( $token_address ) => ( new TokenData() )->get( $chain_ID, $token_address ),
 			$token_addresses
 		);
 

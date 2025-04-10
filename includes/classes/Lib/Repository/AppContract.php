@@ -3,44 +3,29 @@
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Definition\AppContractDefinition;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
+use Cornix\Serendipity\Core\Types\AppContractType;
 
 /**
  * 本アプリケーション用のコントラクトに関する情報を提供します
  */
 class AppContract {
 	public function __construct( Environment $environment = null ) {
-		$this->definition = new AppContractDefinition();
-
-		// 開発環境でない場合はプライベートネットの定義を除外するためのコールバック
-		$environment        = $environment ?? new Environment();
-		$this->chain_filter = $environment->isDevelopmentMode()
-			? fn( $chain_ID ) => true
-			: fn( $chain_ID ) => ( new NetworkCategoryDefinition() )->get( $chain_ID ) !== NetworkCategory::privatenet();
+		$this->definition = new AppContractDefinition( $environment ?? new Environment() );
 	}
-
 	private AppContractDefinition $definition;
 
-	/** @var callable */
-	private $chain_filter;
-
 	/**
-	 * アプリケーションがデプロイされているチェーンIDをすべて取得します。
+	 * 指定されたチェーンIDに対応するアプリケーションのコントラクト情報を取得します。
 	 *
-	 * ※ 開発環境でない場合は、プライベートネットワークのチェーンIDは含まれません。
-	 *
-	 * @return int[]
+	 * @param int $chain_ID
+	 * @return null|AppContractType
 	 */
-	public function allChainIDs(): array {
-		return array_values( array_filter( $this->definition->allChainIDs(), $this->chain_filter ) );
-	}
-
-	/**
-	 * 指定されたチェーンIDに対応するアプリケーションのコントラクトアドレスを取得します。
-	 */
-	public function address( int $chain_ID ): ?string {
-		return in_array( $chain_ID, $this->allChainIDs() ) ? $this->definition->address( $chain_ID ) : null;
+	public function get( int $chain_ID ): ?AppContractType {
+		$app_contracts = array_filter(
+			$this->definition->all(),
+			fn( AppContractType $app_contract ) => $app_contract->chainID() === $chain_ID
+		);
+		return array_values( $app_contracts )[0] ?? null;
 	}
 }
