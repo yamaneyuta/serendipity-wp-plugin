@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Types;
 
 use DateTime;
 
-class SalesDataType {
+class SalesHistoryType {
 
 	private const COLUMN_INVOICE_ID               = 'invoice_id';
 	private const COLUMN_POST_ID                  = 'post_id';
@@ -35,7 +35,7 @@ class SalesDataType {
 	 * SalesData::select()内で取得したレコードを元に、SalesDataTypeを生成します
 	 *
 	 * @param array $record
-	 * @return SalesDataType
+	 * @return SalesHistoryType
 	 */
 	public static function fromRecord( array $record ): self {
 		assert( array_key_exists( self::COLUMN_INVOICE_ID, $record ), '[FEABA7F7]' );
