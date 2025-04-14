@@ -5,13 +5,13 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Definition\AppContractDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Types\SalesDataType;
+use Cornix\Serendipity\Core\Types\SalesHistoryType;
 use wpdb;
 
 /**
  * 売上データを取得するクラス
  */
-class SalesData {
+class SalesHistories {
 	public function __construct( wpdb $wpdb = null ) {
 		$this->wpdb = $wpdb ?? $GLOBALS['wpdb'];
 
@@ -30,7 +30,7 @@ class SalesData {
 
 	/**
 	 *
-	 * @return SalesDataType[]
+	 * @return SalesHistoryType[]
 	 */
 	public function select( ?string $invoice_id = null ): array {
 		( new AppContractTmpTable( $this->wpdb ) )->create();
@@ -78,7 +78,7 @@ class SalesData {
 		$records = $this->wpdb->get_results( $sql, ARRAY_A );
 
 		return array_map(
-			fn( $record ) => SalesDataType::fromRecord( $record ),
+			fn( $record ) => SalesHistoryType::fromRecord( $record ),
 			$records
 		);
 	}

@@ -6,26 +6,26 @@ use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Lib\Repository\SalesData;
+use Cornix\Serendipity\Core\Lib\Repository\SalesHistories;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Types\SalesDataType;
+use Cornix\Serendipity\Core\Types\SalesHistoryType;
 
-class SalesDataTest extends IntegrationTestBase {
+class SalesHistoriesTest extends IntegrationTestBase {
 
 	/**
-	 * 各データベースのバージョンでSalesData::selectで売上データを取得できることを確認
+	 * 各データベースのバージョンでSalesHistories::selectで売上データを取得できることを確認
 	 * 取得したデータの各項目の形式が正しいことを確認
 	 *
 	 * @test
-	 * @testdox [87F7BA82] SalesData::select - host: $host
+	 * @testdox [87F7BA82] SalesHistories::select - host: $host
 	 * @dataProvider selectDataProvider
 	 */
 	public function select( string $host ) {
 		// ARRANGE
 		$wpdb = WpdbFactory::create( $host );
-		( new SalesDataTablesInitializer( $wpdb ) )->initialize();    // テーブルを初期化
+		( new SalesHistoriesTablesInitializer( $wpdb ) )->initialize();    // テーブルを初期化
 		$this->insertTableData( $wpdb );
-		$sut = new SalesData( $wpdb );
+		$sut = new SalesHistories( $wpdb );
 
 		// ACT
 		$results = $sut->select();
@@ -73,19 +73,19 @@ class SalesDataTest extends IntegrationTestBase {
 	}
 
 	/**
-	 * 各データベースのバージョンでSalesData::selectで売上データを複数件取得できることを確認
+	 * 各データベースのバージョンでSalesHistories::selectで売上データを複数件取得できることを確認
 	 *
 	 * @test
-	 * @testdox [0AAF9A7C] SalesData::select (2 rows) - host: $host
+	 * @testdox [0AAF9A7C] SalesHistories::select (2 rows) - host: $host
 	 * @dataProvider selectDataProvider
 	 */
 	public function selectMultiRecords( string $host ) {
 		// ARRANGE
 		$wpdb = WpdbFactory::create( $host );
-		( new SalesDataTablesInitializer( $wpdb ) )->initialize();    // テーブルを初期化
+		( new SalesHistoriesTablesInitializer( $wpdb ) )->initialize();    // テーブルを初期化
 		$this->insertTableData( $wpdb );    // 1件目のデータを挿入
 		$this->insertTableData2( $wpdb );   // 2件目のデータを挿入
-		$sut = new SalesData( $wpdb );
+		$sut = new SalesHistories( $wpdb );
 
 		// ACT
 		$results = $sut->select();  // 全件取得
@@ -93,7 +93,7 @@ class SalesDataTest extends IntegrationTestBase {
 		// ASSERT
 		$this->assertIsArray( $results );
 		$this->assertGreaterThanOrEqual( 2, count( $results ) );
-		$invoice_ids = array_map( fn( SalesDataType $sales_data ) => $sales_data->invoiceID(), $results );
+		$invoice_ids = array_map( fn( SalesHistoryType $sales_data ) => $sales_data->invoiceID(), $results );
 		$this->assertContains( '01JKFB56B8PQQ261K5VZDCE5DH', $invoice_ids );    // 1件目のデータのinvoice_idが含まれていること
 		$this->assertContains( '01JKFZQE7YDYVHG97BBXWY4WTJ', $invoice_ids );    // 2件目のデータのinvoice_idが含まれていること
 	}
@@ -152,7 +152,7 @@ class SalesDataTest extends IntegrationTestBase {
 /**
  * テストで使用するテーブルを初期化するクラス
  */
-class SalesDataTablesInitializer {
+class SalesHistoriesTablesInitializer {
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb = $wpdb;
 	}
