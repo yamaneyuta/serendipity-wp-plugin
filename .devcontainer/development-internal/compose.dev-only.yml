@@ -73,7 +73,7 @@ services:
   wp-sandbox-latest:
     # バージョン変更時は他の箇所も変更が必要
     # @see .github/workflows/ci.yml
-    image: wordpress:6.6.2
+    image: wordpress:6.8.1
     depends_on:
       - wp-sandbox-db-latest
     ports:
