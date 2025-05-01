@@ -41,7 +41,10 @@ jobs:
           { php-version: "8.2", wordpress-version: "6.8.1" }, # PHP8.2 + 最新WP
 
           { php-version: "8.3", wordpress-version: "6.4" },   # PHP8.3 => WP6.4以降をbetaサポート
-          { php-version: "8.3", wordpress-version: "6.8.1" }  # PHP8.3 + 最新WP
+          { php-version: "8.3", wordpress-version: "6.8.1" }, # PHP8.3 + 最新WP
+
+          { php-version: "8.4", wordpress-version: "6.7" },   # PHP8.4 => WP6.7以降をbetaサポート
+          { php-version: "8.4", wordpress-version: "6.8.1" }  # PHP8.4 + 最新WP
         ]
         # ※1 WP5.9,6.0では`set_current_screen`に空文字を渡すと`Undefined array key "hook_suffix"`のエラーが発生するためマトリクスから除外
 
