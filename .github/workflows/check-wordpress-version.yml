@@ -1,0 +1,83 @@
+name: Check WordPress Version
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # 毎月1日 00:00 (UTC)
+  workflow_dispatch:      # 手動実行可能
+
+permissions:
+  issues: write  # Issue 作成のために必要な権限
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get tested WordPress version from readme.txt
+        id: get-tested-version
+        run: |
+          TESTED_VERSION=$(grep -oP 'Tested up to:\s*\K[\d.]+' ./readme.txt)
+          echo "Tested WordPress version in readme.txt: $TESTED_VERSION"
+          echo "tested_version=$TESTED_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Fetch latest WordPress version
+        id: get-latest-version
+        run: |
+          response=$(curl -s https://api.wordpress.org/core/version-check/1.7/)
+          LATEST_VERSION=$(echo $response | jq -r '.offers[0].version')
+          echo "Latest WordPress version: $LATEST_VERSION"
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check existing issues
+        if: steps.get-latest-version.outputs.latest_version != steps.get-tested-version.outputs.tested_version
+        id: check-issues
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'wordpress-version-alert'
+            });
+            const hasDuplicate = issues.some(issue =>
+              issue.title.includes('WordPress バージョン警告')
+            );
+            console.log(`Has duplicate issue: ${hasDuplicate}`);
+            core.setOutput('has_duplicate_issue', hasDuplicate ? 'true' : 'false');
+
+      - name: Debug outputs
+        run: |
+          echo "Tested Version: ${{ steps.get-tested-version.outputs.tested_version }}"
+          echo "Latest Version: ${{ steps.get-latest-version.outputs.latest_version }}"
+          echo "Check Issues Result: ${{ steps.check-issues.outputs.has_duplicate_issue }}"
+          echo "Raw Check Issues Result: '${{ steps.check-issues.outputs.has_duplicate_issue }}'"
+
+      - name: Create GitHub Issue if needed
+        if: |
+          steps.get-latest-version.outputs.latest_version != steps.get-tested-version.outputs.tested_version &&
+          (steps.check-issues.outputs.has_duplicate_issue == 'false' || steps.check-issues.outputs.has_duplicate_issue == '')
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "⚠️ WordPress バージョン警告: 最新版は ${{ steps.get-latest-version.outputs.latest_version }} (テスト済み: ${{ steps.get-tested-version.outputs.tested_version }})",
+              body: [
+                "### WordPress の最新バージョンがテスト済みバージョンと一致しません！",
+                "",
+                "**リポジトリでテスト済みのバージョン**: ${{ steps.get-tested-version.outputs.tested_version }}",
+                "**現在の最新WordPressバージョン**: ${{ steps.get-latest-version.outputs.latest_version }}",
+                "**確認URL**: https://wordpress.org/download/",
+                "",
+                "このIssueは毎月1日に自動チェックされ、新しいバージョンが検出された場合に生成されます。",
+                "",
+                "対応方法:",
+                "1. 最新版WordPressでテーマ/プラグインの動作確認を行う",
+                "2. `readme.txt` の `Tested up to:` の値を更新",
+                "3. このIssueを閉じる"
+              ].join('\n'),
+              labels: ["wordpress-version-alert"]
+            });
