@@ -17,7 +17,7 @@ updates:
      interval: monthly
    reviewers:
      - "yamaneyuta"
-   open-pull-requests-limit: 10
+   # open-pull-requests-limit: 10
    ignore:
      - dependency-name: "*"
        update-types: [ "version-update:semver-major" ]
