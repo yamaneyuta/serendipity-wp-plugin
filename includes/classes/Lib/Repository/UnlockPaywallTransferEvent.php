@@ -17,7 +17,7 @@ class UnlockPaywallTransferEvent {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function save( InvoiceIdType $invoice_id, int $log_index, string $from_address, string $to_address, string $token_address, string $amount_hex ): void {
+	public function save( InvoiceIdType $invoice_id, int $log_index, string $from_address, string $to_address, string $token_address, string $amount_hex, int $transfer_type ): void {
 		Judge::checkAddress( $from_address );
 		Judge::checkAddress( $to_address );
 		Judge::checkAmountHex( $amount_hex );
@@ -25,11 +25,11 @@ class UnlockPaywallTransferEvent {
 		// ※ `INSERT IGNORE`を使用している点に注意
 		$sql = <<<SQL
 			INSERT IGNORE INTO `{$this->table_name}`
-			(`invoice_id`, `log_index`, `from_address`, `to_address`, `token_address`, `amount_hex`)
-			VALUES (%s, %d, %s, %s, %s, %s)
+			(`invoice_id`, `log_index`, `from_address`, `to_address`, `token_address`, `amount_hex`, `transfer_type`)
+			VALUES (%s, %d, %s, %s, %s, %s, %d)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_id->ulid(), $log_index, $from_address, $to_address, $token_address, $amount_hex );
+		$sql = $this->wpdb->prepare( $sql, $invoice_id->ulid(), $log_index, $from_address, $to_address, $token_address, $amount_hex, $transfer_type );
 
 		$result = $this->wpdb->query( $sql );
 		assert( false !== $result );

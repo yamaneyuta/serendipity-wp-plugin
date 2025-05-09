@@ -38,6 +38,7 @@ class UnlockPaywallTransferEventTable {
 				`to_address`     varchar(191)  NOT NULL,
 				`token_address`  varchar(191)  NOT NULL,
 				`amount_hex`     varchar(191)  NOT NULL,
+				`transfer_type`  int(11)       NOT NULL,
 				PRIMARY KEY (`invoice_id`, `log_index`),
 				KEY `{$index_name}` (`created_at`)
 			) ${charset};

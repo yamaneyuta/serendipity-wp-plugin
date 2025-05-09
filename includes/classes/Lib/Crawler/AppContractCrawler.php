@@ -107,6 +107,8 @@ class AppContractCrawler {
 			$amount = $event_args['amount'];
 			/** @var BigInteger */
 			$invoice_ID_bi = $event_args['invoiceID'];
+			/** @var BigInteger */
+			$transfer_type = $event_args['transferType'];
 
 			/** @var string */
 			$log_index_hex = $unlock_paywall_transfer_log->logIndex;
@@ -118,6 +120,7 @@ class AppContractCrawler {
 				$to,
 				$token_address,
 				Hex::from( $amount ),
+				Hex::toInt( '0x' . $transfer_type->toHex() ),
 			);
 		}
 	}

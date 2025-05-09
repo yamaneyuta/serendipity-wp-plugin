@@ -62,6 +62,12 @@ class AppAbi {
 								"internalType": "uint128",
 								"name": "invoiceID",
 								"type": "uint128"
+							},
+							{
+								"indexed": false,
+								"internalType": "uint32",
+								"name": "transferType",
+								"type": "uint32"
 							}
 						],
 						"name": "UnlockPaywallTransfer",

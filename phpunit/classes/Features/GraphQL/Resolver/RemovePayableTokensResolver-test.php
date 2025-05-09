@@ -133,13 +133,13 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array() );
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// ERC20トークンを登録する準備
-		( new TokenData() )->addERC20( $chain_ID, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
-		( new TokenData() )->addERC20( $chain_ID, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
+		( new TokenData() )->addERC20( $chain_ID, TestERC20Address::L1_TUSD );
+		( new TokenData() )->addERC20( $chain_ID, TestERC20Address::L1_TJPY );
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 		// 3つ登録
-		$token1 = TokenType::from( $chain_ID, '0x0000000000000000000000000000000000000000', 'ETH', 18 );
-		$token2 = TokenType::from( $chain_ID, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', 'TUSD', 18 );
-		$token3 = TokenType::from( $chain_ID, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', 'TJPY', 18 );
+		$token1 = TokenType::from( $chain_ID, Ethers::zeroAddress(), 'ETH', 18 );
+		$token2 = TokenType::from( $chain_ID, TestERC20Address::L1_TUSD, 'TUSD', 18 );
+		$token3 = TokenType::from( $chain_ID, TestERC20Address::L1_TJPY, 'TJPY', 18 );
 		( new PayableTokens() )->save( $chain_ID, array( $token1, $token2, $token3 ) );
 
 		// ACT
