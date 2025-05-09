@@ -33,12 +33,12 @@ class UnlockPaywallTransferEventTable {
 			CREATE TABLE `{$this->table_name}` (
 				`created_at`     timestamp     NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`invoice_id`     varchar(191)  NOT NULL,
-				`log_index`      int(11)       NOT NULL,
+				`log_index`      int           NOT NULL,
 				`from_address`   varchar(191)  NOT NULL,
 				`to_address`     varchar(191)  NOT NULL,
 				`token_address`  varchar(191)  NOT NULL,
 				`amount_hex`     varchar(191)  NOT NULL,
-				`transfer_type`  int(11)       NOT NULL,
+				`transfer_type`  int           NOT NULL,
 				PRIMARY KEY (`invoice_id`, `log_index`),
 				KEY `{$index_name}` (`created_at`)
 			) ${charset};

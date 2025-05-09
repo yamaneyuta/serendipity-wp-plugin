@@ -34,7 +34,7 @@ class OracleTable {
 			CREATE TABLE `{$this->table_name}` (
 				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				`chain_id`       bigint(20)    unsigned  NOT NULL,
+				`chain_id`       bigint        unsigned  NOT NULL,
 				`address`        varchar(191)            NOT NULL,
 				`base_symbol`    varchar(191)            NOT NULL,
 				`quote_symbol`   varchar(191)            NOT NULL,
