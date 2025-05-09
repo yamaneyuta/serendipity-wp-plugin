@@ -33,8 +33,8 @@ class InvoiceTable {
 			CREATE TABLE `{$this->table_name}` (
 				`created_at`             timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`id`                     varchar(191)            NOT NULL,
-				`post_id`			     bigint(20)    unsigned  NOT NULL,
-				`chain_id`               bigint(20)    unsigned  NOT NULL,
+				`post_id`			     bigint        unsigned  NOT NULL,
+				`chain_id`               bigint        unsigned  NOT NULL,
 				`selling_amount_hex`     varchar(191)            NOT NULL,
 				`selling_decimals`       int                     NOT NULL,
 				`selling_symbol`         varchar(191)            NOT NULL,

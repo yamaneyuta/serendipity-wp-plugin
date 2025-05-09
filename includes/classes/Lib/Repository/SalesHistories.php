@@ -103,7 +103,7 @@ class AppContractTmpTable {
 		$this->wpdb->query(
 			<<<SQL
 			CREATE TEMPORARY TABLE `{$table_name}` (
-				`chain_id`  bigint(20)    unsigned  NOT NULL,
+				`chain_id`  bigint        unsigned  NOT NULL,
 				`address`   varchar(191)            NOT NULL,
 				PRIMARY KEY (`chain_id`),
 				KEY `idx_{$table_name}_92D7958C` (`address`)
