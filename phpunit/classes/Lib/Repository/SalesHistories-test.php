@@ -11,9 +11,15 @@ use Cornix\Serendipity\Core\Lib\Repository\Constants\UnlockPaywallTransferType;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\SalesHistories;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Types\SalesHistoryType;
 
 class SalesHistoriesTest extends IntegrationTestBase {
+
+	private const INVOICE_IDS = array(
+		'01JKFB56B8PQQ261K5VZDCE5DH',
+		'01JKFZQE7YDYVHG97BBXWY4WTJ',
+	);
 
 	/**
 	 * 各データベースのバージョンでSalesHistories::selectで売上データを取得できることを確認
@@ -107,50 +113,54 @@ class SalesHistoriesTest extends IntegrationTestBase {
 
 	/**
 	 * 以下の内容で履歴を記録します。
-	 * 　　販売者: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 	 * 　　投稿ID: 49
 	 * 　　販売価格: 1,000JPY
-	 * 　　購入者: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 	 * 　　購入トークン: ETH
-	 * 　　請求書ID: 01JKFB56B8PQQ261K5VZDCE5DH
 	 */
 	private function insertTableData( wpdb $wpdb ): void {
 		$sales_test_data = new SalesTestData( $wpdb );
+		$chain_ID        = ChainID::PRIVATENET_L1;
+		$app_address     = ( new AppContract() )->get( $chain_ID )->address();
+		$invoice_ID      = self::INVOICE_IDS[0]; // 請求書ID
+		$alice_address   = HardhatSignerFactory::alice()->address();  // 販売者アドレス
+		$bob_address     = HardhatSignerFactory::bob()->address();      // 購入者アドレス
+		$token_address   = Ethers::zeroAddress(); // トークンアドレス(ETH)
 
 		// invoiceテーブルへデータ挿入
-		$sales_test_data->insertInvoiceData( '2025-02-07 04:37:14', '01JKFB56B8PQQ261K5VZDCE5DH', '49', '31337', '0x3e8', '0', 'JPY', '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0x0000000000000000000000000000000000000000', '0x089e9b46556754', '0x70997970C51812dc3A010C7d01b50e0d17dc79C8' );
+		$sales_test_data->insertInvoiceData( '2025-02-07 04:37:14', $invoice_ID, '49', $chain_ID, '0x3e8', '0', 'JPY', $alice_address, $token_address, '0x089e9b46556754', $bob_address );
 
 		// unlock_paywall_transactionテーブルへデータ挿入
-		$sales_test_data->insertTransactionData( '2025-02-07 04:58:04', '01JKFB56B8PQQ261K5VZDCE5DH', '31337', '276', '0x7117fd9b43492484bf18d93a834de4c39ec2e00687ee235594b77129426bb236' );
+		$sales_test_data->insertTransactionData( '2025-02-07 04:58:04', $invoice_ID, $chain_ID, '276', '0x7117fd9b43492484bf18d93a834de4c39ec2e00687ee235594b77129426bb236' );
 
 		// unlock_paywall_transfer_eventテーブルへデータ挿入
-		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:04', '01JKFB56B8PQQ261K5VZDCE5DH', '0', '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', '0x5FbDB2315678afecb367f032d93F642f64180aa3', '0x0000000000000000000000000000000000000000', '0x1610e9a9d064', UnlockPaywallTransferType::HANDLING_FEE );
-		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:05', '01JKFB56B8PQQ261K5VZDCE5DH', '1', '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0x0000000000000000000000000000000000000000', '0x08888a5cab96f0', UnlockPaywallTransferType::SELLER_PROFIT );
+		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:04', $invoice_ID, 0, $bob_address, $app_address, $token_address, '0x1610e9a9d064', UnlockPaywallTransferType::HANDLING_FEE );
+		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:05', $invoice_ID, 1, $bob_address, $alice_address, $token_address, '0x08888a5cab96f0', UnlockPaywallTransferType::SELLER_PROFIT );
 	}
 
 	/**
 	 * 以下の内容で履歴を記録します。
-	 * 　　販売者: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
 	 * 　　投稿ID: 49
 	 * 　　販売価格: 1,000JPY
-	 * 　　購入者: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
 	 * 　　購入トークン: ETH
-	 * 　　請求書ID: 01JKFZQE7YDYVHG97BBXWY4WTJ
 	 */
 	private function insertTableData2( wpdb $wpdb ): void {
 		$sales_test_data = new SalesTestData( $wpdb );
 		$chain_ID        = ChainID::PRIVATENET_L1;
 		$app_address     = ( new AppContract() )->get( $chain_ID )->address();
+		$invoice_ID      = self::INVOICE_IDS[1];    // 請求書ID
+		$alice_address   = HardhatSignerFactory::alice()->address();      // 販売者アドレス
+		$charlie_address = HardhatSignerFactory::charlie()->address();  // 購入者アドレス
+		$token_address   = Ethers::zeroAddress(); // トークンアドレス(ETH)
 
 		// invoiceテーブルへデータ挿入
-		$sales_test_data->insertInvoiceData( '2025-02-07 10:36:48', '01JKFZQE7YDYVHG97BBXWY4WTJ', '49', "${chain_ID}", '0x3e8', '0', 'JPY', '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0x0000000000000000000000000000000000000000', '0x087f79088eac8e', '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC' );
+		$sales_test_data->insertInvoiceData( '2025-02-07 10:36:48', $invoice_ID, '49', "${chain_ID}", '0x3e8', '0', 'JPY', $alice_address, $token_address, '0x087f79088eac8e', $charlie_address );
 
 		// unlock_paywall_transactionテーブルへデータ挿入
-		$sales_test_data->insertTransactionData( '2025-02-07 10:50:25', '01JKFZQE7YDYVHG97BBXWY4WTJ', "${chain_ID}", '2068', '0xe6355e851a760d4bb2c283f59fc0cc6af03d983341671ba9789b475ab6d2c4ce' );
+		$sales_test_data->insertTransactionData( '2025-02-07 10:50:25', $invoice_ID, "${chain_ID}", '2068', '0xe6355e851a760d4bb2c283f59fc0cc6af03d983341671ba9789b475ab6d2c4ce' );
 
 		// unlock_paywall_transfer_eventテーブルへデータ挿入
-		$sales_test_data->insertTransferEventData( '2025-02-07 10:50:25', '01JKFZQE7YDYVHG97BBXWY4WTJ', '0', '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC', $app_address, '0x0000000000000000000000000000000000000000', '0x15c135d8777c', UnlockPaywallTransferType::HANDLING_FEE );
-		$sales_test_data->insertTransferEventData( '2025-02-07 10:50:25', '01JKFZQE7YDYVHG97BBXWY4WTJ', '1', '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC', '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0x0000000000000000000000000000000000000000', '0x0869b7d2b63512', UnlockPaywallTransferType::SELLER_PROFIT );
+		$sales_test_data->insertTransferEventData( '2025-02-07 10:50:25', $invoice_ID, 0, $charlie_address, $app_address, $token_address, '0x15c135d8777c', UnlockPaywallTransferType::HANDLING_FEE );
+		$sales_test_data->insertTransferEventData( '2025-02-07 10:50:25', $invoice_ID, 1, $charlie_address, $alice_address, $token_address, '0x0869b7d2b63512', UnlockPaywallTransferType::SELLER_PROFIT );
 	}
 }
 

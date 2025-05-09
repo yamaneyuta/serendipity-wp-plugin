@@ -36,7 +36,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 */
 	public function requestAddPayableTokensSuccess( string $user_type ) {
 		$chain_ID      = ChainID::PRIVATENET_L1;
-		$token_address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // TUSD
+		$token_address = TestERC20Address::L1_TUSD;
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
@@ -67,7 +67,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 */
 	public function requestAddPayableTokensFail( string $user_type ) {
 		$chain_ID      = ChainID::PRIVATENET_L1;
-		$token_address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // TUSD
+		$token_address = TestERC20Address::L1_TUSD;
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
@@ -94,7 +94,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 */
 	public function requestAddPayableTokensDuplicate() {
 		$chain_ID      = ChainID::PRIVATENET_L1;
-		$token_address = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // TUSD
+		$token_address = TestERC20Address::L1_TUSD;
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
@@ -124,8 +124,8 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 */
 	public function requestAddPayableTokensMultiple() {
 		$chain_ID       = ChainID::PRIVATENET_L1;
-		$token_address1 = '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707'; // TUSD
-		$token_address2 = '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853'; // TJPY
+		$token_address1 = TestERC20Address::L1_TUSD;
+		$token_address2 = TestERC20Address::L1_TJPY;
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );

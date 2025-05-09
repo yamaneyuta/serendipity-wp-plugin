@@ -23,9 +23,10 @@ class TokenDataTest extends IntegrationTestBase {
 		( new TokenTable() )->create();
 		$sut         = new TokenData();
 		$prev_result = $sut->select( ChainID::PRIVATENET_L1 );   // データ追加前の状態を取得
+		$add_address = TestERC20Address::L1_TUSD;
 
 		// ACT
-		$sut->addERC20( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
+		$sut->addERC20( ChainID::PRIVATENET_L1, $add_address );
 
 		$result = $sut->select( ChainID::PRIVATENET_L1 );
 		$added  = array_values( array_diff( $result, $prev_result ) );
@@ -33,7 +34,7 @@ class TokenDataTest extends IntegrationTestBase {
 		// ASSERT
 		$this->assertEquals( 1, count( $added ) );
 		$this->assertEquals( ChainID::PRIVATENET_L1, $added[0]->chainID() );
-		$this->assertEquals( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $added[0]->address() );
+		$this->assertEquals( $add_address, $added[0]->address() );
 		$this->assertEquals( 'TUSD', $added[0]->symbol() );
 		$this->assertEquals( 18, $added[0]->decimals() );
 	}
@@ -72,9 +73,9 @@ class TokenDataTest extends IntegrationTestBase {
 
 		// ACT
 		$token_data = new TokenData();
-		$token_data->addERC20( ChainID::PRIVATENET_L1, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
-		$token_data->addERC20( ChainID::PRIVATENET_L2, '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707' ); // TUSD
-		$token_data->addERC20( ChainID::PRIVATENET_L2, '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853' ); // TJPY
+		$token_data->addERC20( ChainID::PRIVATENET_L1, TestERC20Address::L1_TUSD );
+		$token_data->addERC20( ChainID::PRIVATENET_L2, TestERC20Address::L2_TUSD );
+		$token_data->addERC20( ChainID::PRIVATENET_L2, TestERC20Address::L2_TJPY );
 
 		$result_eth = $token_data->select( ChainID::ETH_MAINNET );     // イーサリアムメインネットのトークン情報(追加していないため0件)
 		$result_l1  = $token_data->select( ChainID::PRIVATENET_L1 );    // プライベートネットL1のトークン情報(1件)
@@ -88,12 +89,12 @@ class TokenDataTest extends IntegrationTestBase {
 
 		$this->assertEquals( 1, count( $result_l1 ) ); // 1件
 		$this->assertEquals( ChainID::PRIVATENET_L1, $result_l1[0]->chainID() );
-		$this->assertContains( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $get_addresses( $result_l1 ) );
+		$this->assertContains( TestERC20Address::L1_TUSD, $get_addresses( $result_l1 ) );
 
 		$this->assertEquals( 2, count( $result_l2 ) ); // 2件
 		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[0]->chainID() );
 		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[1]->chainID() );
-		$this->assertContains( '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707', $get_addresses( $result_l2 ) );
-		$this->assertContains( '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', $get_addresses( $result_l2 ) );
+		$this->assertContains( TestERC20Address::L2_TUSD, $get_addresses( $result_l2 ) );
+		$this->assertContains( TestERC20Address::L2_TJPY, $get_addresses( $result_l2 ) );
 	}
 }
