@@ -10,7 +10,9 @@ if( [ 'true', '1' ].includes( process.env.CHOKIDAR_USEPOLLING ) ) {
 
 module.exports = {
 	...config,
-
+	cache: {
+		type: 'filesystem',  // ファイルシステムキャッシュを使用
+	},
 	plugins: [
 		...config.plugins,
 
