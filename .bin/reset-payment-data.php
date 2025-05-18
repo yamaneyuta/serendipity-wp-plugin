@@ -8,6 +8,8 @@ require_once __DIR__ . '/../includes/vendor/autoload.php';
  * このスクリプトをpackage.jsonから呼び出されます。
  */
 
+use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceNonceTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
@@ -15,7 +17,7 @@ use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 // 方針:
 // テストネットで確認することもあるため、コントラクトのデータは変更せず以下の処理を実施
 // - 署名用ウォレットの秘密鍵を新規作成
-// - 履歴を削除
+// - 請求書や履歴のデータを削除
 
 $server_signer_data = new ServerSignerData();
 $prevAddress        = $server_signer_data->getAddress();
@@ -32,3 +34,7 @@ global $wpdb;
 ( new UnlockPaywallTransactionTable( $wpdb ) )->create();
 ( new UnlockPaywallTransferEventTable( $wpdb ) )->drop();
 ( new UnlockPaywallTransferEventTable( $wpdb ) )->create();
+( new InvoiceTable( $wpdb ) )->drop();
+( new InvoiceTable( $wpdb ) )->create();
+( new InvoiceNonceTable( $wpdb ) )->drop();
+( new InvoiceNonceTable( $wpdb ) )->create();
