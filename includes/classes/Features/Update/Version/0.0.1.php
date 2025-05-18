@@ -15,7 +15,6 @@ use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 use Cornix\Serendipity\Core\Types\TokenType;
 use InvalidArgumentException;
 
@@ -26,7 +25,7 @@ class v001 {
 
 	public function up() {
 		// 署名用ウォレットの秘密鍵を初期化
-		( new PrivateKeyInitializer() )->initialize();
+		( new ServerSignerData() )->initialize();
 
 		// 購入者が支払可能なトークンの初期値を設定
 		( new PayableTokensInitializer() )->initialize();
@@ -136,22 +135,6 @@ class RpcSettingsInitializer {
 				return $privatenet( 2 );
 			default:
 				throw new \InvalidArgumentException( '[AC32E587] Invalid chain ID. ' . $chain_ID );
-		}
-	}
-}
-
-
-class PrivateKeyInitializer {
-	/**
-	 * 署名用ウォレットの秘密鍵が存在しない場合は生成して保存します。
-	 */
-	public function initialize(): void {
-		$server_signer_data = new ServerSignerData();
-
-		if ( ! $server_signer_data->exists() ) {
-			// 秘密鍵を生成して保存
-			$private_key = ( new PrivateKey() )->generate();
-			$server_signer_data->save( $private_key );
 		}
 	}
 }

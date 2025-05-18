@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Repository\Option\ArrayOption;
 use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
+use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
 
 // ■秘密鍵の保存について
@@ -52,8 +53,18 @@ class ServerSignerData {
 	/**
 	 * 秘密鍵が保存済みかどうかを取得します。
 	 */
-	public function exists(): bool {
+	private function exists(): bool {
 		return ! is_null( $this->option->get( null ) );
+	}
+
+	/**
+	 * 署名用の秘密鍵を初期化します。
+	 *
+	 * @param bool $force 強制的に初期化するかどうか
+	 */
+	public function initialize( bool $force = false ): void {
+		$private_key = ( new PrivateKey() )->generate();
+		$this->save( $private_key, $force );
 	}
 
 	/**
@@ -62,12 +73,13 @@ class ServerSignerData {
 	 * @param string $private_key
 	 * @disregard P1009 Undefined type
 	 */
-	public function save(
+	private function save(
 		#[\SensitiveParameter]
-		string $private_key
+		string $private_key,
+		bool $force
 	): void {
-		// 上書き禁止
-		if ( $this->exists() ) {
+		// 強制的に上書きしない設定で既に存在する場合はエラーとする
+		if ( ! $force && $this->exists() ) {
 			throw new \Exception( '[2DD53C18] The private key has already been set.' );
 		}
 
