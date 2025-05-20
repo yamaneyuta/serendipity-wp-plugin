@@ -34,6 +34,7 @@ class AppContractDefinition {
 			$addresses[ ChainID::PRIVATENET_L1 ] = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 			$addresses[ ChainID::PRIVATENET_L2 ] = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
 			$addresses[ ChainID::SEPOLIA ]       = '0x6e98081f56608E3a9414823239f65c0e6399561d';
+			$addresses[ ChainID::SONEIUM_MINATO ] = '0x6a9214D8264C00d884225542d3af47cf5De2049f';
 		}
 
 		return array_map(

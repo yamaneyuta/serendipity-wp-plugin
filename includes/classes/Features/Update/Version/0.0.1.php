@@ -193,6 +193,7 @@ class TokenTableRecordInitializer {
 
 		// テストネットのネイティブトークンを登録
 		$token_table->insert( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18 );
+		$token_table->insert( ChainID::SONEIUM_MINATO, Ethers::zeroAddress(), 'ETH', 18 );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( ( new Environment() )->isDevelopmentMode() ) {
