@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn, expect, userEvent, within } from '@storybook/test';
+import { expect, userEvent, within } from '@storybook/test';
 import { BlockAmountInput } from './BlockAmountInput';
 
 const TEST_ID = '9844799D'; // コンポーネントに付与するdata-testid
@@ -26,7 +26,7 @@ export const Default: Story = {
 	args: {
 		'data-testid': TEST_ID,
 	},
-	play: async ( { args, canvasElement } ) => {
+	play: async ( { canvasElement } ) => {
 		const canvas = within( canvasElement );
 		const input = canvas.getByTestId( TEST_ID );
 		await userEvent.type( input, 'Hello, World!' );
@@ -57,7 +57,7 @@ export const Disabled: Story = {
 		'data-testid': TEST_ID,
 		disabled: true,
 	},
-	play: async ( { args, canvasElement } ) => {
+	play: async ( { canvasElement } ) => {
 		const canvas = within( canvasElement );
 		const input = canvas.getByTestId( TEST_ID ) as HTMLInputElement;
 		input.disabled = true;

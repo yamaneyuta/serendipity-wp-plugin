@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { fn, expect, userEvent, within } from '@storybook/test';
+import { expect, userEvent, within } from '@storybook/test';
 import { BlockInput } from './BlockInput';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -20,7 +20,7 @@ type Story = StoryObj< typeof BlockInput >;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Default: Story = {
 	args: {},
-	play: async ( { args, canvasElement } ) => {
+	play: async ( { canvasElement } ) => {
 		const canvas = within( canvasElement );
 		const input = canvas.getByRole( 'textbox' );
 		await userEvent.type( input, 'Hello, World!' );
@@ -33,7 +33,7 @@ export const Disabled: Story = {
 	args: {
 		disabled: true,
 	},
-	play: async ( { args, canvasElement } ) => {
+	play: async ( { canvasElement } ) => {
 		const canvas = within( canvasElement );
 		const input = canvas.getByRole( 'textbox' );
 		await userEvent.type( input, 'Hello, World!' );
