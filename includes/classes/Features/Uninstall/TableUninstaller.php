@@ -23,7 +23,7 @@ class TableUninstaller {
 		assert( in_array( count( $table_names ), array( 0, 6 ), true ), 'Invalid table names. table_names: ' . json_encode( $table_names ) );
 
 		foreach ( $table_names as $table_name ) {
-			assert( 0 === Strings::strpos( $table_name, $table_name_prefix ) );
+			assert( 0 === Strings::strpos( $table_name, $table_name_prefix ), "[58E981E9] name: {$table_name}, prefix: {$table_name_prefix}" );
 			$mysqli = ( new MySQLiFactory() )->create( $wpdb );
 			$result = $mysqli->query( "DROP TABLE IF EXISTS `$table_name`" );
 			assert( false !== $result );
