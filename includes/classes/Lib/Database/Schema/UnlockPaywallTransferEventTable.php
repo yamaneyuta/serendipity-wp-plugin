@@ -41,7 +41,7 @@ class UnlockPaywallTransferEventTable {
 				`transfer_type`  int           NOT NULL,
 				PRIMARY KEY (`invoice_id`, `log_index`),
 				KEY `{$index_name}` (`created_at`)
-			) ${charset};
+			) {$charset};
 		SQL;
 
 		$result = $this->mysqli->query( $sql );

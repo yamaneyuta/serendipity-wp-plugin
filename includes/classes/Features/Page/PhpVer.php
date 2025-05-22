@@ -18,7 +18,7 @@ class PhpVer {
 
 		$success = wp_add_inline_script(
 			$handle,
-			"var ${js_var_name} = " . wp_json_encode( $var ) . ';',
+			"var $js_var_name = " . wp_json_encode( $var ) . ';',
 			'before',   // スクリプトの前に追加
 		);
 
