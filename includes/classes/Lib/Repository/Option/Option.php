@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class Option {
 	public function __construct( string $option_key_name ) {
-		assert( 0 === Strings::strpos( $option_key_name, ( new Prefix() )->optionKeyName() ) );
+		assert( 0 === Strings::strpos( $option_key_name, ( new Prefix() )->optionKeyPrefix() ) );
 		$this->option_key_name = $option_key_name;
 	}
 	private string $option_key_name;

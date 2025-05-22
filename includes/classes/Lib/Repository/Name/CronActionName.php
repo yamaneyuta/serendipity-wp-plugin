@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository\Name;
 class CronActionName {
 
 	private static function getPrefix(): string {
-		return ( new Prefix() )->cronActionName();
+		return ( new Prefix() )->cronActionNamePrefix();
 	}
 
 	/**

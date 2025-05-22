@@ -15,7 +15,7 @@ class TableName {
 	 * 作成するテーブル名はこのメソッドを使用してください
 	 */
 	private function addPrefix( string $table_name ): string {
-		return ( new Prefix() )->tableName() . $table_name;
+		return ( new Prefix() )->tableNamePrefix() . $table_name;
 	}
 
 	/** 発行した請求書情報を記録するテーブル名 */

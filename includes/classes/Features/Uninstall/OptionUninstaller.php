@@ -11,7 +11,7 @@ class OptionUninstaller {
 	 * 本プラグインで扱うオプションをすべて削除します。
 	 */
 	public function execute() {
-		$prefix = ( new Prefix() )->optionKeyName();
+		$prefix = ( new Prefix() )->optionKeyPrefix();
 
 		// `wp_load_alloptions`は`autoload`が`yes`のオプションのみ取得する。
 		// `autoload`が`no`のオプションも取得したいので、直接SQLを実行する。
