@@ -128,12 +128,10 @@ jobs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
 
-    - run: npm run ci:check-license
-    - run: npm run ci:lint
-    - run: npm run ci:test
-    # wp-envの起動設定(--xdebug=)によってphpunitのテストは問題なく終了するがカバレッジレポートが出力されない、という状況になるため、
-    # `ci:test`で実行するphpunitはcoverage出力オプションありをテスト実施項目とする。
-    # ※ カバレッジレポートが出力されているかどうかのチェック処理は`postcoverage:php`に記述。
+    - run: npx run-p "check-license:*"
+    - run: npx run-p "lint:*"
+    - run: npx run-p "format:*"
+    - run: npx run-p "coverage:*"
 
     # cleanコマンドでエラーが発生しないことを確認。
     - run: npm run clean
