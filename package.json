@@ -8,10 +8,9 @@
 	"main": "build/index.js",
 	"scripts": {
 		"prebuild": "npm run clean:php-cache",
-		"build": "run-s build:graphql-types build:block",
-		"prebuild:block": "tsc --noEmit",
+		"build": "run-s build:*",
+		"prebuild:block": "graphql-codegen && tsc --noEmit",
 		"build:block": "wp-scripts build",
-		"build:graphql-types": "graphql-codegen",
 		"check-license": "run-s check-license:*",
 		"check-license:js": "license-checker --production --excludePrivatePackages --onlyAllow '0BSD;Apache-2.0 WITH LLVM-exception;BSD-2-Clause;BSD-3-Clause;CC0-1.0;CC-BY-3.0;GPL-2.0-or-later;ISC;MIT' > /dev/null",
 		"check-license:php": "tsx .bin/check-php-license",
