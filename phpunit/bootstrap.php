@@ -17,7 +17,7 @@ require_once WPIntegration\get_path_to_wp_test_dir() . 'includes/functions.php';
 
 // 手動でプラグインをロードするコールバック
 function _manually_load_plugin() {
-	require_once dirname( __DIR__ ) . '/todo-list.php';
+	require_once dirname( __DIR__ ) . '/qik-chain-pay.php';
 }
 
 /** @disregard P1010 */
