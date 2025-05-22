@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Todo List
+ * Plugin Name:       Qik Chain Pay
  * Description:       Example static block scaffolded with Create Block tool.
  * Requires at least: 5.4
  * Requires PHP:      7.4
@@ -8,7 +8,7 @@
  * Author:            yamaneyuta
  * License:           Split License
  * License URI:       ./LICENSE
- * Text Domain:       todo-list
+ * Text Domain:       qik-chain-pay
  * Domain Path:       /languages
  */
 
