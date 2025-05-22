@@ -6,7 +6,7 @@
 	"title": "Todo List",
 	"category": "widgets",
 	"icon": "smiley",
-	"description": "Example static block scaffolded with Create Block tool.",
+	"description": "Allows you to implement a paywall using crypto-assets.",
 	"supports": {
 		"html": false
 	},

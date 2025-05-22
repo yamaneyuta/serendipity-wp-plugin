@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Qik Chain Pay
- * Description:       Example static block scaffolded with Create Block tool.
+ * Description:       Allows you to implement a paywall using crypto-assets.
  * Requires at least: 5.4
  * Requires PHP:      7.4
  * Version:           0.8.0

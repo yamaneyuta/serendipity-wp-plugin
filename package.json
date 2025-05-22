@@ -2,7 +2,7 @@
 	"name": "qik-chain-pay",
 	"version": "0.8.0",
 	"private": true,
-	"description": "Example block scaffolded with Create Block tool.",
+	"description": "Allows you to implement a paywall using crypto-assets.",
 	"license": "Split License",
 	"author": "yamaneyuta",
 	"main": "build/index.js",
