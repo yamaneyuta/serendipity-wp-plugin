@@ -12,7 +12,7 @@ class TransientFactory {
 	 * transientデータをoptionsテーブルへ問い合わせる時のキーを取得します。
 	 */
 	private function getTransientKeyName( string $raw_transient_key_name ): string {
-		return ( new Prefix() )->transientKeyName() . $raw_transient_key_name;
+		return ( new Prefix() )->transientKeyPrefix() . $raw_transient_key_name;
 	}
 
 	/**

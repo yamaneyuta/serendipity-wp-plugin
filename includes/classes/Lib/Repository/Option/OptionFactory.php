@@ -12,7 +12,7 @@ class OptionFactory {
 	 * optionsテーブルに問い合わせる時のキーを取得します。
 	 */
 	private function getOptionKeyName( string $raw_option_key_name ): string {
-		return ( new Prefix() )->optionKeyName() . $raw_option_key_name;
+		return ( new Prefix() )->optionKeyPrefix() . $raw_option_key_name;
 	}
 
 	/**

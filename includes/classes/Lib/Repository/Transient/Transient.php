@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class Transient {
 	public function __construct( string $transient_key_name ) {
-		assert( 0 === Strings::strpos( $transient_key_name, ( new Prefix() )->transientKeyName() ) );
+		assert( 0 === Strings::strpos( $transient_key_name, ( new Prefix() )->transientKeyPrefix() ) );
 		$this->transient_key_name = $transient_key_name;
 	}
 	private string $transient_key_name;

@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class TableUninstaller {
 	public function execute( \wpdb $wpdb ): void {
-		$table_name_prefix = ( new Prefix() )->tableName();
+		$table_name_prefix = ( new Prefix() )->tableNamePrefix();
 
 		// $table_name_prefixで始まるテーブルをすべて削除する
 		$sql = <<<SQL

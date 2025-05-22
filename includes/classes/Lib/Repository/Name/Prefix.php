@@ -9,7 +9,7 @@ class Prefix {
 	/**
 	 * 本プラグインで使用するテーブル名のプレフィックスを取得します。
 	 */
-	public function tableName(): string {
+	public function tableNamePrefix(): string {
 		global $wpdb;
 		$table_prefix = $wpdb->prefix;
 		$text_domain  = ( new PluginInfo() )->textDomain();
@@ -19,15 +19,15 @@ class Prefix {
 	/**
 	 * Cronに登録するアクション名に付与するプレフィックスを取得します。
 	 */
-	public function cronActionName(): string {
+	public function cronActionNamePrefix(): string {
 		// optionsテーブルに格納する際のキー名のプレフィックスと同じものをcronのアクション名として使用する
-		return $this->optionKeyName();
+		return $this->optionKeyPrefix();
 	}
 
 	/**
 	 * optionsテーブルに格納する際のキー名に付与するプレフィックスを取得します。
 	 */
-	public function optionKeyName(): string {
+	public function optionKeyPrefix(): string {
 		$text_domain = ( new PluginInfo() )->textDomain();
 		return "${text_domain}_";
 	}
@@ -37,8 +37,8 @@ class Prefix {
 	 *
 	 * @return string
 	 */
-	public function transientKeyName(): string {
+	public function transientKeyPrefix(): string {
 		// optionsテーブルに格納する際のキー名のプレフィックスと同じものをtransientのキーとして使用する
-		return $this->optionKeyName();
+		return $this->optionKeyPrefix();
 	}
 }
