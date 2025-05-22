@@ -8,6 +8,6 @@ class I18nText {
 	 * プラグイン名を取得します。
 	 */
 	public function pluginName(): string {
-		return __( 'Todo List', 'todo-list' );
+		return __( 'Qik Chain Pay', 'qik-chain-pay' );
 	}
 }

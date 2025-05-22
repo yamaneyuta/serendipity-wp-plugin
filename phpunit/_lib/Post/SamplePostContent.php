@@ -27,9 +27,9 @@ class SamplePostContent {
 			<p>{$this->free_text}</p>
 			<!-- /wp:paragraph -->
 
-			<!-- wp:create-block/todo-list {"dummy":"2024-08-26T10:54:22.901Z"} -->
-			<aside class="wp-block-create-block-todo-list {$this->class_name}"></aside>
-			<!-- /wp:create-block/todo-list -->
+			<!-- wp:create-block/qik-chain-pay {"dummy":"2024-08-26T10:54:22.901Z"} -->
+			<aside class="wp-block-create-block-qik-chain-pay {$this->class_name}"></aside>
+			<!-- /wp:create-block/qik-chain-pay -->
 
 			<!-- wp:paragraph -->
 			<p>{$this->paid_text}</p>
