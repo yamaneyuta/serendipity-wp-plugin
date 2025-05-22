@@ -73,12 +73,12 @@ const makeMo = () => {
  * wp-env run cli wp 18n コマンドを実行します。
  * @param args wp i18n 以降の引数
  */
-const wpI18n = async ( args: string[] ) => {
+const wpI18n = ( args: string[] ) => {
 	const childProcess = spawn.spawnSync( 'npx', [ 'wp-env', 'run', 'cli', 'wp', 'i18n', ...args ], {
 		stdio: 'inherit',
 	} );
 	// エラーが発生した場合
-	if ( childProcess.error ) {
+	if ( childProcess.status !== 0 || childProcess.error ) {
 		console.error( childProcess.error );
 		process.exit( childProcess.status ?? 1 );
 	}
