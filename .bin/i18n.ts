@@ -78,7 +78,7 @@ const wpI18n = ( args: string[] ) => {
 		stdio: 'inherit',
 	} );
 	// エラーが発生した場合
-	if ( childProcess.error ) {
+	if ( childProcess.status !== 0 || childProcess.error ) {
 		console.error( childProcess.error );
 		process.exit( childProcess.status ?? 1 );
 	}
