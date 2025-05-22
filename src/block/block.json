@@ -3,7 +3,7 @@
 	"apiVersion": 2,
 	"name": "create-block/todo-list",
 	"version": "0.1.0",
-	"title": "Todo List",
+	"title": "Qik Chain Pay",
 	"category": "widgets",
 	"icon": "smiley",
 	"description": "Allows you to implement a paywall using crypto-assets.",

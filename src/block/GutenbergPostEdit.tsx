@@ -18,7 +18,7 @@ export const GutenbergPostEdit: React.FC< GutenbergPostEditProps > = ( {} ) => {
 	useUpdateWidgetAttributes();
 
 	return (
-		<Placeholder icon={ widget } label={ 'todo-list' }>
+		<Placeholder icon={ widget } label={ 'Qik Chain Pay' }>
 			<div style={ { width: '100%' } }>
 				<NetworkCategorySelect { ...useNetworkCategorySelectProps() } />
 			</div>
