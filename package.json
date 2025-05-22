@@ -50,7 +50,6 @@
 		"release": "npx release-it",
 		"// 支払データを初期化し、再度同一ページで購入できるようにします。※ブラウザ側のlocalstorageは手動で削除してください。": "",
 		"reset:payment-data": "wp-env run cli wp eval-file wp-content/plugins/workspaces/.bin/reset-payment-data.php",
-		"start": "wp-scripts start",
 		"start:docker": "run-p env:start my-docker:start",
 		"test": "run-s test:js test:php",
 		"// 1つのファイルをテストする場合はテスト対象ファイルのパスを後ろに付与してください => npm run test:php ./phpunit/classes/path-to-test-file.php": "",
@@ -62,7 +61,10 @@
 		"build-storybook": "storybook build",
 		"update:php-package": "cd includes && composer update --ignore-platform-req=ext-gmp",
 		"update:package": "npx npm-check-updates -u --target minor",
-		"watch": "npm run watch:graphql",
+		"prewatch": "npm run prebuild",
+		"watch": "run-p watch:*",
+		"prewatch:block": "npm run prebuild:block",
+		"watch:block": "wp-scripts start",
 		"watch:graphql": "graphql-codegen --watch"
 	},
 	"# note": {
