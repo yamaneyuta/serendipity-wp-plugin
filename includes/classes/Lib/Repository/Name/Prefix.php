@@ -31,7 +31,7 @@ class Prefix {
 		global $wpdb;
 		$table_prefix = $wpdb->prefix;
 		$text_domain  = $this->convertedTextDomain();
-		return "${table_prefix}${text_domain}_";
+		return "{$table_prefix}{$text_domain}_";
 	}
 
 	/**
@@ -39,7 +39,7 @@ class Prefix {
 	 */
 	public function cronActionNamePrefix(): string {
 		$text_domain = $this->convertedTextDomain();
-		return "${text_domain}_";
+		return "{$text_domain}_";
 	}
 
 	/**
@@ -47,7 +47,7 @@ class Prefix {
 	 */
 	public function optionKeyPrefix(): string {
 		$text_domain = $this->convertedTextDomain();
-		return "${text_domain}_";
+		return "{$text_domain}_";
 	}
 
 	/**
@@ -57,6 +57,6 @@ class Prefix {
 	 */
 	public function transientKeyPrefix(): string {
 		$text_domain = $this->convertedTextDomain();
-		return "${text_domain}_";
+		return "{$text_domain}_";
 	}
 }

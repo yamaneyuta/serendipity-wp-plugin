@@ -44,7 +44,7 @@ class InvoiceTable {
 				`consumer_address`       varchar(191)            NOT NULL,
 				PRIMARY KEY (`id`),
 				KEY `{$index_name}` (`created_at`)
-			) ${charset};
+			) {$charset};
 		SQL;
 
 		$result = $this->mysqli->query( $sql );

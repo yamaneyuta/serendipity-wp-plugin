@@ -153,10 +153,10 @@ class SalesHistoriesTest extends IntegrationTestBase {
 		$token_address   = Ethers::zeroAddress(); // トークンアドレス(ETH)
 
 		// invoiceテーブルへデータ挿入
-		$sales_test_data->insertInvoiceData( '2025-02-07 10:36:48', $invoice_ID, '49', "${chain_ID}", '0x3e8', '0', 'JPY', $alice_address, $token_address, '0x087f79088eac8e', $charlie_address );
+		$sales_test_data->insertInvoiceData( '2025-02-07 10:36:48', $invoice_ID, '49', "{$chain_ID}", '0x3e8', '0', 'JPY', $alice_address, $token_address, '0x087f79088eac8e', $charlie_address );
 
 		// unlock_paywall_transactionテーブルへデータ挿入
-		$sales_test_data->insertTransactionData( '2025-02-07 10:50:25', $invoice_ID, "${chain_ID}", '2068', '0xe6355e851a760d4bb2c283f59fc0cc6af03d983341671ba9789b475ab6d2c4ce' );
+		$sales_test_data->insertTransactionData( '2025-02-07 10:50:25', $invoice_ID, "{$chain_ID}", '2068', '0xe6355e851a760d4bb2c283f59fc0cc6af03d983341671ba9789b475ab6d2c4ce' );
 
 		// unlock_paywall_transfer_eventテーブルへデータ挿入
 		$sales_test_data->insertTransferEventData( '2025-02-07 10:50:25', $invoice_ID, 0, $charlie_address, $app_address, $token_address, '0x15c135d8777c', UnlockPaywallTransferType::HANDLING_FEE );

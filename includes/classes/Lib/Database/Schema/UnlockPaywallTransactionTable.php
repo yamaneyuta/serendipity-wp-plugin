@@ -39,7 +39,7 @@ class UnlockPaywallTransactionTable {
 				`transaction_hash`    varchar(191)            NOT NULL,
 				PRIMARY KEY (`invoice_id`),
 				KEY `{$index_name}` (`created_at`)
-			) ${charset};
+			) {$charset};
 		SQL;
 
 		$result = $this->mysqli->query( $sql );

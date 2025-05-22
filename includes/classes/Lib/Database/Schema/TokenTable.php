@@ -40,7 +40,7 @@ class TokenTable {
 				`symbol`         varchar(191)            NOT NULL,
 				`decimals`       int                     NOT NULL,
 				PRIMARY KEY (`chain_id`, `address`)
-			) ${charset};
+			) {$charset};
 		SQL;
 
 		$result = $this->mysqli->query( $sql );

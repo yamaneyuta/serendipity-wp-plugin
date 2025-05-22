@@ -40,7 +40,7 @@ class OracleTable {
 				`quote_symbol`   varchar(191)            NOT NULL,
 				PRIMARY KEY (`chain_id`, `address`),
 				UNIQUE KEY `{$unique_key_name}` (`chain_id`, `base_symbol`, `quote_symbol`)
-			) ${charset};
+			) {$charset};
 		SQL;
 
 		$result = $this->mysqli->query( $sql );

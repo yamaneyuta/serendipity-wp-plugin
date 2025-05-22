@@ -51,7 +51,7 @@ class InvoiceNonceTable {
 				`invoice_id`  varchar(191)  NOT NULL,
 				`nonce`       varchar(191)  NOT NULL,
 				PRIMARY KEY (`invoice_id`)
-			) ${charset};
+			) {$charset};
 		SQL;
 
 		$result = $this->mysqli->query( $sql );

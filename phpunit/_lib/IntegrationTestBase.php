@@ -122,7 +122,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		$rest_property = $this->crateRestPropertyStub();
 		$namespace     = $rest_property->namespace();
 		$graphQlRoute  = $rest_property->graphQlRoute();
-		$request       = new WP_REST_Request( 'POST', "/${namespace}${graphQlRoute}" );
+		$request       = new WP_REST_Request( 'POST', "/{$namespace}{$graphQlRoute}" );
 
 		$request->set_header( 'content-type', 'application/json' );
 		$request->set_body( wp_json_encode( $request_data ) );
@@ -211,7 +211,7 @@ class TestPostContent {
 
 	public function create() {
 		$class_name = ( new ClassName() )->getBlock();
-		$html       = "<div class=\"${class_name}\"></div>";
+		$html       = "<div class=\"{$class_name}\"></div>";
 		// https://developer.wordpress.org/reference/functions/serialize_blocks/#parameters
 		return serialize_blocks(
 			array(
