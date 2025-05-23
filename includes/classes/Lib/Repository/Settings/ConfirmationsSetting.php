@@ -41,7 +41,6 @@ class ConfirmationsSetting {
 
 		$option = ( new OptionFactory() )->confirmations( $chain_ID );
 
-		$ret = is_null( $confirmations ) ? $option->delete() : $option->update( (string) $confirmations );
-		assert( $ret );
+		is_null( $confirmations ) ? $option->delete() : $option->update( (string) $confirmations );
 	}
 }

@@ -149,8 +149,7 @@ class AppContractCrawlCronProcedure {
 					// クロール実行
 					$crawler->crawl( $chain_ID, $from_block_number, $to_block_number );
 					// クロールしたブロック番号を保存
-					$ret = ( new CrawledBlockNumber() )->set( $chain_ID, $block_tag, $to_block_number );
-					assert( $ret === true, '[2DA97333] CrawledBlock::set failed. - chain_ID: ' . $chain_ID );
+					( new CrawledBlockNumber() )->set( $chain_ID, $block_tag, $to_block_number );
 				} catch ( \Throwable $e ) {
 					// クロールに失敗したチェーンIDを記録
 					$crawl_failed_chain_ids[] = $chain_ID;

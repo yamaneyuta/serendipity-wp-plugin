@@ -15,7 +15,7 @@ class IntOption {
 		return is_null( $ret ) ? null : (int) $ret;
 	}
 
-	public function update( int $value, ?bool $autoload = null ): bool {
-		return $this->option->update( $value, $autoload );
+	public function update( int $value, ?bool $autoload = null ): void {
+		$this->option->update( (string) $value, $autoload );
 	}
 }

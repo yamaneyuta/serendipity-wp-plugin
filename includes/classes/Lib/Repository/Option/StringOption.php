@@ -14,8 +14,8 @@ class StringOption {
 		return $this->option->get( $default );
 	}
 
-	public function update( string $value, ?bool $autoload = null ): bool {
-		return $this->option->update( $value, $autoload );
+	public function update( string $value, ?bool $autoload = null ): void {
+		$this->option->update( $value, $autoload );
 	}
 
 	public function delete(): bool {
