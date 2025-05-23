@@ -47,4 +47,8 @@ class TableName {
 	public function oracle(): string {
 		return $this->addPrefix( 'oracle' );
 	}
+
+	public function paidContent(): string {
+		return $this->addPrefix( 'paid_content' );
+	}
 }
