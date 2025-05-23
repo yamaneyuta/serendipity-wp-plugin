@@ -18,7 +18,7 @@ class StringOption {
 		$this->option->update( $value, $autoload );
 	}
 
-	public function delete(): bool {
-		return $this->option->delete();
+	public function delete(): void {
+		$this->option->delete();
 	}
 }

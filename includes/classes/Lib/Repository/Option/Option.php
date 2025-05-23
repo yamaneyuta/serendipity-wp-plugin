@@ -27,9 +27,10 @@ class Option {
 		update_option( $this->option_key_name, $value, $autoload );
 	}
 
-	public function delete(): bool {
-		$success = delete_option( $this->option_key_name );
-		assert( true === $success );
-		return $success;
+	/**
+	 * 値を削除します
+	 */
+	public function delete(): void {
+		delete_option( $this->option_key_name );
 	}
 }
