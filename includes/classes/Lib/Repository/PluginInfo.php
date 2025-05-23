@@ -82,7 +82,13 @@ class PluginMainFile {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 		// プラグインの情報を取得してフィールドに保持
-		$this->plugin_data = get_plugin_data( $this->path() );
+		//
+		// ※ WP6.7.0以降、init()フックより前に`translate`関数を呼び出すとエラーになる。
+		// 　 `get_plugin_data`関数内では`_get_plugin_data_markup_translate`が呼び出され、そこから`translate`関数が呼び出される。
+		// 　 ここでは、`_get_plugin_data_markup_translate`が呼び出されないように第二引数、第三引数を共にfalseにしている
+		// 　 (翻訳済みのプラグインの説明などが必要であれば`translate`関数を呼び出す必要があるが、本プラグイン内の使用範囲では不要)
+		// 　 参考: https://github.com/WordPress/wordpress-develop/blob/6.8.1/src/wp-admin/includes/plugin.php#L74-L121
+		$this->plugin_data = get_plugin_data( $this->path(), false, false );
 	}
 
 	public function getProperty( string $property_name ): string {
