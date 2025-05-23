@@ -25,10 +25,10 @@ class CrawledBlockNumber {
 	/**
 	 * 指定したチェーン、ブロックタグで最後にクロールしたブロック番号を保存します。
 	 */
-	public function set( int $chain_ID, string $block_tag, BlockNumberType $block_number ): bool {
+	public function set( int $chain_ID, string $block_tag, BlockNumberType $block_number ): void {
 		Judge::checkChainID( $chain_ID );
 		Judge::checkBlockTagName( $block_tag );
 
-		return ( new OptionFactory() )->crawledBlockNumberHex( $chain_ID, $block_tag )->update( $block_number->hex() );
+		( new OptionFactory() )->crawledBlockNumberHex( $chain_ID, $block_tag )->update( $block_number->hex() );
 	}
 }

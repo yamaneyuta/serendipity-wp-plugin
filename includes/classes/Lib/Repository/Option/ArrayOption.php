@@ -15,7 +15,7 @@ class ArrayOption {
 		return is_null( $ret ) ? null : $ret;
 	}
 
-	public function update( array $value, ?bool $autoload = null ): bool {
-		return $this->option->update( $value, $autoload );
+	public function update( array $value, ?bool $autoload = null ): void {
+		$this->option->update( $value, $autoload );
 	}
 }

@@ -24,12 +24,12 @@ class BlockNumberActiveSince {
 	/**
 	 * 指定したチェーンが最初に有効になった(≒取引が開始された)ブロック番号を設定します。
 	 */
-	public function set( int $chain_ID, BlockNumberType $block_number ): bool {
+	public function set( int $chain_ID, BlockNumberType $block_number ): void {
 		if ( ! is_null( $this->get( $chain_ID ) ) ) {
 			// 上書きしない
 			throw new \InvalidArgumentException( "[FBE35625] active start block number is already set. chain_ID: {$chain_ID}" );
 		}
 
-		return ( new OptionFactory() )->activeSinceBlockNumberHex( $chain_ID )->update( $block_number->hex() );
+		( new OptionFactory() )->activeSinceBlockNumberHex( $chain_ID )->update( $block_number->hex() );
 	}
 }

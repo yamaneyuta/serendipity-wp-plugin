@@ -14,11 +14,13 @@ class StringOption {
 		return $this->option->get( $default );
 	}
 
-	public function update( string $value, ?bool $autoload = null ): bool {
-		return $this->option->update( $value, $autoload );
+	public function update( string $value, ?bool $autoload = null ): void {
+		$this->option->update( $value, $autoload );
+		assert( $value === $this->get( $value ) );
 	}
 
-	public function delete(): bool {
-		return $this->option->delete();
+	public function delete(): void {
+		$this->option->delete();
+		assert( is_null( $this->get() ) );
 	}
 }
