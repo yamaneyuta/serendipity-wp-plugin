@@ -28,5 +28,6 @@ class BoolOption {
 
 	public function update( bool $value, ?bool $autoload = null ): void {
 		$this->option->update( $value ? self::TRUE_VALUE : self::FALSE_VALUE, $autoload );
+		assert( $value === $this->get( $value ) );
 	}
 }

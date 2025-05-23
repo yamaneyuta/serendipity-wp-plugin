@@ -17,5 +17,6 @@ class IntOption {
 
 	public function update( int $value, ?bool $autoload = null ): void {
 		$this->option->update( (string) $value, $autoload );
+		assert( $value === $this->get( $value ) );
 	}
 }
