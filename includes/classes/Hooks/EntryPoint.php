@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Hooks\Page\AdminPageHook;
 use Cornix\Serendipity\Core\Hooks\Cron\CronHook;
 use Cornix\Serendipity\Core\Hooks\Page\PostEditHook;
 use Cornix\Serendipity\Core\Hooks\Page\ViewPageHook;
+use Cornix\Serendipity\Core\Hooks\Post\ContentIoHook;
 use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
@@ -30,5 +31,8 @@ class EntryPoint {
 		( new PostEditHook() )->register();
 		// 投稿表示画面
 		( new ViewPageHook() )->register();
+
+		// 投稿を保存または取得する時のフィルタ処理
+		( new ContentIoHook() )->register();
 	}
 }
