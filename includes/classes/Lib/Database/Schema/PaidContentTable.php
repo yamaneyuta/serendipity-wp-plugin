@@ -96,6 +96,68 @@ class PaidContentTable {
 	}
 
 	/**
+	 * 指定した投稿IDの有料記事データが存在するかどうかを取得します。
+	 */
+	public function exists( int $post_id ): bool {
+		$sql = <<<SQL
+			SELECT COUNT(*) FROM `{$this->table_name}` WHERE `post_id` = %d
+		SQL;
+
+		$sql    = $this->wpdb->prepare( $sql, $post_id );
+		$result = $this->wpdb->get_var( $sql );
+
+		if ( false === $result ) {
+			throw new \Exception( '[7546DD24] Failed to check if paid content exists.' );
+		}
+
+		return (int) $result > 0;
+	}
+
+	/**
+	 * 指定した投稿IDの有料記事部分を取得します。
+	 */
+	public function getPaidContent( int $post_id ): ?string {
+		$sql = <<<SQL
+			SELECT `paid_content` FROM `{$this->table_name}` WHERE `post_id` = %d
+		SQL;
+
+		$sql    = $this->wpdb->prepare( $sql, $post_id );
+		$result = $this->wpdb->get_var( $sql );
+
+		return is_null( $result ) ? null : (string) $result;
+	}
+
+	/**
+	 * 指定した投稿IDで販売するネットワークカテゴリIDを取得します。
+	 */
+	public function getSellingNetworkCategoryID( int $post_id ): ?int {
+		$sql = <<<SQL
+			SELECT `selling_network_category_id` FROM `{$this->table_name}` WHERE `post_id` = %d
+		SQL;
+
+		$sql    = $this->wpdb->prepare( $sql, $post_id );
+		$result = $this->wpdb->get_var( $sql );
+
+		return is_null( $result ) ? null : (int) $result;
+	}
+
+	/**
+	 * 指定した投稿IDの販売価格を取得します。
+	 */
+	public function getSellingPrice( int $post_id ): ?Price {
+		$sql = <<<SQL
+			SELECT `selling_amount_hex`, `selling_decimals`, `selling_symbol`
+			FROM `{$this->table_name}`
+			WHERE `post_id` = %d
+		SQL;
+
+		$sql    = $this->wpdb->prepare( $sql, $post_id );
+		$result = $this->wpdb->get_row( $sql, ARRAY_A );
+
+		return is_null( $result ) ? null : new Price( $result['selling_amount_hex'], (int) $result['selling_decimals'], $result['selling_symbol'] );
+	}
+
+	/**
 	 * テーブルを削除します。
 	 */
 	public function drop(): void {
