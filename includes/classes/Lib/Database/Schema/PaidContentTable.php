@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Schema;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Types\Price;
 
 /**
  * 有料記事の情報を記録するテーブル
@@ -48,6 +49,50 @@ class PaidContentTable {
 
 		$result = $this->mysqli->query( $sql );
 		assert( true === $result );
+	}
+
+	public function set( int $post_id, string $paid_content, int $selling_network_category_id, Price $selling_price ): void {
+		$sql = <<<SQL
+			INSERT INTO `{$this->table_name}` (
+				`post_id`,
+				`paid_content`,
+				`selling_network_category_id`,
+				`selling_amount_hex`,
+				`selling_decimals`,
+				`selling_symbol`
+			) VALUES (
+				%d, %s, %d, %s, %d, %s
+			) ON DUPLICATE KEY UPDATE
+				`paid_content` = %s,
+				`selling_network_category_id` = %d,
+				`selling_amount_hex` = %s,
+				`selling_decimals` = %d,
+				`selling_symbol` = %s
+		SQL;
+
+		$sql = $this->wpdb->prepare(
+			$sql,
+			array(
+				$post_id,
+				$paid_content,
+				$selling_network_category_id,
+				$selling_price->amountHex(),
+				$selling_price->decimals(),
+				$selling_price->symbol(),
+				$paid_content,
+				$selling_network_category_id,
+				$selling_price->amountHex(),
+				$selling_price->decimals(),
+				$selling_price->symbol(),
+			)
+		);
+
+		$result = $this->wpdb->query( $sql );
+
+		if ( false === $result ) {
+			throw new \Exception( '[8DAB2BCF] Failed to set paid content data.' );
+		}
+		assert( $result <= 1, "[DBB26475] Failed to set paid content data. - post_id: {$post_id}, result: {$result}" );
 	}
 
 	/**
