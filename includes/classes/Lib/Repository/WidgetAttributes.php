@@ -15,7 +15,7 @@ class WidgetAttributes {
 	private const ATTRS_KEY_SELLING_DECIMALS            = 'sellingDecimals';
 	private const ATTRS_KEY_SELLING_SYMBOL              = 'sellingSymbol';
 
-	public function __construct( array $attrs ) {
+	private function __construct( array $attrs ) {
 		$this->attrs = $attrs;
 	}
 
@@ -30,8 +30,15 @@ class WidgetAttributes {
 		);
 	}
 
+	/** @deprecated */
 	public static function fromPostID( int $post_ID ): ?WidgetAttributes {
-		$attrs = ( new WidgetParser() )->attrs( $post_ID );
+		$attrs = ( new WidgetParser() )->attrsFromPostID( $post_ID );
+
+		return is_null( $attrs ) ? null : new self( $attrs );
+	}
+
+	public static function fromContent( string $content ): ?WidgetAttributes {
+		$attrs = ( new WidgetParser() )->attrsFromContent( $content );
 
 		return is_null( $attrs ) ? null : new self( $attrs );
 	}
@@ -88,6 +95,7 @@ class BlockParser {
 	 * @return WP_Block_Parser_Block[]
 	 */
 	public function parse( string $content ): array {
+		$blocks = parse_blocks( $content );
 		return array_map(
 			function ( $block ) {
 				[
@@ -100,7 +108,7 @@ class BlockParser {
 
 				return new WP_Block_Parser_Block( $name, $attrs, $inner_blocks, $inner_html, $inner_content );
 			},
-			parse_blocks( $content )
+			$blocks
 		);
 	}
 }
@@ -109,13 +117,12 @@ class WidgetParser {
 	/**
 	 * ウィジェットブロックに関する情報を取得します。
 	 *
-	 * @param int $post_ID
+	 * @param string $post_content
 	 * @return WP_Block_Parser_Block|null
 	 */
-	private function block( int $post_ID ): ?WP_Block_Parser_Block {
-		$post_content = ( new PostContent( $post_ID ) )->getRaw();
-		$blocks       = ( new BlockParser() )->parse( $post_content );
-		$block_name   = BlockName::get(); // ウィジェットに付与されているブロック名
+	private function block( string $post_content ): ?WP_Block_Parser_Block {
+		$blocks     = ( new BlockParser() )->parse( $post_content );
+		$block_name = BlockName::get(); // ウィジェットに付与されているブロック名
 
 		// `blockName`プロパティが$block_nameと一致するブロックを取得
 		$blocks = array_filter(
@@ -140,8 +147,15 @@ class WidgetParser {
 	 * @param int $post_ID
 	 * @return null|array
 	 */
-	public function attrs( int $post_ID ): ?array {
-		$block = $this->block( $post_ID );
+	public function attrsFromPostID( int $post_ID ): ?array {
+		return $this->attrsFromContent( ( new PostContent( $post_ID ) )->getRaw() );
+	}
+
+	/**
+	 * ウィジェットブロックの属性を取得します。
+	 */
+	public function attrsFromContent( string $content ): ?array {
+		$block = $this->block( $content );
 		if ( is_null( $block ) || is_null( $block->attrs ) ) {
 			return null;
 		}
