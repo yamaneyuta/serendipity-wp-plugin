@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\Post;
 
 use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
@@ -24,7 +23,10 @@ class ContentIoHook {
 	 */
 	public function register(): void {
 		// 投稿を保存する際のフィルタを登録
+		// `wp_insert_post_data`は、wp_postsに保存される投稿データを加工し、元の投稿内容を静的変数に保持。
+		// `save_post`は`wp_insert_post_data`で保持した投稿内容から有料記事の情報をテーブルに保存する。
 		add_filter( 'wp_insert_post_data', array( $this, 'wpInsertPostDataFilter' ), 10, 2 );
+		add_filter( 'save_post', array( $this, 'savePostFilter' ), 10, 2 );
 
 		// 投稿内容を取得する際のフィルタを登録
 		// ※ Gutenbergでは`the_editor_content`が動作しないので`rest_prepare_post`(`rest_prepare_page`)を使用する
@@ -35,26 +37,9 @@ class ContentIoHook {
 	}
 
 	public function restPreparePostFilter( \WP_REST_Response $response, \WP_Post $post, \WP_REST_Request $request ): \WP_REST_Response {
-		if ( ! is_null( self::$unsaved_original_content ) ) {
-			// 未保存の投稿内容が存在する場合(投稿画面で保存した時)は有料記事情報をテーブルに保存
-			// ※ここで処理をしないと投稿IDが発行されていため、静的変数に保持する手法を採用している
-			$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
-			( new PaidContentTable() )->set(
-				$post->ID,
-				( new RawContentDivider() )->getPaidContent( self::$unsaved_original_content ),
-				$attributes->sellingNetworkCategory()->id(),
-				$attributes->sellingPrice()
-			);
-
-			// 返す投稿内容も加工前の内容に戻す
-			$response->data['content']['raw']      = self::$unsaved_original_content;
-			$response->data['content']['rendered'] = apply_filters( 'the_content', $response->data['content']['raw'] );
-
-			// 静的変数をリセット
-			self::$unsaved_original_content = null; // 静的変数をリセット
-		} elseif ( ( new PaidContentTable() )->exists( $post->ID ) ) {
-			// 投稿画面表示時(未保存の投稿内容が存在しないが、有料記事の情報がある場合)は
-			// $response->data['content']['raw']に無料部分のみ格納された状態。
+		if ( ( new PaidContentTable() )->exists( $post->ID ) ) {
+			// 有料記事の情報がある場合、
+			// これは$response->data['content']['raw']に無料部分のみ格納された状態。
 			// ここにウィジェットと有料部分を追加して返す。
 
 			// 念のため投稿編集権限を持っていることを確認
@@ -75,7 +60,7 @@ class ContentIoHook {
 			$paid_content   = ( new PaidContentTable() )->getPaidContent( $post->ID ) ?? '';
 			assert( ! is_null( $paid_content ), "[A1FF1B77] Paid content is null. - post ID: {$post->ID}" );
 
-			$response->data['content']['raw'] = $response->data['content']['raw'] . "\n\n" . $widget_content . "\n\n" . $paid_content;
+			$response->data['content']['raw']      = $response->data['content']['raw'] . "\n\n" . $widget_content . "\n\n" . $paid_content;
 			$response->data['content']['rendered'] = apply_filters( 'the_content', $response->data['content']['raw'] );
 		}
 
@@ -92,35 +77,44 @@ class ContentIoHook {
 	private static $unsaved_original_content = null;
 
 	public function wpInsertPostDataFilter( array $data, array $postarr ): array {
-		/** @var string|null */
-		$content = $data['post_content'] ?? null;
-		if ( null === $content ) {
-			// 投稿内容が取得できない場合はログ出力をしてそのまま返す
-			Logger::error( '[9BFF2293] Invalid post content. - data: ' . json_encode( $data ) );
-			return $data;
+		// 別のフックで有料記事部分の保存等を行えるように静的変数に投稿編集画面全体の内容を保持。
+		// ※ ここでは投稿IDがまだ発行されていないため登録処理ができない。
+		if ( is_null( self::$unsaved_original_content ) ) {
+			// 投稿⇒リビジョンというように連続でここを通ったとき、2回目の$data['post_content']は無料部分だけになっている。
+			// 加工後の投稿内容をオリジナルとして保持しないように、初回のみオリジナルの投稿内容を保持する。
+			self::$unsaved_original_content = $data['post_content'] ?? null;
 		}
+		assert( ! is_null( self::$unsaved_original_content ), '[8EC62676] Unsaved original content is null.' );
 
 		$divider = new RawContentDivider();
-		if ( $divider->hasWidget( $content ) ) {
-			// ※ ここではまだ投稿の保存が完了しておらず、投稿IDが取得できないため一旦静的変数に加工前の投稿内容を保持。
-			// 　 有料記事の情報登録は後続の`rest_prepare_post`フック処理で実施する。
-			self::$unsaved_original_content = $content;
-
-			// ウィジェットが含まれている場合は、投稿内容を無料部分だけにして返す
-			$data['post_content'] = $divider->getFreeContent( $content );
-
-			return $data;
-
-		} else {
-			// ウィジェットが含まれていない場合はウィジェットが削除された可能性があるので、
-			// 対象の投稿IDに関する有料記事のデータを削除し、$dataはそのまま返す
-
-			// TODO: 有料記事のデータを削除する処理を実装する
-
-			return $data;
+		if ( $divider->hasWidget( self::$unsaved_original_content ) ) {
+			// ウィジェットが含まれている場合は、投稿内容を無料部分だけにして返す。
+			// これにより、無料部分だけがwp_postsテーブルに保存されるようになる。
+			$data['post_content'] = $divider->getFreeContent( self::$unsaved_original_content );
 		}
 
 		return $data;
+	}
+
+	public function savePostFilter( int $post_id, \WP_Post $post ): void {
+		if ( is_null( self::$unsaved_original_content ) ) {
+			throw new \LogicException( '[4F0E9951] Unsaved original content is null. - post ID: ' . $post_id );
+		}
+
+		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
+		$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
+		if ( is_null( $attributes ) ) {
+			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
+			( new PaidContentTable() )->delete( $post_id );
+		} else {
+			// ウィジェットが含まれている場合は有料記事の情報を保存
+			( new PaidContentTable() )->set(
+				$post_id,
+				( new RawContentDivider() )->getPaidContent( self::$unsaved_original_content ),
+				$attributes->sellingNetworkCategory()->id(),
+				$attributes->sellingPrice()
+			);
+		}
 	}
 }
 
@@ -128,7 +122,7 @@ class WidgetContentBuilder {
 	public function build( int $selling_network_category_id, Price $selling_price ): string {
 		$block_name = ( new BlockName() )->get();
 		$attrs      = WidgetAttributes::from( NetworkCategory::from( $selling_network_category_id ), $selling_price->amountHex(), $selling_price->decimals(), $selling_price->symbol() )->toArray();
-		$attrs_str = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		return "<!-- wp:{$block_name} {$attrs_str} -->\n"
 			. "<aside class=\"wp-block-create-block-qik-chain-pay ae6cefc4-82d4-4220-840b-d74538ea7284\"></aside>\n"
 			. "<!-- /wp:{$block_name} -->";
