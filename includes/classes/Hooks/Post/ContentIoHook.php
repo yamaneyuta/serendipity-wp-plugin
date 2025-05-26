@@ -32,6 +32,8 @@ class ContentIoHook {
 		add_action( 'delete_post', array( $this, 'deletePostAction' ), 10, 1 );
 
 		// 投稿内容を取得する際のフィルタを登録
+		// [通常の画面]
+		add_filter( 'the_content', array( $this, 'theContentFilter' ), 10, 1 );
 		// [リビジョン画面表示]
 		add_filter( '_wp_post_revision_field_post_content', array( $this, 'wpPostRevisionFieldPostContentFilter' ), 10, 4 );
 		// [APIレスポンス]
@@ -148,6 +150,26 @@ class ContentIoHook {
 	public function deletePostAction( int $post_id ): void {
 		// 投稿が削除された時に有料記事の情報も削除
 		( new PaidContentTable() )->delete( $post_id );
+	}
+
+	public function theContentFilter( string $content ): string {
+		// 投稿、固定ページ以外は処理抜け
+		if ( ! is_single() && ! is_page() ) {
+			return $content;
+		}
+
+		global $post;
+		/** @var int|null */
+		$post_id = isset( $post->ID ) ? $post->ID : null;
+		assert( is_int( $post_id ), '[97CAA15C] Post ID is not an integer. - ' . json_encode( $post_id ) );
+
+		// 有料記事の情報がある場合はウィジェットを結合して返す
+		if ( is_int( $post_id ) && ( new PaidContentTable() )->exists( $post_id ) ) {
+			// HTMLコメントを除去したウィジェットを追加
+			$content .= "\n\n" . preg_replace( '/<!--[\s\S]*?-->/', '', $this->createWidgetContent( $post_id ) );
+		}
+
+		return $content;
 	}
 
 	public function wpPostRevisionFieldPostContentFilter( string $revision_field_content, string $field, \WP_Post $revision_post, string $context ) {
