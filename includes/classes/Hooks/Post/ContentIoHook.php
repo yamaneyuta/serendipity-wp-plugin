@@ -28,6 +28,9 @@ class ContentIoHook {
 		add_filter( 'wp_insert_post_data', array( $this, 'wpInsertPostDataFilter' ), 10, 2 );
 		add_filter( 'save_post', array( $this, 'savePostFilter' ), 10, 2 );
 
+		// 投稿が削除された時のフックを登録
+		add_action( 'delete_post', array( $this, 'deletePostAction' ), 10, 1 );
+
 		// 投稿内容を取得する際のフィルタを登録
 		// ※ Gutenbergでは`the_editor_content`が動作しないので`rest_prepare_post`(`rest_prepare_page`)を使用する
 		// 　 https://github.com/WordPress/gutenberg/issues/12081#issuecomment-451631170
@@ -115,6 +118,11 @@ class ContentIoHook {
 				$attributes->sellingPrice()
 			);
 		}
+	}
+
+	public function deletePostAction( int $post_id ): void {
+		// 投稿が削除された時に有料記事の情報も削除
+		( new PaidContentTable() )->delete( $post_id );
 	}
 }
 
