@@ -111,7 +111,8 @@ class ContentIoHook {
 
 	public function savePostFilter( int $post_id, \WP_Post $post ): void {
 		if ( is_null( self::$unsaved_original_content ) ) {
-			throw new \LogicException( '[4F0E9951] Unsaved original content is null. - post ID: ' . $post_id );
+			// 投稿内容が未保存の場合は何もしない(ゴミ箱に移動された時などが該当)
+			return;
 		}
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
