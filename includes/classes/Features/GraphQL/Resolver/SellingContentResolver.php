@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
+use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Post\ContentAnalyzer;
-use Cornix\Serendipity\Core\Lib\Post\ContentFilter;
-use Cornix\Serendipity\Core\Lib\Post\PostContent;
 
 class SellingContentResolver extends ResolverBase {
 
@@ -21,16 +21,16 @@ class SellingContentResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		// HTMLコメントを含まない投稿本文を取得
-		$content = ( new PostContent( $post_ID ) )->getCommentRemoved();
-
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new ContentFilter( $content ) )->getPaid();
+		$paid_content = ( new PaidContentTable() )->getPaidContent( $post_ID );
 
 		// 有料部分のコンテンツが取得できなかった場合はnullを返す
 		if ( null === $paid_content ) {
 			return null;
 		}
+
+		// HTMLコメントを除去
+		$paid_content = HtmlFormat::removeHtmlComments( $paid_content );
 
 		// 有料部分のコンテンツの文字数と画像数を取得
 		$analyzer        = new ContentAnalyzer( $paid_content );
