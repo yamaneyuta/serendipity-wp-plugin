@@ -90,20 +90,34 @@ class ContentIoHook {
 	private static $unsaved_original_content = null;
 
 	public function wpInsertPostDataFilter( array $data, array $postarr ): array {
-		// 別のフックで有料記事部分の保存等を行えるように静的変数に投稿編集画面全体の内容を保持。
-		// ※ ここでは投稿IDがまだ発行されていないため登録処理ができない。
-		if ( is_null( self::$unsaved_original_content ) ) {
-			// 投稿⇒リビジョンというように連続でここを通ったとき、2回目の$data['post_content']は無料部分だけになっている。
-			// 加工後の投稿内容をオリジナルとして保持しないように、初回のみオリジナルの投稿内容を保持する。
-			self::$unsaved_original_content = $data['post_content'] ?? null;
-		}
-		assert( ! is_null( self::$unsaved_original_content ), '[8EC62676] Unsaved original content is null.' );
+		assert( is_string( $data['post_content'] ), '[A7742864] Post content is not a string. - ' . json_encode( $data['post_content'] ) );
 
-		$divider = new RawContentDivider();
-		if ( $divider->hasWidget( self::$unsaved_original_content ) ) {
-			// ウィジェットが含まれている場合は、投稿内容を無料部分だけにして返す。
-			// これにより、無料部分だけがwp_postsテーブルに保存されるようになる。
-			$data['post_content'] = $divider->getFreeContent( self::$unsaved_original_content );
+		// どの画面から投稿が保存されようとしているのかを判定
+		$is_autosaving         = $postarr['post_type'] === 'revision' && defined( 'DOING_AUTOSAVE' );
+		$is_revision_restoring = $postarr['post_type'] === 'post' && ( $_GET['action'] ?? null ) === 'restore' && is_numeric( $_GET['revision'] ?? null );
+		$is_normal_saving      = $postarr['post_type'] === 'post' && ! $is_autosaving && ! $is_revision_restoring;
+
+		if ( $is_revision_restoring ) {
+			// リビジョンからの復元の場合、$data['post_content']には無料部分しか入っていない。
+			// 有料部分を含めた全体をオリジナルの投稿内容として保持する。
+			$revision                 = (int) $_GET['revision'];
+			$unsaved_original_content = $data['post_content'] ?? null; // 一旦無料部分を取得。
+			$paid_content_table       = new PaidContentTable();
+			if ( $paid_content_table->exists( $revision ) ) {
+				$unsaved_original_content .= "\n\n"
+					. $this->createWidgetContent( $revision ) . "\n\n"
+					. $paid_content_table->getPaidContent( $revision );
+			}
+			self::$unsaved_original_content = $unsaved_original_content;
+		} elseif ( $is_normal_saving || $is_autosaving ) {
+			// 通常の投稿編集画面からのリクエストの場合は、送信されたデータから投稿内容を取得
+			self::$unsaved_original_content = $data['post_content'] ?? null;
+			$divider                        = new RawContentDivider();
+			if ( $divider->hasWidget( self::$unsaved_original_content ) ) {
+				// ウィジェットが含まれている場合は、投稿内容を無料部分だけにして返す。
+				// これにより、無料部分だけがwp_postsテーブルに保存されるようになる。
+				$data['post_content'] = $divider->getFreeContent( self::$unsaved_original_content );
+			}
 		}
 
 		return $data;
