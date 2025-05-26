@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class PostResolver extends ResolverBase {
 
@@ -34,12 +35,10 @@ class PostResolver extends ResolverBase {
 	 * 指定された投稿IDに対して支払いが可能なトークン一覧を取得します。
 	 */
 	private function payableTokens( array $root_value, int $post_ID ) {
-		$widget_attributes = WidgetAttributes::fromPostID( $post_ID );
-		if ( is_null( $widget_attributes ) ) {
-			throw new \InvalidArgumentException( '[AB4A5F57] Widget attributes not found. - postID: ' . $post_ID );
-		}
 		// 投稿に設定されている販売ネットワークカテゴリに属するチェーンID一覧を取得
-		$chain_IDs = ( new NetworkCategoryDefinition() )->getAllChainID( $widget_attributes->sellingNetworkCategory() );
+		$chain_IDs = ( new NetworkCategoryDefinition() )->getAllChainID(
+			NetworkCategory::from( ( new PaidContentTable() )->getSellingNetworkCategoryID( $post_ID ) )
+		);
 
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {
