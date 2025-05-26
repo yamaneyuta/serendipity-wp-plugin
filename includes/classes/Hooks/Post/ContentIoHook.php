@@ -39,6 +39,21 @@ class ContentIoHook {
 		add_filter( 'rest_prepare_page', array( $this, 'restPreparePageFilter' ), 10, 3 );
 	}
 
+	/**
+	 * ウィジェットの内容(ブロックタグ付きのHTML)を生成します。
+	 */
+	private function createWidgetContent( int $post_id ): string {
+		$selling_network_category_id = ( new PaidContentTable() )->getSellingNetworkCategoryID( $post_id );
+		$selling_price               = ( new PaidContentTable() )->getSellingPrice( $post_id );
+		assert( ! is_null( $selling_network_category_id ), "[E58341D9] Selling network category ID is null. - post ID: {$post_id}" );
+		assert( ! is_null( $selling_price ), "[8E5423E3] Selling price is null. - post ID: {$post_id}" );
+
+		return ( new WidgetContentBuilder() )->build(
+			$selling_network_category_id,
+			$selling_price
+		);
+	}
+
 	public function restPreparePostFilter( \WP_REST_Response $response, \WP_Post $post, \WP_REST_Request $request ): \WP_REST_Response {
 		if ( ( new PaidContentTable() )->exists( $post->ID ) ) {
 			// 有料記事の情報がある場合、
@@ -51,15 +66,7 @@ class ContentIoHook {
 				throw new \LogicException( '[0196607A] You do not have permission to edit this post. - post ID: ' . $post->ID );
 			}
 
-			$selling_network_category_id = ( new PaidContentTable() )->getSellingNetworkCategoryID( $post->ID );
-			$selling_price               = ( new PaidContentTable() )->getSellingPrice( $post->ID );
-			assert( ! is_null( $selling_network_category_id ), "[E58341D9] Selling network category ID is null. - post ID: {$post->ID}" );
-			assert( ! is_null( $selling_price ), "[8E5423E3] Selling price is null. - post ID: {$post->ID}" );
-
-			$widget_content = ( new WidgetContentBuilder() )->build(
-				$selling_network_category_id,
-				$selling_price
-			);
+			$widget_content = $this->createWidgetContent( $post->ID );
 			$paid_content   = ( new PaidContentTable() )->getPaidContent( $post->ID ) ?? '';
 			assert( ! is_null( $paid_content ), "[A1FF1B77] Paid content is null. - post ID: {$post->ID}" );
 
