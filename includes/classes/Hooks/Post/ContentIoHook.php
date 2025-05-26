@@ -140,7 +140,7 @@ class ContentIoHook {
 			// ウィジェットが含まれている場合は有料記事の情報を保存
 			( new PaidContentTable() )->set(
 				$post_id,
-				( new RawContentDivider() )->getPaidContent( self::$unsaved_original_content ),
+				( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) ),
 				$attributes->sellingNetworkCategory()->id(),
 				$attributes->sellingPrice()
 			);
