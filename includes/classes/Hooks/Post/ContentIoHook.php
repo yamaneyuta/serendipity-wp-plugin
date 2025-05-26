@@ -93,18 +93,20 @@ class ContentIoHook {
 	private static $unsaved_original_content = null;
 
 	public function wpInsertPostDataFilter( array $data, array $postarr ): array {
-		assert( is_string( $data['post_content'] ), '[A7742864] Post content is not a string. - ' . json_encode( $data['post_content'] ) );
+		// 本文に何も記載していないとき、$data['post_content'] は false や空文字だったりしたためチェック(assert)は省略
 
 		// どの画面から投稿が保存されようとしているのかを判定
+		// ※ 通常の保存判定で`is_null( $_GET['action'] ?? null )`を含めているのは、テーマによって2回呼び出されることがあったため
+		// 　 その時は2回目の呼び出しで`$_GET['action']`に`edit`が入っていた(WordPress標準のテーマは1回しか呼び出されない)
 		$is_autosaving         = $postarr['post_type'] === 'revision' && defined( 'DOING_AUTOSAVE' );
 		$is_revision_restoring = $postarr['post_type'] === 'post' && ( $_GET['action'] ?? null ) === 'restore' && is_numeric( $_GET['revision'] ?? null );
-		$is_normal_saving      = $postarr['post_type'] === 'post' && ! $is_autosaving && ! $is_revision_restoring;
+		$is_normal_saving      = $postarr['post_type'] === 'post' && is_null( $_GET['action'] ?? null ) && ! $is_autosaving && ! $is_revision_restoring;
 
 		if ( $is_revision_restoring ) {
 			// リビジョンからの復元の場合、$data['post_content']には無料部分しか入っていない。
 			// 有料部分を含めた全体をオリジナルの投稿内容として保持する。
 			$revision                 = (int) $_GET['revision'];
-			$unsaved_original_content = $data['post_content'] ?? null; // 一旦無料部分を取得。
+			$unsaved_original_content = $data['post_content'] ?? ''; // 一旦無料部分を取得。
 			$paid_content_table       = new PaidContentTable();
 			if ( $paid_content_table->exists( $revision ) ) {
 				$unsaved_original_content .= "\n\n"
@@ -114,7 +116,7 @@ class ContentIoHook {
 			self::$unsaved_original_content = $unsaved_original_content;
 		} elseif ( $is_normal_saving || $is_autosaving ) {
 			// 通常の投稿編集画面からのリクエストの場合は、送信されたデータから投稿内容を取得
-			self::$unsaved_original_content = $data['post_content'] ?? null;
+			self::$unsaved_original_content = $data['post_content'] ?? '';
 			$divider                        = new RawContentDivider();
 			if ( $divider->hasWidget( self::$unsaved_original_content ) ) {
 				// ウィジェットが含まれている場合は、投稿内容を無料部分だけにして返す。
