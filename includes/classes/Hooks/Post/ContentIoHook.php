@@ -32,6 +32,9 @@ class ContentIoHook {
 		add_action( 'delete_post', array( $this, 'deletePostAction' ), 10, 1 );
 
 		// 投稿内容を取得する際のフィルタを登録
+		// [リビジョン画面表示]
+		add_filter( '_wp_post_revision_field_post_content', array( $this, 'wpPostRevisionFieldPostContentFilter' ), 10, 4 );
+		// [APIレスポンス]
 		// ※ Gutenbergでは`the_editor_content`が動作しないので`rest_prepare_post`(`rest_prepare_page`)を使用する
 		// 　 https://github.com/WordPress/gutenberg/issues/12081#issuecomment-451631170
 		// add_filter ( 'the_editor_content', array( $this, 'theEditorContentFilter' ), 10, 2 );
@@ -130,6 +133,20 @@ class ContentIoHook {
 	public function deletePostAction( int $post_id ): void {
 		// 投稿が削除された時に有料記事の情報も削除
 		( new PaidContentTable() )->delete( $post_id );
+	}
+
+	public function wpPostRevisionFieldPostContentFilter( string $revision_field_content, string $field, \WP_Post $revision_post, string $context ) {
+		$post_id            = $revision_post->ID;
+		$paid_content_table = ( new PaidContentTable() );
+
+		if ( $paid_content_table->exists( $post_id ) ) {
+			// 記事の有料部分の情報がある場合はウィジェットと有料部分を結合して返す
+			$widget_content = $this->createWidgetContent( $post_id );
+			$paid_content   = $paid_content_table->getPaidContent( $post_id ) ?? '';
+
+			$revision_field_content .= "\n\n" . $widget_content . "\n\n" . $paid_content; // ウィジェットと有料部分を追加
+		}
+		return $revision_field_content;
 	}
 }
 
