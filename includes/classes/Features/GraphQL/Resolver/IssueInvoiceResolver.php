@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
+use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Lib\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
@@ -12,12 +13,10 @@ use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
 use Cornix\Serendipity\Core\Lib\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
-use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
-use Cornix\Serendipity\Core\Types\TokenType;
 
 class IssueInvoiceResolver extends ResolverBase {
 
@@ -49,14 +48,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		}
 		$seller_address = Ethers::verifyMessage( $seller_agreed_terms->message(), $seller_agreed_terms->signature() );
 
-		// 投稿設定を取得
-		$widget_attributes = WidgetAttributes::fromPostID( $post_ID );
-		if ( null === $widget_attributes ) {
-			throw new \Exception( '[6BDB4DC3] WidgetAttributes not found' );
-		}
-
-		// 現時点での販売価格を取得
-		$selling_price = $widget_attributes->sellingPrice();
+		// 販売価格を取得
+		$selling_price = ( new PaidContentTable() )->getSellingPrice( $post_ID );
 
 		// 支払うトークンにおける価格を計算
 		// ※ これは`1ETH`等の価格を表現するオブジェクトであり、実際に支払う数量(wei等)ではないことに注意
