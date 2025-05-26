@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Post;
 
+use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
+
 /**
  * 投稿IDを指定して投稿の本文を取得するクラス
  */
@@ -27,6 +29,6 @@ class PostContent {
 	 */
 	public function getCommentRemoved(): string {
 		// HTMLコメントを削除
-		return preg_replace( '/<!--.*?-->/s', '', $this->getRaw() );
+		return HtmlFormat::removeHtmlComments( $this->getRaw() );
 	}
 }

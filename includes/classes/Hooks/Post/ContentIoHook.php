@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Hooks\Post;
 
+use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
@@ -166,7 +167,7 @@ class ContentIoHook {
 		// 有料記事の情報がある場合はウィジェットを結合して返す
 		if ( is_int( $post_id ) && ( new PaidContentTable() )->exists( $post_id ) ) {
 			// HTMLコメントを除去したウィジェットを追加
-			$content .= "\n\n" . preg_replace( '/<!--[\s\S]*?-->/', '', $this->createWidgetContent( $post_id ) );
+			$content .= "\n\n" . HtmlFormat::removeHtmlComments( $this->createWidgetContent( $post_id ) );
 		}
 
 		return $content;
