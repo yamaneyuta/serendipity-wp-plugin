@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Repository\AppContractAddressData;
 use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\ChainData;
 use Cornix\Serendipity\Core\Lib\Repository\RPC;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -64,7 +64,7 @@ class ChainResolver extends ResolverBase {
 			return $root_value['networkCategory'](
 				$root_value,
 				array(
-					'networkCategoryID' => ( new NetworkCategoryDefinition() )->get( $chain_ID )->id(),
+					'networkCategoryID' => ( new ChainData( $chain_ID ) )->networkCategory()->id(),
 				)
 			);
 		};

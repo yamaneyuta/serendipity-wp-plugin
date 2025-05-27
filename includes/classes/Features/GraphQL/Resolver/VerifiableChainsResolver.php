@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\AppContractAddressData;
-use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Lib\Repository\RPC;
 
@@ -29,7 +29,7 @@ class VerifiableChainsResolver extends ResolverBase {
 		}
 
 		// 投稿の販売ネットワークカテゴリに属する全てのチェーンIDを取得
-		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new NetworkCategoryDefinition() )->getAllChainID( $selling_network_category );
+		$chain_IDs = is_null( $selling_network_category ) ? array() : ChainID::all( $selling_network_category->id() );
 
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {

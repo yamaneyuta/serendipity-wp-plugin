@@ -31,7 +31,7 @@ class RpcUrlSettingTest extends IntegrationTestBase {
 				$chain_ID,
 				( ChainType::from( $chain_ID ) )->networkCategory() === NetworkCategory::privatenet(), // is_registered -> DBに登録済みかどうか。テスト中はプライベートネットのみ登録されている状態となる。
 			),
-			( new TestAllChainID() )->get()
+			ChainID::all()
 		);
 	}
 

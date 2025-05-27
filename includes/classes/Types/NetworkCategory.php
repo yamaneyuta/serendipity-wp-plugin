@@ -3,16 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Lib\Repository\Constants\NetworkCategoryID;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
 
 /**
  * ネットワークカテゴリを表すクラス
  */
 final class NetworkCategory {
-
-	private const NETWORK_CATEGORY_ID_MAINNET    = 1;   // メインネット(Ethereumメインネット、Polygonメインネット等)
-	private const NETWORK_CATEGORY_ID_TESTNET    = 2;   // テストネット(Ethereum Sepolia等)
-	private const NETWORK_CATEGORY_ID_PRIVATENET = 3;   // プライベートネット(Ganache、Hardhat等)
 
 	private function __construct( int $network_category_id ) {
 		$this->id = $network_category_id;
@@ -38,7 +35,7 @@ final class NetworkCategory {
 	 */
 	public static function from( int $network_category_id ): NetworkCategory {
 		if ( ! isset( self::$cache[ $network_category_id ] ) ) {
-			if ( ! in_array( $network_category_id, array( self::NETWORK_CATEGORY_ID_MAINNET, self::NETWORK_CATEGORY_ID_TESTNET, self::NETWORK_CATEGORY_ID_PRIVATENET ), true ) ) {
+			if ( ! in_array( $network_category_id, array( NetworkCategoryID::MAINNET, NetworkCategoryID::TESTNET, NetworkCategoryID::PRIVATENET ), true ) ) {
 				throw new \InvalidArgumentException( '[E878BC2D] Invalid network category ID. - network_category_id: ' . $network_category_id );
 			}
 			self::$cache[ $network_category_id ] = new NetworkCategory( $network_category_id );
@@ -52,21 +49,21 @@ final class NetworkCategory {
 	 * メインネットを表すネットワークカテゴリインスタンスを取得します。
 	 */
 	public static function mainnet(): NetworkCategory {
-		return self::from( self::NETWORK_CATEGORY_ID_MAINNET );
+		return self::from( NetworkCategoryID::MAINNET );
 	}
 
 	/**
 	 * テストネットを表すネットワークカテゴリインスタンスを取得します。
 	 */
 	public static function testnet(): NetworkCategory {
-		return self::from( self::NETWORK_CATEGORY_ID_TESTNET );
+		return self::from( NetworkCategoryID::TESTNET );
 	}
 
 	/**
 	 * プライベートネットを表すネットワークカテゴリインスタンスを取得します。
 	 */
 	public static function privatenet(): NetworkCategory {
-		return self::from( self::NETWORK_CATEGORY_ID_PRIVATENET );
+		return self::from( NetworkCategoryID::PRIVATENET );
 	}
 
 	/**
@@ -91,11 +88,11 @@ final class NetworkCategory {
 
 	public function __toString(): string {
 		switch ( $this->id() ) {
-			case self::NETWORK_CATEGORY_ID_MAINNET:
+			case NetworkCategoryID::MAINNET:
 				return 'Mainnet';
-			case self::NETWORK_CATEGORY_ID_TESTNET:
+			case NetworkCategoryID::TESTNET:
 				return 'Testnet';
-			case self::NETWORK_CATEGORY_ID_PRIVATENET:
+			case NetworkCategoryID::PRIVATENET:
 				return 'Privatenet';
 			default:
 				throw new \LogicException( '[E3A7D1A1] Invalid network category ID. id: ' . $this->id() );

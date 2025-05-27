@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Config;
 
 use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Lib\Repository\Constants\NetworkCategoryID;
 
 /**
  * システム固定の設定値を取得するためのクラス
@@ -48,5 +49,21 @@ class Config {
 		ChainID::PRIVATENET_L2  => '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
 		ChainID::SEPOLIA        => '0x6e98081f56608E3a9414823239f65c0e6399561d',
 		ChainID::SONEIUM_MINATO => '0x6a9214D8264C00d884225542d3af47cf5De2049f',
+	);
+
+	/**
+	 * ネットワークカテゴリの定義
+	 * key: ChainID, value: NetworkCategoryID
+	 *
+	 * @var array<int,int>
+	 */
+	public const NETWORK_CATEGORIES = array(
+		ChainID::ETH_MAINNET            => NetworkCategoryID::MAINNET,
+		ChainID::POLYGON_ZK_EVM         => NetworkCategoryID::MAINNET,
+		ChainID::SEPOLIA                => NetworkCategoryID::TESTNET,
+		ChainID::POLYGON_ZK_EVM_CARDONA => NetworkCategoryID::TESTNET,
+		ChainID::SONEIUM_MINATO         => NetworkCategoryID::TESTNET,
+		ChainID::PRIVATENET_L1          => NetworkCategoryID::PRIVATENET,
+		ChainID::PRIVATENET_L2          => NetworkCategoryID::PRIVATENET,
 	);
 }
