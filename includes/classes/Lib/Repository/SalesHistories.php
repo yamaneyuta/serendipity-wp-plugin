@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Definition\AppContractDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Types\SalesHistoryType;
 use wpdb;
@@ -112,14 +112,20 @@ class AppContractTmpTable {
 		);
 
 		// テーブルにデータを挿入
-		$app_contracts = ( new AppContractDefinition() )->all();
-		foreach ( $app_contracts as $app_contract ) {
-			$this->wpdb->query(
-				<<<SQL
-				INSERT INTO `{$table_name}` (chain_id, address)
-				VALUES ({$app_contract->chainID()}, '{$app_contract->address()}')
-			SQL
-			);
+		$chain_IDs        = ChainID::all();
+		$app_address_data = ( new AppContractAddressData() );
+		foreach ( $chain_IDs as $chain_ID ) {
+			$address = $app_address_data->get( $chain_ID );
+			if ( is_null( $address ) ) {
+				continue;   // アプリケーションコントラクトがデプロイされていないチェーンはスキップ
+			}
+			$sql    = <<<SQL
+				INSERT INTO `{$table_name}` (`chain_id`, `address`)
+				VALUES (%d, %s)
+			SQL;
+			$sql    = $this->wpdb->prepare( $sql, $chain_ID, $address );
+			$result = $this->wpdb->query( $sql );
+			assert( 1 === $result, "[5549D888] Failed to insert app contract address for chain ID {$chain_ID}" );
 		}
 	}
 
