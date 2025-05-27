@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\AppContract;
+use Cornix\Serendipity\Core\Lib\Repository\AppContractAddressData;
 use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\RPC;
@@ -23,8 +23,10 @@ class ChainResolver extends ResolverBase {
 
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
-		$app_contract          = ( new AppContract() )->get( $chain_ID );
-		$app_contract_callback = fn() => is_null( $app_contract ) ? null : array( 'address' => $app_contract->address() );
+		$app_contract_callback = function () use ( $chain_ID ) {
+			$app_contract_address = ( new AppContractAddressData() )->get( $chain_ID );
+			return is_null( $app_contract_address ) ? null : array( 'address' => $app_contract_address );
+		};
 
 		$confirmations_callback = function () use ( $chain_ID ) {
 			// 権限チェック不要
