@@ -128,7 +128,7 @@ class RpcSettingsInitializer {
 
 		// プライベートネットのURLを取得する関数
 		$privatenet = function ( int $number ): string {
-			assert( in_array( $number, array( 1, 2 ) ) );
+			assert( in_array( $number, array( 1, 2 ), true ) );
 			$prefix = ( new Environment() )->isTesting() ? 'tests-' : '';
 			return "http://{$prefix}privatenet-{$number}.local";
 		};

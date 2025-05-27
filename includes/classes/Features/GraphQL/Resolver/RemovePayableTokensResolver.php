@@ -35,7 +35,7 @@ class RemovePayableTokensResolver extends ResolverBase {
 			$current_payable_tokens
 		);
 		foreach ( $token_addresses as $address ) {
-			if ( ! in_array( $address, $current_payable_tokens_addresses ) ) {
+			if ( ! in_array( $address, $current_payable_tokens_addresses, true ) ) {
 				throw new \InvalidArgumentException( '[B7367B4B] Token not found: ' . $address );
 			}
 		}
@@ -44,7 +44,7 @@ class RemovePayableTokensResolver extends ResolverBase {
 		$new_payable_tokens = array_values(
 			array_filter(
 				$current_payable_tokens,
-				fn( $token ) => ! in_array( $token->address(), $token_addresses )
+				fn( $token ) => ! in_array( $token->address(), $token_addresses, true )
 			)
 		);
 		assert( count( $new_payable_tokens ) === count( $current_payable_tokens ) - count( $token_addresses ) );

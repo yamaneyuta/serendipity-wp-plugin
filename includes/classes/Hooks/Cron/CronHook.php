@@ -105,7 +105,7 @@ class AppContractCrawlCronProcedure {
 			$is_continue_crawling = false; // ループ継続フラグをリセット
 
 			foreach ( $crawlable_chain_ids as $chain_ID ) {
-				if ( in_array( $chain_ID, $crawl_failed_chain_ids ) ) {
+				if ( in_array( $chain_ID, $crawl_failed_chain_ids, true ) ) {
 					// クロールに失敗したチェーンIDはスキップ
 					continue;
 				}

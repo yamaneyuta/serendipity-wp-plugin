@@ -44,7 +44,7 @@ class BlockchainClient {
 			$property->setAccessible( true );
 			/** @var string[] */
 			$allowedMethods = $property->getValue( $eth );
-			assert( ! in_array( 'eth_chainId', $allowedMethods ), '[36C3ECD5] `eth_chainId` method is already allowed.' );
+			assert( ! in_array( 'eth_chainId', $allowedMethods, true ), '[36C3ECD5] `eth_chainId` method is already allowed.' );
 			$allowedMethods[] = 'eth_chainId';
 			$property->setValue( $eth, $allowedMethods ); // 許可するメソッド一覧に`eth_chainId`を追加
 

@@ -259,7 +259,7 @@ class TestUser {
 
 		// $user_typeはUserTypeのプロパティであること
 		$properties = ( new ReflectionClass( UserType::class ) )->getConstants();
-		assert( in_array( $user_type, array_values( $properties ) ), '[AAF3AE09] invalid user_type: ' . $user_type );
+		assert( in_array( $user_type, array_values( $properties ), true ), '[AAF3AE09] invalid user_type: ' . $user_type );
 
 		$this->initialize( $user_type );
 	}

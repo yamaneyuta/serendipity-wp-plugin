@@ -63,7 +63,7 @@ class AppContractCrawler {
 			$invoice_ID = InvoiceIdType::from( $invoice_ID_bi );
 
 			// 既に保存済みのinvoiceIDの場合はスキップ
-			if ( in_array( $invoice_ID->hex(), $saved_invoice_id_hex_array ) ) {
+			if ( in_array( $invoice_ID->hex(), $saved_invoice_id_hex_array, true ) ) {
 				continue;
 			} else {
 				$saved_invoice_id_hex_array[] = $invoice_ID->hex();
