@@ -5,7 +5,9 @@ namespace Cornix\Serendipity\Core\Hooks\Post;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
+use Cornix\Serendipity\Core\Lib\Repository\Environment;
 use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
+use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -151,6 +153,16 @@ class ContentIoHook {
 	}
 
 	public function deletePostAction( int $post_id ): void {
+		// テスト実行中、テストツールによって投稿が削除される。
+		// その際、このフックが呼び出されるが、テーブル作成前に呼び出されるとエラーになるため
+		// テスト中かつテーブルが存在しない場合は何もしない
+		if ( ( new Environment() )->isTesting() ) {
+			global $wpdb;
+			if ( ! $wpdb->get_var( "SHOW TABLES LIKE '" . ( new TableName() )->paidContent() . "'" ) ) {
+				return; // テーブルが存在しない場合は何もしない
+			}
+		}
+
 		// 投稿が削除された時に有料記事の情報も削除
 		( new PaidContentTable() )->delete( $post_id );
 	}
