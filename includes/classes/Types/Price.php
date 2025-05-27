@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Types;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Repository\TokenData;
+use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use phpseclib\Math\BigInteger;
 

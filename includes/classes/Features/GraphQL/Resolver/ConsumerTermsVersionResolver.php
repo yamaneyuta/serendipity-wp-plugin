@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\ConsumerTerms;
+use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 
 class ConsumerTermsVersionResolver extends ResolverBase {
 	/**

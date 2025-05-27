@@ -4,15 +4,15 @@ namespace Cornix\Serendipity\Core\Hooks\Cron;
 
 use Cornix\Serendipity\Core\Lib\Crawler\AppContractCrawler;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Lib\Repository\BlockNumberActiveSince;
-use Cornix\Serendipity\Core\Lib\Repository\CrawledBlockNumber;
-use Cornix\Serendipity\Core\Lib\Repository\Name\CronActionName;
-use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
-use Cornix\Serendipity\Core\Lib\Repository\RPC;
+use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
+use Cornix\Serendipity\Core\Repository\CrawledBlockNumber;
+use Cornix\Serendipity\Core\Repository\Name\CronActionName;
+use Cornix\Serendipity\Core\Repository\PluginInfo;
+use Cornix\Serendipity\Core\Repository\RPC;
 use Cornix\Serendipity\Core\Config\Config;
-use Cornix\Serendipity\Core\Lib\Repository\AppContractAddressData;
-use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
+use Cornix\Serendipity\Core\Repository\AppContractAddressData;
+use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 
 /**

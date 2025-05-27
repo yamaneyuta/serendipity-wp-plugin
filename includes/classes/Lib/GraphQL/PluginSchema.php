@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\GraphQL;
 
 use Cornix\Serendipity\Core\Lib\Path\ProjectFile;
-use Cornix\Serendipity\Core\Lib\Repository\Environment;
+use Cornix\Serendipity\Core\Repository\Environment;
 use GraphQL\Language\Parser;
 use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
+use Cornix\Serendipity\Core\Repository\PluginInfo;
 
 class ExternalApiAccess {
 	/**

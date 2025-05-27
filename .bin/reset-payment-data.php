@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
-use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
+use Cornix\Serendipity\Core\Repository\ServerSignerData;
 
 // 方針:
 // テストネットで確認することもあるため、コントラクトのデータは変更せず以下の処理を実施

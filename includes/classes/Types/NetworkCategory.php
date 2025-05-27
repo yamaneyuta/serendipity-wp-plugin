@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
-use Cornix\Serendipity\Core\Lib\Repository\Constants\NetworkCategoryID;
-use Cornix\Serendipity\Core\Lib\Repository\Environment;
+use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
+use Cornix\Serendipity\Core\Repository\Environment;
 
 /**
  * ネットワークカテゴリを表すクラス

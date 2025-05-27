@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
-use Cornix\Serendipity\Core\Lib\Repository\ChainData;
+use Cornix\Serendipity\Core\Repository\ChainData;
 
 /**
  * チェーンを表すクラス

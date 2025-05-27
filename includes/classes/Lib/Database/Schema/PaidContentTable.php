@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Database\Schema;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
-use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Price;
 

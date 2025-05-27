@@ -7,10 +7,10 @@ use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Logger\ILogger;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
-use Cornix\Serendipity\Core\Lib\Repository\Name\ClassName;
-use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
+use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Repository\Name\BlockName;
+use Cornix\Serendipity\Core\Repository\Name\ClassName;
+use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 

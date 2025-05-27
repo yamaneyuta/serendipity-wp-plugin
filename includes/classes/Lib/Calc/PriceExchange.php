@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
-use Cornix\Serendipity\Core\Lib\Repository\Oracle;
-use Cornix\Serendipity\Core\Lib\Repository\RateData;
-use Cornix\Serendipity\Core\Lib\Repository\TokenData;
+use Cornix\Serendipity\Core\Repository\Oracle;
+use Cornix\Serendipity\Core\Repository\RateData;
+use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Types\Price;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 use phpseclib\Math\BigInteger;

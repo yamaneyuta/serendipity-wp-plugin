@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
-use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
-use Cornix\Serendipity\Core\Lib\Repository\Invoice;
-use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
-use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
-use Cornix\Serendipity\Core\Lib\Repository\RPC;
-use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
+use Cornix\Serendipity\Core\Repository\Confirmations;
+use Cornix\Serendipity\Core\Repository\Invoice;
+use Cornix\Serendipity\Core\Repository\InvoiceNonce;
+use Cornix\Serendipity\Core\Repository\PaidContentData;
+use Cornix\Serendipity\Core\Repository\RPC;
+use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;

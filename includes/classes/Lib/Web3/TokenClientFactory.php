@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
-use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
+use Cornix\Serendipity\Core\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
 class TokenClientFactory {

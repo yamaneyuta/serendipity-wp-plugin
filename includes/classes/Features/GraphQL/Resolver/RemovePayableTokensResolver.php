@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
+use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
 class RemovePayableTokensResolver extends ResolverBase {

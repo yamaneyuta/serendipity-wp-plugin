@@ -5,10 +5,10 @@ namespace Cornix\Serendipity\Core\Lib\Crawler;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Convert\Padding;
-use Cornix\Serendipity\Core\Lib\Repository\Invoice;
-use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
-use Cornix\Serendipity\Core\Lib\Repository\UnlockPaywallTransaction;
-use Cornix\Serendipity\Core\Lib\Repository\UnlockPaywallTransferEvent;
+use Cornix\Serendipity\Core\Repository\Invoice;
+use Cornix\Serendipity\Core\Repository\ServerSignerData;
+use Cornix\Serendipity\Core\Repository\UnlockPaywallTransaction;
+use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppAbi;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;

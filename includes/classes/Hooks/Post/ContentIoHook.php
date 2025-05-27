@@ -5,11 +5,11 @@ namespace Cornix\Serendipity\Core\Hooks\Post;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
-use Cornix\Serendipity\Core\Lib\Repository\Environment;
-use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
-use Cornix\Serendipity\Core\Lib\Repository\Name\ClassName;
-use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
-use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
+use Cornix\Serendipity\Core\Repository\Environment;
+use Cornix\Serendipity\Core\Repository\Name\BlockName;
+use Cornix\Serendipity\Core\Repository\Name\ClassName;
+use Cornix\Serendipity\Core\Repository\PaidContentData;
+use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 

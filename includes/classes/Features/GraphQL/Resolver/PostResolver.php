@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
-use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
+use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Repository\PaidContentData;
+use Cornix\Serendipity\Core\Repository\PayableTokens;
 
 class PostResolver extends ResolverBase {
 

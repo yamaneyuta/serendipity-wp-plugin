@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\Oracle;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
+use Cornix\Serendipity\Core\Repository\Oracle;
+use Cornix\Serendipity\Core\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;

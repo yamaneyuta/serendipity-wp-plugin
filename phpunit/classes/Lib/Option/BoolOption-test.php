@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\Name\Prefix;
+use Cornix\Serendipity\Core\Repository\Name\Prefix;
 use Cornix\Serendipity\Core\Lib\Option\BoolOption;
 
 class BoolOptionTest extends IntegrationTestBase {

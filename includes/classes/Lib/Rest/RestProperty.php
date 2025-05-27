@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Rest;
 
-use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
-use Cornix\Serendipity\Core\Lib\Repository\WPSettings;
+use Cornix\Serendipity\Core\Repository\PluginInfo;
+use Cornix\Serendipity\Core\Repository\WPSettings;
 
 class RestProperty {
 

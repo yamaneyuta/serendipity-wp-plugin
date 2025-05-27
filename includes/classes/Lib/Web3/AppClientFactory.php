@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
-use Cornix\Serendipity\Core\Lib\Repository\AppContractAddressData;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
+use Cornix\Serendipity\Core\Repository\AppContractAddressData;
+use Cornix\Serendipity\Core\Repository\Settings\RpcUrlSetting;
 
 class AppClientFactory {
 	/**

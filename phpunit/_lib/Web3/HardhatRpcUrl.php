@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\RpcUrlSetting;
+use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Repository\Settings\RpcUrlSetting;
 
 /** Hardhatに接続するRPC URLを取得します。 */
 class HardhatRpcUrl {

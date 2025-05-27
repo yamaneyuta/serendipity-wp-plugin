@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Repository\SellerAgreedTerms;
-use Cornix\Serendipity\Core\Lib\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
+use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 
 class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {

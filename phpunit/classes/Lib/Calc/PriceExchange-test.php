@@ -2,13 +2,13 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Repository\RateData;
+use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Types\Rate;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
-use Cornix\Serendipity\Core\Lib\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Lib\Repository\Oracle;
+use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Repository\Oracle;
 use Cornix\Serendipity\Core\Types\Price;
 use phpseclib\Math\BigInteger;
 
