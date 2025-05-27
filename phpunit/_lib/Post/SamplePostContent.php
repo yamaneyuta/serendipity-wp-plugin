@@ -27,7 +27,7 @@ class SamplePostContent {
 			<p>{$this->free_text}</p>
 			<!-- /wp:paragraph -->
 
-			<!-- wp:create-block/qik-chain-pay {"dummy":"2024-08-26T10:54:22.901Z"} -->
+			<!-- wp:create-block/qik-chain-pay {"sellingNetworkCategoryID":2,"sellingAmountHex":"0x3","sellingDecimals":0,"sellingSymbol":"JPY"} -->
 			<aside class="wp-block-create-block-qik-chain-pay {$this->class_name}"></aside>
 			<!-- /wp:create-block/qik-chain-pay -->
 
