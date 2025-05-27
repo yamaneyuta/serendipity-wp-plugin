@@ -93,6 +93,9 @@ class ContentIoHook {
 	/** 未保存の加工前投稿内容 */
 	private static $unsaved_original_content = null;
 
+	/**
+	 * 投稿の保存前のフック。投稿内容を加工してwp_postsに保存される内容を変更します。
+	 */
 	public function wpInsertPostDataFilter( array $data, array $postarr ): array {
 		// 本文に何も記載していないとき、$data['post_content'] は false や空文字だったりしたためチェック(assert)は省略
 
@@ -129,6 +132,9 @@ class ContentIoHook {
 		return $data;
 	}
 
+	/**
+	 * 投稿の保存後のフック。静的変数に保持した投稿内容から有料記事の情報を取得して保存します。
+	 */
 	public function savePostFilter( int $post_id, \WP_Post $post ): void {
 		if ( is_null( self::$unsaved_original_content ) ) {
 			// 投稿内容が未保存の場合は何もしない(ゴミ箱に移動された時などが該当)
@@ -151,6 +157,9 @@ class ContentIoHook {
 		}
 	}
 
+	/**
+	 * 投稿が削除された時のアクション。有料記事の情報も削除します。
+	 */
 	public function deletePostAction( int $post_id ): void {
 		// テスト実行中、テストツールによって投稿が削除される。
 		// その際、このフックが呼び出されるが、テーブル作成前に呼び出されるとエラーになるため
@@ -166,6 +175,10 @@ class ContentIoHook {
 		( new PaidContentTable() )->delete( $post_id );
 	}
 
+	/**
+	 * 投稿の内容をフィルタします。
+	 * 投稿、固定ページの内容に有料記事のウィジェットを追加します。
+	 */
 	public function theContentFilter( string $content ): string {
 		// 投稿、固定ページ以外は処理抜け
 		if ( ! is_single() && ! is_page() ) {
@@ -186,6 +199,10 @@ class ContentIoHook {
 		return $content;
 	}
 
+	/**
+	 * リビジョン画面で表示される投稿内容をフィルタします。
+	 * 差分は投稿全体で比較したいので、リビジョンの内容に有料記事のウィジェットと有料部分を追加します。
+	 */
 	public function wpPostRevisionFieldPostContentFilter( string $revision_field_content, string $field, \WP_Post $revision_post, string $context ) {
 		$post_id            = $revision_post->ID;
 		$paid_content_table = ( new PaidContentTable() );
