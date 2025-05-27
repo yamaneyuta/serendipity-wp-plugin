@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Post\ContentFilter;
-use Cornix\Serendipity\Core\Lib\Post\PostContent;
+use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
+use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
@@ -82,15 +82,11 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			return $error_result_callback( self::ERROR_CODE_TRANSACTION_UNCONFIRMED );
 		}
 
-		// 投稿の有料部分を取得
-		// HTMLコメントを含まない投稿本文を取得
-		$content = ( new PostContent( $post_ID ) )->getCommentRemoved();
-
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new ContentFilter( $content ) )->getPaid();
+		$paid_content = ( new PaidContentTable() )->getPaidContent( $post_ID );
 
 		return array(
-			'content'   => $paid_content,
+			'content'   => HtmlFormat::removeHtmlComments( $paid_content ), // HTMLコメントを除去
 			'errorCode' => null,
 		);
 	}

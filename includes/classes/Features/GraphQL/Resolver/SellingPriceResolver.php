@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
+use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 
 class SellingPriceResolver extends ResolverBase {
 
@@ -19,11 +19,8 @@ class SellingPriceResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		// ウィジェットの属性を取得
-		$widget_attributes = WidgetAttributes::fromPostID( $post_ID );
-
-		// 販売価格を返す
-		$selling_price = is_null( $widget_attributes ) ? null : $widget_attributes->sellingPrice();
+		// 販売価格をテーブルから取得して返す
+		$selling_price = ( new PaidContentTable() )->getSellingPrice( $post_ID );
 		return is_null( $selling_price ) ? null : array(
 			'amountHex' => $selling_price->amountHex(),
 			'decimals'  => $selling_price->decimals(),

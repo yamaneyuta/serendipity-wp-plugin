@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
 use Cornix\Serendipity\Core\Lib\Repository\RPC;
-use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class VerifiableChainsResolver extends ResolverBase {
 
@@ -22,7 +23,7 @@ class VerifiableChainsResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		$selling_network_category = WidgetAttributes::fromPostID( $post_ID )->sellingNetworkCategory() ?? null;
+		$selling_network_category = NetworkCategory::from( ( new PaidContentTable() )->getSellingNetworkCategoryID( $post_ID ) );
 
 		if ( is_null( $selling_network_category ) ) {
 			// 通常ネットワークカテゴリ一覧が取得できない場合は無い

@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Features\Update\Version;
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\OracleTable;
+use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
@@ -34,6 +35,8 @@ class v001 {
 		( new RpcSettingsInitializer() )->initialize();
 
 		global $wpdb;
+		// 有料記事を管理するためのテーブルを作成
+		( new PaidContentTable( $wpdb ) )->create();
 		// 請求書情報テーブルを作成
 		( new InvoiceTable( $wpdb ) )->create();
 		// 請求書とnonceの紐づきを保存するテーブルを作成
@@ -57,6 +60,8 @@ class v001 {
 		// 署名用ウォレットの秘密鍵の削除は行わない
 
 		global $wpdb;
+		// 有料記事を管理するためのテーブルを削除
+		( new PaidContentTable( $wpdb ) )->drop();
 		// 請求書情報テーブルを削除
 		( new InvoiceTable( $wpdb ) )->drop();
 		// 請求書とnonceの紐づきを保存するテーブルを削除

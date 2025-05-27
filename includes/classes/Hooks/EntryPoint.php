@@ -5,10 +5,9 @@ namespace Cornix\Serendipity\Core\Hooks;
 use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hooks\Page\AdminPageHook;
 use Cornix\Serendipity\Core\Hooks\Cron\CronHook;
-use Cornix\Serendipity\Core\Hooks\Post\ContentFilterHook;
 use Cornix\Serendipity\Core\Hooks\Page\PostEditHook;
 use Cornix\Serendipity\Core\Hooks\Page\ViewPageHook;
-use Cornix\Serendipity\Core\Hooks\Post\ExcerptFilterHook;
+use Cornix\Serendipity\Core\Hooks\Post\ContentIoHook;
 use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
@@ -33,10 +32,7 @@ class EntryPoint {
 		// 投稿表示画面
 		( new ViewPageHook() )->register();
 
-		// 抜粋のフィルタ
-		( new ExcerptFilterHook() )->register();
-
-		// 投稿内容のフィルタ
-		( new ContentFilterHook() )->register();
+		// 投稿を保存または取得する時のフィルタ処理
+		( new ContentIoHook() )->register();
 	}
 }
