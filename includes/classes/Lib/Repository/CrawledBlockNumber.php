@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
+use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Types\BlockNumberType;
 

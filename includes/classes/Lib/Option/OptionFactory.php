@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Repository\Option;
+namespace Cornix\Serendipity\Core\Lib\Option;
 
 use Cornix\Serendipity\Core\Lib\Repository\Name\Prefix;
 use Cornix\Serendipity\Core\Types\RpcUrlProviderType;

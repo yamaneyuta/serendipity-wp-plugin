@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Option\ArrayOption;
-use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
+use Cornix\Serendipity\Core\Lib\Option\ArrayOption;
+use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
 

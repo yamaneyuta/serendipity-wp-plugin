@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Lib\Repository\Environment;
-use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
+use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 
 class EnvironmentTest extends WP_UnitTestCase {
 	/**

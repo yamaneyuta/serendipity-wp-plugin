@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Repository\Option\OptionFactory;
+use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 
 /**
  * インストールされている環境から情報を取得するクラス。

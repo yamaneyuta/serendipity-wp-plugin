@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Repository\Option;
+namespace Cornix\Serendipity\Core\Lib\Option;
 
 class IntOption {
 	public function __construct( string $option_key_name ) {
