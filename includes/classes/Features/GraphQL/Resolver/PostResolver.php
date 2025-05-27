@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
+use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Lib\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class PostResolver extends ResolverBase {
 
@@ -35,10 +35,15 @@ class PostResolver extends ResolverBase {
 	 * 指定された投稿IDに対して支払いが可能なトークン一覧を取得します。
 	 */
 	private function payableTokens( array $root_value, int $post_ID ) {
+		// 販売ネットワークカテゴリを取得
+		$selling_network_category = ( new PaidContentData( $post_ID ) )->sellingNetworkCategory();
+
+		if ( is_null( $selling_network_category ) ) {
+			Logger::warn( '[21B2C2DD] Selling network category is null for post ID: ' . $post_ID );
+		}
+
 		// 投稿に設定されている販売ネットワークカテゴリに属するチェーンID一覧を取得
-		$chain_IDs = ( new NetworkCategoryDefinition() )->getAllChainID(
-			NetworkCategory::from( ( new PaidContentTable() )->getSellingNetworkCategoryID( $post_ID ) )
-		);
+		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new NetworkCategoryDefinition() )->getAllChainID( $selling_network_category );
 
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {

@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
+use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Repository\AppContract;
 use Cornix\Serendipity\Core\Lib\Repository\Definition\NetworkCategoryDefinition;
+use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Lib\Repository\RPC;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 class VerifiableChainsResolver extends ResolverBase {
 
@@ -23,15 +23,13 @@ class VerifiableChainsResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		$selling_network_category = NetworkCategory::from( ( new PaidContentTable() )->getSellingNetworkCategoryID( $post_ID ) );
-
+		$selling_network_category = ( new PaidContentData( $post_ID ) )->sellingNetworkCategory();
 		if ( is_null( $selling_network_category ) ) {
-			// 通常ネットワークカテゴリ一覧が取得できない場合は無い
-			throw new \InvalidArgumentException( '[F105287A] Cannot get selling network category. postID: ' . $post_ID );
+			Logger::warn( '[B4FC6E2A] Selling network category is null for post ID: ' . $post_ID );
 		}
 
 		// 投稿の販売ネットワークカテゴリに属する全てのチェーンIDを取得
-		$chain_IDs = ( new NetworkCategoryDefinition() )->getAllChainID( $selling_network_category );
+		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new NetworkCategoryDefinition() )->getAllChainID( $selling_network_category );
 
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {

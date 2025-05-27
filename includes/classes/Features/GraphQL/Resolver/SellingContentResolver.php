@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
-use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
+use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Post\ContentAnalyzer;
+use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
 
 class SellingContentResolver extends ResolverBase {
 
@@ -22,10 +23,11 @@ class SellingContentResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new PaidContentTable() )->getPaidContent( $post_ID );
+		$paid_content = ( new PaidContentData( $post_ID ) )->content();
 
 		// 有料部分のコンテンツが取得できなかった場合はnullを返す
 		if ( null === $paid_content ) {
+			Logger::warn( '[248F67EA] Paid content is null for post ID: ' . $post_ID );
 			return null;
 		}
 

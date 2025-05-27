@@ -5,11 +5,11 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
-use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Lib\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
+use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Lib\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Repository\TokenData;
@@ -49,7 +49,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		$seller_address = Ethers::verifyMessage( $seller_agreed_terms->message(), $seller_agreed_terms->signature() );
 
 		// 販売価格を取得
-		$selling_price = ( new PaidContentTable() )->getSellingPrice( $post_ID );
+		$selling_price = ( new PaidContentData( $post_ID ) )->sellingPrice();
+		assert( ! is_null( $selling_price ), '[F8524488] Selling price is null for post ID: ' . $post_ID );
 
 		// 支払うトークンにおける価格を計算
 		// ※ これは`1ETH`等の価格を表現するオブジェクトであり、実際に支払う数量(wei等)ではないことに注意
