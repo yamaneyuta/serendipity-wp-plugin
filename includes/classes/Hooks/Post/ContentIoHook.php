@@ -10,7 +10,6 @@ use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Price;
@@ -62,20 +61,20 @@ class ContentIoHook {
 		);
 	}
 
+	/**
+	 * 投稿のREST APIレスポンスを加工します。
+	 * このメソッドが呼び出されるタイミング:
+	 *   - 投稿編集画面を開いたとき
+	 *   - 投稿を保存した時
+	 *   - wp/v2/posts等のAPIにアクセスした時
+	 */
 	public function restPreparePostFilter( \WP_REST_Response $response, \WP_Post $post, \WP_REST_Request $request ): \WP_REST_Response {
-		if ( ( new PaidContentTable() )->exists( $post->ID ) ) {
-			// 有料記事の情報がある場合、
-			// これは$response->data['content']['raw']に無料部分のみ格納された状態。
-			// ここにウィジェットと有料部分を追加して返す。
-
-			// 念のため投稿編集権限を持っていることを確認
-			Judge::checkHasEditableRole();
-			if ( ! ( new Access() )->canCurrentUserEditPost( $post->ID ) ) {
-				throw new \LogicException( '[0196607A] You do not have permission to edit this post. - post ID: ' . $post->ID );
-			}
+		if ( ( new Access() )->canCurrentUserEditPost( $post->ID ) && ( new PaidContentTable() )->exists( $post->ID ) ) {
+			// このメソッドが呼び出されたタイミングでは$response->data['content']['raw']に無料部分のみ格納された状態。
+			// この投稿の編集権限があり、かつ有料記事の情報が存在する場合はウィジェットと有料部分を結合して返す。
 
 			$widget_content = $this->createWidgetContent( $post->ID );
-			$paid_content   = ( new PaidContentTable() )->getPaidContent( $post->ID ) ?? '';
+			$paid_content   = ( new PaidContentTable() )->getPaidContent( $post->ID );
 			assert( ! is_null( $paid_content ), "[A1FF1B77] Paid content is null. - post ID: {$post->ID}" );
 
 			$response->data['content']['raw']      = $response->data['content']['raw'] . "\n\n" . $widget_content . "\n\n" . $paid_content;
