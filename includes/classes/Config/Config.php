@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Repository\Settings;
+namespace Cornix\Serendipity\Core\Config;
 
 /**
  * システム固定の設定値を取得するためのクラス

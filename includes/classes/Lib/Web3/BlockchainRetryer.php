@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Algorithm\Retryer;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
+use Cornix\Serendipity\Core\Config\Config;
 
 class BlockchainRetryer {
 	public function __construct() {

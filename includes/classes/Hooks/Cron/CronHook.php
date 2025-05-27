@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Lib\Repository\CrawledBlockNumber;
 use Cornix\Serendipity\Core\Lib\Repository\Name\CronActionName;
 use Cornix\Serendipity\Core\Lib\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Lib\Repository\RPC;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
+use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 

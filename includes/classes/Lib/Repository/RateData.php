@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Repository;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Repository\Oracle;
-use Cornix\Serendipity\Core\Lib\Repository\Settings\Config;
+use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Repository\Transient\TransientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\OracleClient;
 use Cornix\Serendipity\Core\Types\Rate;
