@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
+use Cornix\Serendipity\Core\Lib\Logger\Logger;
+use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
 
 class SellingPriceResolver extends ResolverBase {
 
@@ -20,7 +21,12 @@ class SellingPriceResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// 販売価格をテーブルから取得して返す
-		$selling_price = ( new PaidContentTable() )->getSellingPrice( $post_ID );
+		$selling_price = ( new PaidContentData( $post_ID ) )->sellingPrice();
+
+		if ( is_null( $selling_price ) ) {
+			Logger::warn( '[57B6E802] Selling price is null for post ID: ' . $post_ID );
+		}
+
 		return is_null( $selling_price ) ? null : array(
 			'amountHex' => $selling_price->amountHex(),
 			'decimals'  => $selling_price->decimals(),

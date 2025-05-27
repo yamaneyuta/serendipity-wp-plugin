@@ -19,13 +19,13 @@ class WidgetAttributes {
 		$this->attrs = $attrs;
 	}
 
-	public static function from( NetworkCategory $network_category, string $amount_hex, int $decimals, string $symbol ): WidgetAttributes {
+	public static function from( ?NetworkCategory $network_category, ?Price $selling_price ): WidgetAttributes {
 		return new self(
 			array(
-				self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID => $network_category->id(),
-				self::ATTRS_KEY_SELLING_AMOUNT_HEX => $amount_hex,
-				self::ATTRS_KEY_SELLING_DECIMALS   => $decimals,
-				self::ATTRS_KEY_SELLING_SYMBOL     => $symbol,
+				self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID => $network_category ? $network_category->id() : null,
+				self::ATTRS_KEY_SELLING_AMOUNT_HEX => $selling_price ? $selling_price->amountHex() : null,
+				self::ATTRS_KEY_SELLING_DECIMALS   => $selling_price ? $selling_price->decimals() : null,
+				self::ATTRS_KEY_SELLING_SYMBOL     => $selling_price ? $selling_price->symbol() : null,
 			)
 		);
 	}

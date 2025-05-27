@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
-use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Repository\Confirmations;
 use Cornix\Serendipity\Core\Lib\Repository\Invoice;
 use Cornix\Serendipity\Core\Lib\Repository\InvoiceNonce;
+use Cornix\Serendipity\Core\Lib\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Lib\Repository\RPC;
 use Cornix\Serendipity\Core\Lib\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -83,7 +83,8 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new PaidContentTable() )->getPaidContent( $post_ID );
+		$paid_content = ( new PaidContentData( $post_ID ) )->content();
+		assert( is_string( $paid_content ), '[391C0A77] Paid content must be a string.' );
 
 		return array(
 			'content'   => HtmlFormat::removeHtmlComments( $paid_content ), // HTMLコメントを除去
