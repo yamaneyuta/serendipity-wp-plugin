@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\Transient;
+namespace Cornix\Serendipity\Core\Lib\Transient;
 
 class IntTransient {
 	public function __construct( string $option_key_name ) {

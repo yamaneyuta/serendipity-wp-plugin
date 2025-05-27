@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\Transient;
+namespace Cornix\Serendipity\Core\Lib\Transient;
 
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
 use Cornix\Serendipity\Core\Types\SymbolPair;
