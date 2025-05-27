@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Schema;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Lib\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Price;
 
 /**
@@ -51,7 +52,38 @@ class PaidContentTable {
 		assert( true === $result );
 	}
 
-	public function set( int $post_id, string $paid_content, int $selling_network_category_id, Price $selling_price ): void {
+	/**
+	 * @return null|object{
+	 *   created_at: string,
+	 *   updated_at: string,
+	 *   post_id: int,
+	 *   paid_content: string,
+	 *   selling_network_category_id: int,
+	 *   selling_amount_hex: string,
+	 *   selling_decimals: int,
+	 *   selling_symbol: string
+	 * }
+	 */
+	public function select( int $post_id ) {
+		$sql = <<<SQL
+			SELECT *
+			FROM `{$this->table_name}`
+			WHERE `post_id` = %d
+		SQL;
+
+		$sql    = $this->wpdb->prepare( $sql, $post_id );
+		$result = $this->wpdb->get_row( $sql );
+
+		if ( ! is_null( $result ) ) {
+			$result->post_id                     = (int) $result->post_id;
+			$result->selling_network_category_id = (int) $result->selling_network_category_id;
+			$result->selling_decimals            = (int) $result->selling_decimals;
+		}
+
+		return $result;
+	}
+
+	public function set( int $post_id, string $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}` (
 				`post_id`,
@@ -70,20 +102,25 @@ class PaidContentTable {
 				`selling_symbol` = %s
 		SQL;
 
+		$selling_network_category_id = is_null( $selling_network_category ) ? null : $selling_network_category->id();
+		$selling_price_amount_hex    = is_null( $selling_price ) ? null : $selling_price->amountHex();
+		$selling_price_decimals      = is_null( $selling_price ) ? null : $selling_price->decimals();
+		$selling_price_symbol        = is_null( $selling_price ) ? null : $selling_price->symbol();
+
 		$sql = $this->wpdb->prepare(
 			$sql,
 			array(
 				$post_id,
 				$paid_content,
 				$selling_network_category_id,
-				$selling_price->amountHex(),
-				$selling_price->decimals(),
-				$selling_price->symbol(),
+				$selling_price_amount_hex,
+				$selling_price_decimals,
+				$selling_price_symbol,
 				$paid_content,
 				$selling_network_category_id,
-				$selling_price->amountHex(),
-				$selling_price->decimals(),
-				$selling_price->symbol(),
+				$selling_price_amount_hex,
+				$selling_price_decimals,
+				$selling_price_symbol,
 			)
 		);
 
@@ -110,65 +147,10 @@ class PaidContentTable {
 	}
 
 	/**
-	 * 指定した投稿IDの有料記事データが存在するかどうかを取得します。
+	 * テーブルが存在するかどうかを取得します。
 	 */
-	public function exists( int $post_id ): bool {
-		$sql = <<<SQL
-			SELECT COUNT(*) FROM `{$this->table_name}` WHERE `post_id` = %d
-		SQL;
-
-		$sql    = $this->wpdb->prepare( $sql, $post_id );
-		$result = $this->wpdb->get_var( $sql );
-
-		if ( false === $result ) {
-			throw new \Exception( '[7546DD24] Failed to check if paid content exists.' );
-		}
-
-		return (int) $result > 0;
-	}
-
-	/**
-	 * 指定した投稿IDの有料記事部分を取得します。
-	 */
-	public function getPaidContent( int $post_id ): ?string {
-		$sql = <<<SQL
-			SELECT `paid_content` FROM `{$this->table_name}` WHERE `post_id` = %d
-		SQL;
-
-		$sql    = $this->wpdb->prepare( $sql, $post_id );
-		$result = $this->wpdb->get_var( $sql );
-
-		return is_null( $result ) ? null : (string) $result;
-	}
-
-	/**
-	 * 指定した投稿IDで販売するネットワークカテゴリIDを取得します。
-	 */
-	public function getSellingNetworkCategoryID( int $post_id ): ?int {
-		$sql = <<<SQL
-			SELECT `selling_network_category_id` FROM `{$this->table_name}` WHERE `post_id` = %d
-		SQL;
-
-		$sql    = $this->wpdb->prepare( $sql, $post_id );
-		$result = $this->wpdb->get_var( $sql );
-
-		return is_null( $result ) ? null : (int) $result;
-	}
-
-	/**
-	 * 指定した投稿IDの販売価格を取得します。
-	 */
-	public function getSellingPrice( int $post_id ): ?Price {
-		$sql = <<<SQL
-			SELECT `selling_amount_hex`, `selling_decimals`, `selling_symbol`
-			FROM `{$this->table_name}`
-			WHERE `post_id` = %d
-		SQL;
-
-		$sql    = $this->wpdb->prepare( $sql, $post_id );
-		$result = $this->wpdb->get_row( $sql, ARRAY_A );
-
-		return is_null( $result ) ? null : new Price( $result['selling_amount_hex'], (int) $result['selling_decimals'], $result['selling_symbol'] );
+	public function exists(): bool {
+		return (bool) $this->wpdb->get_var( "SHOW TABLES LIKE '{$this->table_name}'" );
 	}
 
 	/**
