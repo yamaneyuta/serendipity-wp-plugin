@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Repository;
 
-use Cornix\Serendipity\Core\Lib\Post\PostContent;
 use Cornix\Serendipity\Core\Lib\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
 use Cornix\Serendipity\Core\Types\Price;
@@ -28,13 +27,6 @@ class WidgetAttributes {
 				self::ATTRS_KEY_SELLING_SYMBOL     => $selling_price ? $selling_price->symbol() : null,
 			)
 		);
-	}
-
-	/** @deprecated */
-	public static function fromPostID( int $post_ID ): ?WidgetAttributes {
-		$attrs = ( new WidgetParser() )->attrsFromPostID( $post_ID );
-
-		return is_null( $attrs ) ? null : new self( $attrs );
 	}
 
 	public static function fromContent( string $content ): ?WidgetAttributes {
@@ -139,16 +131,6 @@ class WidgetParser {
 
 		// ウィジェットが存在しない場合はnullを返す
 		return 0 === count( $blocks ) ? null : $blocks[0];
-	}
-
-	/**
-	 * ウィジェットブロックの属性を取得します。
-	 *
-	 * @param int $post_ID
-	 * @return null|array
-	 */
-	public function attrsFromPostID( int $post_ID ): ?array {
-		return $this->attrsFromContent( ( new PostContent( $post_ID ) )->getRaw() );
 	}
 
 	/**
