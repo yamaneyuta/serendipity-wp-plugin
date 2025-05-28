@@ -16,14 +16,17 @@ class SetRpcUrlResolver extends ResolverBase {
 	 * @return bool
 	 */
 	public function resolve( array $root_value, array $args ) {
-		// 管理者権限を持っているかどうかをチェック
-		Judge::checkHasAdminRole();
-
 		/** @var int */
 		$chain_ID = $args['chainID'];
 		/** @var string|null */
 		$rpc_url = $args['rpcURL'] ?? null;
 
+		Judge::checkHasAdminRole(); // 管理者権限を持っているかどうかをチェック
+		Judge::checkChainID( $chain_ID );
+		( ! is_null( $rpc_url ) ) && Judge::checkURL( $rpc_url );
+
+		// RPC URLを登録する場合は実際にアクセスしてチェーンIDを取得し、
+		// 引数のチェーンIDと一致していることを確認する
 		if ( ! is_null( $rpc_url ) ) {
 			$actual_chain_ID_hex = ( new BlockchainClient( $rpc_url ) )->getChainIDHex();
 			if ( Hex::from( $chain_ID ) !== $actual_chain_ID_hex ) {
@@ -32,10 +35,18 @@ class SetRpcUrlResolver extends ResolverBase {
 		}
 
 		// RPC URLを保存
-		if ( is_null( $rpc_url ) ) {
-			( new ChainData( $chain_ID ) )->deleteRpcURL();
-		} else {
-			( new ChainData( $chain_ID ) )->setRpcURL( $rpc_url );
+		try {
+			global $wpdb;
+			$wpdb->query( 'START TRANSACTION' );
+			if ( is_null( $rpc_url ) ) {
+				( new ChainData( $chain_ID, $wpdb ) )->deleteRpcURL();
+			} else {
+				( new ChainData( $chain_ID, $wpdb ) )->setRpcURL( $rpc_url );
+			}
+			$wpdb->query( 'COMMIT' );
+		} catch ( \Throwable $e ) {
+			$wpdb->query( 'ROLLBACK' );
+			throw $e;
 		}
 
 		return true;

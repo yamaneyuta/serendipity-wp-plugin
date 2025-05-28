@@ -121,7 +121,7 @@ class ChainTable {
 			array( '%d' )                       // where_format
 		);
 
-		if ( 1 !== $result ) {
+		if ( 1 < $result ) {
 			throw new \Exception( '[8314C8C0] Failed to update RPC URL. result: ' . var_export( $result, true ) );
 		}
 		if ( $this->wpdb->last_error ) {
@@ -150,7 +150,7 @@ class ChainTable {
 			array( '%d' )                       // where_format
 		);
 
-		if ( 1 !== $result ) {
+		if ( 1 < $result ) {
 			throw new \Exception( '[7B341BB3] Failed to update confirmations. result: ' . var_export( $result, true ) );
 		}
 		if ( $this->wpdb->last_error ) {

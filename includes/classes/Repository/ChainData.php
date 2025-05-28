@@ -10,9 +10,9 @@ use Cornix\Serendipity\Core\Lib\Database\Table\ChainTable;
  * チェーンの情報を取得するクラス
  */
 class ChainData {
-	public function __construct( int $chian_ID ) {
+	public function __construct( int $chian_ID, ?\wpdb $wpdb = null ) {
 		$this->chain_ID    = $chian_ID;
-		$this->chain_table = new ChainTable();
+		$this->chain_table = new ChainTable( $wpdb );
 	}
 
 	private int $chain_ID;

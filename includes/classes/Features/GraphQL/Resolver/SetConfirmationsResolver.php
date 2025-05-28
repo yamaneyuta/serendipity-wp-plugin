@@ -32,7 +32,16 @@ class SetConfirmationsResolver extends ResolverBase {
 		Judge::checkConfirmations( $confirmations );
 
 		// confirmationsを保存
-		( new ChainData( $chain_ID ) )->setConfirmations( $confirmations );
+		try {
+			global $wpdb;
+			$wpdb->query( 'START TRANSACTION' );
+			// ChainDataのインスタンスを作成し、confirmationsを設定
+			( new ChainData( $chain_ID, $wpdb ) )->setConfirmations( $confirmations );
+			$wpdb->query( 'COMMIT' );
+		} catch ( \Throwable $e ) {
+			$wpdb->query( 'ROLLBACK' );
+			throw $e;
+		}
 
 		return true;
 	}
