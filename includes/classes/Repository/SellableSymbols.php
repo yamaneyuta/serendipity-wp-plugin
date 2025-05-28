@@ -20,13 +20,10 @@ class SellableSymbols {
 		// テーブルに登録されているOracle情報をすべて取得
 		$oracles = ( new OracleTable() )->select();
 
-		// RPC URLが設定されているチェーンIDのoracleに絞り込み
-		$rpc     = new RPC();
+		// 接続可能なoracleに絞り込み
 		$oracles = array_filter(
 			$oracles,
-			function ( $oracle ) use ( $rpc ) {
-				return $rpc->isUrlRegistered( $oracle->chainID() );
-			}
+			fn( $oracle ) => ( new ChainData( $oracle->chainID() ) )->connectable()
 		);
 
 		// baseとquoteの通貨シンボルを取得

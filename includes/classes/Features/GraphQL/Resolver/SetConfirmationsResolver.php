@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\Confirmations;
+use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Repository\ChainData;
 
 class SetConfirmationsResolver extends ResolverBase {
 
@@ -22,14 +23,16 @@ class SetConfirmationsResolver extends ResolverBase {
 		/** @var string|null */
 		$confirmations = $args['confirmations'] ?? null;
 
-		// confirmationsが数値の場合はint型に変換
-		// ※nullでもブロックタグ名でもない場合は数値の文字列として扱う
-		if ( ! is_null( $confirmations ) && ! Judge::isBlockTagName( $confirmations ) ) {
-			$confirmations = (int) $confirmations;
-		}
+		// $confirmationsがnullの場合は、最低待機数を指定
+		$confirmations = is_null( $confirmations ) ? Config::MIN_CONFIRMATIONS : $confirmations;
+		// confirmationsが数値の文字列だった場合はint型に変換
+		$confirmations = is_numeric( $confirmations ) ? (int) $confirmations : $confirmations;
+
+		// confirmationsが正しい値かどうかをチェック
+		Judge::checkConfirmations( $confirmations );
 
 		// confirmationsを保存
-		( new Confirmations() )->set( $chain_ID, $confirmations );
+		( new ChainData( $chain_ID ) )->setConfirmations( $confirmations );
 
 		return true;
 	}

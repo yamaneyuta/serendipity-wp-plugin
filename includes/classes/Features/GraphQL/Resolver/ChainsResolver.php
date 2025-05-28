@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Repository\RPC;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Repository\ChainData;
+use Cornix\Serendipity\Core\Repository\ChainsData;
 
 class ChainsResolver extends ResolverBase {
 
@@ -26,7 +26,7 @@ class ChainsResolver extends ResolverBase {
 		$filter_is_connectable = $filter['isConnectable'] ?? null;
 
 		// チェーンID一覧を取得
-		$chain_ids = ChainID::all();
+		$chain_ids = ( new ChainsData() )->chainIDs();
 
 		// チェーンIDでフィルタする場合
 		if ( isset( $filter_chain_ID ) ) {
@@ -40,11 +40,10 @@ class ChainsResolver extends ResolverBase {
 
 		// 接続可能なチェーンIDでの絞り込みが指定されている場合はRPC URLが登録されいてるもののみ抽出
 		if ( isset( $filter_is_connectable ) ) {
-			$rpc       = new RPC();
 			$chain_ids = array_values(
 				array_filter(
 					$chain_ids,
-					fn( $chain_id ) => $rpc->isUrlRegistered( $chain_id )
+					fn( $chain_id ) => ( new ChainData( $chain_id ) )->connectable()
 				)
 			);
 		}

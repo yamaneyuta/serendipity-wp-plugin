@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
+use Cornix\Serendipity\Core\Config\Config;
+use Cornix\Serendipity\Core\Lib\Database\Table\ChainTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\OracleTable;
@@ -14,10 +16,9 @@ use Cornix\Serendipity\Core\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
-use Cornix\Serendipity\Core\Repository\Settings\RpcUrlSetting;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
 use Cornix\Serendipity\Core\Types\TokenType;
-use InvalidArgumentException;
 
 /**
  * Ver0.0.1(インストール直後に実行されるように一番小さいバージョンで仮作成)
@@ -31,10 +32,9 @@ class v001 {
 		// 購入者が支払可能なトークンの初期値を設定
 		( new PayableTokensInitializer() )->initialize();
 
-		// RPCの設定を初期化
-		( new RpcSettingsInitializer() )->initialize();
-
 		global $wpdb;
+		// チェーン情報を管理するためのテーブルを作成
+		( new ChainTable( $wpdb ) )->create();
 		// 有料記事を管理するためのテーブルを作成
 		( new PaidContentTable( $wpdb ) )->create();
 		// 請求書情報テーブルを作成
@@ -50,6 +50,8 @@ class v001 {
 		// ペイウォール解除時のトークン転送イベントの内容を記録するテーブルを作成
 		( new UnlockPaywallTransferEventTable( $wpdb ) )->create();
 
+		// チェーンテーブルの初期値を設定
+		( new ChainTableRecordInitializer( $wpdb ) )->initialize();
 		// oracleテーブルの初期値を設定
 		( new OracleTableRecordInitializer( $wpdb ) )->initialize();
 		// tokenテーブルの初期値を設定
@@ -60,6 +62,8 @@ class v001 {
 		// 署名用ウォレットの秘密鍵の削除は行わない
 
 		global $wpdb;
+		// チェーン情報を管理するためのテーブルを削除
+		( new ChainTable( $wpdb ) )->drop();
 		// 有料記事を管理するためのテーブルを削除
 		( new PaidContentTable( $wpdb ) )->drop();
 		// 請求書情報テーブルを削除
@@ -101,21 +105,36 @@ class PayableTokensInitializer {
 	}
 }
 
-class RpcSettingsInitializer {
-	/**
-	 * RPCの設定を初期化します。
-	 */
-	public function initialize(): void {
-		// 開発モード時はプライベートネットのRPC URLをユーザー設定として登録
-		if ( ( new Environment() )->isDevelopmentMode() ) {
-			$this->registerPrivatenetRpcUrl( ChainID::PRIVATENET_L1 );
-			$this->registerPrivatenetRpcUrl( ChainID::PRIVATENET_L2 );
-		}
+
+class ChainTableRecordInitializer {
+	private $wpdb;
+
+	public function __construct( $wpdb ) {
+		$this->wpdb = $wpdb;
 	}
 
-	private function registerPrivatenetRpcUrl( int $chain_ID ): void {
-		$rpc_url = $this->getPrivatenetRpcURL( $chain_ID );
-		( new RpcUrlSetting() )->set( $chain_ID, $rpc_url );
+	/**
+	 * チェーンテーブルの初期値を設定します。
+	 */
+	public function initialize(): void {
+		$chain_table = new ChainTable( $this->wpdb );
+
+		// メインネットのチェーン情報を登録
+		$chain_table->insert( ChainID::ETH_MAINNET, 'Ethereum Mainnet' );
+
+		// テストネットのチェーン情報を登録
+		$chain_table->insert( ChainID::SEPOLIA, 'Sepolia' );
+		$chain_table->insert( ChainID::SONEIUM_MINATO, 'Soneium Testnet Minato' );
+
+		// 開発モード時はプライベートネットのチェーン情報も登録
+		if ( ( new Environment() )->isDevelopmentMode() ) {
+			$chain_table->insert( ChainID::PRIVATENET_L1, 'Privatenet1' );
+			$chain_table->insert( ChainID::PRIVATENET_L2, 'Privatenet2' );
+
+			// プライベートネットのRPC URLを設定
+			$chain_table->updateRpcURL( ChainID::PRIVATENET_L1, $this->getPrivatenetRpcURL( ChainID::PRIVATENET_L1 ) );
+			$chain_table->updateRpcURL( ChainID::PRIVATENET_L2, $this->getPrivatenetRpcURL( ChainID::PRIVATENET_L2 ) );
+		}
 	}
 
 

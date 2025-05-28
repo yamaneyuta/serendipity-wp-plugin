@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Repository\AppContractAddressData;
-use Cornix\Serendipity\Core\Repository\Confirmations;
 use Cornix\Serendipity\Core\Repository\ChainData;
-use Cornix\Serendipity\Core\Repository\RPC;
 use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
@@ -31,14 +29,15 @@ class ChainResolver extends ResolverBase {
 		$confirmations_callback = function () use ( $chain_ID ) {
 			// 権限チェック不要
 			// 待機ブロック数を返す
-			$confirmations = ( new Confirmations() )->get( $chain_ID );
+			$confirmations = ( new ChainData( $chain_ID ) )->confirmations();
+			assert( ! is_null( $confirmations ), '[7EA52FB6] confirmations must not be null. chain id: ' . var_export( $chain_ID, true ) );
 			// string型にして返す(GraphQLの定義した型に変換)
 			return (string) $confirmations;
 		};
 
 		$rpc_url_callback = function () use ( $chain_ID ) {
 			Judge::checkHasAdminRole(); // 管理者権限が必要
-			return ( new RPC() )->getURL( $chain_ID );
+			return ( new ChainData( $chain_ID ) )->rpcURL();
 		};
 
 		$tokens_callback = function () use ( $root_value, $chain_ID ) {
@@ -64,7 +63,7 @@ class ChainResolver extends ResolverBase {
 			return $root_value['networkCategory'](
 				$root_value,
 				array(
-					'networkCategoryID' => ( new ChainData( $chain_ID ) )->networkCategory()->id(),
+					'networkCategoryID' => ( new ChainData( $chain_ID ) )->networkCategoryID(),
 				)
 			);
 		};
