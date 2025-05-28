@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
 use Cornix\Serendipity\Core\Repository\Environment;
 
@@ -34,10 +35,9 @@ final class NetworkCategory {
 	 * ネットワークカテゴリID(数値)からインスタンスを取得します。
 	 */
 	public static function from( int $network_category_id ): NetworkCategory {
+		Judge::checkNetworkCategoryID( $network_category_id );
+
 		if ( ! isset( self::$cache[ $network_category_id ] ) ) {
-			if ( ! in_array( $network_category_id, array( NetworkCategoryID::MAINNET, NetworkCategoryID::TESTNET, NetworkCategoryID::PRIVATENET ), true ) ) {
-				throw new \InvalidArgumentException( '[E878BC2D] Invalid network category ID. - network_category_id: ' . $network_category_id );
-			}
 			self::$cache[ $network_category_id ] = new NetworkCategory( $network_category_id );
 		}
 

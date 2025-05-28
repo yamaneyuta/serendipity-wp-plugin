@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
 use Cornix\Serendipity\Core\Types\TokenType;
 
 /**
@@ -84,6 +85,18 @@ class Judge {
 	/** 指定された値がチェーンIDとして有効かどうかを返します。 */
 	public static function isChainID( int $chain_ID ): bool {
 		return in_array( $chain_ID, ChainID::all(), true );
+	}
+
+	/** ネットワークカテゴリIDが有効でない場合は例外をスローします。 */
+	public static function checkNetworkCategoryID( int $network_category_id ): void {
+		if ( ! self::isNetworkCategoryID( $network_category_id ) ) {
+			throw new \InvalidArgumentException( '[E3D44CFD] Invalid network category ID. - network_category_id: ' . $network_category_id );
+		}
+	}
+
+	/** 指定された値がネットワークカテゴリIDとして有効かどうかを返します。 */
+	private static function isNetworkCategoryID( int $network_category_id ): bool {
+		return in_array( $network_category_id, NetworkCategoryID::all(), true );
 	}
 
 	/**
