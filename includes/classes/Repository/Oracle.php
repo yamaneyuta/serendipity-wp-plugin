@@ -20,8 +20,8 @@ class Oracle {
 			( new OracleTable() )->select( null, null, $symbol_pair->base(), $symbol_pair->quote() )
 		);
 
-		// 接続可能(RPC URLが設定済み)なチェーンIDに絞り込み
-		$chain_IDs = array_filter( $chain_IDs, fn( $chain_ID ) => ( new RPC() )->isUrlRegistered( $chain_ID ) );
+		// 接続可能なチェーンIDに絞り込み
+		$chain_IDs = array_filter( $chain_IDs, fn( $chain_ID ) => ( new ChainData( $chain_ID ) )->connectable() );
 
 		// 重複を削除し、インデックスを振り直した配列を返す
 		return array_values( array_unique( $chain_IDs ) );

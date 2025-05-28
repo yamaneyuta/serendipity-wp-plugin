@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Repository\RPC;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
+use Cornix\Serendipity\Core\Repository\ChainData;
 
 class SetRpcUrlResolver extends ResolverBase {
 
@@ -32,7 +32,11 @@ class SetRpcUrlResolver extends ResolverBase {
 		}
 
 		// RPC URLを保存
-		( new RPC() )->setURL( $chain_ID, $rpc_url );
+		if ( is_null( $rpc_url ) ) {
+			( new ChainData( $chain_ID ) )->deleteRpcURL();
+		} else {
+			( new ChainData( $chain_ID ) )->setRpcURL( $rpc_url );
+		}
 
 		return true;
 	}

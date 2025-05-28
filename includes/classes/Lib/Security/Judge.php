@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Security;
 
+use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
+use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Types\TokenType;
 
 /**
@@ -69,6 +71,13 @@ class Judge {
 		return Strings::starts_with( $hex, '0x' ) && \Web3\Utils::isHex( $hex );
 	}
 
+	/** 文字列が有効なURLでない場合は例外をスローします。 */
+	public static function checkURL( string $url ): void {
+		if ( ! self::isUrl( $url ) ) {
+			throw new \InvalidArgumentException( '[67D57E5E] Invalid URL. - url: ' . $url );
+		}
+	}
+
 	/**
 	 * 文字列がURLの形式かどうかを返します。
 	 */
@@ -84,7 +93,13 @@ class Judge {
 	}
 	/** 指定された値がチェーンIDとして有効かどうかを返します。 */
 	public static function isChainID( int $chain_ID ): bool {
-		return in_array( $chain_ID, ChainID::all(), true );
+		// リフレクションを使用して、クラス定数を取得
+		$reflection = new \ReflectionClass( ChainID::class );
+		$constants  = $reflection->getConstants();
+		/** @var int[] */
+		$all_chain_ids = array_values( $constants );
+
+		return in_array( $chain_ID, $all_chain_ids, true );
 	}
 
 	/** ネットワークカテゴリIDが有効でない場合は例外をスローします。 */
@@ -96,7 +111,18 @@ class Judge {
 
 	/** 指定された値がネットワークカテゴリIDとして有効かどうかを返します。 */
 	private static function isNetworkCategoryID( int $network_category_id ): bool {
-		return in_array( $network_category_id, NetworkCategoryID::all(), true );
+		// 開発環境でない場合、Privatenetは無効とする
+		if ( $network_category_id === NetworkCategoryID::PRIVATENET && ! ( new Environment() )->isDevelopmentMode() ) {
+			return false;
+		}
+
+		// リフレクションを使用して、クラス定数を取得
+		$reflection = new \ReflectionClass( NetworkCategoryID::class );
+		$constants  = $reflection->getConstants();
+		/** @var int[] */
+		$all_network_category_ids = array_values( $constants );
+
+		return in_array( $network_category_id, $all_network_category_ids, true );
 	}
 
 	/**
@@ -193,6 +219,37 @@ class Judge {
 	private static function isCurrentSellerTermsVersion( int $seller_terms_version ): bool {
 		$current_version = ( new SellerTerms() )->currentVersion();  // 現在の販売者向け利用規約バージョン
 		return $seller_terms_version === $current_version;
+	}
+
+	/**
+	 * 指定された値が確認ブロック数として有効でない場合は例外をスローします。
+	 *
+	 * @param int|string $confirmations 確認ブロック数
+	 */
+	public static function checkConfirmations( $confirmations ): void {
+		if ( ! self::isConfirmations( $confirmations ) ) {
+			throw new \InvalidArgumentException( '[12E0674F] Invalid confirmations. - confirmations: ' . var_export( $confirmations, true ) );
+		}
+	}
+
+	/**
+	 * 指定された値が確認ブロック数として有効かどうかを返します。
+	 *
+	 * @param int|string $confirmations 確認ブロック数
+	 */
+	private static function isConfirmations( $confirmations ): bool {
+		if ( is_int( $confirmations ) ) {
+			// 確認ブロック数は0以上の整数である必要がある
+			return Config::MIN_CONFIRMATIONS <= $confirmations;
+		}
+		if ( is_string( $confirmations ) && self::isBlockTagName( $confirmations ) ) {
+			// ブロックのタグ名である場合は有効としたいが、
+			// プロバイダによってはタグが使用できない可能性があるため
+			// 現時点(2025/5/28)では無効としておく
+			return false;
+		}
+
+		throw new \InvalidArgumentException( '[745B8DC7] Invalid confirmations. - confirmations: ' . var_export( $confirmations, true ) );
 	}
 
 	/** 指定した文字列がブロックのタグ名であるかどうかを判定します。 */

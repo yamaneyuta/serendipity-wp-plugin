@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Constants;
 
-use Cornix\Serendipity\Core\Repository\ChainData;
-use Cornix\Serendipity\Core\Repository\Environment;
-
 final class ChainID {
 	// ==================== Mainnet ====================
 	/** イーサリアムメインネット(L1) */
@@ -33,40 +30,4 @@ final class ChainID {
 
 	/** PrivatenetL2に位置付けられたチェーンID(L2) ※実際はロールアップを行っていない、単に独立したネットワーク */
 	public const PRIVATENET_L2 = 1337;  // 0x539
-
-
-	/**
-	 * 指定したネットワークカテゴリIDに対応するチェーンID一覧を取得します。
-	 *
-	 * @param int|null $target_network_category_id 対象のネットワークカテゴリID(ネットワークカテゴリを限定しない場合はnullを指定)
-	 */
-	public static function all( int $target_network_category_id = null ): array {
-		// リフレクションを使用して、クラス定数を取得
-		$reflection = new \ReflectionClass( self::class );
-		$constants  = $reflection->getConstants();
-		/** @var int[] */
-		$all_chainIDs = array_values( $constants );
-
-		// ネットワークカテゴリIDに対応するチェーンIDをフィルタリング
-		if ( ! is_null( $target_network_category_id ) ) {
-			$all_chainIDs = array_filter(
-				$all_chainIDs,
-				function ( int $chainID ) use ( $target_network_category_id ): bool {
-					return ( new ChainData( $chainID ) )->networkCategory()->id() === $target_network_category_id;
-				}
-			);
-		}
-
-		// 開発モードでない場合はプライベートネットのチェーンIDを除外
-		if ( ! ( new Environment() )->isDevelopmentMode() ) {
-			$all_chainIDs = array_filter(
-				$all_chainIDs,
-				function ( int $chainID ): bool {
-					return ( new ChainData( $chainID ) )->networkCategory()->id() !== NetworkCategoryID::PRIVATENET;
-				}
-			);
-		}
-
-		return array_values( $all_chainIDs );
-	}
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Option;
 
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
-use Cornix\Serendipity\Core\Types\RpcUrlProviderType;
 
 class OptionFactory {
 
@@ -51,14 +50,6 @@ class OptionFactory {
 	}
 
 	/**
-	 * 指定したチェーンIDで、購入完了と判定するための待機ブロック数
-	 * またはブロック位置('safe', 'finalized')を取得または保存するオブジェクトを取得します。
-	 */
-	public function confirmations( int $chain_ID ): StringOption {
-		return new StringOption( $this->getOptionKeyName( 'confirmations_' . $chain_ID ) );
-	}
-
-	/**
 	 * 本プラグインが開発モードで動作しているかどうかを取得または保存するオブジェクトを取得します。
 	 */
 	public function isDevelopmentMode(): BoolOption {
@@ -94,14 +85,5 @@ class OptionFactory {
 	public function sellerAgreedTermsUserID(): IntOption {
 		$prefix = $this->sellerAgreedTermsKeyPrefix();
 		return new IntOption( $this->getOptionKeyName( $prefix . 'user_id' ) );
-	}
-
-	/**
-	 * ユーザーが設定したRPC URLを取得または保存するオブジェクトを取得します。
-	 *
-	 * @param int $chain_ID
-	 */
-	public function rpcUrl( int $chain_ID ): StringOption {
-		return new StringOption( $this->getOptionKeyName( 'rpc_url_' . $chain_ID ) );
 	}
 }

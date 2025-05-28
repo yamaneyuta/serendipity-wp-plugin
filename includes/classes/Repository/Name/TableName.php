@@ -39,6 +39,11 @@ class TableName {
 	}
 
 	/** (支払時に使用する)トークンの情報を記録するテーブル名 */
+	public function chain(): string {
+		return $this->addPrefix( 'chain' );
+	}
+
+	/** (支払時に使用する)トークンの情報を記録するテーブル名 */
 	public function token(): string {
 		return $this->addPrefix( 'token' );
 	}

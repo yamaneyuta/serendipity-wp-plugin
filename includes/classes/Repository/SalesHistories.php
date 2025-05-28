@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Types\SalesHistoryType;
 use wpdb;
@@ -112,7 +111,7 @@ class AppContractTmpTable {
 		);
 
 		// テーブルにデータを挿入
-		$chain_IDs        = ChainID::all();
+		$chain_IDs        = ( new ChainsData() )->chainIDs();
 		$app_address_data = ( new AppContractAddressData() );
 		foreach ( $chain_IDs as $chain_ID ) {
 			$address = $app_address_data->get( $chain_ID );

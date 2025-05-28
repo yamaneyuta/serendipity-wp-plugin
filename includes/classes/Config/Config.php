@@ -31,6 +31,12 @@ class Config {
 	public const CRON_INTERVAL_APP_CONTRACT_CRAWL = 60 * 15; // 15分
 
 	/**
+	 * 最小のブロック待機数
+	 * ブロックにトランザクションが取り込まれた時点で1とカウントする
+	 */
+	public const MIN_CONFIRMATIONS = 1; // 【変更不可】
+
+	/**
 	 * Appコントラクトのアドレス一覧
 	 * (このプラグインを導入したユーザーが利用するコントラクトアドレス)
 	 *
