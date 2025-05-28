@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Lib\Database\Schema\OracleTable;
+use Cornix\Serendipity\Core\Lib\Database\Table\OracleTable;
 use Cornix\Serendipity\Core\Types\SymbolPair;
 
 class Oracle {

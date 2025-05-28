@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
-use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceNonceTable;
-use Cornix\Serendipity\Core\Lib\Database\Schema\InvoiceTable;
-use Cornix\Serendipity\Core\Lib\Database\Schema\OracleTable;
-use Cornix\Serendipity\Core\Lib\Database\Schema\PaidContentTable;
-use Cornix\Serendipity\Core\Lib\Database\Schema\TokenTable;
-use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransactionTable;
-use Cornix\Serendipity\Core\Lib\Database\Schema\UnlockPaywallTransferEventTable;
+use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
+use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
+use Cornix\Serendipity\Core\Lib\Database\Table\OracleTable;
+use Cornix\Serendipity\Core\Lib\Database\Table\PaidContentTable;
+use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
+use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransactionTable;
+use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
