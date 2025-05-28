@@ -11,5 +11,6 @@
 		".devcontainer/.intelephense-includes/wordpress-develop/tests/phpunit/includes",
 		".phpunit/vendor"
 	],
+	"jest.runMode": "on-demand",
 	"php.suggest.basic": false
 }
