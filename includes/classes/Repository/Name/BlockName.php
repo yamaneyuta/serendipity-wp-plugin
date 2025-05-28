@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Name;
 
+use Cornix\Serendipity\Core\Config\Config;
+
 class BlockName {
 
 	/** ブロックエディタで使用されるブロック名(キャッシュ) */
@@ -13,7 +15,7 @@ class BlockName {
 
 		if ( is_null( self::$block_name ) ) {
 			// /workspaces/build/block/block.json のnameを取得して保持
-			$block_json       = file_get_contents( __DIR__ . '/../../../../build/block/block.json' );
+			$block_json       = file_get_contents( Config::ROOT_DIR . '/build/block/block.json' );
 			$block            = json_decode( $block_json, true );
 			self::$block_name = $block['name'];
 		}

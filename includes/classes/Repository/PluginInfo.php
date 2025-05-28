@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
+use Cornix\Serendipity\Core\Config\Config;
+
 class PluginInfo {
 
 	public function __construct() {
@@ -106,10 +108,9 @@ class PluginMainFile {
 	 */
 	public function path(): string {
 		if ( $this->path === null ) {
-			$plugin_root_dir = '/../../../';
-			$ret             = glob( __DIR__ . $plugin_root_dir . '*.php' );
+			$ret = glob( Config::ROOT_DIR . '/*.php' );
 			assert( count( $ret ) === 1 );
-			assert( count( glob( __DIR__ . $plugin_root_dir . 'readme.txt' ) ) === 1 );
+			assert( count( glob( Config::ROOT_DIR . '/readme.txt' ) ) === 1 );
 			$this->path = realpath( $ret[0] );
 		}
 		return $this->path;

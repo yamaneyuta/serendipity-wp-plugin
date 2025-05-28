@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
+use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 
 /**
@@ -26,7 +27,7 @@ class Environment {
 		$is_development_mode = $option->get( null );
 
 		if ( is_null( $is_development_mode ) ) {
-			$package_json_path   = __DIR__ . '/../../../package.json';
+			$package_json_path   = Config::ROOT_DIR . '/package.json';
 			$is_development_mode = file_exists( $package_json_path );
 			$option->update( $is_development_mode );    // '0'や'1'のような文字列で保存される
 		}

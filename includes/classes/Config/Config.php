@@ -10,6 +10,13 @@ use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
  * システム固定の設定値を取得するためのクラス
  */
 class Config {
+
+	/**
+	 * このプラグインのルートディレクトリ
+	 * (エントリファイルが存在するディレクトリのパス)
+	 */
+	public const ROOT_DIR = __DIR__ . '/../../..';
+
 	/**
 	 * レートの一時データの有効期限(秒)
 	 */
