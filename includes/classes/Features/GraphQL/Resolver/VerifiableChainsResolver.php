@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Repository\AppContractAddressData;
+use Cornix\Serendipity\Core\Repository\AppContractData;
 use Cornix\Serendipity\Core\Repository\ChainData;
 use Cornix\Serendipity\Core\Repository\ChainsData;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
@@ -34,7 +34,7 @@ class VerifiableChainsResolver extends ResolverBase {
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {
 			// アプリケーションコントラクトがデプロイされており、チェーンに接続可能な場合は、検証可能なチェーンとして返す
-			$app_contract_address = ( new AppContractAddressData() )->get( $chain_ID );
+			$app_contract_address = ( new AppContractData( $chain_ID ) )->address();
 			if ( ! is_null( $app_contract_address ) && ( new ChainData( $chain_ID ) )->connectable() ) {
 				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
 			}

@@ -5,7 +5,7 @@ use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransferEventTable;
-use Cornix\Serendipity\Core\Repository\AppContractAddressData;
+use Cornix\Serendipity\Core\Repository\AppContractData;
 use Cornix\Serendipity\Core\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\Constants\UnlockPaywallTransferType;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
@@ -120,7 +120,7 @@ class SalesHistoriesTest extends IntegrationTestBase {
 	private function insertTableData( wpdb $wpdb ): void {
 		$sales_test_data = new SalesTestData( $wpdb );
 		$chain_ID        = ChainID::PRIVATENET_L1;
-		$app_address     = ( new AppContractAddressData() )->get( $chain_ID );
+		$app_address     = ( new AppContractData( $chain_ID ) )->address();
 		$invoice_ID      = self::INVOICE_IDS[0]; // 請求書ID
 		$alice_address   = HardhatSignerFactory::alice()->address();  // 販売者アドレス
 		$bob_address     = HardhatSignerFactory::bob()->address();      // 購入者アドレス
@@ -146,7 +146,7 @@ class SalesHistoriesTest extends IntegrationTestBase {
 	private function insertTableData2( wpdb $wpdb ): void {
 		$sales_test_data = new SalesTestData( $wpdb );
 		$chain_ID        = ChainID::PRIVATENET_L1;
-		$app_address     = ( new AppContractAddressData() )->get( $chain_ID );
+		$app_address     = ( new AppContractData( $chain_ID ) )->address();
 		$invoice_ID      = self::INVOICE_IDS[1];    // 請求書ID
 		$alice_address   = HardhatSignerFactory::alice()->address();      // 販売者アドレス
 		$charlie_address = HardhatSignerFactory::charlie()->address();  // 購入者アドレス

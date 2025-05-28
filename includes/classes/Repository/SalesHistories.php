@@ -111,10 +111,9 @@ class AppContractTmpTable {
 		);
 
 		// テーブルにデータを挿入
-		$chain_IDs        = ( new ChainsData() )->chainIDs();
-		$app_address_data = ( new AppContractAddressData() );
+		$chain_IDs = ( new ChainsData() )->chainIDs();
 		foreach ( $chain_IDs as $chain_ID ) {
-			$address = $app_address_data->get( $chain_ID );
+			$address = ( new AppContractData( $chain_ID ) )->address();
 			if ( is_null( $address ) ) {
 				continue;   // アプリケーションコントラクトがデプロイされていないチェーンはスキップ
 			}

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\AppContractAddressData;
+use Cornix\Serendipity\Core\Repository\AppContractData;
 use Cornix\Serendipity\Core\Repository\ChainData;
 use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -22,7 +22,7 @@ class ChainResolver extends ResolverBase {
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
 		$app_contract_callback = function () use ( $chain_ID ) {
-			$app_contract_address = ( new AppContractAddressData() )->get( $chain_ID );
+			$app_contract_address = ( new AppContractData( $chain_ID ) )->address();
 			return is_null( $app_contract_address ) ? null : array( 'address' => $app_contract_address );
 		};
 
