@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Repository\ChainData;
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Constants\ChainID;
 
 /** Hardhatに接続するRPC URLを取得します。 */
 class HardhatRpcUrl {

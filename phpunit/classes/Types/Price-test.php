@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\ValueObject\Price;
 use phpseclib\Math\BigInteger;
 

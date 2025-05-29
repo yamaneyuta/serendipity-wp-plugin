@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\ValueObject;
 
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
+use Cornix\Serendipity\Core\Constants\NetworkCategoryID;
 use Cornix\Serendipity\Core\Repository\Environment;
 
 /**

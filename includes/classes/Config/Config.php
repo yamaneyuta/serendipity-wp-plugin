@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Config;
 
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
+use Cornix\Serendipity\Core\Constants\ChainID;
+use Cornix\Serendipity\Core\Constants\NetworkCategoryID;
 
 /**
  * システム固定の設定値を取得するためのクラス

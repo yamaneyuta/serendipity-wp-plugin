@@ -12,12 +12,12 @@ use Cornix\Serendipity\Core\Lib\Database\Table\PaidContentTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransferEventTable;
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
+use Cornix\Serendipity\Core\Constants\NetworkCategoryID;
 use Cornix\Serendipity\Core\Entity\Token;
 
 /**

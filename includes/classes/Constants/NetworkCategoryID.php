@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\Constants;
+namespace Cornix\Serendipity\Core\Constants;
 
 final class NetworkCategoryID {
 	/** メインネット(Ethereumメインネット、Polygonメインネット等) */

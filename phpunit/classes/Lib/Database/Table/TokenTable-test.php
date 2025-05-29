@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 
 require_once 'includes/classes/Repository/RateData.php';

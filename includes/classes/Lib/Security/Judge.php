@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Config\Config;
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
+use Cornix\Serendipity\Core\Constants\NetworkCategoryID;
 use Cornix\Serendipity\Core\Entity\Token;
 
 /**
