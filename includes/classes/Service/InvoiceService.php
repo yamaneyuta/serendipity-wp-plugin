@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
 use Cornix\Serendipity\Core\Entity\Invoice;
 use Cornix\Serendipity\Core\Types\InvoiceIdType;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\ValueObject\Price;
 
 class InvoiceService {
 

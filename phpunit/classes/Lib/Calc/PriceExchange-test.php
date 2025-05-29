@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
 use Cornix\Serendipity\Core\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\Oracle;
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\ValueObject\Price;
 use phpseclib\Math\BigInteger;
 
 class PriceExchangeTest extends IntegrationTestBase {

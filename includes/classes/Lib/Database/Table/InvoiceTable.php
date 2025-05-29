@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Table;
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Types\InvoiceIdType;
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\ValueObject\Price;
 
 /**
  * 発行した請求書の情報を保存するテーブル

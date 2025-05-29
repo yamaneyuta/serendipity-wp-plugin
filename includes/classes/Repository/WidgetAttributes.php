@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\ValueObject\Price;
 use WP_Block_Parser_Block;
 
 class WidgetAttributes {

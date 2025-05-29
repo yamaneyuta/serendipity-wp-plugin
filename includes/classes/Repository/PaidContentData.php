@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Lib\Database\Table\PaidContentTable;
 use Cornix\Serendipity\Core\Types\NetworkCategory;
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\ValueObject\Price;
 
 /**
  * 有料記事の情報を管理するクラス
