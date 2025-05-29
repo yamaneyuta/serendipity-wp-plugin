@@ -5,16 +5,16 @@ namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\Types\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 
 class Invoice {
-	public function __construct( InvoiceIdType $invoice_ID, \wpdb $wpdb = null ) {
+	public function __construct( InvoiceID $invoice_ID, \wpdb $wpdb = null ) {
 		$this->invoice_ID = $invoice_ID;
 		$this->wpdb       = $wpdb;
 	}
 
-	private InvoiceIdType $invoice_ID;
+	private InvoiceID $invoice_ID;
 
 	/** @var null|\wpdb */
 	private $wpdb;
@@ -30,7 +30,7 @@ class Invoice {
 		return ! is_null( $this->record() );
 	}
 
-	public function id(): InvoiceIdType {
+	public function id(): InvoiceID {
 		return $this->invoice_ID;
 	}
 

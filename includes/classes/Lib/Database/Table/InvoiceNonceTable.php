@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Table;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\Types\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 
 /**
@@ -65,7 +65,7 @@ class InvoiceNonceTable {
 	}
 
 	/** 指定した請求書IDに紐づくnonceを記録します。 */
-	public function set( InvoiceIdType $invoice_ID, InvoiceNonce $nonce ): void {
+	public function set( InvoiceID $invoice_ID, InvoiceNonce $nonce ): void {
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
 			(`invoice_id`, `nonce`)
@@ -84,7 +84,7 @@ class InvoiceNonceTable {
 	/**
 	 * 指定した請求書IDに紐づくnonceを取得します。
 	 */
-	public function getNonce( InvoiceIdType $invoice_ID ): ?InvoiceNonce {
+	public function getNonce( InvoiceID $invoice_ID ): ?InvoiceNonce {
 		$sql = <<<SQL
 			SELECT `nonce`
 			FROM `{$this->table_name}`

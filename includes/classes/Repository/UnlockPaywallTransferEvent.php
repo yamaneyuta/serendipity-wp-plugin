@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\Types\InvoiceID;
 
 class UnlockPaywallTransferEvent {
 
@@ -17,7 +17,7 @@ class UnlockPaywallTransferEvent {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function save( InvoiceIdType $invoice_id, int $log_index, string $from_address, string $to_address, string $token_address, string $amount_hex, int $transfer_type ): void {
+	public function save( InvoiceID $invoice_id, int $log_index, string $from_address, string $to_address, string $token_address, string $amount_hex, int $transfer_type ): void {
 		Judge::checkAddress( $from_address );
 		Judge::checkAddress( $to_address );
 		Judge::checkAmountHex( $amount_hex );

@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Service;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
 use Cornix\Serendipity\Core\Entity\Invoice;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\Types\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\ValueObject\Price;
 
@@ -56,7 +56,7 @@ class InvoiceService {
 		return new Invoice( $invoice_ID );
 	}
 
-	public function getData( InvoiceIdType $invoice_ID ): ?Invoice {
+	public function getData( InvoiceID $invoice_ID ): ?Invoice {
 		$invoice_data = new Invoice( $invoice_ID, $this->wpdb );
 
 		// 請求書データが存在しない場合はnullを返す

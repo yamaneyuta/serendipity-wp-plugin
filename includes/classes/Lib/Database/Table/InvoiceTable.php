@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Table;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\Types\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\Price;
 
 /**
@@ -59,7 +59,7 @@ class InvoiceTable {
 
 	/**
 	 *
-	 * @param InvoiceIdType $invoice_ID
+	 * @param InvoiceID $invoice_ID
 	 * @return null|object{
 	 *   id: string,
 	 *   post_id: int,
@@ -73,7 +73,7 @@ class InvoiceTable {
 	 *   consumer_address: string
 	 * }
 	 */
-	public function select( InvoiceIdType $invoice_ID ) {
+	public function select( InvoiceID $invoice_ID ) {
 		$sql = <<<SQL
 			SELECT *
 			FROM `{$this->invoice_table_name}`
@@ -93,7 +93,7 @@ class InvoiceTable {
 	}
 
 	public function insert( int $post_ID, int $chain_ID, Price $selling_price, string $seller_address, string $payment_token_address, string $payment_amount_hex, string $consumer_address ) {
-		$invoice_id         = InvoiceIdType::generate();
+		$invoice_id         = InvoiceID::generate();
 		$selling_amount_hex = $selling_price->amountHex();
 		$selling_decimals   = $selling_price->decimals();
 		$selling_symbol     = $selling_price->symbol();

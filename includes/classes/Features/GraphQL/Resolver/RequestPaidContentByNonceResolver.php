@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\ChainData;
 use Cornix\Serendipity\Core\Types\BlockNumberType;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\Types\InvoiceID;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
 
@@ -35,7 +35,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 		Judge::checkHex( $invoice_ID_hex );
 		Judge::checkInvoiceNonceValueFormat( $nonce );
-		$invoice_ID = InvoiceIdType::from( $invoice_ID_hex );
+		$invoice_ID = InvoiceID::from( $invoice_ID_hex );
 
 		// エラー時の結果を返すコールバック関数
 		$error_result_callback = fn( $error_code ) => array(

@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Lib\Web3\AppAbi;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Types\BlockNumberType;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\Types\InvoiceID;
 use phpseclib\Math\BigInteger;
 use stdClass;
 
@@ -59,7 +59,7 @@ class AppContractCrawler {
 			/** @var BigInteger */
 			$invoice_ID_bi = $event_args['invoiceID'];
 			assert( $invoice_ID_bi instanceof BigInteger, '[9A2B802E] invoice_ID is not BigInteger. ' . var_export( $invoice_ID_bi, true ) );
-			$invoice_ID = InvoiceIdType::from( $invoice_ID_bi );
+			$invoice_ID = InvoiceID::from( $invoice_ID_bi );
 
 			// 既に保存済みのinvoiceIDの場合はスキップ
 			if ( in_array( $invoice_ID->hex(), $saved_invoice_id_hex_array, true ) ) {
@@ -113,7 +113,7 @@ class AppContractCrawler {
 			$log_index_hex = $unlock_paywall_transfer_log->logIndex;
 
 			$transfer_event_repository->save(
-				InvoiceIdType::from( $invoice_ID_bi ),
+				InvoiceID::from( $invoice_ID_bi ),
 				Hex::toInt( $log_index_hex ),
 				$from,
 				$to,
