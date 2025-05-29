@@ -2,7 +2,7 @@
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Config\Config;
+use Cornix\Serendipity\Core\Constants\Config;
 
 /**
  * 指定したチェーンのAppコントラクトの情報を取得するクラス

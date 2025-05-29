@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Entity;
 
-use Cornix\Serendipity\Core\Config\Config;
+use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Lib\Database\Table\ChainTable;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 

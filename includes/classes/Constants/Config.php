@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Config;
+namespace Cornix\Serendipity\Core\Constants;
 
 use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Constants\NetworkCategoryID;
