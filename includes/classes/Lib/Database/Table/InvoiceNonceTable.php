@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Table;
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Types\InvoiceIdType;
-use Cornix\Serendipity\Core\Types\InvoiceNonce;
+use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 
 /**
  * 発行した請求書IDとnonceの紐づきを保存するテーブル

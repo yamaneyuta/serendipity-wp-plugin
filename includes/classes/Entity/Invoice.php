@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Entity;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
 use Cornix\Serendipity\Core\Types\InvoiceIdType;
-use Cornix\Serendipity\Core\Types\InvoiceNonce;
+use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 
 class Invoice {
 	public function __construct( InvoiceIdType $invoice_ID, \wpdb $wpdb = null ) {
