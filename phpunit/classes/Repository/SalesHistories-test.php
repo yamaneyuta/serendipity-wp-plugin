@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Repository\SalesHistories;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Types\SalesHistoryType;
+use Cornix\Serendipity\Core\Entity\SalesHistory;
 
 class SalesHistoriesTest extends IntegrationTestBase {
 
@@ -102,7 +102,7 @@ class SalesHistoriesTest extends IntegrationTestBase {
 		// ASSERT
 		$this->assertIsArray( $results );
 		$this->assertGreaterThanOrEqual( 2, count( $results ) );
-		$invoice_ids = array_map( fn( SalesHistoryType $sales_data ) => $sales_data->invoiceID(), $results );
+		$invoice_ids = array_map( fn( SalesHistory $sales_data ) => $sales_data->invoiceID(), $results );
 		$this->assertContains( '01JKFB56B8PQQ261K5VZDCE5DH', $invoice_ids );    // 1件目のデータのinvoice_idが含まれていること
 		$this->assertContains( '01JKFZQE7YDYVHG97BBXWY4WTJ', $invoice_ids );    // 2件目のデータのinvoice_idが含まれていること
 	}

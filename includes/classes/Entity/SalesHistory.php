@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Types;
+namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\ValueObject\Price;
 use DateTime;
 
-class SalesHistoryType {
+class SalesHistory {
 
 	private const COLUMN_INVOICE_ID               = 'invoice_id';
 	private const COLUMN_POST_ID                  = 'post_id';
@@ -37,7 +37,7 @@ class SalesHistoryType {
 	 * SalesData::select()内で取得したレコードを元に、SalesDataTypeを生成します
 	 *
 	 * @param array $record
-	 * @return SalesHistoryType
+	 * @return SalesHistory
 	 */
 	public static function fromRecord( array $record ): self {
 		assert( array_key_exists( self::COLUMN_INVOICE_ID, $record ), '[FEABA7F7]' );

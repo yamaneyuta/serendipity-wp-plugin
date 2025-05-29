@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Types\SalesHistoryType;
+use Cornix\Serendipity\Core\Entity\SalesHistory;
 use wpdb;
 
 /**
@@ -29,7 +29,7 @@ class SalesHistories {
 
 	/**
 	 *
-	 * @return SalesHistoryType[]
+	 * @return SalesHistory[]
 	 */
 	public function select( ?string $invoice_id = null ): array {
 		( new AppContractTmpTable( $this->wpdb ) )->create();
@@ -77,7 +77,7 @@ class SalesHistories {
 		$records = $this->wpdb->get_results( $sql, ARRAY_A );
 
 		return array_map(
-			fn( $record ) => SalesHistoryType::fromRecord( $record ),
+			fn( $record ) => SalesHistory::fromRecord( $record ),
 			$records
 		);
 	}
