@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Service\ChainService;
-use Cornix\Serendipity\Core\Lib\Database\Table\OracleTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\OracleTable;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 
 class SellableSymbols {

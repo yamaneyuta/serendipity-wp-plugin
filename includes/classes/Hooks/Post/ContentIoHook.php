@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hooks\Post;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
-use Cornix\Serendipity\Core\Lib\Database\Table\PaidContentTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Repository\Name\ClassName;

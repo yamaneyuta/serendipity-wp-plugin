@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Entity;
 
-use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
-use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceNonceTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceTable;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 

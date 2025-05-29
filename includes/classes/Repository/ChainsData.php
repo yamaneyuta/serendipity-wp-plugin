@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Constants\Config;
-use Cornix\Serendipity\Core\Lib\Database\Table\ChainTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 
 /**

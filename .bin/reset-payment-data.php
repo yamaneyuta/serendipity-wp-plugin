@@ -8,10 +8,10 @@ require_once __DIR__ . '/../includes/vendor/autoload.php';
  * このスクリプトをpackage.jsonから呼び出されます。
  */
 
-use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
-use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
-use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransactionTable;
-use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransferEventTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceNonceTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransactionTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 
 // 方針:

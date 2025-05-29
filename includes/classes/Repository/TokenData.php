@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClientFactory;

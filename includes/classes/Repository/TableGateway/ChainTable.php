@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Database\Table;
+namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
 use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
-use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
-use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransactionTable;
-use Cornix\Serendipity\Core\Lib\Database\Table\UnlockPaywallTransferEventTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransactionTable;
+use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Repository\AppContractData;
 use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Constants\UnlockPaywallTransferType;
