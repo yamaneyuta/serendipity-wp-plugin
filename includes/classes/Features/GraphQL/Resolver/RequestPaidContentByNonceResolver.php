@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
-use Cornix\Serendipity\Core\Repository\Invoice;
-use Cornix\Serendipity\Core\Repository\InvoiceNonce;
+use Cornix\Serendipity\Core\Service\InvoiceService;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
@@ -35,6 +34,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		$nonce = $args['nonce'];
 
 		Judge::checkHex( $invoice_ID_hex );
+		Judge::checkInvoiceNonceValueFormat( $nonce );
 		$invoice_ID = InvoiceIdType::from( $invoice_ID_hex );
 
 		// エラー時の結果を返すコールバック関数
@@ -44,16 +44,18 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		);
 
 		global $wpdb;
-		if ( ! ( new InvoiceNonce( $wpdb ) )->exists( $invoice_ID, $nonce ) ) {
-			// nonceが無効な場合はドメインエラーとして返す
-			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
-		}
-
-		$invoice_data = ( new Invoice( $wpdb ) )->get( $invoice_ID );
+		$invoice_data = ( new InvoiceService( $wpdb ) )->getData( $invoice_ID );
 		if ( is_null( $invoice_data ) ) {
 			// 通常、ここは通らない
 			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID_hex );
 		}
+
+		$db_nonce = $invoice_data->nonce(); // DBから取得したnonce
+		if ( is_null( $db_nonce ) || $nonce !== $db_nonce->value() ) {
+			// nonceが無効な場合はドメインエラーとして返す
+			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
+		}
+
 		$post_ID          = $invoice_data->postID();
 		$chain_ID         = $invoice_data->chainID();
 		$consumer_address = $invoice_data->consumerAddress();

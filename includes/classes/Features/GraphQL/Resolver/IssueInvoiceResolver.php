@@ -5,10 +5,9 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
+use Cornix\Serendipity\Core\Service\InvoiceService;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
-use Cornix\Serendipity\Core\Repository\Invoice;
-use Cornix\Serendipity\Core\Repository\InvoiceNonce;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
@@ -60,14 +59,20 @@ class IssueInvoiceResolver extends ResolverBase {
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
-		$invoice_id = ( new Invoice( $wpdb ) )->issue( $post_ID, $chain_ID, $selling_price, $seller_address, $token_address, $payment_amount_hex, $consumer_address );
-		$nonce      = ( new InvoiceNonce( $wpdb ) )->new( $invoice_id );
+		try {
+			$wpdb->query( 'START TRANSACTION' );
+			$invoice_data = ( new InvoiceService( $wpdb ) )->issue( $post_ID, $chain_ID, $selling_price, $seller_address, $token_address, $payment_amount_hex, $consumer_address );
+			$wpdb->query( 'COMMIT' );
+		} catch ( \Throwable $e ) {
+			$wpdb->query( 'ROLLBACK' );
+			throw $e;
+		}
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成
 		$server_message = SolidityStrings::valueToHexString( $chain_ID )
 			. SolidityStrings::addressToHexString( $seller_address )
 			. SolidityStrings::addressToHexString( $consumer_address )
-			. SolidityStrings::valueToHexString( $invoice_id->hex() )
+			. SolidityStrings::valueToHexString( $invoice_data->id()->hex() )
 			. SolidityStrings::valueToHexString( $post_ID )
 			. SolidityStrings::addressToHexString( $token_address )
 			. SolidityStrings::valueToHexString( $payment_amount_hex )
@@ -86,8 +91,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		}
 
 		return array(
-			'invoiceIdHex'     => $invoice_id->hex(),
-			'nonce'            => $nonce,
+			'invoiceIdHex'     => $invoice_data->id()->hex(),
+			'nonce'            => $invoice_data->nonce()->value(),
 			'serverMessage'    => $server_message,
 			'serverSignature'  => $server_signature,
 			'paymentAmountHex' => $payment_amount_hex,

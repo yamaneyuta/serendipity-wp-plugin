@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Lib\Crawler;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Convert\Padding;
-use Cornix\Serendipity\Core\Repository\Invoice;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransaction;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
