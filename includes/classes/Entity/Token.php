@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Types;
+namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
-class TokenType {
+class Token {
 
-	/** @var TokenType[] */
+	/** @var Token[] */
 	private static array $cache = array();
 
 	private function __construct( int $chain_ID, string $address, string $symbol, int $decimals ) {
@@ -50,7 +50,7 @@ class TokenType {
 	}
 
 
-	public static function from( int $chain_ID, string $address, string $symbol, int $decimals ): TokenType {
+	public static function from( int $chain_ID, string $address, string $symbol, int $decimals ): Token {
 		$cache_key = $chain_ID . $address;
 
 		if ( ! isset( self::$cache[ $cache_key ] ) ) {
@@ -58,7 +58,7 @@ class TokenType {
 			Judge::checkAddress( $address );
 			Judge::checkSymbol( $symbol );
 			Judge::checkDecimals( $decimals );
-			self::$cache[ $cache_key ] = new TokenType( $chain_ID, $address, $symbol, $decimals );
+			self::$cache[ $cache_key ] = new Token( $chain_ID, $address, $symbol, $decimals );
 		}
 
 		return self::$cache[ $cache_key ];

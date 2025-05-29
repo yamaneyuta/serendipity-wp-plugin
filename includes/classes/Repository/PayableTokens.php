@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Lib\Option\ArrayOption;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
-use Cornix\Serendipity\Core\Types\TokenType;
+use Cornix\Serendipity\Core\Entity\Token;
 
 /**
  * 管理者が設定した購入者が支払い可能なトークン一覧を取得または保存するクラス。
@@ -26,7 +26,7 @@ class PayableTokens {
 	 * 指定したチェーンIDで購入可能なトークン一覧を取得します。
 	 *
 	 * @param int $chain_ID
-	 * @return TokenType[]
+	 * @return Token[]
 	 */
 	public function get( int $chain_ID ): array {
 		/** @var string[] */
@@ -39,8 +39,8 @@ class PayableTokens {
 	/**
 	 * 指定したチェーンIDで購入可能なトークン一覧を保存します。
 	 *
-	 * @param int         $chain_ID
-	 * @param TokenType[] $tokens
+	 * @param int     $chain_ID
+	 * @param Token[] $tokens
 	 */
 	public function save( int $chain_ID, array $tokens, ?bool $autoload = null ): void {
 		// 引数チェック
@@ -63,10 +63,10 @@ class PayableTokens {
 	/**
 	 * 支払時に使用可能なトークンとして登録済みかどうかを取得します。
 	 *
-	 * @param TokenType $token
+	 * @param Token $token
 	 */
-	public function exists( TokenType $token ): bool {
-		/** @var TokenType[] */
+	public function exists( Token $token ): bool {
+		/** @var Token[] */
 		$tokens = $this->get( $token->chainID() );
 
 		$token_address = $token->address();

@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Table;
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Types\TokenType;
+use Cornix\Serendipity\Core\Entity\Token;
 
 /**
  * トークンの情報を記録するテーブル
@@ -54,7 +54,7 @@ class TokenTable {
 	 * @param int|null    $chain_ID チェーンID
 	 * @param string|null $address トークンアドレス
 	 * @param string|null $symbol トークンシンボル
-	 * @return TokenType[]
+	 * @return Token[]
 	 */
 	public function select( ?int $chain_ID = null, ?string $contract_address = null, ?string $symbol = null ): array {
 		$sql = <<<SQL
@@ -98,7 +98,7 @@ class TokenTable {
 			assert( Judge::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
 			assert( Judge::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
 
-			$records[] = TokenType::from( $chain_ID, $address, $symbol, $decimals );
+			$records[] = Token::from( $chain_ID, $address, $symbol, $decimals );
 		}
 
 		return $records;

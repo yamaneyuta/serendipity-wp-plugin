@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Types;
 
+use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\ValueObject\Price;
 use DateTime;
 
@@ -137,8 +138,8 @@ class SalesHistoryType {
 	}
 
 	/** 支払いトークン */
-	public function paymentToken(): TokenType {
-		return TokenType::from(
+	public function paymentToken(): Token {
+		return Token::from(
 			(int) $this->record[ self::COLUMN_CHAIN_ID ],
 			(string) $this->record[ self::COLUMN_TOKEN_ADDRESS ],
 			(string) $this->record[ self::COLUMN_TOKEN_SYMBOL ],

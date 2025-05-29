@@ -5,7 +5,7 @@ use Cornix\Serendipity\Core\Repository\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Types\TokenType;
+use Cornix\Serendipity\Core\Entity\Token;
 
 class RemovePayableTokensResolverTest extends IntegrationTestBase {
 
@@ -45,7 +45,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		// 1つ登録
 		$register_token_address = Ethers::zeroAddress(); // ETH
 
-		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
+		( new PayableTokens() )->save( $chain_ID, array( Token::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
 		// ACT
@@ -74,7 +74,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
 		$register_token_address = Ethers::zeroAddress(); // ETH
-		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
+		( new PayableTokens() )->save( $chain_ID, array( Token::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
 		// ACT
@@ -103,7 +103,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 		// 1つ登録
 		$register_token_address = Ethers::zeroAddress(); // ETH
-		( new PayableTokens() )->save( $chain_ID, array( TokenType::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
+		( new PayableTokens() )->save( $chain_ID, array( Token::from( $chain_ID, $register_token_address, 'ETH', 18 ) ) );
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 		$not_registered_token_address = '0x0000000000000000000000000000000000000001'; // 登録されていない適当なアドレス
 
@@ -137,9 +137,9 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new TokenData() )->addERC20( $chain_ID, TestERC20Address::L1_TJPY );
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 		// 3つ登録
-		$token1 = TokenType::from( $chain_ID, Ethers::zeroAddress(), 'ETH', 18 );
-		$token2 = TokenType::from( $chain_ID, TestERC20Address::L1_TUSD, 'TUSD', 18 );
-		$token3 = TokenType::from( $chain_ID, TestERC20Address::L1_TJPY, 'TJPY', 18 );
+		$token1 = Token::from( $chain_ID, Ethers::zeroAddress(), 'ETH', 18 );
+		$token2 = Token::from( $chain_ID, TestERC20Address::L1_TUSD, 'TUSD', 18 );
+		$token3 = Token::from( $chain_ID, TestERC20Address::L1_TJPY, 'TJPY', 18 );
 		( new PayableTokens() )->save( $chain_ID, array( $token1, $token2, $token3 ) );
 
 		// ACT
