@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
-use Cornix\Serendipity\Core\Repository\AppContractData;
+use Cornix\Serendipity\Core\Service\AppContractService;
 use Cornix\Serendipity\Core\Service\ChainsService;
 use wpdb;
 
@@ -115,7 +115,7 @@ class AppContractTmpTable {
 		// テーブルにデータを挿入
 		$chain_IDs = ( new ChainsService() )->chainIDs();
 		foreach ( $chain_IDs as $chain_ID ) {
-			$address = ( new AppContractData( $chain_ID ) )->address();
+			$address = ( new AppContractService( $chain_ID ) )->address();
 			if ( is_null( $address ) ) {
 				continue;   // アプリケーションコントラクトがデプロイされていないチェーンはスキップ
 			}

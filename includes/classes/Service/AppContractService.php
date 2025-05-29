@@ -1,13 +1,14 @@
 <?php
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Constants\Config;
+use Cornix\Serendipity\Core\Repository\Environment;
 
 /**
  * 指定したチェーンのAppコントラクトの情報を取得するクラス
  */
-class AppContractData {
+class AppContractService {
 
 	public function __construct( int $chain_ID, Environment $environment = null ) {
 		$this->chain_ID    = $chain_ID;
