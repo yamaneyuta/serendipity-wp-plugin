@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Service;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
 use Cornix\Serendipity\Core\Entity\Invoice;
-use Cornix\Serendipity\Core\Types\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\ValueObject\Price;
 

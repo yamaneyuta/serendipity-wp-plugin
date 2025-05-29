@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Types\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
 /**
  * ペイウォール解除時のトランザクションに関するデータを記録するクラス

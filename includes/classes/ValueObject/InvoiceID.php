@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Types;
+namespace Cornix\Serendipity\Core\ValueObject;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use phpseclib\Math\BigInteger;

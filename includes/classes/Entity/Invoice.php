@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
-use Cornix\Serendipity\Core\Types\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 
 class Invoice {

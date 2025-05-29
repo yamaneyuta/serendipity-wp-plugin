@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Types\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 

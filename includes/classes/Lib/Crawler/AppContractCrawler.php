@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Lib\Web3\AppAbi;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\Types\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use phpseclib\Math\BigInteger;
 use stdClass;
 
