@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Repository\TableGateway\ChainTable;
@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 /**
  * 本プラグインで扱うチェーンの情報を取得するクラス
  */
-class ChainsData {
+class ChainsService {
 	public function __construct() {
 		$this->chain_table = new ChainTable();
 	}

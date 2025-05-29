@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Repository\AppContractData;
 use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Service\ChainService;
-use Cornix\Serendipity\Core\Repository\ChainsData;
+use Cornix\Serendipity\Core\Service\ChainsService;
 
 /**
  * wp_cronを利用した処理を登録するクラス。
@@ -178,7 +178,7 @@ class AppContractCrawlableChainIDs {
 	 */
 	public function get(): array {
 		// すべてのチェーンIDを取得
-		$all_chain_IDs = ( new ChainsData() )->chainIDs();
+		$all_chain_IDs = ( new ChainsService() )->chainIDs();
 
 		// チェーンに接続可能かつアプリケーション用コントラクトアドレスが取得可能なチェーンに絞り込み
 		$connectable_chain_ids = array_filter(
