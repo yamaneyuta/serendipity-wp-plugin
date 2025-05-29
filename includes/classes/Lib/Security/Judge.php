@@ -260,6 +260,20 @@ class Judge {
 			throw new \InvalidArgumentException( '[5B634FE3] Invalid tag. tag: ' . $block_tag );
 		}
 	}
+
+
+	/** 指定した文字列が請求書に紐づくnonce値のフォーマットであるかどうかを判定します。 */
+	public static function isInvoiceNonceValueFormat( string $invoice_nonce_value ): bool {
+		// 請求書に紐づくnonceは、128bitのHEX(`0x`プレフィックス無し)文字列
+		return preg_match( '/^[0-9a-f]{32}$/i', $invoice_nonce_value ) === 1;
+	}
+
+	/** 指定した文字列が請求書に紐づくnonce値のフォーマットでない場合は例外をスローします。 */
+	public static function checkInvoiceNonceValueFormat( string $invoice_nonce_value ): void {
+		if ( ! self::isInvoiceNonceValueFormat( $invoice_nonce_value ) ) {
+			throw new \InvalidArgumentException( '[8EEF9FD6] Invalid invoice nonce value format. - value: ' . $invoice_nonce_value );
+		}
+	}
 }
 
 /**

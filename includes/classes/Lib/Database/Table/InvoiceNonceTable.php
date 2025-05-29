@@ -5,7 +5,8 @@ namespace Cornix\Serendipity\Core\Lib\Database\Table;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-
+use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\Types\InvoiceNonce;
 
 /**
  * 発行した請求書IDとnonceの紐づきを保存するテーブル
@@ -27,15 +28,17 @@ use Cornix\Serendipity\Core\Repository\Name\TableName;
  * 4.2. クライアント: 記事の続きを受信した場合は保存していたnonceを削除する(以後使用できなくなるため)。
  */
 class InvoiceNonceTable {
-	public function __construct( \wpdb $wpdb ) {
-		$this->wpdb       = $wpdb;
-		$this->mysqli     = ( new MySQLiFactory() )->create( $wpdb );
+	public function __construct( \wpdb $wpdb = null ) {
+		$this->wpdb       = $wpdb ?? $GLOBALS['wpdb'];
 		$this->table_name = ( new TableName() )->invoiceNonce();
 	}
 
 	private \wpdb $wpdb;
-	private \mysqli $mysqli;
 	private string $table_name;
+
+	private function mysqli(): \mysqli {
+		return ( new MySQLiFactory() )->create( $this->wpdb );
+	}
 
 	/**
 	 * 請求書IDに対応するnonceを保存するテーブルを作成します。
@@ -54,8 +57,48 @@ class InvoiceNonceTable {
 			) {$charset};
 		SQL;
 
-		$result = $this->mysqli->query( $sql );
-		assert( true === $result );
+		$mysqli = $this->mysqli();
+		$result = $mysqli->query( $sql );
+		if ( true !== $result ) {
+			throw new \RuntimeException( '[A1CB0FAD] Failed to create invoice nonce table. ' . $mysqli->error );
+		}
+	}
+
+	/** 指定した請求書IDに紐づくnonceを記録します。 */
+	public function set( InvoiceIdType $invoice_ID, InvoiceNonce $nonce ): void {
+		$sql = <<<SQL
+			INSERT INTO `{$this->table_name}`
+			(`invoice_id`, `nonce`)
+			VALUES (%s, %s)
+			ON DUPLICATE KEY UPDATE `nonce` = VALUES(`nonce`);
+		SQL;
+
+		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid(), $nonce->value() );
+
+		$result = $this->wpdb->query( $sql );
+		if ( false === $result ) {
+			throw new \RuntimeException( '[9A316865] Failed to set invoice nonce. ' . $this->wpdb->last_error );
+		}
+	}
+
+	/**
+	 * 指定した請求書IDに紐づくnonceを取得します。
+	 */
+	public function getNonce( InvoiceIdType $invoice_ID ): ?InvoiceNonce {
+		$sql = <<<SQL
+			SELECT `nonce`
+			FROM `{$this->table_name}`
+			WHERE `invoice_id` = %s
+		SQL;
+
+		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid() );
+
+		$nonce = $this->wpdb->get_var( $sql );
+		if ( is_null( $nonce ) ) {
+			return null;
+		}
+
+		return new InvoiceNonce( $nonce );
 	}
 
 	/**
@@ -66,7 +109,10 @@ class InvoiceNonceTable {
 			DROP TABLE IF EXISTS `{$this->table_name}`;
 		SQL;
 
-		$result = $this->mysqli->query( $sql );
-		assert( true === $result );
+		$mysqli = $this->mysqli();
+		$result = $mysqli->query( $sql );
+		if ( true !== $result ) {
+			throw new \RuntimeException( '[9D11FBD7] Failed to drop invoice nonce table. ' . $mysqli->error );
+		}
 	}
 }

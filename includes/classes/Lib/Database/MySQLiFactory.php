@@ -28,5 +28,7 @@ class MySQLiFactory {
 				sleep( 1 );
 			}
 		}
+
+		throw new \RuntimeException( '[41143BCA] Failed to connect to MySQL after 10 attempts.' );
 	}
 }
