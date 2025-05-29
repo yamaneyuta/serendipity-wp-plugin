@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Repository\ChainsData;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
+use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 
 class NetworkCategoryResolver extends ResolverBase {
 

@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Table;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
+use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
 
 /**

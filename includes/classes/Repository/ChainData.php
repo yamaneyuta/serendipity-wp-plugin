@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Database\Table\ChainTable;
-use Cornix\Serendipity\Core\Types\NetworkCategory;
+use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 
 /**
  * チェーンの情報を取得するクラス
