@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\SalesHistories;
+use Cornix\Serendipity\Core\Service\SalesHistoryService;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
 class SalesHistoriesResolver extends ResolverBase {
@@ -21,7 +21,7 @@ class SalesHistoriesResolver extends ResolverBase {
 
 		Judge::checkHasAdminRole(); // 管理者権限が必要
 
-		$sales_data_records = ( new SalesHistories() )->select( $invoice_id );
+		$sales_data_records = ( new SalesHistoryService() )->select( $invoice_id );
 
 		$ret = array_map(
 			fn ( $sales_data ) => array(

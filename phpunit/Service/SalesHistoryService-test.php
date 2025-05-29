@@ -9,12 +9,12 @@ use Cornix\Serendipity\Core\Repository\AppContractData;
 use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Constants\UnlockPaywallTransferType;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Repository\SalesHistories;
+use Cornix\Serendipity\Core\Service\SalesHistoryService;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
 
-class SalesHistoriesTest extends IntegrationTestBase {
+class SalesHistoryServiceTest extends IntegrationTestBase {
 
 	private const INVOICE_IDS = array(
 		'01JKFB56B8PQQ261K5VZDCE5DH',
@@ -34,7 +34,7 @@ class SalesHistoriesTest extends IntegrationTestBase {
 		$wpdb = WpdbFactory::create( $host );
 		( new SalesHistoriesTablesInitializer( $wpdb ) )->initialize();    // テーブルを初期化
 		$this->insertTableData( $wpdb );
-		$sut = new SalesHistories( $wpdb );
+		$sut = new SalesHistoryService( $wpdb );
 
 		// ACT
 		$results = $sut->select();
@@ -94,7 +94,7 @@ class SalesHistoriesTest extends IntegrationTestBase {
 		( new SalesHistoriesTablesInitializer( $wpdb ) )->initialize();    // テーブルを初期化
 		$this->insertTableData( $wpdb );    // 1件目のデータを挿入
 		$this->insertTableData2( $wpdb );   // 2件目のデータを挿入
-		$sut = new SalesHistories( $wpdb );
+		$sut = new SalesHistoryService( $wpdb );
 
 		// ACT
 		$results = $sut->select();  // 全件取得

@@ -1,16 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
+use Cornix\Serendipity\Core\Repository\AppContractData;
+use Cornix\Serendipity\Core\Repository\ChainsData;
 use wpdb;
 
 /**
  * 売上データを取得するクラス
  */
-class SalesHistories {
+class SalesHistoryService {
 	public function __construct( wpdb $wpdb = null ) {
 		$this->wpdb = $wpdb ?? $GLOBALS['wpdb'];
 
