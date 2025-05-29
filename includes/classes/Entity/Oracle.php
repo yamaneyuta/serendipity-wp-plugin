@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Types;
+namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 
-class OracleType {
+class Oracle {
 
-	/** @var OracleType[] */
+	/** @var Oracle[] */
 	private static array $cache = array();
 
 	private function __construct( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ) {
@@ -49,14 +49,14 @@ class OracleType {
 		);
 	}
 
-	public static function from( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ): OracleType {
+	public static function from( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ): Oracle {
 		assert( Judge::isChainID( $chain_ID ), '[403AD6AB] Invalid chain ID. chain id: ' . $chain_ID );
 		assert( Judge::isAddress( $address ), '[7A82CB13] Invalid oracle address. chain id: ' . $chain_ID . ', address: ' . $address );
 		assert( Judge::isSymbol( $base_symbol ), '[CD285CC7] Invalid base symbol. ' . $base_symbol );
 		assert( Judge::isSymbol( $quote_symbol ), '[BA65690D] Invalid quote symbol. ' . $quote_symbol );
 
 		if ( is_null( self::$cache[ $chain_ID ][ $address ] ?? null ) ) {
-			self::$cache[ $chain_ID ][ $address ] = new OracleType( $chain_ID, $address, $base_symbol, $quote_symbol );
+			self::$cache[ $chain_ID ][ $address ] = new Oracle( $chain_ID, $address, $base_symbol, $quote_symbol );
 		}
 
 		return self::$cache[ $chain_ID ][ $address ];

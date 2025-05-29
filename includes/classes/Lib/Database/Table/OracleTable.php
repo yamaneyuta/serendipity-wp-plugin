@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Database\Table;
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Types\OracleType;
+use Cornix\Serendipity\Core\Entity\Oracle;
 
 /**
  * Oracleの情報を記録するテーブル
@@ -55,7 +55,7 @@ class OracleTable {
 	 * @param string|null $address Oracleアドレス
 	 * @param string|null $base_symbol ベースシンボル
 	 * @param string|null $quote_symbol クォートシンボル
-	 * @return OracleType[]
+	 * @return Oracle[]
 	 */
 	public function select( ?int $chain_ID = null, ?string $address = null, ?string $base_symbol = null, ?string $quote_symbol = null ): array {
 		$sql = <<<SQL
@@ -103,7 +103,7 @@ class OracleTable {
 			assert( Judge::isSymbol( $base_symbol ), '[7F884B25] Invalid base symbol. ' . $base_symbol );
 			assert( Judge::isSymbol( $quote_symbol ), '[9A0090FB] Invalid quote symbol. ' . $quote_symbol );
 
-			$records[] = OracleType::from( $chain_ID, $address, $base_symbol, $quote_symbol );
+			$records[] = Oracle::from( $chain_ID, $address, $base_symbol, $quote_symbol );
 		}
 
 		return $records;
