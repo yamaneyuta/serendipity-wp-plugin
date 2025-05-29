@@ -33,15 +33,29 @@ final class NetworkCategory {
 
 	/**
 	 * ネットワークカテゴリID(数値)からインスタンスを取得します。
+	 * 引数がnullの場合はnullを返します。
 	 */
-	public static function from( int $network_category_id ): NetworkCategory {
-		Judge::checkNetworkCategoryID( $network_category_id );
-
-		if ( ! isset( self::$cache[ $network_category_id ] ) ) {
-			self::$cache[ $network_category_id ] = new NetworkCategory( $network_category_id );
+	public static function from( ?int $network_category_id, Environment $environment = null ): ?NetworkCategory {
+		if ( is_null( $network_category_id ) ) {
+			return null;
 		}
 
-		assert( isset( self::$cache[ $network_category_id ] ), '[79AD75D5] NetworkCategory cache is not set.' );
+		// キャッシュに存在する場合はキャッシュから取得
+		if ( isset( self::$cache[ $network_category_id ] ) ) {
+			return self::$cache[ $network_category_id ];
+		}
+
+		// 開発環境でない環境でPrivatenetの値を渡された場合は例外をスローする
+		if ( $network_category_id === NetworkCategoryID::PRIVATENET && ! ( $environment ?? new Environment() )->isDevelopmentMode() ) {
+			throw new \LogicException( '[F9EF95EC] Invalid network category ID. - network_category_id: ' . $network_category_id );
+		}
+
+		// ネットワークカテゴリIDとして正しい値が渡されているかどうかを検証
+		Judge::checkNetworkCategoryID( $network_category_id );
+
+		assert( ! isset( self::$cache[ $network_category_id ] ), '[87F07910] NetworkCategory cache is already set. network_category_id: ' . $network_category_id );
+		self::$cache[ $network_category_id ] = new NetworkCategory( $network_category_id );
+
 		return self::$cache[ $network_category_id ];
 	}
 
@@ -68,34 +82,32 @@ final class NetworkCategory {
 
 	/**
 	 * すべてのネットワークカテゴリインスタンスを取得します。
+	 * ※ 開発環境でない場合はPrivatenetの値を除外します。
 	 *
 	 * @return NetworkCategory[]
 	 */
 	public static function all(): array {
-		$is_development_mode = ( new Environment() )->isDevelopmentMode();
+		$environment = new Environment();
 
-		$result = array(
-			self::mainnet(),
-			self::testnet(),
+		// リフレクションを使用して、クラス定数を取得
+		$reflection = new \ReflectionClass( NetworkCategoryID::class );
+		$constants  = $reflection->getConstants();
+		/** @var int[] */
+		$all_network_category_ids = array_values( $constants );
+
+		// 開発環境でない場合はPrivatenetの値を除外する
+		if ( ! $environment->isDevelopmentMode() ) {
+			$all_network_category_ids = array_values(
+				array_filter(
+					$all_network_category_ids,
+					fn ( int $id ) => $id !== NetworkCategoryID::PRIVATENET
+				)
+			);
+		}
+
+		return array_map(
+			fn ( int $network_category_id ) => self::from( $network_category_id, $environment ),
+			$all_network_category_ids
 		);
-		if ( $is_development_mode ) {
-			$result[] = self::privatenet();
-		}
-
-		return $result;
-	}
-
-
-	public function __toString(): string {
-		switch ( $this->id() ) {
-			case NetworkCategoryID::MAINNET:
-				return 'Mainnet';
-			case NetworkCategoryID::TESTNET:
-				return 'Testnet';
-			case NetworkCategoryID::PRIVATENET:
-				return 'Privatenet';
-			default:
-				throw new \LogicException( '[E3A7D1A1] Invalid network category ID. id: ' . $this->id() );
-		}
 	}
 }

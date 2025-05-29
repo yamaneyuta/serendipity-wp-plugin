@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Database\Table\ChainTable;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 /**
  * チェーンの情報を取得するクラス
@@ -48,8 +49,13 @@ class ChainData {
 	}
 
 	/** このチェーンのネットワークカテゴリを取得します */
-	public function networkCategoryID(): ?int {
-		return Config::NETWORK_CATEGORIES[ $this->chain_ID ] ?? null;
+	public function networkCategory(): NetworkCategory {
+		$network_category = NetworkCategory::from( Config::NETWORK_CATEGORIES[ $this->chain_ID ] ?? null );
+		if ( is_null( $network_category ) ) {
+			throw new \UnexpectedValueException( '[B3FE6205] Network category ID is not defined for chain ID: ' . var_export( $this->chain_ID, true ) );
+		}
+
+		return $network_category;
 	}
 
 	/**

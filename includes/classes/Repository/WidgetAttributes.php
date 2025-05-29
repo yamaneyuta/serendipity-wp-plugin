@@ -44,8 +44,7 @@ class WidgetAttributes {
 
 	/** 販売対象のネットワークカテゴリを取得します。 */
 	public function sellingNetworkCategory(): ?NetworkCategory {
-		$selling_network_category_id = $this->attrs[ self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID ] ?? null;
-		return is_null( $selling_network_category_id ) ? null : NetworkCategory::from( $selling_network_category_id );
+		return NetworkCategory::from( $this->attrs[ self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID ] ?? null );
 	}
 
 	/** 販売価格を取得します。 */

@@ -40,10 +40,11 @@ class PostResolver extends ResolverBase {
 
 		if ( is_null( $selling_network_category ) ) {
 			Logger::warn( '[21B2C2DD] Selling network category is null for post ID: ' . $post_ID );
+			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
 		}
 
 		// 投稿に設定されている販売ネットワークカテゴリに属するチェーンID一覧を取得
-		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new ChainsData() )->chainIDs( $selling_network_category->id() );
+		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new ChainsData() )->chainIDs( $selling_network_category );
 
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {
