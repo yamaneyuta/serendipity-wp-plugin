@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Repository\ChainData;
+use Cornix\Serendipity\Core\Entity\Chain;
 use Cornix\Serendipity\Core\Repository\ChainsData;
 
 class ChainsResolver extends ResolverBase {
@@ -43,7 +43,7 @@ class ChainsResolver extends ResolverBase {
 			$chain_ids = array_values(
 				array_filter(
 					$chain_ids,
-					fn( $chain_id ) => ( new ChainData( $chain_id ) )->connectable()
+					fn( $chain_id ) => ( new Chain( $chain_id ) )->connectable()
 				)
 			);
 		}

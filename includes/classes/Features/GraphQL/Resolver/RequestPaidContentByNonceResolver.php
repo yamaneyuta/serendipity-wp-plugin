@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Repository\ChainData;
+use Cornix\Serendipity\Core\Entity\Chain;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
@@ -63,7 +63,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		if ( ! ( new ChainData( $chain_ID ) )->connectable() ) {
+		if ( ! ( new Chain( $chain_ID ) )->connectable() ) {
 			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す
 			// ※ 支払い後、管理者によってチェーンが無効化された場合はここを通るため、例外を投げない
 			return $error_result_callback( self::ERROR_CODE_INVALID_CHAIN_ID );
@@ -98,7 +98,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( int $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$confirmations = ( new ChainData( $chain_ID ) )->confirmations();
+		$confirmations = ( new Chain( $chain_ID ) )->confirmations();
 
 		if ( is_int( $confirmations ) ) {
 			// 最新のブロック番号を取得

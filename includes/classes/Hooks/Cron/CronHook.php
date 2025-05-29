@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Repository\AppContractData;
 use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Repository\ChainData;
+use Cornix\Serendipity\Core\Entity\Chain;
 use Cornix\Serendipity\Core\Repository\ChainsData;
 
 /**
@@ -183,7 +183,7 @@ class AppContractCrawlableChainIDs {
 		// チェーンに接続可能かつアプリケーション用コントラクトアドレスが取得可能なチェーンに絞り込み
 		$connectable_chain_ids = array_filter(
 			$all_chain_IDs,
-			fn( $chain_id ) => ( new ChainData( $chain_id ) )->connectable() && ! is_null( ( new AppContractData( $chain_id ) )->address() )
+			fn( $chain_id ) => ( new Chain( $chain_id ) )->connectable() && ! is_null( ( new AppContractData( $chain_id ) )->address() )
 		);
 
 		// 取引が開始された(=請求書を発行した)ブロックが存在するチェーンに絞り込み

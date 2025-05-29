@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Database\Table\ChainTable;
@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 /**
  * チェーンの情報を取得するクラス
  */
-class ChainData {
+class Chain {
 	public function __construct( int $chian_ID, ?\wpdb $wpdb = null ) {
 		$this->chain_ID    = $chian_ID;
 		$this->chain_table = new ChainTable( $wpdb );
