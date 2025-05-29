@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Lib\Database\Table\OracleTable;
+use Cornix\Serendipity\Core\Repository\ChainData;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
-class Oracle {
+class OracleService {
 
 	/**
 	 * 指定した通貨ペアのOracleがデプロイされている接続可能なチェーンID一覧を取得します。

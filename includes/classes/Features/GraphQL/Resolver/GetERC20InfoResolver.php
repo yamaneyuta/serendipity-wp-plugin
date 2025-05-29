@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\Oracle;
+use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
@@ -54,7 +54,7 @@ class GetERC20InfoResolver extends ResolverBase {
 		// レート変換可能かどうかを返すコールバック関数
 		$rate_exchangeable_callback = function () use ( $symbol ) {
 			Judge::checkHasAdminRole();  // 管理者権限が必要
-			$oracle = new Oracle();
+			$oracle = new OracleService();
 			// XXX/USD や XXX/ETH のOracleが存在する場合はレート変換可能と判定
 			$quote_symbols = array( 'USD', 'ETH' );
 			foreach ( $quote_symbols as $quote_symbol ) {
