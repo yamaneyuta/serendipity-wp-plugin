@@ -8,8 +8,8 @@ use Cornix\Serendipity\Core\Repository\Oracle;
 use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Transient\TransientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\OracleClient;
-use Cornix\Serendipity\Core\Types\Rate;
-use Cornix\Serendipity\Core\Types\SymbolPair;
+use Cornix\Serendipity\Core\ValueObject\Rate;
+use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
 class RateData {
 	public function __construct( RateTransient $rate_transient = null, OracleRate $oracle_rate = null ) {

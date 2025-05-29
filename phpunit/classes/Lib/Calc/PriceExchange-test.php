@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Repository\RateData;
-use Cornix\Serendipity\Core\Types\Rate;
-use Cornix\Serendipity\Core\Types\SymbolPair;
+use Cornix\Serendipity\Core\ValueObject\Rate;
+use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
 use Cornix\Serendipity\Core\Repository\Constants\ChainID;

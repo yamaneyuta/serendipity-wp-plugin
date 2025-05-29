@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
 use Cornix\Serendipity\Core\Repository\ChainData;
-use Cornix\Serendipity\Core\Types\SymbolPair;
+use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
 /**
  * ERC20トークンの情報をブロックチェーンから取得して返します。

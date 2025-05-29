@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Transient;
 
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
-use Cornix\Serendipity\Core\Types\SymbolPair;
+use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
 class TransientFactory {
 
