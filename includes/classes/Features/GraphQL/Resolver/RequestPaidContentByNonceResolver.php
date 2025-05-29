@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\ChainData;
-use Cornix\Serendipity\Core\Types\BlockNumberType;
+use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Types\InvoiceID;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
@@ -96,7 +96,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	/**
 	 * トランザクションが待機済みかどうかを判定します。
 	 */
-	private function isConfirmed( int $chain_ID, BlockNumberType $unlocked_block_number ): bool {
+	private function isConfirmed( int $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
 		$confirmations = ( new ChainData( $chain_ID ) )->confirmations();
 

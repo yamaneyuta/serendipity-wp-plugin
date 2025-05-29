@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppAbi;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Types\BlockNumberType;
+use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Types\InvoiceID;
 use phpseclib\Math\BigInteger;
 use stdClass;
@@ -28,7 +28,7 @@ class AppContractCrawler {
 	private AppAbi $app_abi;
 	private \wpdb $wpdb;
 
-	public function crawl( int $chain_ID, BlockNumberType $from_block, BlockNumberType $to_block ): void {
+	public function crawl( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): void {
 		// UnlockPaywallTransferイベントのログを取得
 		$transfer_logs = $this->getUnlockPaywallTransferLogs( $chain_ID, $from_block, $to_block );
 		// トランザクション情報をDBに保存
@@ -40,7 +40,7 @@ class AppContractCrawler {
 	/**
 	 * UnlockPaywallTransferイベントのログを取得します。
 	 */
-	private function getUnlockPaywallTransferLogs( int $chain_ID, BlockNumberType $from_block, BlockNumberType $to_block ): array {
+	private function getUnlockPaywallTransferLogs( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
 		return ( new UnlockPaywallTransferCrawler() )->execute( $chain_ID, $from_block, $to_block );
 	}
 
@@ -78,7 +78,7 @@ class AppContractCrawler {
 			$transaction_repository->save(
 				$invoice_ID,
 				$chain_ID,
-				BlockNumberType::from( $block_number_hex ),
+				BlockNumber::from( $block_number_hex ),
 				$transaction_hash,
 			);
 		}
@@ -153,7 +153,7 @@ class UnlockPaywallTransferCrawler {
 	 *
 	 * @return stdClass[]
 	 */
-	public function execute( int $chain_ID, BlockNumberType $from_block, BlockNumberType $to_block ): array {
+	public function execute( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
 		$blockchain_client = ( new BlockchainClientFactory() )->create( $chain_ID );
 
 		$contract_address = ( new AppClientFactory() )->create( $chain_ID )->address();
