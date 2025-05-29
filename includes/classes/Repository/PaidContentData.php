@@ -55,11 +55,10 @@ class PaidContentData {
 	 */
 	public function sellingNetworkCategory(): ?NetworkCategory {
 		$record = $this->record();
-		if ( ! is_null( $record ) && ! is_null( $record->selling_network_category_id ) ) {
-			return NetworkCategory::from( $record->selling_network_category_id );
-		} else {
-			return null;
+		if ( is_null( $record ) ) {
+			return null; // レコードが存在しない場合はnullを返す
 		}
+		return NetworkCategory::from( $record->selling_network_category_id );
 	}
 
 	/**

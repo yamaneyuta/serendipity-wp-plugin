@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Config\Config;
 use Cornix\Serendipity\Core\Lib\Database\Table\ChainTable;
+use Cornix\Serendipity\Core\Types\NetworkCategory;
 
 /**
  * 本プラグインで扱うチェーンの情報を取得するクラス
@@ -28,14 +29,14 @@ class ChainsData {
 	 *
 	 * @return int[]
 	 */
-	public function chainIDs( int $network_category_id = null ): array {
+	public function chainIDs( NetworkCategory $network_category = null ): array {
 		$chain_ids = array_values( array_map( fn ( $record ) => $record->chain_id, $this->records() ) );
 
-		if ( ! is_null( $network_category_id ) ) {
+		if ( ! is_null( $network_category ) ) {
 			$chain_ids = array_values(
 				array_filter(
 					$chain_ids,
-					fn ( $chain_id ) => Config::NETWORK_CATEGORIES[ $chain_id ] === $network_category_id
+					fn ( $chain_id ) => Config::NETWORK_CATEGORIES[ $chain_id ] === $network_category->id()
 				)
 			);
 		}

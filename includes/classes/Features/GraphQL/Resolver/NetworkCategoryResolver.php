@@ -16,26 +16,29 @@ class NetworkCategoryResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		/** @var int */
-		$network_category_id = $args['networkCategoryID'];
-		$network_category    = NetworkCategory::from( $network_category_id );
+		$network_category = NetworkCategory::from( $args['networkCategoryID'] ?? null );
+
+		if ( is_null( $network_category ) ) {
+			// ネットワークカテゴリIDの指定は必須
+			throw new \InvalidArgumentException( '[FE3B9036] Invalid network category ID.' );
+		}
 
 		$sellable_symbols_callback = function () use ( $network_category ) {
 			Judge::checkHasEditableRole();  // 投稿編集者権限以上が必要
 			return ( new SellableSymbols() )->get( $network_category );
 		};
 
-		$chains_callback = function () use ( $root_value, $network_category_id ) {
+		$chains_callback = function () use ( $root_value, $network_category ) {
 			return array_map(
 				function ( $chain_ID ) use ( $root_value ) {
 					return $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
 				},
-				( new ChainsData() )->chainIDs( $network_category_id )
+				( new ChainsData() )->chainIDs( $network_category )
 			);
 		};
 
 		return array(
-			'id'              => $network_category_id,
+			'id'              => $network_category->id(),
 			'chains'          => $chains_callback,
 			'sellableSymbols' => $sellable_symbols_callback,
 		);

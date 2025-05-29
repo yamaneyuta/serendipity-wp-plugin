@@ -10,7 +10,6 @@ use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Repository\Constants\NetworkCategoryID;
-use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Types\TokenType;
 
 /**
@@ -102,20 +101,18 @@ class Judge {
 		return in_array( $chain_ID, $all_chain_ids, true );
 	}
 
-	/** ネットワークカテゴリIDが有効でない場合は例外をスローします。 */
+	/** 指定されたネットワークカテゴリIDが定義されていない値の場合は例外をスローします。 */
 	public static function checkNetworkCategoryID( int $network_category_id ): void {
 		if ( ! self::isNetworkCategoryID( $network_category_id ) ) {
 			throw new \InvalidArgumentException( '[E3D44CFD] Invalid network category ID. - network_category_id: ' . $network_category_id );
 		}
 	}
 
-	/** 指定された値がネットワークカテゴリIDとして有効かどうかを返します。 */
+	/**
+	 * 指定された値がネットワークカテゴリIDとして有効かどうか(NetworkCategoryIDに定義されているかどうか)を返します。
+	 * ※ あくまで定義されているかどうかの判定のため、本番環境でPrivatenetの値が渡されてもtrueを返すことに注意。
+	 */
 	private static function isNetworkCategoryID( int $network_category_id ): bool {
-		// 開発環境でない場合、Privatenetは無効とする
-		if ( $network_category_id === NetworkCategoryID::PRIVATENET && ! ( new Environment() )->isDevelopmentMode() ) {
-			return false;
-		}
-
 		// リフレクションを使用して、クラス定数を取得
 		$reflection = new \ReflectionClass( NetworkCategoryID::class );
 		$constants  = $reflection->getConstants();

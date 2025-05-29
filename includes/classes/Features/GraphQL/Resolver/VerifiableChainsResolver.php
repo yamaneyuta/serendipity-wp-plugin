@@ -26,10 +26,11 @@ class VerifiableChainsResolver extends ResolverBase {
 		$selling_network_category = ( new PaidContentData( $post_ID ) )->sellingNetworkCategory();
 		if ( is_null( $selling_network_category ) ) {
 			Logger::warn( '[B4FC6E2A] Selling network category is null for post ID: ' . $post_ID );
+			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
 		}
 
 		// 投稿の販売ネットワークカテゴリに属する全てのチェーンIDを取得
-		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new ChainsData() )->chainIDs( $selling_network_category->id() );
+		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new ChainsData() )->chainIDs( $selling_network_category );
 
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {
