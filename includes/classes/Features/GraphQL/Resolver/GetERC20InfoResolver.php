@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
 /**
@@ -35,7 +35,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
 		// RPC URLを取得
-		$rpc_url = ( new Chain( $chain_ID ) )->rpcURL();
+		$rpc_url = ( new ChainService( $chain_ID ) )->rpcURL();
 		if ( is_null( $rpc_url ) ) {
 			// RPC URLが取得できない(=接続できない)チェーンIDが指定された場合は例外を投げる
 			throw new \InvalidArgumentException( '[84752B42] chainID is not connectable. chain id: ' . $chain_ID );

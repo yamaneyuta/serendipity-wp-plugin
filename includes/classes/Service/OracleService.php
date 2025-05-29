@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Lib\Database\Table\OracleTable;
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
 class OracleService {
@@ -22,7 +22,7 @@ class OracleService {
 		);
 
 		// 接続可能なチェーンIDに絞り込み
-		$chain_IDs = array_filter( $chain_IDs, fn( $chain_ID ) => ( new Chain( $chain_ID ) )->connectable() );
+		$chain_IDs = array_filter( $chain_IDs, fn( $chain_ID ) => ( new ChainService( $chain_ID ) )->connectable() );
 
 		// 重複を削除し、インデックスを振り直した配列を返す
 		return array_values( array_unique( $chain_IDs ) );

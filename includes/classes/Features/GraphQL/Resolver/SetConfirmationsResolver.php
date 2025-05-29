@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Service\ChainService;
 
 class SetConfirmationsResolver extends ResolverBase {
 
@@ -36,7 +36,7 @@ class SetConfirmationsResolver extends ResolverBase {
 			global $wpdb;
 			$wpdb->query( 'START TRANSACTION' );
 			// ChainDataのインスタンスを作成し、confirmationsを設定
-			( new Chain( $chain_ID, $wpdb ) )->setConfirmations( $confirmations );
+			( new ChainService( $chain_ID, $wpdb ) )->setConfirmations( $confirmations );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );

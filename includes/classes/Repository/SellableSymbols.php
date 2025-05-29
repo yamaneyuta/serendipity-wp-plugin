@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\Lib\Database\Table\OracleTable;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 
@@ -24,7 +24,7 @@ class SellableSymbols {
 		// 接続可能なoracleに絞り込み
 		$oracles = array_filter(
 			$oracles,
-			fn( $oracle ) => ( new Chain( $oracle->chainID() ) )->connectable()
+			fn( $oracle ) => ( new ChainService( $oracle->chainID() ) )->connectable()
 		);
 
 		// baseとquoteの通貨シンボルを取得

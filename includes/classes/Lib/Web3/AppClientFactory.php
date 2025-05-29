@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Repository\AppContractData;
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Service\ChainService;
 
 class AppClientFactory {
 	/**
@@ -12,7 +12,7 @@ class AppClientFactory {
 	 */
 	public function create( int $chain_ID ): AppClient {
 		// チェーンに接続するためのRPC URLを取得
-		$rpc_url = ( new Chain( $chain_ID ) )->rpcURL();
+		$rpc_url = ( new ChainService( $chain_ID ) )->rpcURL();
 		if ( is_null( $rpc_url ) ) {
 			throw new \LogicException( '[49ACED7A] RPC URL is not found. - ' . $chain_ID );
 		}

@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Repository\RateTransient;
 use Cornix\Serendipity\Core\Repository\OracleRate;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\ValueObject\Rate;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
@@ -146,7 +146,7 @@ class RateDataTest extends IntegrationTestBase {
 		// ARRANGE
 		$rate_data   = new RateData();
 		$symbol_pair = new SymbolPair( 'ETH', 'USD' );
-		( new Chain( ChainID::ETH_MAINNET ) )->setRpcURL( TestRpcUrl::ETH_MAINNET );  // テスト用のRPC URLを設定
+		( new ChainService( ChainID::ETH_MAINNET ) )->setRpcURL( TestRpcUrl::ETH_MAINNET );  // テスト用のRPC URLを設定
 
 		// ACT
 		$result = $rate_data->get( $symbol_pair );  // Oracleから取得される
