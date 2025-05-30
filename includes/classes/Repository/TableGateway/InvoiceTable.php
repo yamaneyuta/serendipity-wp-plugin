@@ -3,32 +3,31 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
-use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
+use Cornix\Serendipity\Core\Lib\Database\TableBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceTableRecord;
 
 /**
  * 発行した請求書の情報を保存するテーブル
  */
-class InvoiceTable {
-	public function __construct( \wpdb $wpdb = null ) {
-		$this->wpdb               = $wpdb ?? $GLOBALS['wpdb'];
-		$this->invoice_table_name = ( new TableName() )->invoice();
+class InvoiceTable extends TableBase {
+	public function __construct( \wpdb $wpdb ) {
+		parent::__construct( $wpdb );
+
+		$table_name               = new TableName();
+		$this->invoice_table_name = $table_name->invoice();
 	}
 
-	private \wpdb $wpdb;
 	private string $invoice_table_name;
 
-	private function mysqli(): \mysqli {
-		return ( new MySQLiFactory() )->create( $this->wpdb );
-	}
-
 	/**
+	 * @inheritdoc
 	 * 購入用請求書テーブルを作成します。
 	 */
 	public function create(): void {
-		$charset    = $this->wpdb->get_charset_collate();
+		$charset    = $this->wpdb()->get_charset_collate();
 		$index_name = "idx_{$this->invoice_table_name}_2D6F4376";
 
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
@@ -50,55 +49,47 @@ class InvoiceTable {
 			) {$charset};
 		SQL;
 
-		$mysqli = $this->mysqli();
-		$result = $mysqli->query( $sql );
+		$result = $this->mysqli()->query( $sql );
 		if ( true !== $result ) {
-			throw new \RuntimeException( '[BAC2FC48] Failed to create invoice table. ' . $mysqli->error );
+			throw new \RuntimeException( '[BAC2FC48] Failed to create invoice table. ' . $this->mysqli()->error );
 		}
 	}
 
 	/**
 	 *
 	 * @param InvoiceID $invoice_ID
-	 * @return null|object{
-	 *   id: string,
-	 *   post_id: int,
-	 *   chain_id: int,
-	 *   selling_amount_hex: string,
-	 *   selling_decimals: int,
-	 *   selling_symbol: string,
-	 *   seller_address: string,
-	 *   payment_token_address: string,
-	 *   payment_amount_hex: string,
-	 *   consumer_address: string
-	 * }
+	 * @return null|InvoiceTableRecord
 	 */
 	public function select( InvoiceID $invoice_ID ) {
 		$sql = <<<SQL
-			SELECT *
+			SELECT
+				`id`,
+				`post_id`,
+				`chain_id`,
+				`selling_amount_hex`,
+				`selling_decimals`,
+				`selling_symbol`,
+				`seller_address`,
+				`payment_token_address`,
+				`payment_amount_hex`,
+				`consumer_address`
 			FROM `{$this->invoice_table_name}`
 			WHERE `id` = %s
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid() );
+		$sql = $this->wpdb()->prepare( $sql, $invoice_ID->ulid() );
 
-		$result = $this->wpdb->get_row( $sql );
+		$result = $this->wpdb()->get_row( $sql );
 
-		if ( ! is_null( $result ) ) {
-			$result->post_id          = (int) $result->post_id;
-			$result->chain_id         = (int) $result->chain_id;
-			$result->selling_decimals = (int) $result->selling_decimals;
-		}
-		return $result;
+		return is_null( $result ) ? null : new InvoiceTableRecord( $result );
 	}
 
-	public function insert( int $post_ID, int $chain_ID, Price $selling_price, string $seller_address, string $payment_token_address, string $payment_amount_hex, string $consumer_address ) {
-		$invoice_id         = InvoiceID::generate();
+	public function insert( InvoiceID $invoice_id, int $post_ID, int $chain_ID, Price $selling_price, string $seller_address, string $payment_token_address, string $payment_amount_hex, string $consumer_address ) {
 		$selling_amount_hex = $selling_price->amountHex();
 		$selling_decimals   = $selling_price->decimals();
 		$selling_symbol     = $selling_price->symbol();
 
-		$result = $this->wpdb->insert(
+		$result = $this->wpdb()->insert(
 			$this->invoice_table_name,
 			array(
 				'id'                    => $invoice_id->ulid(),
@@ -113,8 +104,8 @@ class InvoiceTable {
 				'consumer_address'      => $consumer_address,
 			),
 		);
-		if ( false === $result || $this->wpdb->last_error ) {
-			throw new \RuntimeException( '[5F99E86E] Failed to insert invoice. ' . $this->wpdb->last_error );
+		if ( false === $result || $this->wpdb()->last_error ) {
+			throw new \RuntimeException( '[5F99E86E] Failed to insert invoice. ' . $this->wpdb()->last_error );
 		}
 
 		return $invoice_id;

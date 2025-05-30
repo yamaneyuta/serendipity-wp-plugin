@@ -15,7 +15,7 @@ class InvoiceNonce {
 	 * 請求書に紐づくnonceインスタンスを生成します。
 	 * コンストラクタの引数に値を指定しない場合は、ランダムなnonceが生成されます。
 	 */
-	public function __construct( string $invoice_nonce_value = null ) {
+	public function __construct( string $invoice_nonce_value ) {
 		$invoice_nonce_value = $invoice_nonce_value ?? self::generateNonceValue();
 		assert(
 			Judge::isInvoiceNonceValueFormat( $invoice_nonce_value ),
@@ -30,8 +30,12 @@ class InvoiceNonce {
 		return $this->value;
 	}
 
+	public static function generate(): self {
+		return new self( self::generateNonceValue() );
+	}
+
 	/**
-	 * nonceを生成します。
+	 * nonceの値を生成します。
 	 */
 	private static function generateNonceValue(): string {
 		// `wp_generate_uuid4`は`mt_rand`を用いているため、別の方法で乱数を生成する。

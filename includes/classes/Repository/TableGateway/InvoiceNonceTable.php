@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceNonceTableRecord;
 
 /**
  * 発行した請求書IDとnonceの紐づきを保存するテーブル
@@ -64,8 +65,24 @@ class InvoiceNonceTable {
 		}
 	}
 
+	public function select( InvoiceID $invoice_ID ): ?InvoiceNonceTableRecord {
+		$sql = <<<SQL
+			SELECT
+				`invoice_id`,
+				`nonce`
+			FROM `{$this->table_name}`
+			WHERE `invoice_id` = %s
+		SQL;
+
+		$sql = $this->wpdb->prepare( $sql, $invoice_ID->ulid() );
+
+		$record = $this->wpdb->get_row( $sql );
+
+		return is_null( $record ) ? null : new InvoiceNonceTableRecord( $record );
+	}
+
 	/** 指定した請求書IDに紐づくnonceを記録します。 */
-	public function set( InvoiceID $invoice_ID, InvoiceNonce $nonce ): void {
+	public function setNonce( InvoiceID $invoice_ID, InvoiceNonce $nonce ): void {
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
 			(`invoice_id`, `nonce`)

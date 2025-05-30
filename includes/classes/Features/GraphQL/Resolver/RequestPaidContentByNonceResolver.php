@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
-use Cornix\Serendipity\Core\Service\InvoiceService;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
@@ -43,22 +43,21 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			'errorCode' => $error_code,
 		);
 
-		global $wpdb;
-		$invoice_data = ( new InvoiceService( $wpdb ) )->getData( $invoice_ID );
-		if ( is_null( $invoice_data ) ) {
+		$invoice = ( new InvoiceRepository() )->get( $invoice_ID );
+		if ( is_null( $invoice ) ) {
 			// 通常、ここは通らない
 			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID_hex );
 		}
 
-		$db_nonce = $invoice_data->nonce(); // DBから取得したnonce
+		$db_nonce = $invoice->nonce; // DBから取得したnonce
 		if ( is_null( $db_nonce ) || $nonce !== $db_nonce->value() ) {
 			// nonceが無効な場合はドメインエラーとして返す
 			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
 		}
 
-		$post_ID          = $invoice_data->postID();
-		$chain_ID         = $invoice_data->chainID();
-		$consumer_address = $invoice_data->consumerAddress();
+		$post_ID          = $invoice->post_ID;
+		$chain_ID         = $invoice->chain_ID;
+		$consumer_address = $invoice->consumer_address;
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
