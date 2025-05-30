@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\Oracle;
+use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
-use Cornix\Serendipity\Core\Repository\ChainData;
-use Cornix\Serendipity\Core\Types\SymbolPair;
+use Cornix\Serendipity\Core\Service\ChainService;
+use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
 /**
  * ERC20トークンの情報をブロックチェーンから取得して返します。
@@ -35,7 +35,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
 		// RPC URLを取得
-		$rpc_url = ( new ChainData( $chain_ID ) )->rpcURL();
+		$rpc_url = ( new ChainService( $chain_ID ) )->rpcURL();
 		if ( is_null( $rpc_url ) ) {
 			// RPC URLが取得できない(=接続できない)チェーンIDが指定された場合は例外を投げる
 			throw new \InvalidArgumentException( '[84752B42] chainID is not connectable. chain id: ' . $chain_ID );
@@ -54,7 +54,7 @@ class GetERC20InfoResolver extends ResolverBase {
 		// レート変換可能かどうかを返すコールバック関数
 		$rate_exchangeable_callback = function () use ( $symbol ) {
 			Judge::checkHasAdminRole();  // 管理者権限が必要
-			$oracle = new Oracle();
+			$oracle = new OracleService();
 			// XXX/USD や XXX/ETH のOracleが存在する場合はレート変換可能と判定
 			$quote_symbols = array( 'USD', 'ETH' );
 			foreach ( $quote_symbols as $quote_symbol ) {

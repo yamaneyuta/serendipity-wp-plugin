@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Repository\RateData;
-use Cornix\Serendipity\Core\Types\Rate;
-use Cornix\Serendipity\Core\Types\SymbolPair;
+use Cornix\Serendipity\Core\ValueObject\Rate;
+use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
-use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
-use Cornix\Serendipity\Core\Repository\Oracle;
-use Cornix\Serendipity\Core\Types\Price;
+use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
+use Cornix\Serendipity\Core\Constants\ChainID;
+use Cornix\Serendipity\Core\Service\OracleService;
+use Cornix\Serendipity\Core\ValueObject\Price;
 use phpseclib\Math\BigInteger;
 
 class PriceExchangeTest extends IntegrationTestBase {
@@ -23,7 +23,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 		parent::setUp();
 
 		$this->rate_data_stub = $this->createMock( RateData::class );
-		$this->oracle_stub    = $this->createMock( Oracle::class );
+		$this->oracle_stub    = $this->createMock( OracleService::class );
 		$this->sut            = new PriceExchange( $this->rate_data_stub, $this->oracle_stub );
 
 		// ERC20トークンの情報をテーブルに保存

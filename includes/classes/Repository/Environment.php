@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Config\Config;
+use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 
 /**

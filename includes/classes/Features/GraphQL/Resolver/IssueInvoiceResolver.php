@@ -61,7 +61,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		global $wpdb;
 		try {
 			$wpdb->query( 'START TRANSACTION' );
-			$invoice_data = ( new InvoiceService( $wpdb ) )->issue( $post_ID, $chain_ID, $selling_price, $seller_address, $token_address, $payment_amount_hex, $consumer_address );
+			$invoice = ( new InvoiceService() )->issue( $post_ID, $chain_ID, $selling_price, $seller_address, $token_address, $payment_amount_hex, $consumer_address );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );
@@ -72,7 +72,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		$server_message = SolidityStrings::valueToHexString( $chain_ID )
 			. SolidityStrings::addressToHexString( $seller_address )
 			. SolidityStrings::addressToHexString( $consumer_address )
-			. SolidityStrings::valueToHexString( $invoice_data->id()->hex() )
+			. SolidityStrings::valueToHexString( $invoice->id->hex() )
 			. SolidityStrings::valueToHexString( $post_ID )
 			. SolidityStrings::addressToHexString( $token_address )
 			. SolidityStrings::valueToHexString( $payment_amount_hex )
@@ -91,8 +91,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		}
 
 		return array(
-			'invoiceIdHex'     => $invoice_data->id()->hex(),
-			'nonce'            => $invoice_data->nonce()->value(),
+			'invoiceIdHex'     => $invoice->id->hex(),
+			'nonce'            => $invoice->nonce->value(),
 			'serverMessage'    => $server_message,
 			'serverSignature'  => $server_signature,
 			'paymentAmountHex' => $payment_amount_hex,

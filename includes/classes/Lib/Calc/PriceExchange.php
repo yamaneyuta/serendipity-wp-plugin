@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
-use Cornix\Serendipity\Core\Repository\Oracle;
+use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Repository\TokenData;
-use Cornix\Serendipity\Core\Types\Price;
-use Cornix\Serendipity\Core\Types\SymbolPair;
+use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 use phpseclib\Math\BigInteger;
 
 class PriceExchange {
-	public function __construct( RateData $rate_data = null, Oracle $oracle = null ) {
+	public function __construct( RateData $rate_data = null, OracleService $oracle = null ) {
 		$this->rate_data = $rate_data ?? new RateData();
-		$this->oracle    = $oracle ?? new Oracle();
+		$this->oracle    = $oracle ?? new OracleService();
 	}
 	private RateData $rate_data;
-	private Oracle $oracle;
+	private OracleService $oracle;
 
 	public function convert( Price $price, string $to_symbol ): Price {
 		// 元の価格が0の場合は変換後の値も0

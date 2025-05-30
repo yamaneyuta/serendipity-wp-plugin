@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Database\Table\TokenTable;
-use Cornix\Serendipity\Core\Repository\Constants\ChainID;
+use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
+use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Types\TokenType;
+use Cornix\Serendipity\Core\Entity\Token;
 
 require_once 'includes/classes/Repository/RateData.php';
 
@@ -83,7 +83,7 @@ class TokenDataTest extends IntegrationTestBase {
 
 		// ASSERT
 		// 結果からコントラクトアドレス一覧を取得するコールバック
-		$get_addresses = fn( array $result ) => array_map( fn( TokenType $ret ) => $ret->address(), $result );
+		$get_addresses = fn( array $result ) => array_map( fn( Token $ret ) => $ret->address(), $result );
 
 		$this->assertEquals( 0, count( $result_eth ) ); // 0件
 

@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Config\Config;
+use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Types\BlockNumberType;
+use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
 use Web3\Eth;
@@ -78,7 +78,7 @@ class BlockchainClient {
 	/**
 	 * ブロック番号を取得します。
 	 */
-	public function getBlockNumber( string $tag = 'latest' ): BlockNumberType {
+	public function getBlockNumber( string $tag = 'latest' ): BlockNumber {
 		Judge::checkBlockTagName( $tag );
 
 		/** @var string|null */
@@ -89,7 +89,7 @@ class BlockchainClient {
 			$block_number_hex = $this->getBlockNumberByTag( $tag );
 		}
 
-		return BlockNumberType::from( $block_number_hex );
+		return BlockNumber::from( $block_number_hex );
 	}
 
 	/**

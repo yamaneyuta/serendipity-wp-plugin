@@ -5,8 +5,8 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Types\BlockNumberType;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
+use Cornix\Serendipity\Core\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
 /**
  * ペイウォール解除時のトランザクションに関するデータを記録するクラス
@@ -21,7 +21,7 @@ class UnlockPaywallTransaction {
 	private \wpdb $wpdb;
 	private string $table_name;
 
-	public function save( InvoiceIdType $invoice_id, int $chain_id, BlockNumberType $block_number, string $transaction_hash ): void {
+	public function save( InvoiceID $invoice_id, int $chain_id, BlockNumber $block_number, string $transaction_hash ): void {
 		Judge::checkChainID( $chain_id );
 		Judge::checkHex( $transaction_hash );
 

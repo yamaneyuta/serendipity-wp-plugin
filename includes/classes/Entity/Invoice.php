@@ -3,65 +3,53 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Entity;
 
-use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceNonceTable;
-use Cornix\Serendipity\Core\Lib\Database\Table\InvoiceTable;
-use Cornix\Serendipity\Core\Types\InvoiceIdType;
-use Cornix\Serendipity\Core\Types\InvoiceNonce;
+use Cornix\Serendipity\Core\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
+use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceNonceTableRecord;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceTableRecord;
 
 class Invoice {
-	public function __construct( InvoiceIdType $invoice_ID, \wpdb $wpdb = null ) {
-		$this->invoice_ID = $invoice_ID;
-		$this->wpdb       = $wpdb;
+
+	public function __construct( InvoiceID $id, int $post_ID, int $chain_ID, Price $selling_price, string $seller_address, string $payment_token_address, string $payment_amount_hex, string $consumer_address, ?InvoiceNonce $nonce = null ) {
+		$this->id                    = $id;
+		$this->post_ID               = $post_ID;
+		$this->chain_ID              = $chain_ID;
+		$this->selling_price         = $selling_price;
+		$this->seller_address        = $seller_address;
+		$this->payment_token_address = $payment_token_address;
+		$this->payment_amount_hex    = $payment_amount_hex;
+		$this->consumer_address      = $consumer_address;
+		$this->nonce                 = $nonce;
 	}
 
-	private InvoiceIdType $invoice_ID;
+	public InvoiceID $id;
+	public int $post_ID;
+	public int $chain_ID;
+	public Price $selling_price;
+	public string $seller_address;
+	public string $payment_token_address;
+	public string $payment_amount_hex;
+	public string $consumer_address;
+	public ?InvoiceNonce $nonce;
 
-	/** @var null|\wpdb */
-	private $wpdb;
+	public static function fromTableRecord( InvoiceTableRecord $invoice_record, ?InvoiceNonceTableRecord $invoice_nonce_record ): self {
+		$nonce = is_null( $invoice_nonce_record ) ? null : new InvoiceNonce( $invoice_nonce_record->nonce );
 
-	private function record() {
-		return ( new InvoiceTable( $this->wpdb ) )->select( $this->invoice_ID );
-	}
-
-	/**
-	 * コンストラクタで指定されたIDの請求書情報が存在するかどうかを返します。
-	 */
-	public function exists(): bool {
-		return ! is_null( $this->record() );
-	}
-
-	public function id(): InvoiceIdType {
-		return $this->invoice_ID;
-	}
-
-	public function nonce(): ?InvoiceNonce {
-		return ( new InvoiceNonceTable( $this->wpdb ) )->getNonce( $this->invoice_ID );
-	}
-
-	/**
-	 * 請求書が発行された投稿IDを取得します。
-	 */
-	public function postID(): int {
-		$record = $this->record();
-		assert( property_exists( $record, 'post_id' ), '[1196F8E0] requires the record to have a post_id property.' );
-		assert( is_int( $record->post_id ), '[3CCDB8FC] post_id must be an integer.' );
-
-		return $record->post_id;
-	}
-
-	public function chainID(): int {
-		$record = $this->record();
-		assert( property_exists( $record, 'chain_id' ), '[53F6B40C] requires the record to have a chain_id property.' );
-		assert( is_int( $record->chain_id ), '[165D1295] chain_id must be an integer.' );
-
-		return $record->chain_id;
-	}
-
-	public function consumerAddress(): string {
-		$record = $this->record();
-		assert( property_exists( $record, 'consumer_address' ), '[8BA56ACE] requires the record to have a consumer_address property.' );
-		assert( is_string( $record->consumer_address ), '[A30BDDD7] consumer_address must be a string.' );
-
-		return $record->consumer_address;
+		return new self(
+			InvoiceID::from( $invoice_record->id ),
+			$invoice_record->post_id,
+			$invoice_record->chain_id,
+			new Price(
+				$invoice_record->selling_amount_hex,
+				$invoice_record->selling_decimals,
+				$invoice_record->selling_symbol
+			),
+			$invoice_record->seller_address,
+			$invoice_record->payment_token_address,
+			$invoice_record->payment_amount_hex,
+			$invoice_record->consumer_address,
+			$nonce
+		);
 	}
 }
