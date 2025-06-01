@@ -7,11 +7,11 @@ use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
+use Cornix\Serendipity\Core\Lib\Web3\AppClient;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Repository\InvoiceRepository;
-use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
@@ -70,7 +70,8 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// ブロックチェーンに問い合わせる
-		$app                   = ( new AppClientFactory() )->create( $chain );
+		$app_contract          = ( new AppContractRepository() )->get( $chain->id );
+		$app                   = new AppClient( $app_contract ); // AppClientのインスタンスを生成して、接続可能かチェック
 		$server_signer_address = ( new ServerSignerData() )->getAddress();
 		$payment_status        = $app->getPaywallStatus( $server_signer_address, $post_ID, $consumer_address );
 
@@ -98,7 +99,8 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( int $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$confirmations = ( new ChainService( $chain_ID ) )->confirmations();
+		$chain         = ( new ChainRepository() )->getChain( $chain_ID );
+		$confirmations = $chain->confirmations;
 
 		if ( is_int( $confirmations ) ) {
 			// 最新のブロック番号を取得

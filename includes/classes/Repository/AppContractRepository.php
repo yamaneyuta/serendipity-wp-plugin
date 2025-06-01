@@ -7,18 +7,21 @@ use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Entity\AppContract;
 
 class AppContractRepository {
-	public function __construct( ?Environment $environment = null ) {
-		$this->environment = $environment ?? new Environment();
+	public function __construct( ?ChainRepository $chain_repository = null, ?Environment $environment = null ) {
+		$this->chain_repository = $chain_repository ?? new ChainRepository();
+		$this->environment      = $environment ?? new Environment();
 	}
+	private ChainRepository $chain_repository;
 	private Environment $environment;
 
 
 	public function get( int $chain_id ): ?AppContract {
+		$chain   = $this->chain_repository->getChain( $chain_id );
 		$address = $this->getAddress( $chain_id );
-		if ( $address === null ) {
+		if ( is_null( $chain ) || is_null( $address ) ) {
 			return null;
 		}
-		return new AppContract( $chain_id, $address );
+		return new AppContract( $chain, $address );
 	}
 
 	/**
