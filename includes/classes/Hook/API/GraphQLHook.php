@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Hooks\API;
+namespace Cornix\Serendipity\Core\Hook\API;
 
 use Cornix\Serendipity\Core\Features\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;

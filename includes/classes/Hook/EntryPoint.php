@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Hooks;
+namespace Cornix\Serendipity\Core\Hook;
 
-use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
-use Cornix\Serendipity\Core\Hooks\Page\AdminPageHook;
-use Cornix\Serendipity\Core\Hooks\Cron\CronHook;
-use Cornix\Serendipity\Core\Hooks\Page\PostEditHook;
-use Cornix\Serendipity\Core\Hooks\Page\ViewPageHook;
-use Cornix\Serendipity\Core\Hooks\Post\ContentIoHook;
-use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
+use Cornix\Serendipity\Core\Hook\API\GraphQLHook;
+use Cornix\Serendipity\Core\Hook\Page\AdminPageHook;
+use Cornix\Serendipity\Core\Hook\Cron\CronHook;
+use Cornix\Serendipity\Core\Hook\Page\PostEditHook;
+use Cornix\Serendipity\Core\Hook\Page\ViewPageHook;
+use Cornix\Serendipity\Core\Hook\Post\ContentIoHook;
+use Cornix\Serendipity\Core\Hook\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 
 /**
