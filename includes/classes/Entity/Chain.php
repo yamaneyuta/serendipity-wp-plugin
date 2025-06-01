@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Constants\Config;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\TableRecord\ChainTableRecord;
 
@@ -41,7 +41,7 @@ class Chain {
 	/** このチェーンに接続可能かどうかを取得します。 */
 	public function connectable(): bool {
 		// RPC URLが設定されている場合は接続可能とする
-		return ! is_null( $this->rpc_url ) && Judge::isUrl( $this->rpc_url );
+		return ! is_null( $this->rpc_url ) && Validate::isUrl( $this->rpc_url );
 	}
 
 	public function networkCategory(): NetworkCategory {

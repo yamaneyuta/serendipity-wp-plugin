@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\ValueObject;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use phpseclib\Math\BigInteger;
 
 /**
@@ -21,7 +21,7 @@ class BlockNumber {
 	public static function from( $block_number ): BlockNumber {
 		if ( is_int( $block_number ) ) {
 			return new BlockNumber( new BigInteger( $block_number, 10 ) );
-		} elseif ( is_string( $block_number ) && Judge::isHex( $block_number ) ) {
+		} elseif ( is_string( $block_number ) && Validate::isHex( $block_number ) ) {
 			return new BlockNumber( new BigInteger( $block_number, 16 ) );
 		} elseif ( $block_number instanceof BigInteger ) {
 			return new BlockNumber( $block_number );

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use phpseclib\Math\BigInteger;
 
 class Hex {
@@ -39,7 +39,7 @@ class Hex {
 	 * 16進数文字列を整数に変換します。
 	 */
 	public static function toInt( string $hex ): int {
-		Judge::checkHex( $hex );
+		Validate::checkHex( $hex );
 
 		// 引数の値をBigIntegerに変換
 		$bi_value = new BigInteger( $hex, 16 );

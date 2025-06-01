@@ -19,7 +19,7 @@ use Cornix\Serendipity\Core\Entity\Token;
  * 参考: Ownable.sol#_checkOwner
  * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/1edc2ae004974ebf053f4eba26b45469937b9381/contracts/access/Ownable.sol#L63-L67
  */
-class Judge {
+class Validate {
 
 	/**
 	 * 現在アクセスしているユーザーが管理者権限を持っていない場合は例外をスローします。

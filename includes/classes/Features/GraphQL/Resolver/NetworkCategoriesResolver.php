@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 
 class NetworkCategoriesResolver extends ResolverBase {
@@ -18,7 +18,7 @@ class NetworkCategoriesResolver extends ResolverBase {
 		$filter                  = $args['filter'] ?? null;
 		$filter_network_category = NetworkCategory::from( $filter['networkCategoryID'] ?? null );
 
-		Judge::checkHasEditableRole();  // 投稿編集者権限以上が必要
+		Validate::checkHasEditableRole();  // 投稿編集者権限以上が必要
 
 		// ネットワークカテゴリIDが指定されていない場合は全てのネットワークカテゴリを取得
 		$network_categories = is_null( $filter_network_category ) ? NetworkCategory::all() : array( $filter_network_category );

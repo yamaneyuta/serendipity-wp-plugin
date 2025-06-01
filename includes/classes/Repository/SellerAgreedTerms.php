@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class SellerAgreedTerms {
 
@@ -40,8 +40,8 @@ class SellerAgreedTerms {
 	 */
 	public function save( int $version, string $signature ): void {
 		// 引数チェック
-		Judge::checkCurrentSellerTermsVersion( $version );  // 現在の販売者向け利用規約バージョンで登録されること
-		Judge::checkHex( $signature );  // 署名が16進数表記であること
+		Validate::checkCurrentSellerTermsVersion( $version );  // 現在の販売者向け利用規約バージョンで登録されること
+		Validate::checkHex( $signature );  // 署名が16進数表記であること
 
 		// 保存
 		$option_factory = new OptionFactory();

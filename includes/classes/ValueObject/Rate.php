@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\ValueObject;
 
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class Rate {
 	/**
@@ -14,8 +14,8 @@ class Rate {
 	 * @param int        $decimals レートの小数点以下桁数
 	 */
 	public function __construct( SymbolPair $symbol_pair, string $amount_hex, int $decimals ) {
-		Judge::checkAmountHex( $amount_hex );
-		Judge::checkDecimals( $decimals );
+		Validate::checkAmountHex( $amount_hex );
+		Validate::checkDecimals( $decimals );
 
 		$this->symbol_pair = $symbol_pair;
 		$this->amount_hex  = $amount_hex;

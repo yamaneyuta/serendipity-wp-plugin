@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Repository\TokenData;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 /**
  * ERC20トークンの情報をサーバーに登録します。
@@ -15,7 +15,7 @@ class RegisterERC20TokenResolver extends ResolverBase {
 	 * #[\Override]
 	 */
 	public function resolve( array $root_value, array $args ) {
-		Judge::checkHasAdminRole();  // 管理者権限が必要
+		Validate::checkHasAdminRole();  // 管理者権限が必要
 
 		/** @var int */
 		$chain_ID = $args['chainID'];

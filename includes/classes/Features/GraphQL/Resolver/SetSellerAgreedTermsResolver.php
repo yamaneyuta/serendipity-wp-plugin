@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class SetSellerAgreedTermsResolver extends ResolverBase {
 
@@ -20,7 +20,7 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 		$signature = $args['signature'];
 
 		// 管理者権限を持っているかどうかをチェック
-		Judge::checkHasAdminRole();
+		Validate::checkHasAdminRole();
 
 		// 販売者の署名情報を保存
 		( new SellerAgreedTerms() )->save( $version, $signature );

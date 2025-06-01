@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Constants\Config;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Service\ChainService;
 
 class SetConfirmationsResolver extends ResolverBase {
@@ -16,7 +16,7 @@ class SetConfirmationsResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		// 管理者権限を持っているかどうかをチェック
-		Judge::checkHasAdminRole();
+		Validate::checkHasAdminRole();
 
 		/** @var int */
 		$chain_ID = $args['chainID'];
@@ -29,7 +29,7 @@ class SetConfirmationsResolver extends ResolverBase {
 		$confirmations = is_numeric( $confirmations ) ? (int) $confirmations : $confirmations;
 
 		// confirmationsが正しい値かどうかをチェック
-		Judge::checkConfirmations( $confirmations );
+		Validate::checkConfirmations( $confirmations );
 
 		// confirmationsを保存
 		try {

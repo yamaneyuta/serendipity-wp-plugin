@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Service\OracleService;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
@@ -21,15 +21,15 @@ class GetERC20InfoResolver extends ResolverBase {
 	 * @return string|null
 	 */
 	public function resolve( array $root_value, array $args ) {
-		Judge::checkHasAdminRole();  // 管理者権限が必要
+		Validate::checkHasAdminRole();  // 管理者権限が必要
 
 		/** @var int */
 		$chain_ID = $args['chainID'];
 		/** @var string */
 		$address = $args['address'];
 
-		Judge::checkChainID( $chain_ID );  // チェーンIDが有効であること
-		Judge::checkAddress( $address );  // アドレスが有効であること
+		Validate::checkChainID( $chain_ID );  // チェーンIDが有効であること
+		Validate::checkAddress( $address );  // アドレスが有効であること
 		if ( $address === Ethers::zeroAddress() ) {
 			// ERC20トークンの情報を取得するResolverのため、アドレスゼロも不許可
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
@@ -48,13 +48,13 @@ class GetERC20InfoResolver extends ResolverBase {
 		$symbol = $token_client->symbol();
 
 		$symbol_callback = function () use ( $symbol ) {
-			Judge::checkHasAdminRole();  // 管理者権限が必要
+			Validate::checkHasAdminRole();  // 管理者権限が必要
 			return $symbol;
 		};
 
 		// レート変換可能かどうかを返すコールバック関数
 		$rate_exchangeable_callback = function () use ( $symbol ) {
-			Judge::checkHasAdminRole();  // 管理者権限が必要
+			Validate::checkHasAdminRole();  // 管理者権限が必要
 			$oracle = new OracleService();
 			// XXX/USD や XXX/ETH のOracleが存在する場合はレート変換可能と判定
 			$quote_symbols = array( 'USD', 'ETH' );

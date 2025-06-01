@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\ValueObject;
 
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Constants\NetworkCategoryID;
 use Cornix\Serendipity\Core\Repository\Environment;
 
@@ -51,7 +51,7 @@ final class NetworkCategory {
 		}
 
 		// ネットワークカテゴリIDとして正しい値が渡されているかどうかを検証
-		Judge::checkNetworkCategoryID( $network_category_id );
+		Validate::checkNetworkCategoryID( $network_category_id );
 
 		assert( ! isset( self::$cache[ $network_category_id ] ), '[87F07910] NetworkCategory cache is already set. network_category_id: ' . $network_category_id );
 		self::$cache[ $network_category_id ] = new NetworkCategory( $network_category_id );
