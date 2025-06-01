@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\ValueObject\Web3;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
-class PaywallStatusResult {
+class GetPaywallStatusResult {
 	public function __construct( bool $is_unlocked, InvoiceID $invoice_ID, BlockNumber $unlocked_block_number ) {
 		$this->is_unlocked           = $is_unlocked;
 		$this->invoice_ID            = $invoice_ID;

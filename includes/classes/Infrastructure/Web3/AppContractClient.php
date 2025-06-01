@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\ContractFactory;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\ValueObject\Web3\PaywallStatusResult;
+use Cornix\Serendipity\Core\ValueObject\Web3\GetPaywallStatusResult;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
@@ -25,12 +25,12 @@ class AppContractClient {
 	private Contract $app;
 	private AppContract $app_contract;
 
-	public function getPaywallStatus( string $signer_address_hex, int $post_ID, string $consumer_address_hex ): PaywallStatusResult {
+	public function getPaywallStatus( string $signer_address_hex, int $post_ID, string $consumer_address_hex ): GetPaywallStatusResult {
 		Judge::checkAddress( $signer_address_hex );
 		// Judge::checkPostID( $post_ID );
 		Judge::checkAddress( $consumer_address_hex );
 
-		/** @var PaywallStatusResult|null */
+		/** @var GetPaywallStatusResult|null */
 		$result = null;
 		$this->app->call(
 			'getPaywallStatus',
@@ -50,7 +50,7 @@ class AppContractClient {
 				assert( $invoice_ID instanceof BigInteger );
 				assert( $unlocked_block_number instanceof BigInteger );
 
-				$result = new PaywallStatusResult( $is_unlocked, InvoiceID::from( $invoice_ID ), BlockNumber::from( $unlocked_block_number ) );
+				$result = new GetPaywallStatusResult( $is_unlocked, InvoiceID::from( $invoice_ID ), BlockNumber::from( $unlocked_block_number ) );
 			}
 		);
 
