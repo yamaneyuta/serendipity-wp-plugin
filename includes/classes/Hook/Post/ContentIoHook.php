@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Hooks\Post;
+namespace Cornix\Serendipity\Core\Hook\Post;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Repository\TableGateway\PaidContentTable;
@@ -19,7 +19,7 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
  *    2回呼び出されるようになったりするため、完全な対応は難しい。
  *    問題があれば都度対応することになると思われる。
  *
- * @package Cornix\Serendipity\Core\Hooks\Post
+ * @package Cornix\Serendipity\Core\Hook\Post
  */
 class ContentIoHook {
 	/**

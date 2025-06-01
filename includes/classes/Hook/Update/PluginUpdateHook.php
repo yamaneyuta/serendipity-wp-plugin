@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Hooks\Update;
+namespace Cornix\Serendipity\Core\Hook\Update;
 
 use Cornix\Serendipity\Core\Features\Update\PluginUpdater;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Hooks\EntryPoint;
+use Cornix\Serendipity\Core\Hook\EntryPoint;
 
 class EntryPointTestBase extends WP_UnitTestCase {
 

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Features\Uninstall\TableUninstaller;
-use Cornix\Serendipity\Core\Hooks\API\GraphQLHook;
-use Cornix\Serendipity\Core\Hooks\Update\PluginUpdateHook;
+use Cornix\Serendipity\Core\Hook\API\GraphQLHook;
+use Cornix\Serendipity\Core\Hook\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Logger\ILogger;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Constant\ChainID;
