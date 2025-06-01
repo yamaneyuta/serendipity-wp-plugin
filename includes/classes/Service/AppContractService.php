@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Repository\Environment;
  */
 class AppContractService {
 
-	public function __construct( int $chain_ID, Environment $environment = null ) {
+	public function __construct( int $chain_ID, ?Environment $environment = null ) {
 		$this->chain_ID    = $chain_ID;
 		$this->environment = is_null( $environment ) ? new Environment() : $environment;
 	}

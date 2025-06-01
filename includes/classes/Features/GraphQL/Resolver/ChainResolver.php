@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Service\AppContractService;
-use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Repository\ChainRepository;
 
 class ChainResolver extends ResolverBase {
 
@@ -18,29 +18,22 @@ class ChainResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
 		$chain_ID = $args['chainID'];
+		$chain    = ( new ChainRepository() )->getChain( $chain_ID );
+
+		if ( is_null( $chain ) ) {
+			throw new \InvalidArgumentException( '[CA31D9B5] chain data is not found. chain id: ' . $chain_ID );
+		}
 
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
-		$app_contract_callback = function () use ( $chain_ID ) {
-			$app_contract_address = ( new AppContractService( $chain_ID ) )->address();
-			return is_null( $app_contract_address ) ? null : array( 'address' => $app_contract_address );
-		};
-
-		$confirmations_callback = function () use ( $chain_ID ) {
+		$app_contract_callback = function () use ( $chain ) {
 			// 権限チェック不要
-			// 待機ブロック数を返す
-			$confirmations = ( new ChainService( $chain_ID ) )->confirmations();
-			assert( ! is_null( $confirmations ), '[7EA52FB6] confirmations must not be null. chain id: ' . var_export( $chain_ID, true ) );
-			// string型にして返す(GraphQLの定義した型に変換)
-			return (string) $confirmations;
+			$app_contract = ( new AppContractRepository() )->get( $chain->id );
+			$address      = is_null( $app_contract ) ? null : $app_contract->address;
+			return is_null( $address ) ? null : array( 'address' => $address );
 		};
 
-		$rpc_url_callback = function () use ( $chain_ID ) {
-			Judge::checkHasAdminRole(); // 管理者権限が必要
-			return ( new ChainService( $chain_ID ) )->rpcURL();
-		};
-
-		$tokens_callback = function () use ( $root_value, $chain_ID ) {
+		$tokens_callback = function () use ( $root_value, $chain ) {
 			Judge::checkHasAdminRole(); // 管理者権限が必要
 
 			return array_map(
@@ -53,26 +46,26 @@ class ChainResolver extends ResolverBase {
 						)
 					);
 				},
-				( new TokenData() )->select( $chain_ID )
+				( new TokenData() )->select( $chain->id )
 			);
 		};
 
-		$network_category_callback = function () use ( $root_value, $chain_ID ) {
+		$network_category_callback = function () use ( $root_value, $chain ) {
 			Judge::checkHasAdminRole(); // 管理者権限が必要
 
 			return $root_value['networkCategory'](
 				$root_value,
 				array(
-					'networkCategoryID' => ( new ChainService( $chain_ID ) )->networkCategory()->id(),
+					'networkCategoryID' => $chain->networkCategory()->id(),
 				)
 			);
 		};
 
 		return array(
-			'id'              => $chain_ID,
+			'id'              => $chain->id,
 			'appContract'     => $app_contract_callback,
-			'confirmations'   => $confirmations_callback,
-			'rpcURL'          => $rpc_url_callback,
+			'confirmations'   => (string) $chain->confirmations,    // string型にして返す(GraphQLの定義した型に変換)
+			'rpcURL'          => $chain->rpc_url,
 			'tokens'          => $tokens_callback,
 			'networkCategory' => $network_category_callback,
 		);

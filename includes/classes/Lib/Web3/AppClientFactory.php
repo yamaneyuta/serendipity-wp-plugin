@@ -3,26 +3,25 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
+use Cornix\Serendipity\Core\Entity\Chain;
 use Cornix\Serendipity\Core\Service\AppContractService;
-use Cornix\Serendipity\Core\Service\ChainService;
 
 class AppClientFactory {
 	/**
 	 * 指定したチェーンのAppコントラクトに接続するオブジェクトを生成します。
 	 */
-	public function create( int $chain_ID ): AppClient {
-		// チェーンに接続するためのRPC URLを取得
-		$rpc_url = ( new ChainService( $chain_ID ) )->rpcURL();
-		if ( is_null( $rpc_url ) ) {
-			throw new \LogicException( '[49ACED7A] RPC URL is not found. - ' . $chain_ID );
+	public function create( Chain $chain ): AppClient {
+		// チェーンに接続できない場合は例外を投げる
+		if ( ! $chain->connectable() ) {
+			throw new \LogicException( '[49ACED7A] Chain is not connectable. - ' . $chain->id );
 		}
 
 		// チェーンにデプロイされているAppコントラクトのアドレスを取得
-		$address = ( new AppContractService( $chain_ID ) )->address();
+		$address = ( new AppContractService( $chain->id ) )->address();
 		if ( is_null( $address ) ) {
-			throw new \Exception( '[6D37E8B3] Contract address is not found. - ' . $chain_ID );
+			throw new \Exception( '[6D37E8B3] Contract address is not found. - ' . $chain->id );
 		}
 
-		return new AppClient( $rpc_url, $address );
+		return new AppClient( $chain->rpc_url, $address );
 	}
 }

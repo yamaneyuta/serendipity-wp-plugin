@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\Service\ChainsService;
 
@@ -27,6 +28,8 @@ class ChainsResolver extends ResolverBase {
 
 		// チェーンID一覧を取得
 		$chain_ids = ( new ChainsService() )->chainIDs();
+
+		$chains = ( new ChainRepository() )->getAllChains();
 
 		// チェーンIDでフィルタする場合
 		if ( isset( $filter_chain_ID ) ) {

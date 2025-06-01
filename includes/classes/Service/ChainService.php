@@ -32,13 +32,8 @@ class ChainService {
 	}
 
 	/** RPC URLを設定します */
-	public function setRpcURL( string $rpc_url ): void {
+	public function setRpcURL( ?string $rpc_url ): void {
 		$this->chain_table->updateRpcURL( $this->chain_ID, $rpc_url );
-	}
-
-	/** RPC URLを削除します */
-	public function deleteRpcURL(): void {
-		$this->chain_table->updateRpcURL( $this->chain_ID, null );
 	}
 
 	/** このチェーンに接続可能かどうかを取得します */
