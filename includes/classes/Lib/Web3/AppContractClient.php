@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\ValueObject\Web3\PaywallStatusResult;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
-class AppClient {
+class AppContractClient {
 	public function __construct( AppContract $app_contract ) {
 		$rpc_url = $app_contract->chain->rpc_url;
 		$address = $app_contract->address;

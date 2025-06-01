@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Lib\Web3\AppClient;
+use Cornix\Serendipity\Core\Lib\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
@@ -71,7 +71,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 		// ブロックチェーンに問い合わせる
 		$app_contract          = ( new AppContractRepository() )->get( $chain->id );
-		$app                   = new AppClient( $app_contract ); // AppClientのインスタンスを生成して、接続可能かチェック
+		$app                   = new AppContractClient( $app_contract );
 		$server_signer_address = ( new ServerSignerData() )->getAddress();
 		$payment_status        = $app->getPaywallStatus( $server_signer_address, $post_ID, $consumer_address );
 
