@@ -24,7 +24,7 @@ class AppContractRepository {
 	/**
 	 * 指定したチェーンにデプロイされているAppコントラクトのアドレスを取得します。
 	 */
-	private function getAddress( int $chain_id ): string {
+	private function getAddress( int $chain_id ): ?string {
 		if ( $this->environment->isDevelopmentMode() ) {
 			return Config::DEV_APP_CONTRACT_ADDRESSES[ $chain_id ] ?? null;
 		} else {

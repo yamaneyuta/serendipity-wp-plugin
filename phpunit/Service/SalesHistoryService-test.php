@@ -5,7 +5,6 @@ use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransferEventTable;
-use Cornix\Serendipity\Core\Service\AppContractService;
 use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Constants\UnlockPaywallTransferType;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
@@ -13,6 +12,7 @@ use Cornix\Serendipity\Core\Service\SalesHistoryService;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
+use Cornix\Serendipity\Core\Repository\AppContractRepository;
 
 class SalesHistoryServiceTest extends IntegrationTestBase {
 
@@ -120,7 +120,7 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 	private function insertTableData( wpdb $wpdb ): void {
 		$sales_test_data = new SalesTestData( $wpdb );
 		$chain_ID        = ChainID::PRIVATENET_L1;
-		$app_address     = ( new AppContractService( $chain_ID ) )->address();
+		$app_address     = ( new AppContractRepository() )->get( $chain_ID )->address;
 		$invoice_ID      = self::INVOICE_IDS[0]; // 請求書ID
 		$alice_address   = HardhatSignerFactory::alice()->address();  // 販売者アドレス
 		$bob_address     = HardhatSignerFactory::bob()->address();      // 購入者アドレス
@@ -146,7 +146,7 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 	private function insertTableData2( wpdb $wpdb ): void {
 		$sales_test_data = new SalesTestData( $wpdb );
 		$chain_ID        = ChainID::PRIVATENET_L1;
-		$app_address     = ( new AppContractService( $chain_ID ) )->address();
+		$app_address     = ( new AppContractRepository() )->get( $chain_ID )->address;
 		$invoice_ID      = self::INVOICE_IDS[1];    // 請求書ID
 		$alice_address   = HardhatSignerFactory::alice()->address();      // 販売者アドレス
 		$charlie_address = HardhatSignerFactory::charlie()->address();  // 購入者アドレス

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Entity\Chain;
-use Cornix\Serendipity\Core\Service\AppContractService;
+use Cornix\Serendipity\Core\Repository\AppContractRepository;
 
 class AppClientFactory {
 	/**
@@ -17,11 +17,11 @@ class AppClientFactory {
 		}
 
 		// チェーンにデプロイされているAppコントラクトのアドレスを取得
-		$address = ( new AppContractService( $chain->id ) )->address();
-		if ( is_null( $address ) ) {
-			throw new \Exception( '[6D37E8B3] Contract address is not found. - ' . $chain->id );
+		$app_contract = ( new AppContractRepository() )->get( $chain->id );
+		if ( is_null( $app_contract ) ) {
+			throw new \Exception( '[6D37E8B3] Contract is not found. - ' . $chain->id );
 		}
 
-		return new AppClient( $chain->rpc_url, $address );
+		return new AppClient( $chain->rpc_url, $app_contract->address );
 	}
 }
