@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Entity;
 
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class Token {
 
@@ -54,10 +54,10 @@ class Token {
 		$cache_key = $chain_ID . $address;
 
 		if ( ! isset( self::$cache[ $cache_key ] ) ) {
-			Judge::checkChainID( $chain_ID );
-			Judge::checkAddress( $address );
-			Judge::checkSymbol( $symbol );
-			Judge::checkDecimals( $decimals );
+			Validate::checkChainID( $chain_ID );
+			Validate::checkAddress( $address );
+			Validate::checkSymbol( $symbol );
+			Validate::checkDecimals( $decimals );
 			self::$cache[ $cache_key ] = new Token( $chain_ID, $address, $symbol, $decimals );
 		}
 

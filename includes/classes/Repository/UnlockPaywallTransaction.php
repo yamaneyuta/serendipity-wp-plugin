@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
@@ -22,8 +22,8 @@ class UnlockPaywallTransaction {
 	private string $table_name;
 
 	public function save( InvoiceID $invoice_id, int $chain_id, BlockNumber $block_number, string $transaction_hash ): void {
-		Judge::checkChainID( $chain_id );
-		Judge::checkHex( $transaction_hash );
+		Validate::checkChainID( $chain_id );
+		Validate::checkHex( $transaction_hash );
 
 		// ※ `INSERT IGNORE`を使用している点に注意
 		$sql = <<<SQL

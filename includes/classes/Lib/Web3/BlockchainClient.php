@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Constants\Config;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
@@ -70,7 +70,7 @@ class BlockchainClient {
 			}
 		);
 		assert( ! is_null( $chain_ID_hex ), '[1BAA2783] Failed to get chain ID.' );
-		Judge::checkAmountHex( $chain_ID_hex );
+		Validate::checkAmountHex( $chain_ID_hex );
 
 		return $chain_ID_hex;
 	}
@@ -79,7 +79,7 @@ class BlockchainClient {
 	 * ブロック番号を取得します。
 	 */
 	public function getBlockNumber( string $tag = 'latest' ): BlockNumber {
-		Judge::checkBlockTagName( $tag );
+		Validate::checkBlockTagName( $tag );
 
 		/** @var string|null */
 		$block_number_hex = null;
@@ -111,7 +111,7 @@ class BlockchainClient {
 			}
 		);
 		assert( ! is_null( $block_number_hex ), '[C38AC4D1] Failed to get block number.' );
-		Judge::checkAmountHex( $block_number_hex );
+		Validate::checkAmountHex( $block_number_hex );
 
 		return $block_number_hex;
 	}
@@ -141,7 +141,7 @@ class BlockchainClient {
 		);
 
 		assert( ! is_null( $block_number_hex ), '[D3B8A88E] Failed to get block number.' );
-		Judge::checkHex( $block_number_hex );
+		Validate::checkHex( $block_number_hex );
 
 		return $block_number_hex;
 	}
@@ -151,7 +151,7 @@ class BlockchainClient {
 	 * アカウントの残高を取得します。
 	 */
 	public function getBalanceHex( string $address ): string {
-		Judge::checkAddress( $address );
+		Validate::checkAddress( $address );
 
 		/** @var string|null */
 		$balance_hex = null;
@@ -169,7 +169,7 @@ class BlockchainClient {
 			}
 		);
 		assert( ! is_null( $balance_hex ), '[72C38938] Failed to get balance.' );
-		Judge::checkAmountHex( $balance_hex );
+		Validate::checkAmountHex( $balance_hex );
 
 		return $balance_hex;
 	}

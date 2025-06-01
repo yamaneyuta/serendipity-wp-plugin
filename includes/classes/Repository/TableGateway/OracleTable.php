@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Entity\Oracle;
 
 /**
@@ -66,19 +66,19 @@ class OracleTable {
 		// 条件がある場合はWHERE句を追加
 		$wheres = array();
 		if ( ! is_null( $chain_ID ) ) {
-			Judge::checkChainID( $chain_ID );
+			Validate::checkChainID( $chain_ID );
 			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
 		}
 		if ( ! is_null( $address ) ) {
-			Judge::checkAddress( $address );
+			Validate::checkAddress( $address );
 			$wheres[] = $this->wpdb->prepare( '`address` = %s', $address );
 		}
 		if ( ! is_null( $base_symbol ) ) {
-			Judge::checkSymbol( $base_symbol );
+			Validate::checkSymbol( $base_symbol );
 			$wheres[] = $this->wpdb->prepare( '`base_symbol` = %s', $base_symbol );
 		}
 		if ( ! is_null( $quote_symbol ) ) {
-			Judge::checkSymbol( $quote_symbol );
+			Validate::checkSymbol( $quote_symbol );
 			$wheres[] = $this->wpdb->prepare( '`quote_symbol` = %s', $quote_symbol );
 		}
 
@@ -98,10 +98,10 @@ class OracleTable {
 			$base_symbol  = (string) $row->base_symbol;
 			$quote_symbol = (string) $row->quote_symbol;
 
-			assert( Judge::isChainID( $chain_ID ), '[75C4111A] Invalid chain ID. ' . $chain_ID );
-			assert( Judge::isAddress( $address ), '[6286F3EC] Invalid oracle address. ' . $address );
-			assert( Judge::isSymbol( $base_symbol ), '[7F884B25] Invalid base symbol. ' . $base_symbol );
-			assert( Judge::isSymbol( $quote_symbol ), '[9A0090FB] Invalid quote symbol. ' . $quote_symbol );
+			assert( Validate::isChainID( $chain_ID ), '[75C4111A] Invalid chain ID. ' . $chain_ID );
+			assert( Validate::isAddress( $address ), '[6286F3EC] Invalid oracle address. ' . $address );
+			assert( Validate::isSymbol( $base_symbol ), '[7F884B25] Invalid base symbol. ' . $base_symbol );
+			assert( Validate::isSymbol( $quote_symbol ), '[9A0090FB] Invalid quote symbol. ' . $quote_symbol );
 
 			$records[] = Oracle::from( $chain_ID, $address, $base_symbol, $quote_symbol );
 		}
@@ -113,10 +113,10 @@ class OracleTable {
 	 * テーブルにOracleを追加します。
 	 */
 	public function insert( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ): void {
-		Judge::checkChainID( $chain_ID );
-		Judge::checkAddress( $address );
-		Judge::checkSymbol( $base_symbol );
-		Judge::checkSymbol( $quote_symbol );
+		Validate::checkChainID( $chain_ID );
+		Validate::checkAddress( $address );
+		Validate::checkSymbol( $base_symbol );
+		Validate::checkSymbol( $quote_symbol );
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`

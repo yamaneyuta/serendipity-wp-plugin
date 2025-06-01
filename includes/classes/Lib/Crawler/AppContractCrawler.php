@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Lib\Convert\Padding;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransaction;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
@@ -70,10 +70,10 @@ class AppContractCrawler {
 
 			/** @var string */
 			$transaction_hash = $unlock_paywall_transfer_log->transactionHash;
-			assert( Judge::isHex( $transaction_hash ), '[4EF0D70F] transactionHash is not hex. ' . var_export( $transaction_hash, true ) );
+			assert( Validate::isHex( $transaction_hash ), '[4EF0D70F] transactionHash is not hex. ' . var_export( $transaction_hash, true ) );
 			/** @var string */
 			$block_number_hex = $unlock_paywall_transfer_log->blockNumber;
-			assert( Judge::isHex( $block_number_hex ), '[067CCE00] blockNumber is not hex. ' . var_export( $block_number_hex, true ) );
+			assert( Validate::isHex( $block_number_hex ), '[067CCE00] blockNumber is not hex. ' . var_export( $block_number_hex, true ) );
 
 			$transaction_repository->save(
 				$invoice_ID,

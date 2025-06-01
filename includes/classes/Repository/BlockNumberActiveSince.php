@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 
 /**
@@ -17,7 +17,7 @@ class BlockNumberActiveSince {
 	 */
 	public function get( int $chain_ID ): ?BlockNumber {
 		$block_number_hex = ( new OptionFactory() )->activeSinceBlockNumberHex( $chain_ID )->get();
-		assert( is_null( $block_number_hex ) || Judge::isHex( $block_number_hex ), "[FF97B758] Invalid block number. - block_number_hex: {$block_number_hex}" );
+		assert( is_null( $block_number_hex ) || Validate::isHex( $block_number_hex ), "[FF97B758] Invalid block number. - block_number_hex: {$block_number_hex}" );
 		return is_null( $block_number_hex ) ? null : BlockNumber::from( $block_number_hex );
 	}
 

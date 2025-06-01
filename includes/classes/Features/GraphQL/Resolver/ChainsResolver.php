@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\Service\ChainsService;
@@ -18,7 +18,7 @@ class ChainsResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		Judge::checkHasAdminRole();  // 管理者権限が必要
+		Validate::checkHasAdminRole();  // 管理者権限が必要
 
 		$filter = $args['filter'] ?? null;
 		/** @var int|null */

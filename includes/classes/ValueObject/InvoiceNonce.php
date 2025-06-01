@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\ValueObject;
 
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 /**
  * 請求書に紐づくnonceを表すクラス
@@ -18,7 +18,7 @@ class InvoiceNonce {
 	public function __construct( string $invoice_nonce_value ) {
 		$invoice_nonce_value = $invoice_nonce_value ?? self::generateNonceValue();
 		assert(
-			Judge::isInvoiceNonceValueFormat( $invoice_nonce_value ),
+			Validate::isInvoiceNonceValueFormat( $invoice_nonce_value ),
 			'[6A2C68E6] Invalid invoice nonce value format: ' . var_export( $invoice_nonce_value, true )
 		);
 		$this->value = $invoice_nonce_value;

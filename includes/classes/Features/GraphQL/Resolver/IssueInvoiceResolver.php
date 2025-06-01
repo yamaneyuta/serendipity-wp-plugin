@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Repository\TokenData;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
@@ -38,7 +38,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 		// 指定されたトークンアドレスが支払可能な設定になっているかどうかをチェック
 		$token = ( new TokenData() )->get( $chain_ID, $token_address );
-		Judge::checkPayableToken( $token );
+		Validate::checkPayableToken( $token );
 
 		// 販売者情報を取得
 		$seller_agreed_terms = new SellerAgreedTerms();

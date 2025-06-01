@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Constants\ChainID;
 use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Repository\RateTransient;
 use Cornix\Serendipity\Core\Repository\OracleRate;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\ValueObject\Rate;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
@@ -127,7 +127,7 @@ class RateDataTest extends IntegrationTestBase {
 		$this->assertNotNull( $result );
 		$this->assertEquals( $result->decimals(), 8 );
 		$this->assertEquals( $result->decimals(), $result2->decimals() );
-		Judge::checkHex( $result->amountHex() );
+		Validate::checkHex( $result->amountHex() );
 		$this->assertEquals( $result->amountHex(), $result2->amountHex() );
 	}
 
@@ -154,6 +154,6 @@ class RateDataTest extends IntegrationTestBase {
 		// ASSERT
 		$this->assertNotNull( $result );
 		$this->assertEquals( $result->decimals(), 8 );
-		Judge::checkHex( $result->amountHex() );
+		Validate::checkHex( $result->amountHex() );
 	}
 }

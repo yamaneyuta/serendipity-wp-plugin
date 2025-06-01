@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
@@ -34,8 +34,8 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		/** @var string */
 		$nonce = $args['nonce'];
 
-		Judge::checkHex( $invoice_ID_hex );
-		Judge::checkInvoiceNonceValueFormat( $nonce );
+		Validate::checkHex( $invoice_ID_hex );
+		Validate::checkInvoiceNonceValueFormat( $nonce );
 		$invoice_ID = InvoiceID::from( $invoice_ID_hex );
 
 		// エラー時の結果を返すコールバック関数

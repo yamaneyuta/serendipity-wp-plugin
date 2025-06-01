@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 
 /**
@@ -15,8 +15,8 @@ class CrawledBlockNumber {
 	 * 指定したチェーン、ブロックタグで最後にクロールしたブロック番号を取得します。
 	 */
 	public function get( int $chain_ID, string $block_tag ): ?BlockNumber {
-		assert( Judge::isChainID( $chain_ID ), "[2AAB831E] Invalid chain ID. - chain_ID: {$chain_ID}" );
-		assert( Judge::isBlockTagName( $block_tag ), "[4306F5FA] Invalid block tag. - block_tag: {$block_tag}" );
+		assert( Validate::isChainID( $chain_ID ), "[2AAB831E] Invalid chain ID. - chain_ID: {$chain_ID}" );
+		assert( Validate::isBlockTagName( $block_tag ), "[4306F5FA] Invalid block tag. - block_tag: {$block_tag}" );
 
 		$block_number_hex = ( new OptionFactory() )->crawledBlockNumberHex( $chain_ID, $block_tag )->get();
 		return is_null( $block_number_hex ) ? null : BlockNumber::from( $block_number_hex );
@@ -26,8 +26,8 @@ class CrawledBlockNumber {
 	 * 指定したチェーン、ブロックタグで最後にクロールしたブロック番号を保存します。
 	 */
 	public function set( int $chain_ID, string $block_tag, BlockNumber $block_number ): void {
-		Judge::checkChainID( $chain_ID );
-		Judge::checkBlockTagName( $block_tag );
+		Validate::checkChainID( $chain_ID );
+		Validate::checkBlockTagName( $block_tag );
 
 		( new OptionFactory() )->crawledBlockNumberHex( $chain_ID, $block_tag )->update( $block_number->hex() );
 	}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Service\ChainService;
 
@@ -21,9 +21,9 @@ class SetRpcUrlResolver extends ResolverBase {
 		/** @var string|null */
 		$rpc_url = $args['rpcURL'] ?? null;
 
-		Judge::checkHasAdminRole(); // 管理者権限を持っているかどうかをチェック
-		Judge::checkChainID( $chain_ID );
-		( ! is_null( $rpc_url ) ) && Judge::checkURL( $rpc_url );
+		Validate::checkHasAdminRole(); // 管理者権限を持っているかどうかをチェック
+		Validate::checkChainID( $chain_ID );
+		( ! is_null( $rpc_url ) ) && Validate::checkURL( $rpc_url );
 
 		// RPC URLを登録する場合は実際にアクセスしてチェーンIDを取得し、
 		// 引数のチェーンIDと一致していることを確認する

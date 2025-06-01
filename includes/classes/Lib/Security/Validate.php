@@ -19,7 +19,7 @@ use Cornix\Serendipity\Core\Entity\Token;
  * 参考: Ownable.sol#_checkOwner
  * https://github.com/OpenZeppelin/openzeppelin-contracts/blob/1edc2ae004974ebf053f4eba26b45469937b9381/contracts/access/Ownable.sol#L63-L67
  */
-class Judge {
+class Validate {
 
 	/**
 	 * 現在アクセスしているユーザーが管理者権限を持っていない場合は例外をスローします。
@@ -39,6 +39,12 @@ class Judge {
 		}
 	}
 
+	/** 指定された値が投稿IDであるかどうかを取得します。 */
+	private static function isPostID( int $post_ID ): bool {
+		// 投稿の状態を取得できれば有効なIDとみなす。
+		return false !== get_post_status( $post_ID );
+	}
+
 	/**
 	 * 投稿IDが有効でない場合は例外をスローします。
 	 *
@@ -46,7 +52,7 @@ class Judge {
 	 * @throws \InvalidArgumentException
 	 */
 	public static function checkPostID( int $post_ID ): void {
-		if ( ! Validator::isPostID( $post_ID ) ) {
+		if ( ! self::isPostID( $post_ID ) ) {
 			throw new \InvalidArgumentException( '[C1D3D3A4] Invalid post ID. - post_ID: ' . $post_ID );
 		}
 	}
@@ -171,6 +177,15 @@ class Judge {
 		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
 	}
 
+
+	/** 購入者が支払可能なトークンかどうかを返します。 */
+	public static function isPayableToken( Token $token ): bool {
+		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
+		$payable_tokens = ( new PayableTokens() )->get( $token->chainID() );
+
+		return in_array( $token, $payable_tokens, true );
+	}
+
 	/**
 	 * 購入者が支払可能なトークンでない場合は例外をスローします。
 	 *
@@ -178,7 +193,7 @@ class Judge {
 	 * @throws \InvalidArgumentException
 	 */
 	public static function checkPayableToken( Token $token ): void {
-		if ( ! Validator::isPayableToken( $token ) ) {
+		if ( ! self::isPayableToken( $token ) ) {
 			throw new \InvalidArgumentException( '[30970153] Invalid payable token. - chain id: ' . $token->chainID() . ', address: ' . $token->address() );
 		}
 	}
@@ -273,24 +288,5 @@ class Judge {
 		if ( ! self::isInvoiceNonceValueFormat( $invoice_nonce_value ) ) {
 			throw new \InvalidArgumentException( '[8EEF9FD6] Invalid invoice nonce value format. - value: ' . $invoice_nonce_value );
 		}
-	}
-}
-
-/**
- * @internal
- */
-class Validator {
-
-	public static function isPostID( int $post_ID ): bool {
-		// 投稿の状態を取得できれば有効なIDとみなす。
-		return false !== get_post_status( $post_ID );
-	}
-
-	/** 購入者が支払可能なトークンかどうかを返します。 */
-	public static function isPayableToken( Token $token ): bool {
-		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
-		$payable_tokens = ( new PayableTokens() )->get( $token->chainID() );
-
-		return in_array( $token, $payable_tokens, true );
 	}
 }

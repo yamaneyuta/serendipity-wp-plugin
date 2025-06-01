@@ -5,14 +5,14 @@ namespace Cornix\Serendipity\Core\ValueObject;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Repository\TokenData;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use phpseclib\Math\BigInteger;
 
 class Price {
 	public function __construct( $amount_hex, $decimals, $symbol ) {
-		Judge::checkHex( $amount_hex ); // レート変換の途中などで一時的に大きい値になることがあるため、ここでは16進数の形式であることのみチェック
-		Judge::checkDecimals( $decimals );
-		Judge::checkSymbol( $symbol );
+		Validate::checkHex( $amount_hex ); // レート変換の途中などで一時的に大きい値になることがあるため、ここでは16進数の形式であることのみチェック
+		Validate::checkDecimals( $decimals );
+		Validate::checkSymbol( $symbol );
 
 		$this->amount_hex = $amount_hex;
 		$this->decimals   = $decimals;
@@ -71,7 +71,7 @@ class Price {
 			$result = Hex::from( $amount );
 		}
 
-		Judge::checkAmountHex( $result );   // トークンの数量としては256bit以内に収まっていないと困る
+		Validate::checkAmountHex( $result );   // トークンの数量としては256bit以内に収まっていないと困る
 		return $result;
 	}
 }

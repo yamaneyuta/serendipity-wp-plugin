@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
 use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\TableRecord\ChainTableRecord;
 
@@ -89,7 +89,7 @@ class ChainTable {
 	 * @param string $name
 	 */
 	public function insert( int $chain_ID, string $name ) {
-		Judge::checkChainID( $chain_ID );
+		Validate::checkChainID( $chain_ID );
 
 		$this->wpdb->insert(
 			$this->table_name,
@@ -108,8 +108,8 @@ class ChainTable {
 
 	/** RPC URLを更新します。 */
 	public function updateRpcURL( int $chain_ID, ?string $rpc_url ): void {
-		Judge::checkChainID( $chain_ID );
-		( ! is_null( $rpc_url ) ) && Judge::checkURL( $rpc_url );
+		Validate::checkChainID( $chain_ID );
+		( ! is_null( $rpc_url ) ) && Validate::checkURL( $rpc_url );
 
 		$result = $this->wpdb->update(
 			$this->table_name,                  // table
@@ -134,8 +134,8 @@ class ChainTable {
 	 * @param int|string $confirmations
 	 */
 	public function updateConfirmations( int $chain_ID, $confirmations ): void {
-		Judge::checkChainID( $chain_ID );
-		Judge::checkConfirmations( $confirmations );
+		Validate::checkChainID( $chain_ID );
+		Validate::checkConfirmations( $confirmations );
 
 		// confirmationsがint型の場合は文字列に変換
 		$confirmations = is_int( $confirmations ) ? (string) $confirmations : $confirmations;

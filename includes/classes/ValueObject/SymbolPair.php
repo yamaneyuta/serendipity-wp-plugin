@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\ValueObject;
 
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class SymbolPair {
 	public function __construct( string $base_symbol, string $quote_symbol ) {
-		Judge::checkSymbol( $base_symbol );
-		Judge::checkSymbol( $quote_symbol );
+		Validate::checkSymbol( $base_symbol );
+		Validate::checkSymbol( $quote_symbol );
 
 		$this->base_symbol  = $base_symbol;
 		$this->quote_symbol = $quote_symbol;

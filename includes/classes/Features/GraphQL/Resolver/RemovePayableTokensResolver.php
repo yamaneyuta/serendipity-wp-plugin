@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class RemovePayableTokensResolver extends ResolverBase {
 
@@ -19,7 +19,7 @@ class RemovePayableTokensResolver extends ResolverBase {
 		/** @var string[] */
 		$token_addresses = $args['tokenAddresses'];
 
-		Judge::checkHasAdminRole(); // 管理者権限が必要
+		Validate::checkHasAdminRole(); // 管理者権限が必要
 
 		// 更新が不要な場合は処理抜け
 		if ( empty( $token_addresses ) ) {

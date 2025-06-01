@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Lib\Security\Judge;
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Entity\Token;
 
 /**
@@ -65,15 +65,15 @@ class TokenTable {
 		// 条件がある場合はWHERE句を追加
 		$wheres = array();
 		if ( ! is_null( $chain_ID ) ) {
-			Judge::checkChainID( $chain_ID );
+			Validate::checkChainID( $chain_ID );
 			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
 		}
 		if ( ! is_null( $contract_address ) ) {
-			Judge::checkAddress( $contract_address );
+			Validate::checkAddress( $contract_address );
 			$wheres[] = $this->wpdb->prepare( '`address` = %s', $contract_address );
 		}
 		if ( ! is_null( $symbol ) ) {
-			Judge::checkSymbol( $symbol );
+			Validate::checkSymbol( $symbol );
 			$wheres[] = $this->wpdb->prepare( '`symbol` = %s', $symbol );
 		}
 
@@ -93,10 +93,10 @@ class TokenTable {
 			$symbol   = (string) $row->symbol;
 			$decimals = (int) $row->decimals;
 
-			assert( Judge::isChainID( $chain_ID ), '[C4D50120] Invalid chain ID. ' . $chain_ID );
-			assert( Judge::isAddress( $address ), '[6535A6C3] Invalid contract address. ' . $address );
-			assert( Judge::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
-			assert( Judge::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
+			assert( Validate::isChainID( $chain_ID ), '[C4D50120] Invalid chain ID. ' . $chain_ID );
+			assert( Validate::isAddress( $address ), '[6535A6C3] Invalid contract address. ' . $address );
+			assert( Validate::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
+			assert( Validate::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
 
 			$records[] = Token::from( $chain_ID, $address, $symbol, $decimals );
 		}
@@ -108,10 +108,10 @@ class TokenTable {
 	 * テーブルにトークンを追加します。
 	 */
 	public function insert( int $chain_ID, string $contract_address, string $symbol, int $decimals ): void {
-		Judge::checkChainID( $chain_ID );
-		Judge::checkAddress( $contract_address );
-		Judge::checkSymbol( $symbol );
-		Judge::checkDecimals( $decimals );
+		Validate::checkChainID( $chain_ID );
+		Validate::checkAddress( $contract_address );
+		Validate::checkSymbol( $symbol );
+		Validate::checkDecimals( $decimals );
 
 		$sql = <<<SQL
 			INSERT INTO `{$this->table_name}`
