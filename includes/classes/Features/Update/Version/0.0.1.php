@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
-use Cornix\Serendipity\Core\Constants\Config;
+use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Repository\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceTable;
@@ -12,12 +12,12 @@ use Cornix\Serendipity\Core\Repository\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransferEventTable;
-use Cornix\Serendipity\Core\Constants\ChainID;
+use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Constants\NetworkCategoryID;
+use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 use Cornix\Serendipity\Core\Entity\Token;
 
 /**

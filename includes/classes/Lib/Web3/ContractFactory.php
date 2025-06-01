@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
-use Cornix\Serendipity\Core\Constants\Config;
+use Cornix\Serendipity\Core\Constant\Config;
 use Web3\Contract;
 use Web3\Providers\HttpProvider;
 

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Constants;
+namespace Cornix\Serendipity\Core\Constant;
 
-use Cornix\Serendipity\Core\Constants\ChainID;
-use Cornix\Serendipity\Core\Constants\NetworkCategoryID;
+use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 
 /**
  * システム固定の設定値を取得するためのクラス

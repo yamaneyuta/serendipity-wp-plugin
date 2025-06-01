@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Constants;
+namespace Cornix\Serendipity\Core\Constant;
 
 /** トークンの転送種別。コントラクトで定義している内容と一致させる必要がある */
 final class UnlockPaywallTransferType {

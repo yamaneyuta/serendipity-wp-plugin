@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require_once 'includes/classes/Repository/RateData.php';
 
-use Cornix\Serendipity\Core\Constants\ChainID;
+use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Repository\RateTransient;
 use Cornix\Serendipity\Core\Repository\OracleRate;
