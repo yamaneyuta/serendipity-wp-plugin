@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransaction;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Lib\Web3\AppAbi;
+use Cornix\Serendipity\Core\Infrastructure\Web3\AppAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
