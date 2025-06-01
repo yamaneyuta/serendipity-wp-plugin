@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Elliptic\EC;
 use Elliptic\EC\KeyPair;
 use kornrunner\Keccak;
@@ -22,7 +23,7 @@ class Signer {
 	/**
 	 * ウォレットアドレスを取得します。
 	 */
-	public function address(): string {
+	public function address(): Address {
 		return Ethers::computeAddress( $this->key_pair->getPublic() );
 	}
 

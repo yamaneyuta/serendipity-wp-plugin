@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
+use Cornix\Serendipity\Core\Entity\Oracle;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
 class OracleClient {
-	public function __construct( string $rpc_url, string $contract_address ) {
-		$this->oracle = ( new ContractFactory() )->create( $rpc_url, ( new OracleAbi() )->get(), $contract_address );
+	public function __construct( string $rpc_url, Oracle $oracle ) {
+		$this->oracle_contract = ( new ContractFactory() )->create( $rpc_url, ( new OracleAbi() )->get(), $oracle->oracleAddress() );
 	}
-	private Contract $oracle;
+	private Contract $oracle_contract;
 
 	/**
 	 * レートの小数点以下桁数を取得します。
@@ -18,7 +19,7 @@ class OracleClient {
 	public function decimals(): int {
 		/** @var int|null */
 		$result = null;
-		$this->oracle->call(
+		$this->oracle_contract->call(
 			'decimals',
 			function ( $err, $res ) use ( &$result ) {
 				if ( $err ) {
@@ -40,7 +41,7 @@ class OracleClient {
 	public function description(): string {
 		/** @var string|null */
 		$result = null;
-		$this->oracle->call(
+		$this->oracle_contract->call(
 			'description',
 			function ( $err, $res ) use ( &$result ) {
 				if ( $err ) {
@@ -71,7 +72,7 @@ class OracleClient {
 	public function latestRoundData(): OracleRoundData {
 		/** @var OracleRoundData|null */
 		$result = null;
-		$this->oracle->call(
+		$this->oracle_contract->call(
 			'latestRoundData',
 			function ( $err, $res ) use ( &$result ) {
 				if ( $err ) {

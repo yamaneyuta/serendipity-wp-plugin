@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Option\ArrayOption;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Lib\Web3\PrivateKey;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 // ■秘密鍵の保存について
 // - `/wp-admin/options.php`での閲覧/編集を防止するため(だけ)にオブジェクト型で保存しています。
@@ -41,13 +42,13 @@ class ServerSignerData {
 	/**
 	 * 署名用ウォレットのアドレスを取得します。
 	 */
-	public function getAddress(): string {
+	public function getAddress(): Address {
 		/** @var string|null */
 		$address = $this->option->get( null )[ self::FIELD_NAME_ADDRESS ] ?? null;
 		if ( ! is_string( $address ) ) {
 			throw new \Exception( '[F16701F9] The private key has not been set.' );
 		}
-		return $address;
+		return new Address( $address );
 	}
 
 	/**
@@ -87,7 +88,7 @@ class ServerSignerData {
 		$this->option->update(
 			array(
 				self::FIELD_NAME_PRIVATE_KEY => $private_key,
-				self::FIELD_NAME_ADDRESS     => ( new Signer( $private_key ) )->address(),
+				self::FIELD_NAME_ADDRESS     => ( new Signer( $private_key ) )->address()->value(),
 			)
 		);
 	}

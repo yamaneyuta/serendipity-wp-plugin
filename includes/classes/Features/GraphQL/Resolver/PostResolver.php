@@ -54,7 +54,7 @@ class PostResolver extends ResolverBase {
 					$root_value,
 					array(
 						'chainID' => $token->chainID(),
-						'address' => $token->address(),
+						'address' => $token->address()->value(),
 					)
 				);
 			}

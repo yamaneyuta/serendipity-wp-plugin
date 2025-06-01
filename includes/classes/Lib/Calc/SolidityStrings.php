@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
+use Cornix\Serendipity\Core\ValueObject\Address;
 use phpseclib\Math\BigInteger;
 
 /**
@@ -37,22 +38,22 @@ class SolidityStrings {
 	/**
 	 * 指定されたアドレスをSolidityで扱う16進数文字列に変換します。
 	 */
-	public static function addressToHexString( string $address ): string {
-		if ( ! preg_match( '/^0x[0-9a-fA-F]{0,40}$/', $address ) ) {
+	public static function addressToHexString( Address $address ): string {
+		if ( ! preg_match( '/^0x[0-9a-fA-F]{0,40}$/', $address->value() ) ) {
 			throw new \InvalidArgumentException( '[A862D0B5] Invalid address format. address: ' . $address );
 		}
 
-		$address = self::valueToHexString( $address );
+		$address_text = self::valueToHexString( $address->value() );
 
 		// SolidityにおけるtoHexString(address)は42文字の長さ
-		assert( strlen( $address ) <= 42 );
-		if ( strlen( $address ) !== 42 ) {
-			$diff        = 42 - strlen( $address );
-			$replace_str = '0x' . str_repeat( '0', $diff );
-			$address     = str_replace( '0x', $replace_str, $address );
+		assert( strlen( $address_text ) <= 42 );
+		if ( strlen( $address_text ) !== 42 ) {
+			$diff         = 42 - strlen( $address_text );
+			$replace_str  = '0x' . str_repeat( '0', $diff );
+			$address_text = str_replace( '0x', $replace_str, $address_text );
 		}
-		assert( preg_match( '/^0x[0-9a-f]{40}$/', $address ) === 1 );   // 16進数文字列はすべて小文字、桁数は40
+		assert( preg_match( '/^0x[0-9a-f]{40}$/', $address_text ) === 1 );   // 16進数文字列はすべて小文字、桁数は40
 
-		return $address;
+		return $address_text;
 	}
 }

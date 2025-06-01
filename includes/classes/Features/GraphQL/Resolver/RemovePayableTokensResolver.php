@@ -31,7 +31,7 @@ class RemovePayableTokensResolver extends ResolverBase {
 
 		// 削除しようとしているアドレスが保存されていない場合は例外をスロー
 		$current_payable_tokens_addresses = array_map(
-			fn( $token ) => $token->address(),
+			fn( $token ) => $token->address()->value(),
 			$current_payable_tokens
 		);
 		foreach ( $token_addresses as $address ) {
@@ -44,7 +44,7 @@ class RemovePayableTokensResolver extends ResolverBase {
 		$new_payable_tokens = array_values(
 			array_filter(
 				$current_payable_tokens,
-				fn( $token ) => ! in_array( $token->address(), $token_addresses, true )
+				fn( $token ) => ! in_array( $token->address()->value(), $token_addresses, true )
 			)
 		);
 		assert( count( $new_payable_tokens ) === count( $current_payable_tokens ) - count( $token_addresses ) );

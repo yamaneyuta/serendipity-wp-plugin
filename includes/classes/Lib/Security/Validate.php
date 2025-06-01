@@ -201,19 +201,19 @@ class Validate {
 	/**
 	 * アドレスとして有効な値でない場合は例外をスローします。
 	 *
-	 * @param string $address アドレス(ウォレットアドレス/コントラクトアドレス)
+	 * @param string $address_text アドレス(ウォレットアドレス/コントラクトアドレス)
 	 * @throws InvalidArgumentException
 	 */
-	public static function checkAddress( string $address ): void {
-		if ( ! self::isAddress( $address ) ) {
-			throw new \InvalidArgumentException( '[66BDC040] Invalid address. - address: ' . $address );
+	public static function checkAddressFormat( string $address_text ): void {
+		if ( ! self::isAddressFormat( $address_text ) ) {
+			throw new \InvalidArgumentException( '[66BDC040] Invalid address. - address: ' . $address_text );
 		}
 	}
 	/**
 	 * アドレスとして有効な値かどうかを返します。
 	 */
-	public static function isAddress( string $address ): bool {
-		return Ethers::isAddress( $address );
+	public static function isAddressFormat( string $address_text ): bool {
+		return Ethers::isAddress( $address_text );
 	}
 
 	/**

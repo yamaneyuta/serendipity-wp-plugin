@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Elliptic\EC;
 use kornrunner\Keccak;
 
 class Ethers {
 
-	public static function zeroAddress(): string {
-		return '0x0000000000000000000000000000000000000000';
+	public static function zeroAddress(): Address {
+		return new Address( '0x0000000000000000000000000000000000000000' );
 	}
 
 	/**
@@ -18,7 +19,7 @@ class Ethers {
 	 *
 	 * @see https://github.com/simplito/elliptic-php?tab=readme-ov-file#verifying-ethereum-signature
 	 */
-	public static function verifyMessage( string $message, string $signature ): ?string {
+	public static function verifyMessage( string $message, string $signature ): ?Address {
 
 		$message_hash = Keccak::hash( self::eip191( $message ), 256 );
 		$sign         = array(
@@ -54,10 +55,10 @@ class Ethers {
 	 *
 	 * @see https://github.com/simplito/elliptic-php#verifying-ethereum-signature
 	 */
-	public static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): string {
+	public static function computeAddress( \Elliptic\Curve\ShortCurve\Point $public_key ): Address {
 		$address = \Web3\Utils::toChecksumAddress( substr( Keccak::hash( substr( hex2bin( $public_key->encode( 'hex' ) ), 1 ), 256 ), 24 ) );
 		assert( self::isAddress( $address ), '[D9ADC5E3] Invalid address. ' . $address );
-		return $address;
+		return new Address( $address );
 	}
 
 

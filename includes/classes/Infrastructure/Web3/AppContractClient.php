@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\ContractFactory;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\Web3\GetPaywallStatusResult;
@@ -26,9 +27,9 @@ class AppContractClient {
 	private AppContract $app_contract;
 
 	public function getPaywallStatus( string $signer_address_hex, int $post_ID, string $consumer_address_hex ): GetPaywallStatusResult {
-		Validate::checkAddress( $signer_address_hex );
+		Validate::checkAddressFormat( $signer_address_hex );
 		// Validate::checkPostID( $post_ID );
-		Validate::checkAddress( $consumer_address_hex );
+		Validate::checkAddressFormat( $consumer_address_hex );
 
 		/** @var GetPaywallStatusResult|null */
 		$result = null;
@@ -61,7 +62,7 @@ class AppContractClient {
 	/**
 	 * 接続するコントラクトアドレスを取得します。
 	 */
-	public function address(): string {
+	public function address(): Address {
 		return $this->app_contract->address;
 	}
 }

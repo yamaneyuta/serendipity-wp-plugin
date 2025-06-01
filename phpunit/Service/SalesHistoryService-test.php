@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class SalesHistoryServiceTest extends IntegrationTestBase {
 
@@ -50,12 +51,12 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 		$this->assertTrue( Validate::isHex( $selling_price->amountHex() ) );
 		$this->assertGreaterThanOrEqual( 0, $selling_price->decimals() );
 		$this->assertTrue( Validate::isSymbol( $selling_price->symbol() ) );
-		$this->assertTrue( Validate::isAddress( $sales_data->sellerAddress() ) );
+		$this->assertTrue( Validate::isAddressFormat( $sales_data->sellerAddress() ) );
 		$payment_price = $sales_data->paymentPrice();
 		$this->assertTrue( Validate::isHex( $payment_price->amountHex() ) );
 		$this->assertGreaterThanOrEqual( 0, $payment_price->decimals() );
 		$this->assertTrue( Validate::isSymbol( $payment_price->symbol() ) );
-		$this->assertTrue( Validate::isAddress( $sales_data->consumerAddress() ) );
+		$this->assertTrue( Validate::isAddressFormat( $sales_data->consumerAddress() ) );
 		$this->assertGreaterThan( 0, $sales_data->createdAt()->getTimestamp() );
 		$this->assertGreaterThan( 0, $sales_data->blockNumber() );
 		$this->assertEquals( 66, strlen( $sales_data->transactionHash() ) );    // transactionHashは64文字
@@ -68,7 +69,6 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 		$this->assertGreaterThanOrEqual( 0, $handling_fee_price->decimals() );
 		$this->assertTrue( Validate::isSymbol( $handling_fee_price->symbol() ) );
 		$payment_token = $sales_data->paymentToken();
-		$this->assertTrue( Validate::isAddress( $payment_token->address() ) );
 		$this->assertTrue( Validate::isSymbol( $payment_token->symbol() ) );
 		$this->assertGreaterThanOrEqual( 0, $payment_token->decimals() );
 		$this->assertGreaterThan( 0, $payment_token->chainID() );
@@ -212,35 +212,56 @@ class SalesTestData {
 	}
 	private wpdb $wpdb;
 
-	public function insertInvoiceData( $created_at, $id, $post_id, $chain_id, $selling_amount_hex, $selling_decimals, $selling_symbol, $seller_address, $payment_token_address, $payment_amount_hex, $consumer_address ) {
+	public function insertInvoiceData( $created_at, $id, $post_id, $chain_id, $selling_amount_hex, $selling_decimals, $selling_symbol, Address $seller_address, Address $payment_token_address, $payment_amount_hex, $consumer_address ) {
 		$invoice_table_name = ( new TableName() )->invoice();
-		$result             = $this->wpdb->query(
-			<<<SQL
-				INSERT INTO `{$invoice_table_name}` (created_at, id, post_id, chain_id, selling_amount_hex, selling_decimals, selling_symbol, seller_address, payment_token_address, payment_amount_hex, consumer_address)
-				VALUES ('$created_at', '$id', $post_id, $chain_id, '$selling_amount_hex', $selling_decimals, '$selling_symbol', '$seller_address', '$payment_token_address', '$payment_amount_hex', '$consumer_address');
-			SQL
+		$result             = $this->wpdb->insert(
+			$invoice_table_name,
+			array(
+				'created_at'            => $created_at,
+				'id'                    => $id,
+				'post_id'               => $post_id,
+				'chain_id'              => $chain_id,
+				'selling_amount_hex'    => $selling_amount_hex,
+				'selling_decimals'      => $selling_decimals,
+				'selling_symbol'        => $selling_symbol,
+				'seller_address'        => (string) $seller_address,
+				'payment_token_address' => (string) $payment_token_address,
+				'payment_amount_hex'    => $payment_amount_hex,
+				'consumer_address'      => (string) $consumer_address,
+			)
 		);
 		assert( 1 === $result, '[E54B5988] ' . $this->wpdb->last_error );
 	}
 
 	public function insertTransactionData( $created_at, $invoice_id, $chain_id, $block_number, $transaction_hash ) {
 		$transaction_table_name = ( new TableName() )->unlockPaywallTransaction();
-		$result                 = $this->wpdb->query(
-			<<<SQL
-				INSERT INTO `{$transaction_table_name}` (created_at, invoice_id, chain_id, block_number, transaction_hash)
-				VALUES ('$created_at', '$invoice_id', $chain_id, $block_number, '$transaction_hash');
-			SQL
+		$result                 = $this->wpdb->insert(
+			$transaction_table_name,
+			array(
+				'created_at'       => $created_at,
+				'invoice_id'       => $invoice_id,
+				'chain_id'         => $chain_id,
+				'block_number'     => $block_number,
+				'transaction_hash' => $transaction_hash,
+			)
 		);
 		assert( 1 === $result, '[9811DF9A] ' . $this->wpdb->last_error );
 	}
 
-	public function insertTransferEventData( $created_at, $invoice_id, $log_index, $from_address, $to_address, $token_address, $amount_hex, $transfer_type ) {
+	public function insertTransferEventData( $created_at, $invoice_id, $log_index, Address $from_address, Address $to_address, Address $token_address, $amount_hex, $transfer_type ) {
 		$transfer_event_table_name = ( new TableName() )->unlockPaywallTransferEvent();
-		$result                    = $this->wpdb->query(
-			<<<SQL
-				INSERT INTO `{$transfer_event_table_name}` (created_at, invoice_id, log_index, from_address, to_address, token_address, amount_hex, transfer_type)
-				VALUES ('$created_at', '$invoice_id', $log_index, '$from_address', '$to_address', '$token_address', '$amount_hex', $transfer_type);
-			SQL
+		$result                    = $this->wpdb->insert(
+			$transfer_event_table_name,
+			array(
+				'created_at'    => $created_at,
+				'invoice_id'    => $invoice_id,
+				'log_index'     => $log_index,
+				'from_address'  => (string) $from_address,
+				'to_address'    => (string) $to_address,
+				'token_address' => (string) $token_address,
+				'amount_hex'    => $amount_hex,
+				'transfer_type' => $transfer_type,
+			)
 		);
 		assert( 1 === $result, '[1C46B20E] ' . $this->wpdb->last_error );
 	}

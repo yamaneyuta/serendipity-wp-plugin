@@ -20,7 +20,7 @@ class EthersTest extends IntegrationTestBase {
 		// Do nothing
 
 		// ASSERT
-		$this->assertMatchesRegularExpression( '/^0x0{40}$/', Ethers::zeroAddress() );
+		$this->assertMatchesRegularExpression( '/^0x0{40}$/', Ethers::zeroAddress()->value() );
 	}
 
 	/**
@@ -35,10 +35,10 @@ class EthersTest extends IntegrationTestBase {
 		$signer    = new Signer( $private_key );
 		$message   = 'Hello, world!';
 		$signature = $signer->signMessage( $message );
-		$this->assertEquals( $signer->address(), $expected_address );
+		$this->assertEquals( $signer->address()->value(), $expected_address );
 
 		// ACT
-		$address = Ethers::verifyMessage( $message, $signature, $signer->address() );
+		$address = Ethers::verifyMessage( $message, $signature );
 
 		// ASSERT
 		$this->assertEquals( $expected_address, $address );

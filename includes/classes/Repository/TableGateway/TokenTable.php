@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 /**
  * トークンの情報を記録するテーブル
@@ -69,7 +70,7 @@ class TokenTable {
 			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
 		}
 		if ( ! is_null( $contract_address ) ) {
-			Validate::checkAddress( $contract_address );
+			Validate::checkAddressFormat( $contract_address );
 			$wheres[] = $this->wpdb->prepare( '`address` = %s', $contract_address );
 		}
 		if ( ! is_null( $symbol ) ) {
@@ -94,11 +95,11 @@ class TokenTable {
 			$decimals = (int) $row->decimals;
 
 			assert( Validate::isChainID( $chain_ID ), '[C4D50120] Invalid chain ID. ' . $chain_ID );
-			assert( Validate::isAddress( $address ), '[6535A6C3] Invalid contract address. ' . $address );
+			assert( Validate::isAddressFormat( $address ), '[6535A6C3] Invalid contract address. ' . $address );
 			assert( Validate::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
 			assert( Validate::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
 
-			$records[] = Token::from( $chain_ID, $address, $symbol, $decimals );
+			$records[] = Token::from( $chain_ID, new Address( $address ), $symbol, $decimals );
 		}
 
 		return $records;
@@ -107,9 +108,8 @@ class TokenTable {
 	/**
 	 * テーブルにトークンを追加します。
 	 */
-	public function insert( int $chain_ID, string $contract_address, string $symbol, int $decimals ): void {
+	public function insert( int $chain_ID, Address $contract_address, string $symbol, int $decimals ): void {
 		Validate::checkChainID( $chain_ID );
-		Validate::checkAddress( $contract_address );
 		Validate::checkSymbol( $symbol );
 		Validate::checkDecimals( $decimals );
 
@@ -119,7 +119,7 @@ class TokenTable {
 			VALUES (%d, %s, %s, %d)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $chain_ID, $contract_address, $symbol, $decimals );
+		$sql = $this->wpdb->prepare( $sql, $chain_ID, $contract_address->value(), $symbol, $decimals );
 
 		$result = $this->wpdb->query( $sql );
 		if ( false === $result ) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\TokenData;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class AddPayableTokensResolverTest extends IntegrationTestBase {
 
@@ -18,7 +19,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		GRAPHQL;
 		$variables = array(
 			'chainID'        => $chain_ID,
-			'tokenAddresses' => $token_addresses,
+			'tokenAddresses' => array_values( array_map( fn( $token_address ) => $token_address->value(), $token_addresses ) ),
 		);
 
 		// GraphQLリクエストを送信
@@ -36,7 +37,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 */
 	public function requestAddPayableTokensSuccess( string $user_type ) {
 		$chain_ID      = ChainID::PRIVATENET_L1;
-		$token_address = TestERC20Address::L1_TUSD;
+		$token_address = TestERC20Address::L1_TUSD();
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
@@ -67,7 +68,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 */
 	public function requestAddPayableTokensFail( string $user_type ) {
 		$chain_ID      = ChainID::PRIVATENET_L1;
-		$token_address = TestERC20Address::L1_TUSD;
+		$token_address = TestERC20Address::L1_TUSD();
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
@@ -94,7 +95,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 */
 	public function requestAddPayableTokensDuplicate() {
 		$chain_ID      = ChainID::PRIVATENET_L1;
-		$token_address = TestERC20Address::L1_TUSD;
+		$token_address = TestERC20Address::L1_TUSD();
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );
@@ -124,8 +125,8 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 	 */
 	public function requestAddPayableTokensMultiple() {
 		$chain_ID       = ChainID::PRIVATENET_L1;
-		$token_address1 = TestERC20Address::L1_TUSD;
-		$token_address2 = TestERC20Address::L1_TJPY;
+		$token_address1 = TestERC20Address::L1_TUSD();
+		$token_address2 = TestERC20Address::L1_TJPY();
 		// ARRANGE
 		// 一旦保存されているトークン一覧を削除
 		( new PayableTokens() )->save( $chain_ID, array() );

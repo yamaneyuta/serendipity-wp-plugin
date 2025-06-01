@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Repository\TableGateway\OracleTable;
 use Cornix\Serendipity\Core\Service\ChainService;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
 class OracleService {
@@ -31,7 +32,7 @@ class OracleService {
 	/**
 	 * 指定したチェーン、通貨ペアのOracleコントラクトのアドレスを取得します。
 	 */
-	public function address( int $chain_ID, SymbolPair $symbol_pair ): ?string {
+	public function address( int $chain_ID, SymbolPair $symbol_pair ): ?Address {
 		$oracles = ( new OracleTable() )->select( $chain_ID, null, $symbol_pair->base(), $symbol_pair->quote() );
 		assert( count( $oracles ) <= 1 );
 

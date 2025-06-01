@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class Oracle {
 
 	/** @var Oracle[] */
 	private static array $cache = array();
 
-	private function __construct( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ) {
+	private function __construct( int $chain_ID, Address $address, string $base_symbol, string $quote_symbol ) {
 		$this->chain_ID     = $chain_ID;
 		$this->address      = $address;
 		$this->base_symbol  = $base_symbol;
@@ -18,7 +19,7 @@ class Oracle {
 	}
 
 	private int $chain_ID;
-	private string $address;
+	private Address $address;
 	private string $base_symbol;
 	private string $quote_symbol;
 
@@ -26,7 +27,7 @@ class Oracle {
 		return $this->chain_ID;
 	}
 
-	public function oracleAddress(): string {
+	public function oracleAddress(): Address {
 		return $this->address;
 	}
 
@@ -49,16 +50,15 @@ class Oracle {
 		);
 	}
 
-	public static function from( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ): Oracle {
+	public static function from( int $chain_ID, Address $address, string $base_symbol, string $quote_symbol ): Oracle {
 		assert( Validate::isChainID( $chain_ID ), '[403AD6AB] Invalid chain ID. chain id: ' . $chain_ID );
-		assert( Validate::isAddress( $address ), '[7A82CB13] Invalid oracle address. chain id: ' . $chain_ID . ', address: ' . $address );
 		assert( Validate::isSymbol( $base_symbol ), '[CD285CC7] Invalid base symbol. ' . $base_symbol );
 		assert( Validate::isSymbol( $quote_symbol ), '[BA65690D] Invalid quote symbol. ' . $quote_symbol );
 
-		if ( is_null( self::$cache[ $chain_ID ][ $address ] ?? null ) ) {
-			self::$cache[ $chain_ID ][ $address ] = new Oracle( $chain_ID, $address, $base_symbol, $quote_symbol );
+		if ( is_null( self::$cache[ $chain_ID ][ $address->value() ] ?? null ) ) {
+			self::$cache[ $chain_ID ][ $address->value() ] = new self( $chain_ID, $address, $base_symbol, $quote_symbol );
 		}
 
-		return self::$cache[ $chain_ID ][ $address ];
+		return self::$cache[ $chain_ID ][ $address->value() ];
 	}
 }

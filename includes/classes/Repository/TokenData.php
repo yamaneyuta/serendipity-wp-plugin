@@ -8,13 +8,13 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClientFactory;
 use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class TokenData {
 
-	public function addERC20( int $chain_ID, string $contract_address ): void {
+	public function addERC20( int $chain_ID, Address $contract_address ): void {
 		assert( Validate::isChainID( $chain_ID ), '[0BB33181] Invalid chain ID. - ' . $chain_ID );
-		assert( Validate::isAddress( $contract_address ), '[A80ECABD] Invalid address. - ' . $contract_address );
-		if ( Ethers::zeroAddress() === $contract_address ) {
+		if ( Ethers::zeroAddress()->value() === $contract_address->value() ) {
 			throw new \InvalidArgumentException( '[6006664F] Address is zero. - ' . $contract_address );
 		}
 

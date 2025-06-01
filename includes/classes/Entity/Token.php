@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class Token {
 
 	/** @var Token[] */
 	private static array $cache = array();
 
-	private function __construct( int $chain_ID, string $address, string $symbol, int $decimals ) {
+	private function __construct( int $chain_ID, Address $address, string $symbol, int $decimals ) {
 		$this->chain_ID = $chain_ID;
 		$this->address  = $address;
 		$this->symbol   = $symbol;
@@ -18,7 +19,7 @@ class Token {
 	}
 
 	private int $chain_ID;
-	private string $address;
+	private Address $address;
 	private string $symbol;
 	private int $decimals;
 
@@ -26,7 +27,7 @@ class Token {
 		return $this->chain_ID;
 	}
 
-	public function address(): string {
+	public function address(): Address {
 		return $this->address;
 	}
 
@@ -50,12 +51,11 @@ class Token {
 	}
 
 
-	public static function from( int $chain_ID, string $address, string $symbol, int $decimals ): Token {
+	public static function from( int $chain_ID, Address $address, string $symbol, int $decimals ): Token {
 		$cache_key = $chain_ID . $address;
 
 		if ( ! isset( self::$cache[ $cache_key ] ) ) {
 			Validate::checkChainID( $chain_ID );
-			Validate::checkAddress( $address );
 			Validate::checkSymbol( $symbol );
 			Validate::checkDecimals( $decimals );
 			self::$cache[ $cache_key ] = new Token( $chain_ID, $address, $symbol, $decimals );

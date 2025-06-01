@@ -6,9 +6,11 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Entity\Oracle;
 use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\Lib\Transient\TransientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\OracleClient;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\Rate;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
@@ -56,7 +58,8 @@ class OracleRate {
 			$chain_data = new ChainService( $chain_ID );
 			if ( $chain_data->connectable() ) {
 				// Oracleに問い合わせ
-				$oracle_client = new OracleClient( $chain_data->rpcURL(), $contract_address );
+				$oracle        = Oracle::from( $chain_ID, $contract_address, $symbol_pair->base(), $symbol_pair->quote() );
+				$oracle_client = new OracleClient( $chain_data->rpcURL(), $oracle );
 				$decimals      = $oracle_client->decimals();
 				$answer_hex    = Hex::from( $oracle_client->latestAnswer() );
 

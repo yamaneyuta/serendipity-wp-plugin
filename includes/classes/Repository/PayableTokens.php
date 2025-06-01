@@ -29,7 +29,6 @@ class PayableTokens {
 	 * @return Token[]
 	 */
 	public function get( int $chain_ID ): array {
-		/** @var string[] */
 		$token_addresses = $this->getPayableTokenAddressesOption( $chain_ID )->get( array() );
 
 		// Tokenオブジェクトに変換
@@ -48,7 +47,7 @@ class PayableTokens {
 			if ( $token->chainID() !== $chain_ID ) {
 				throw new \InvalidArgumentException(
 					'[D1A1D1A1] Invalid token. chain id: ' . $token->chainID() .
-					', address: ' . $token->address() .
+					', address: ' . $token->address()->value() .
 					', symbol: ' . $token->symbol()
 				);
 			}
@@ -56,7 +55,7 @@ class PayableTokens {
 
 		// 保存時はトークンアドレスのみ保存
 		/** @var string[] */
-		$token_addresses = array_values( array_map( fn( $token ) => $token->address(), $tokens ) );
+		$token_addresses = array_values( array_map( fn( $token ) => $token->address()->value(), $tokens ) );
 		$this->getPayableTokenAddressesOption( $chain_ID )->update( $token_addresses, $autoload );
 	}
 
@@ -73,7 +72,7 @@ class PayableTokens {
 		return array_reduce(
 			$tokens,
 			function ( $carry, $t ) use ( $token_address ) {
-				return $carry || $t->address() === $token_address;
+				return $carry || $t->address()->equals( $token_address );
 			},
 			false
 		);

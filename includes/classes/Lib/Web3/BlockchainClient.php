@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Web3;
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
@@ -150,15 +151,14 @@ class BlockchainClient {
 	/**
 	 * アカウントの残高を取得します。
 	 */
-	public function getBalanceHex( string $address ): string {
-		Validate::checkAddress( $address );
+	public function getBalanceHex( Address $address ): string {
 
 		/** @var string|null */
 		$balance_hex = null;
 		$this->retryer->execute(
 			function () use ( $address, &$balance_hex ) {
 				$this->eth()->getBalance(
-					$address,
+					$address->value(),
 					function ( $err, BigInteger $res ) use ( &$balance_hex ) {
 						if ( $err ) {
 							throw $err;

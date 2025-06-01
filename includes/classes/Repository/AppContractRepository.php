@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Entity\AppContract;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class AppContractRepository {
 	public function __construct( ?ChainRepository $chain_repository = null, ?Environment $environment = null ) {
@@ -27,11 +28,15 @@ class AppContractRepository {
 	/**
 	 * 指定したチェーンにデプロイされているAppコントラクトのアドレスを取得します。
 	 */
-	private function getAddress( int $chain_id ): ?string {
+	private function getAddress( int $chain_id ): ?Address {
+		/** @var null|string */
+		$address_str = null;
 		if ( $this->environment->isDevelopmentMode() ) {
-			return Config::DEV_APP_CONTRACT_ADDRESSES[ $chain_id ] ?? null;
+			$address_str = Config::DEV_APP_CONTRACT_ADDRESSES[ $chain_id ] ?? null;
 		} else {
-			return Config::APP_CONTRACT_ADDRESSES[ $chain_id ] ?? null;
+			$address_str = Config::APP_CONTRACT_ADDRESSES[ $chain_id ] ?? null;
 		}
+
+		return is_null( $address_str ) ? null : new Address( $address_str );
 	}
 }

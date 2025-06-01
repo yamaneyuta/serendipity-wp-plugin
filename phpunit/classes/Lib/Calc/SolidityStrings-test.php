@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use phpseclib\Math\BigInteger;
 
 class SolidityStringsTest extends IntegrationTestBase {
@@ -61,12 +62,12 @@ class SolidityStringsTest extends IntegrationTestBase {
 	 * @testdox [30A2439D] SolidityStrings::addressToHexString() - $address -> $expected
 	 * @dataProvider addressToHexStringDataProvider
 	 */
-	public function addressToHexString( $address, string $expected ): void {
+	public function addressToHexString( string $address_text, string $expected ): void {
 		// ARRANGE
 		// Do nothing.
 
 		// ACT
-		$ret = SolidityStrings::addressToHexString( $address );
+		$ret = SolidityStrings::addressToHexString( new Address( $address_text ) );
 
 		// ASSERT
 		$this->assertEquals( $ret, $expected );
@@ -75,25 +76,7 @@ class SolidityStringsTest extends IntegrationTestBase {
 	public function addressToHexStringDataProvider(): array {
 		return array(
 			array( '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266', '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266' ), // 通常のアドレス(小文字に変換される)
-			array( Ethers::zeroAddress(), '0x0000000000000000000000000000000000000000' ),
-			array( '0x0', '0x0000000000000000000000000000000000000000' ),
-			array( '0xA', '0x000000000000000000000000000000000000000a' ), // 小文字になる
+			array( Ethers::zeroAddress()->value(), '0x0000000000000000000000000000000000000000' ),
 		);
-	}
-
-	/**
-	 * アドレスをHEXに変換するテスト(不正なデータ)
-	 *
-	 * @test
-	 * @testdox [1997F132] SolidityStrings::addressToHexString() - address: 'invalid'
-	 */
-	public function addressToHexStringInvalidData(): void {
-		// ARRANGE
-		$address = 'invalid';
-
-		// ACT, ASSERT
-		$this->expectException( InvalidArgumentException::class );
-		$this->expectExceptionMessage( '[A862D0B5]' );
-		SolidityStrings::addressToHexString( $address );
 	}
 }

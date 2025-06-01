@@ -96,9 +96,9 @@ class AppContractCrawler {
 			assert( is_array( $event_args ), '[66C28129] event_args is not array' );
 
 			// イベント発行時の引数を取得
-			// /** @var string */
+			/** @var string */
 			$from = $event_args['from'];
-			// /** @var string */
+			/** @var string */
 			$to = $event_args['to'];
 			/** @var string */
 			$token_address = $event_args['token'];

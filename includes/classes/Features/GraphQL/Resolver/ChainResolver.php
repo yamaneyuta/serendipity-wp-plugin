@@ -30,7 +30,7 @@ class ChainResolver extends ResolverBase {
 			// 権限チェック不要
 			$app_contract = ( new AppContractRepository() )->get( $chain->id );
 			$address      = is_null( $app_contract ) ? null : $app_contract->address;
-			return is_null( $address ) ? null : array( 'address' => $address );
+			return is_null( $address ) ? null : array( 'address' => $address->value() );
 		};
 
 		$tokens_callback = function () use ( $root_value, $chain ) {
@@ -42,7 +42,7 @@ class ChainResolver extends ResolverBase {
 						$root_value,
 						array(
 							'chainID' => $token->chainID(),
-							'address' => $token->address(),
+							'address' => $token->address()->value(),
 						)
 					);
 				},

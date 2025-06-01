@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class AddPayableTokensResolver extends ResolverBase {
 
@@ -33,7 +34,7 @@ class AddPayableTokensResolver extends ResolverBase {
 		// 追加しようとしているアドレスがすでに保存済み場合は例外をスロー
 		foreach ( $token_addresses as $address ) {
 			foreach ( $current_payable_tokens as $current_payable_token ) {
-				if ( $address === $current_payable_token->address() ) {
+				if ( $current_payable_token->address()->equals( new Address( $address ) ) ) {
 					throw new \InvalidArgumentException( '[734CC2DE] Token already exists: ' . $address );
 				}
 			}
