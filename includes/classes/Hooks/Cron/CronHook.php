@@ -9,9 +9,9 @@ use Cornix\Serendipity\Core\Repository\CrawledBlockNumber;
 use Cornix\Serendipity\Core\Repository\Name\CronActionName;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Constants\Config;
-use Cornix\Serendipity\Core\Service\AppContractService;
 use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\Service\ChainsService;
 
@@ -183,7 +183,7 @@ class AppContractCrawlableChainIDs {
 		// チェーンに接続可能かつアプリケーション用コントラクトアドレスが取得可能なチェーンに絞り込み
 		$connectable_chain_ids = array_filter(
 			$all_chain_IDs,
-			fn( $chain_id ) => ( new ChainService( $chain_id ) )->connectable() && ! is_null( ( new AppContractService( $chain_id ) )->address() )
+			fn( $chain_id ) => ( new ChainService( $chain_id ) )->connectable() && ! is_null( ( ( new AppContractRepository() )->get( $chain_id ) ) )
 		);
 
 		// 取引が開始された(=請求書を発行した)ブロックが存在するチェーンに絞り込み

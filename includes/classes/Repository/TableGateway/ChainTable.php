@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Constants\Config;
 use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\ChainTableRecord;
 
 /**
  * チェーンの情報を記録するテーブル
@@ -48,40 +49,37 @@ class ChainTable {
 	}
 
 	/**
-	 * @return object{
-	 *   chain_id: int,
-	 *   name: string,
-	 *   rpc_url: null|string,
-	 *   confirmations: int|string
-	 * }[]
+	 * @return ChainTableRecord[]
 	 */
 	public function select( ?int $chain_ID = null ): array {
-		$sql = <<<SQL
+		// レコード数は少ないのですべてのレコードを取得してからフィルタリングする
+		$sql     = <<<SQL
 			SELECT `chain_id`, `name`, `rpc_url`, `confirmations`
 			FROM `{$this->table_name}`
 		SQL;
+		$results = $this->wpdb->get_results( $sql );
+		assert( is_array( $results ), '[583DBBE7] Invalid result type. Expected array, got ' . gettype( $results ) );
 
-		// 条件がある場合はWHERE句を追加
-		$wheres = array();
+		$chain_table_records = array_map(
+			function ( $row ) {
+				// 型をテーブル定義を一致させる
+				$row->chain_id = (int) $row->chain_id;
+
+				return new ChainTableRecord( $row );
+			},
+			$results
+		);
+
+		// チェーンIDでフィルタ
 		if ( ! is_null( $chain_ID ) ) {
-			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
+			$chain_table_records = array_filter(
+				$chain_table_records,
+				fn( $record ) => $record->chain_id === $chain_ID
+			);
+			assert( count( $chain_table_records ) <= 1, '[9A6ADAB1] should return at most one record.' );
 		}
 
-		if ( ! empty( $wheres ) ) {
-			$sql .= ' WHERE ' . implode( ' AND ', $wheres );
-		}
-
-		$result = $this->wpdb->get_results( $sql );
-		assert( is_array( $result ), '[583DBBE7] Invalid result type. Expected array, got ' . gettype( $result ) );
-
-		foreach ( $result as $row ) {
-			$row->chain_id      = (int) $row->chain_id;
-			$row->confirmations = is_numeric( $row->confirmations )
-				? (int) $row->confirmations
-				: $row->confirmations;
-		}
-
-		return $result;
+		return array_values( $chain_table_records );
 	}
 
 	/**

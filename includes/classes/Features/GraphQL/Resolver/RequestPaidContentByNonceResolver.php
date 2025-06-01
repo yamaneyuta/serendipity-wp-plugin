@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Repository\InvoiceRepository;
-use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
@@ -56,27 +57,28 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		$post_ID          = $invoice->post_ID;
-		$chain_ID         = $invoice->chain_ID;
+		$chain            = ( new ChainRepository() )->getChain( $invoice->chain_ID );
 		$consumer_address = $invoice->consumer_address;
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		if ( ! ( new ChainService( $chain_ID ) )->connectable() ) {
+		if ( ! $chain->connectable() ) {
 			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す
 			// ※ 支払い後、管理者によってチェーンが無効化された場合はここを通るため、例外を投げない
 			return $error_result_callback( self::ERROR_CODE_INVALID_CHAIN_ID );
 		}
 
 		// ブロックチェーンに問い合わせる
-		$app                   = ( new AppClientFactory() )->create( $chain_ID );
+		$app_contract          = ( new AppContractRepository() )->get( $chain->id );
+		$app                   = new AppContractClient( $app_contract );
 		$server_signer_address = ( new ServerSignerData() )->getAddress();
 		$payment_status        = $app->getPaywallStatus( $server_signer_address, $post_ID, $consumer_address );
 
 		if ( ! $payment_status->isUnlocked() ) {
 			// 最新のブロックでもペイウォールの解除が確認できなかった場合
 			return $error_result_callback( self::ERROR_CODE_PAYWALL_LOCKED );
-		} elseif ( ! $this->isConfirmed( $chain_ID, $payment_status->unlockedBlockNumber() ) ) {
+		} elseif ( ! $this->isConfirmed( $chain->id, $payment_status->unlockedBlockNumber() ) ) {
 			// 最新のブロックではペイウォールの解除が確認できたが、
 			// トランザクションの待機ブロック数が管理者が指定した数を下回っている場合
 			return $error_result_callback( self::ERROR_CODE_TRANSACTION_UNCONFIRMED );
@@ -97,7 +99,8 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( int $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$confirmations = ( new ChainService( $chain_ID ) )->confirmations();
+		$chain         = ( new ChainRepository() )->getChain( $chain_ID );
+		$confirmations = $chain->confirmations;
 
 		if ( is_int( $confirmations ) ) {
 			// 最新のブロック番号を取得

@@ -38,11 +38,7 @@ class SetRpcUrlResolver extends ResolverBase {
 		try {
 			global $wpdb;
 			$wpdb->query( 'START TRANSACTION' );
-			if ( is_null( $rpc_url ) ) {
-				( new ChainService( $chain_ID, $wpdb ) )->deleteRpcURL();
-			} else {
-				( new ChainService( $chain_ID, $wpdb ) )->setRpcURL( $rpc_url );
-			}
+			( new ChainService( $chain_ID, $wpdb ) )->setRpcURL( $rpc_url );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );

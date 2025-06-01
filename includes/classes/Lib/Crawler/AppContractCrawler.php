@@ -9,9 +9,9 @@ use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransaction;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Lib\Web3\AppAbi;
-use Cornix\Serendipity\Core\Lib\Web3\AppClientFactory;
+use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use phpseclib\Math\BigInteger;
@@ -22,10 +22,10 @@ use stdClass;
  */
 class AppContractCrawler {
 	public function __construct( \wpdb $wpdb ) {
-		$this->app_abi = new AppAbi();
+		$this->app_abi = new AppContractAbi();
 		$this->wpdb    = $wpdb;
 	}
-	private AppAbi $app_abi;
+	private AppContractAbi $app_abi;
 	private \wpdb $wpdb;
 
 	public function crawl( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): void {
@@ -134,7 +134,7 @@ class UnlockPaywallTransferCrawler {
 
 	public function __construct() {
 		// UnlockPaywallTransferイベントのtopic
-		$topic_hash = ( new AppAbi() )->topicHash( 'UnlockPaywallTransfer' );
+		$topic_hash = ( new AppContractAbi() )->topicHash( 'UnlockPaywallTransfer' );
 
 		// サーバーの署名用ウォレットアドレス
 		$server_signer_address         = ( new ServerSignerData() )->getAddress();
@@ -156,15 +156,13 @@ class UnlockPaywallTransferCrawler {
 	public function execute( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
 		$blockchain_client = ( new BlockchainClientFactory() )->create( $chain_ID );
 
-		$contract_address = ( new AppClientFactory() )->create( $chain_ID )->address();
-
 		/** @var array|null */
 		$logs_result = null;
 		$blockchain_client->getLogs(
 			array(
 				'fromBlock' => $from_block->hex(),
 				'toBlock'   => $to_block->hex(),
-				'address'   => $contract_address,
+				'address'   => ( new AppContractRepository() )->get( $chain_ID )->address,
 				'topics'    => $this->topics,
 			),
 			function ( $err, $logs ) use ( &$logs_result ) {
