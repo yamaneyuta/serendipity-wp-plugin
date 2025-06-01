@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Entity\AppContract;
-use Cornix\Serendipity\Core\Infrastructure\Web3\AppAbi;
+use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
 use Cornix\Serendipity\Core\Lib\Web3\ContractFactory;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
@@ -19,7 +19,7 @@ class AppContractClient {
 		$address = $app_contract->address;
 		// このインスタンスを生成する前に接続可能かどうかをチェックしてください。
 		assert( is_string( $rpc_url ) && Judge::isUrl( $rpc_url ), '[A5ED369D] rpc_url: ' . var_export( $rpc_url, true ) );
-		$this->app          = ( new ContractFactory() )->create( $rpc_url, ( new AppAbi() )->get(), $address );
+		$this->app          = ( new ContractFactory() )->create( $rpc_url, ( new AppContractAbi() )->get(), $address );
 		$this->app_contract = $app_contract;
 	}
 	private Contract $app;

@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransaction;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
 use Cornix\Serendipity\Core\Lib\Security\Judge;
-use Cornix\Serendipity\Core\Infrastructure\Web3\AppAbi;
+use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
@@ -22,10 +22,10 @@ use stdClass;
  */
 class AppContractCrawler {
 	public function __construct( \wpdb $wpdb ) {
-		$this->app_abi = new AppAbi();
+		$this->app_abi = new AppContractAbi();
 		$this->wpdb    = $wpdb;
 	}
-	private AppAbi $app_abi;
+	private AppContractAbi $app_abi;
 	private \wpdb $wpdb;
 
 	public function crawl( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): void {
@@ -134,7 +134,7 @@ class UnlockPaywallTransferCrawler {
 
 	public function __construct() {
 		// UnlockPaywallTransferイベントのtopic
-		$topic_hash = ( new AppAbi() )->topicHash( 'UnlockPaywallTransfer' );
+		$topic_hash = ( new AppContractAbi() )->topicHash( 'UnlockPaywallTransfer' );
 
 		// サーバーの署名用ウォレットアドレス
 		$server_signer_address         = ( new ServerSignerData() )->getAddress();
