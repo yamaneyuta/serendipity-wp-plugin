@@ -54,4 +54,8 @@ abstract class ObjectValueArrayBase implements IteratorAggregate {
 	public function toArray(): array {
 		return $this->items;
 	}
+
+	public function count(): int {
+		return count( $this->items );
+	}
 }
