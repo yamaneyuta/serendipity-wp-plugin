@@ -45,6 +45,9 @@ class Token {
 	public function isPayable(): bool {
 		return $this->is_payable;
 	}
+	public function setIsPayable( bool $is_payable ): void {
+		$this->is_payable = $is_payable;
+	}
 
 	public function __toString() {
 		return json_encode(
