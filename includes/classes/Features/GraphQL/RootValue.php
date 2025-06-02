@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL;
 
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\AddPayableTokensResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ChainsResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\ConsumerTermsVersionResolver;
@@ -13,7 +12,6 @@ use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\NetworkCategoryResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\PostResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RegisterERC20TokenResolver;
-use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RemovePayableTokensResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\RequestPaidContentByNonceResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SalesHistoriesResolver;
 use Cornix\Serendipity\Core\Features\GraphQL\Resolver\SellerResolver;
@@ -52,10 +50,8 @@ class RootValue {
 			'verifiableChains'          => new VerifiableChainsResolver(),
 
 			// Mutation
-			'addPayableTokens'          => new AddPayableTokensResolver(),
 			'issueInvoice'              => new IssueInvoiceResolver(),
 			'requestPaidContentByNonce' => new RequestPaidContentByNonceResolver(),
-			'removePayableTokens'       => new RemovePayableTokensResolver(),
 			'getERC20Info'              => new GetERC20InfoResolver(),
 			'registerERC20Token'        => new RegisterERC20TokenResolver(),
 			'setSellerAgreedTerms'      => new SetSellerAgreedTermsResolver(),
