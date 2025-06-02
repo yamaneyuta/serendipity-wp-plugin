@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\TokenTableRecord;
 
 class Token {
 
@@ -51,7 +52,7 @@ class Token {
 	}
 
 
-	public static function from( int $chain_ID, Address $address, string $symbol, int $decimals ): Token {
+	public static function from( int $chain_ID, Address $address, string $symbol, int $decimals ): self {
 		$cache_key = $chain_ID . $address;
 
 		if ( ! isset( self::$cache[ $cache_key ] ) ) {
@@ -62,5 +63,14 @@ class Token {
 		}
 
 		return self::$cache[ $cache_key ];
+	}
+
+	public static function fromTableRecord( TokenTableRecord $record ): self {
+		$chain_ID = $record->chain_id;
+		$address  = Address::from( $record->address );
+		$symbol   = $record->symbol;
+		$decimals = $record->decimals;
+
+		return self::from( $chain_ID, $address, $symbol, $decimals );
 	}
 }
