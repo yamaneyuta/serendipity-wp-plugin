@@ -7,10 +7,11 @@ use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\Addresses;
 
 class RemovePayableTokensResolverTest extends IntegrationTestBase {
 
-	private function requestRemovePayableTokens( string $user_type, int $chain_ID, array $token_addresses ) {
+	private function requestRemovePayableTokens( string $user_type, int $chain_ID, Addresses $token_addresses ) {
 		// リクエストを送信するユーザーを設定
 		$this->getUser( $user_type )->setCurrentUser();
 
@@ -21,7 +22,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		GRAPHQL;
 		$variables = array(
 			'chainID'        => $chain_ID,
-			'tokenAddresses' => array_values( array_map( fn( $token_address ) => $token_address->value(), $token_addresses ) ),
+			'tokenAddresses' => $token_addresses->values(),
 		);
 
 		// GraphQLリクエストを送信
@@ -50,7 +51,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
 		// ACT
-		$data = $this->requestRemovePayableTokens( $user_type, $chain_ID, array( $register_token_address ) );
+		$data = $this->requestRemovePayableTokens( $user_type, $chain_ID, Addresses::from( $register_token_address ) );
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
@@ -79,7 +80,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		assert( 1 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 1つ登録済みになったことを確認
 
 		// ACT
-		$data = $this->requestRemovePayableTokens( $user_type, $chain_ID, array( $register_token_address ) );
+		$data = $this->requestRemovePayableTokens( $user_type, $chain_ID, Addresses::from( $register_token_address ) );
 
 		// ASSERT
 		$this->assertTrue( isset( $data['errors'] ) ); // エラーフィールドが存在する
@@ -109,7 +110,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		$not_registered_token_address = new Address( '0x0000000000000000000000000000000000000001' ); // 登録されていない適当なアドレス
 
 		// ACT
-		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $not_registered_token_address ) );
+		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, Addresses::from( $not_registered_token_address ) );
 
 		// ASSERT
 		$this->assertTrue( isset( $data['errors'] ) ); // エラーフィールドが存在する
@@ -144,7 +145,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		( new PayableTokens() )->save( $chain_ID, array( $token1, $token2, $token3 ) );
 
 		// ACT
-		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $token1->address(), $token2->address() ) );
+		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, Addresses::from( array( $token1->address(), $token2->address() ) ) );
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドが存在しない
@@ -170,7 +171,7 @@ class RemovePayableTokensResolverTest extends IntegrationTestBase {
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 
 		// ACT
-		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, array() );  // 空配列を渡す
+		$data = $this->requestRemovePayableTokens( UserType::ADMINISTRATOR, $chain_ID, Addresses::from( array() ) );  // 空配列を渡す
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドが存在しない

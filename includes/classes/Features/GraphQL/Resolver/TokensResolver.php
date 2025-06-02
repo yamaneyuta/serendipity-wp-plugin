@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class TokensResolver extends ResolverBase {
 
@@ -22,8 +23,8 @@ class TokensResolver extends ResolverBase {
 		$filter = $args['filter'] ?? null;
 		/** @var int|null */
 		$filter_chain_ID = $filter['chainID'] ?? null;
-		/** @var string|null */
-		$filter_address = $filter['address'] ?? null;
+		/** @var Address|null */
+		$filter_address = Address::from( $filter['address'] ?? null );
 
 		$tokens = ( new TokenData() )->select( $filter_chain_ID, $filter_address );
 		return array_map(

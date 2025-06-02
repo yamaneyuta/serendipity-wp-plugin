@@ -4,11 +4,11 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\TokenData;
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\Addresses;
 
 class AddPayableTokensResolverTest extends IntegrationTestBase {
 
-	private function requestAddPayableTokens( string $user_type, int $chain_ID, array $token_addresses ) {
+	private function requestAddPayableTokens( string $user_type, int $chain_ID, Addresses $token_addresses ) {
 		// リクエストを送信するユーザーを設定
 		$this->getUser( $user_type )->setCurrentUser();
 
@@ -19,7 +19,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		GRAPHQL;
 		$variables = array(
 			'chainID'        => $chain_ID,
-			'tokenAddresses' => array_values( array_map( fn( $token_address ) => $token_address->value(), $token_addresses ) ),
+			'tokenAddresses' => $token_addresses->values(),
 		);
 
 		// GraphQLリクエストを送信
@@ -47,7 +47,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
-		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, array( $token_address ) );
+		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, Addresses::from( $token_address ) );
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
@@ -78,7 +78,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
-		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, array( $token_address ) );
+		$data = $this->requestAddPayableTokens( $user_type, $chain_ID, Addresses::from( $token_address ) );
 
 		// ASSERT
 		$this->assertTrue( isset( $data['errors'] ) ); // エラーフィールドが存在する
@@ -106,8 +106,8 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 
 		// ACT
 		// 同じ値を2回登録
-		$this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $token_address ) );
-		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $token_address ) );
+		$this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, Addresses::from( $token_address ) );
+		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, Addresses::from( $token_address ) );
 
 		// ASSERT
 		$this->assertTrue( isset( $data['errors'] ) ); // エラーフィールドが存在する
@@ -137,7 +137,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		$GLOBALS['wpdb']->query( 'COMMIT' );
 
 		// ACT
-		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array( $token_address1, $token_address2 ) );
+		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, Addresses::from( array( $token_address1, $token_address2 ) ) );
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドが存在しない
@@ -161,7 +161,7 @@ class AddPayableTokensResolverTest extends IntegrationTestBase {
 		assert( 0 === count( ( new PayableTokens() )->get( $chain_ID ) ) ); // 空になったことを確認
 
 		// ACT
-		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, array() );  // 空配列を渡す
+		$data = $this->requestAddPayableTokens( UserType::ADMINISTRATOR, $chain_ID, Addresses::from( array() ) );  // 空配列を渡す
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドが存在しない

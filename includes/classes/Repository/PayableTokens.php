@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Lib\Option\ArrayOption;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 /**
  * 管理者が設定した購入者が支払い可能なトークン一覧を取得または保存するクラス。
@@ -29,10 +30,10 @@ class PayableTokens {
 	 * @return Token[]
 	 */
 	public function get( int $chain_ID ): array {
-		$token_addresses = $this->getPayableTokenAddressesOption( $chain_ID )->get( array() );
+		$token_address_values = $this->getPayableTokenAddressesOption( $chain_ID )->get( array() );
 
 		// Tokenオブジェクトに変換
-		return array_map( fn( $token_address ) => ( new TokenData() )->get( $chain_ID, $token_address ), $token_addresses );
+		return array_map( fn( $token_address_value ) => ( new TokenData() )->get( $chain_ID, Address::from( $token_address_value ) ), $token_address_values );
 	}
 
 	/**

@@ -52,12 +52,12 @@ class TokenTable {
 	 * ネイティブトークンを除くトークンデータ一覧を取得します。
 	 * パラメータでチェーンID、アドレス、シンボルを指定することで絞り込みができます。
 	 *
-	 * @param int|null    $chain_ID チェーンID
-	 * @param string|null $address トークンアドレス
-	 * @param string|null $symbol トークンシンボル
+	 * @param int|null     $chain_ID チェーンID
+	 * @param Address|null $address トークンアドレス
+	 * @param string|null  $symbol トークンシンボル
 	 * @return Token[]
 	 */
-	public function select( ?int $chain_ID = null, ?string $contract_address = null, ?string $symbol = null ): array {
+	public function select( ?int $chain_ID = null, ?Address $contract_address = null, ?string $symbol = null ): array {
 		$sql = <<<SQL
 			SELECT `chain_id`, `address`, `symbol`, `decimals`
 			FROM `{$this->table_name}`
@@ -70,8 +70,7 @@ class TokenTable {
 			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
 		}
 		if ( ! is_null( $contract_address ) ) {
-			Validate::checkAddressFormat( $contract_address );
-			$wheres[] = $this->wpdb->prepare( '`address` = %s', $contract_address );
+			$wheres[] = $this->wpdb->prepare( '`address` = %s', (string) $contract_address );
 		}
 		if ( ! is_null( $symbol ) ) {
 			Validate::checkSymbol( $symbol );

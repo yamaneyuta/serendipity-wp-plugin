@@ -35,11 +35,11 @@ class TokenData {
 	/**
 	 * トークンデータ一覧を取得します。
 	 *
-	 * @param null|int    $chain_ID チェーンIDでフィルタする場合に指定
-	 * @param null|string $address アドレスでフィルタする場合に指定
+	 * @param null|int     $chain_ID チェーンIDでフィルタする場合に指定
+	 * @param null|Address $address アドレスでフィルタする場合に指定
 	 * @return Token[] ネイティブトークンやERC20の情報一覧
 	 */
-	public function select( ?int $chain_ID = null, ?string $address = null, ?string $symbol = null ): array {
+	public function select( ?int $chain_ID = null, ?Address $address = null, ?string $symbol = null ): array {
 		// テーブルに保存されているトークンデータ一覧を取得
 		return ( new TokenTable() )->select( $chain_ID, $address, $symbol );
 	}
@@ -47,7 +47,7 @@ class TokenData {
 	/**
 	 * トークンデータを取得します。
 	 */
-	public function get( int $chain_ID, string $address ): Token {
+	public function get( int $chain_ID, Address $address ): Token {
 		$tokens = $this->select( $chain_ID, $address );
 		if ( 1 !== count( $tokens ) ) {
 			throw new \InvalidArgumentException( "[E6876786] Invalid token data. - chainID: {$chain_ID}, address: {$address}, count: " . count( $tokens ) );

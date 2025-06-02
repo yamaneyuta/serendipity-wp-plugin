@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\Addresses;
 
 class AddPayableTokensResolver extends ResolverBase {
 
@@ -18,8 +18,8 @@ class AddPayableTokensResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
 		$chain_ID = $args['chainID'];
-		/** @var string[] */
-		$token_addresses = $args['tokenAddresses'];
+		/** @var Addresses */
+		$token_addresses = Addresses::fromAddressValues( $args['tokenAddresses'] );
 
 		Validate::checkHasAdminRole(); // 管理者権限が必要
 
@@ -34,16 +34,18 @@ class AddPayableTokensResolver extends ResolverBase {
 		// 追加しようとしているアドレスがすでに保存済み場合は例外をスロー
 		foreach ( $token_addresses as $address ) {
 			foreach ( $current_payable_tokens as $current_payable_token ) {
-				if ( $current_payable_token->address()->equals( new Address( $address ) ) ) {
-					throw new \InvalidArgumentException( '[734CC2DE] Token already exists: ' . $address );
+				if ( $current_payable_token->address()->equals( $address ) ) {
+					throw new \InvalidArgumentException( '[734CC2DE] Token already exists: ' . (string) $address );
 				}
 			}
 		}
 
 		// 追加するトークンオブジェクトの配列を作成
-		$add_tokens = array_map(
-			fn ( $token_address ) => ( new TokenData() )->get( $chain_ID, $token_address ),
-			$token_addresses
+		$add_tokens = array_values(
+			array_map(
+				fn ( $token_address ) => ( new TokenData() )->get( $chain_ID, $token_address ),
+				$token_addresses->toArray()
+			)
 		);
 
 		// データを更新
