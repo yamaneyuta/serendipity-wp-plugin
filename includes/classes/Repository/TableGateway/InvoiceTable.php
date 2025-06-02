@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
 use Cornix\Serendipity\Core\Lib\Database\TableBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\Price;
 use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceTableRecord;
@@ -84,7 +85,7 @@ class InvoiceTable extends TableBase {
 		return is_null( $result ) ? null : new InvoiceTableRecord( $result );
 	}
 
-	public function insert( InvoiceID $invoice_id, int $post_ID, int $chain_ID, Price $selling_price, string $seller_address, string $payment_token_address, string $payment_amount_hex, string $consumer_address ) {
+	public function insert( InvoiceID $invoice_id, int $post_ID, int $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, string $payment_amount_hex, Address $consumer_address ) {
 		$selling_amount_hex = $selling_price->amountHex();
 		$selling_decimals   = $selling_price->decimals();
 		$selling_symbol     = $selling_price->symbol();
@@ -98,10 +99,10 @@ class InvoiceTable extends TableBase {
 				'selling_amount_hex'    => $selling_amount_hex,
 				'selling_decimals'      => $selling_decimals,
 				'selling_symbol'        => $selling_symbol,
-				'seller_address'        => $seller_address,
-				'payment_token_address' => $payment_token_address,
+				'seller_address'        => $seller_address->value(),
+				'payment_token_address' => $payment_token_address->value(),
 				'payment_amount_hex'    => $payment_amount_hex,
-				'consumer_address'      => $consumer_address,
+				'consumer_address'      => $consumer_address->value(),
 			),
 		);
 		if ( false === $result || $this->wpdb()->last_error ) {

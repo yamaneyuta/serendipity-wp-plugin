@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
-use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use kornrunner\Keccak;
 use stdClass;
 use Web3\Contracts\Ethabi;
@@ -199,8 +199,7 @@ class AppContractAbi {
 	 */
 	private function correctDecodedValue( string $type, $value ) {
 		if ( $type === 'address' ) {
-			assert( Ethers::isAddress( $value ), "[442797EA] Invalid address. value: {$value}" );
-			return Ethers::getAddress( $value );
+			return Address::from( $value )->value(); // チェックサムアドレスに変換
 		}
 
 		return $value;

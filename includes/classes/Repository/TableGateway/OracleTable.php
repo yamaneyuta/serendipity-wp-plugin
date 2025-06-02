@@ -71,7 +71,6 @@ class OracleTable {
 			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
 		}
 		if ( ! is_null( $address ) ) {
-			Validate::checkAddressFormat( $address );
 			$wheres[] = $this->wpdb->prepare( '`address` = %s', $address );
 		}
 		if ( ! is_null( $base_symbol ) ) {
@@ -100,11 +99,10 @@ class OracleTable {
 			$quote_symbol = (string) $row->quote_symbol;
 
 			assert( Validate::isChainID( $chain_ID ), '[75C4111A] Invalid chain ID. ' . $chain_ID );
-			assert( Validate::isAddressFormat( $address ), '[6286F3EC] Invalid oracle address. ' . $address );
 			assert( Validate::isSymbol( $base_symbol ), '[7F884B25] Invalid base symbol. ' . $base_symbol );
 			assert( Validate::isSymbol( $quote_symbol ), '[9A0090FB] Invalid quote symbol. ' . $quote_symbol );
 
-			$records[] = Oracle::from( $chain_ID, new Address( $address ), $base_symbol, $quote_symbol );
+			$records[] = Oracle::from( $chain_ID, Address::from( $address ), $base_symbol, $quote_symbol );
 		}
 
 		return $records;
@@ -115,7 +113,6 @@ class OracleTable {
 	 */
 	public function insert( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ): void {
 		Validate::checkChainID( $chain_ID );
-		Validate::checkAddressFormat( $address );
 		Validate::checkSymbol( $base_symbol );
 		Validate::checkSymbol( $quote_symbol );
 

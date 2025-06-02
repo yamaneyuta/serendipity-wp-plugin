@@ -16,6 +16,7 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class IssueInvoiceResolver extends ResolverBase {
 
@@ -28,11 +29,12 @@ class IssueInvoiceResolver extends ResolverBase {
 		/** @var int */
 		$post_ID = $args['postID'];
 		/** @var int */
-		$chain_ID = $args['chainID'];
-		/** @var string */
-		$token_address = $args['tokenAddress'];
-		/** @var string */
-		$consumer_address = $args['consumerAddress']; // 購入者のアドレス
+		$chain_ID         = $args['chainID'];
+		$token_address    = Address::from( $args['tokenAddress'] ?? null );
+		$consumer_address = Address::from( $args['consumerAddress'] ?? null ); // 購入者のアドレス
+
+		assert( null !== $token_address, '[5D2F1CF4] Token address must not be null.' );
+		assert( null !== $consumer_address, '[3AF96606] Consumer address must not be null.' );
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );

@@ -18,8 +18,6 @@ class UnlockPaywallTransferEvent {
 	private string $table_name;
 
 	public function save( InvoiceID $invoice_id, int $log_index, string $from_address, string $to_address, string $token_address, string $amount_hex, int $transfer_type ): void {
-		Validate::checkAddressFormat( $from_address );
-		Validate::checkAddressFormat( $to_address );
 		Validate::checkAmountHex( $amount_hex );
 
 		// ※ `INSERT IGNORE`を使用している点に注意

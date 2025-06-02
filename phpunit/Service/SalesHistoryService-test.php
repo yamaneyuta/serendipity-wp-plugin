@@ -51,12 +51,10 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 		$this->assertTrue( Validate::isHex( $selling_price->amountHex() ) );
 		$this->assertGreaterThanOrEqual( 0, $selling_price->decimals() );
 		$this->assertTrue( Validate::isSymbol( $selling_price->symbol() ) );
-		$this->assertTrue( Validate::isAddressFormat( $sales_data->sellerAddress() ) );
 		$payment_price = $sales_data->paymentPrice();
 		$this->assertTrue( Validate::isHex( $payment_price->amountHex() ) );
 		$this->assertGreaterThanOrEqual( 0, $payment_price->decimals() );
 		$this->assertTrue( Validate::isSymbol( $payment_price->symbol() ) );
-		$this->assertTrue( Validate::isAddressFormat( $sales_data->consumerAddress() ) );
 		$this->assertGreaterThan( 0, $sales_data->createdAt()->getTimestamp() );
 		$this->assertGreaterThan( 0, $sales_data->blockNumber() );
 		$this->assertEquals( 66, strlen( $sales_data->transactionHash() ) );    // transactionHashは64文字

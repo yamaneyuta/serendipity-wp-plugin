@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Entity\Invoice;
 use Cornix\Serendipity\Core\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\ValueObject\Price;
@@ -19,17 +20,17 @@ class InvoiceService {
 	/**
 	 * 購入用請求書を発行します。
 	 *
-	 * @param int    $post_ID
-	 * @param int    $chain_ID
-	 * @param Price  $selling_price
-	 * @param string $seller_address
-	 * @param string $payment_token_address
-	 * @param string $payment_amount_hex
-	 * @param string $consumer_address
+	 * @param int     $post_ID
+	 * @param int     $chain_ID
+	 * @param Price   $selling_price
+	 * @param Address $seller_address
+	 * @param Address $payment_token_address
+	 * @param string  $payment_amount_hex
+	 * @param Address $consumer_address
 	 *
 	 * @return Invoice 発行された請求書情報
 	 */
-	public function issue( int $post_ID, int $chain_ID, Price $selling_price, string $seller_address, string $payment_token_address, string $payment_amount_hex, string $consumer_address ): Invoice {
+	public function issue( int $post_ID, int $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, string $payment_amount_hex, Address $consumer_address ): Invoice {
 
 		$invoice = new Invoice(
 			InvoiceID::generate(), // 新規請求書ID

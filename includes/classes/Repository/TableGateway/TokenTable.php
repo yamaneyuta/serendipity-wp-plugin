@@ -94,11 +94,10 @@ class TokenTable {
 			$decimals = (int) $row->decimals;
 
 			assert( Validate::isChainID( $chain_ID ), '[C4D50120] Invalid chain ID. ' . $chain_ID );
-			assert( Validate::isAddressFormat( $address ), '[6535A6C3] Invalid contract address. ' . $address );
 			assert( Validate::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
 			assert( Validate::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
 
-			$records[] = Token::from( $chain_ID, new Address( $address ), $symbol, $decimals );
+			$records[] = Token::from( $chain_ID, Address::from( $address ), $symbol, $decimals );
 		}
 
 		return $records;

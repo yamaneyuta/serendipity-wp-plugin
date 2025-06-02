@@ -26,18 +26,15 @@ class AppContractClient {
 	private Contract $app;
 	private AppContract $app_contract;
 
-	public function getPaywallStatus( string $signer_address_hex, int $post_ID, string $consumer_address_hex ): GetPaywallStatusResult {
-		Validate::checkAddressFormat( $signer_address_hex );
-		// Validate::checkPostID( $post_ID );
-		Validate::checkAddressFormat( $consumer_address_hex );
+	public function getPaywallStatus( Address $signer_address, int $post_ID, Address $consumer_address ): GetPaywallStatusResult {
 
 		/** @var GetPaywallStatusResult|null */
 		$result = null;
 		$this->app->call(
 			'getPaywallStatus',
-			$signer_address_hex,
+			$signer_address->value(),
 			$post_ID,
-			$consumer_address_hex,
+			$consumer_address->value(),
 			function ( $err, $res ) use ( &$result ) {
 				if ( $err ) {
 					throw $err;

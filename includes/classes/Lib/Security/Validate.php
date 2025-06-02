@@ -199,24 +199,6 @@ class Validate {
 	}
 
 	/**
-	 * アドレスとして有効な値でない場合は例外をスローします。
-	 *
-	 * @param string $address_text アドレス(ウォレットアドレス/コントラクトアドレス)
-	 * @throws InvalidArgumentException
-	 */
-	public static function checkAddressFormat( string $address_text ): void {
-		if ( ! self::isAddressFormat( $address_text ) ) {
-			throw new \InvalidArgumentException( '[66BDC040] Invalid address. - address: ' . $address_text );
-		}
-	}
-	/**
-	 * アドレスとして有効な値かどうかを返します。
-	 */
-	public static function isAddressFormat( string $address_text ): bool {
-		return Ethers::isAddress( $address_text );
-	}
-
-	/**
 	 * 引数として渡されたバージョンが現在の販売者向け利用規約バージョンと一致しない場合は例外をスローします。
 	 *
 	 * @param int $seller_terms_version
