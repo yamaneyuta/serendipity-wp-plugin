@@ -14,4 +14,5 @@ class TokenTableRecord extends TableRecordBase {
 	public string $address;
 	public string $symbol;
 	public int $decimals;
+	public bool $is_payable;
 }

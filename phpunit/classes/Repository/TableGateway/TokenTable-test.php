@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\ValueObject\Address;
 
 require_once 'includes/classes/Repository/RateData.php';
 
@@ -25,16 +25,16 @@ class TokenTableTest extends IntegrationTestBase {
 		$token_table->create();
 
 		// ACT
-		$token_table->insert( ChainID::PRIVATENET_L1, TestERC20Address::L1_TUSD(), 'TUSD', 18 );
+		$token_table->save( Token::from( ChainID::PRIVATENET_L1, TestERC20Address::L1_TUSD(), 'TUSD', 18, true ) );
 
-		$result = $token_table->select();
+		$result = $token_table->all();
 
 		// ASSERT
 		$this->assertEquals( 1, count( $result ) );
-		$this->assertEquals( ChainID::PRIVATENET_L1, $result[0]->chainID() );
-		$this->assertEquals( TestERC20Address::L1_TUSD()->value(), $result[0]->address()->value() );
-		$this->assertEquals( 'TUSD', $result[0]->symbol() );
-		$this->assertEquals( 18, $result[0]->decimals() );
+		$this->assertEquals( ChainID::PRIVATENET_L1, $result[0]->chain_id );
+		$this->assertEquals( TestERC20Address::L1_TUSD()->value(), $result[0]->address );
+		$this->assertEquals( 'TUSD', $result[0]->symbol );
+		$this->assertEquals( 18, $result[0]->decimals );
 	}
 	public function hostDataProvider() {
 		$hosts = ( new TestDBHosts() )->get();
@@ -59,15 +59,15 @@ class TokenTableTest extends IntegrationTestBase {
 		$token_table->create();
 
 		// ACT
-		$token_table->insert( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 );
+		$token_table->save( Token::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18, true ) );
 
 		// ASSERT
-		$result = $token_table->select();
+		$result = $token_table->all();
 		$this->assertEquals( 1, count( $result ) );
-		$this->assertEquals( ChainID::PRIVATENET_L1, $result[0]->chainID() );
-		$this->assertEquals( Ethers::zeroAddress(), $result[0]->address() );
-		$this->assertEquals( 'ETH', $result[0]->symbol() );
-		$this->assertEquals( 18, $result[0]->decimals() );
+		$this->assertEquals( ChainID::PRIVATENET_L1, $result[0]->chain_id );
+		$this->assertEquals( Ethers::zeroAddress(), $result[0]->address );
+		$this->assertEquals( 'ETH', $result[0]->symbol );
+		$this->assertEquals( 18, $result[0]->decimals );
 	}
 
 	/**
@@ -85,32 +85,32 @@ class TokenTableTest extends IntegrationTestBase {
 		$token_table->create();
 
 		// ACT
-		$token_table->insert( ChainID::PRIVATENET_L1, TestERC20Address::L1_TUSD(), 'TUSD', 18 );
-		$token_table->insert( ChainID::PRIVATENET_L2, TestERC20Address::L2_TUSD(), 'TUSD', 18 );
-		$token_table->insert( ChainID::PRIVATENET_L2, TestERC20Address::L2_TJPY(), 'TJPY', 18 );
+		$token_table->save( Token::from( ChainID::PRIVATENET_L1, TestERC20Address::L1_TUSD(), 'TUSD', 18, true ) );
+		$token_table->save( Token::from( ChainID::PRIVATENET_L2, TestERC20Address::L2_TUSD(), 'TUSD', 18, true ) );
+		$token_table->save( Token::from( ChainID::PRIVATENET_L2, TestERC20Address::L2_TJPY(), 'TJPY', 18, true ) );
 
-		$result_all = $token_table->select();
-		$result_eth = $token_table->select( ChainID::ETH_MAINNET );     // イーサリアムメインネットのトークン情報(追加していないため0件)
-		$result_l1  = $token_table->select( ChainID::PRIVATENET_L1 );    // プライベートネットL1のトークン情報(1件)
-		$result_l2  = $token_table->select( ChainID::PRIVATENET_L2 );    // プライベートネットL2のトークン情報(2件)
+		$result_all = $token_table->all();
+		$result_eth = $token_table->all( ChainID::ETH_MAINNET );     // イーサリアムメインネットのトークン情報(追加していないため0件)
+		$result_l1  = $token_table->all( ChainID::PRIVATENET_L1 );    // プライベートネットL1のトークン情報(1件)
+		$result_l2  = $token_table->all( ChainID::PRIVATENET_L2 );    // プライベートネットL2のトークン情報(2件)
 
 		// ASSERT
 		$this->assertEquals( 3, count( $result_all ) );
-		$result_all_l1 = array_filter( $result_all, fn( $ret ) => $ret->chainID() === ChainID::PRIVATENET_L1 );
-		$result_all_l2 = array_filter( $result_all, fn( $ret ) => $ret->chainID() === ChainID::PRIVATENET_L2 );
+		$result_all_l1 = array_filter( $result_all, fn( $ret ) => $ret->chain_id === ChainID::PRIVATENET_L1 );
+		$result_all_l2 = array_filter( $result_all, fn( $ret ) => $ret->chain_id === ChainID::PRIVATENET_L2 );
 		$this->assertEquals( 1, count( $result_all_l1 ) );
 		$this->assertEquals( 2, count( $result_all_l2 ) );
 
 		$this->assertEquals( 0, count( $result_eth ) );
 
 		$this->assertEquals( 1, count( $result_l1 ) );
-		$this->assertEquals( ChainID::PRIVATENET_L1, $result_l1[0]->chainID() );
-		$this->assertEquals( TestERC20Address::L1_TUSD()->value(), $result_l1[0]->address()->value() );
+		$this->assertEquals( ChainID::PRIVATENET_L1, $result_l1[0]->chain_id );
+		$this->assertEquals( TestERC20Address::L1_TUSD()->value(), $result_l1[0]->address );
 
 		$this->assertEquals( 2, count( $result_l2 ) );
-		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[0]->chainID() );
-		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[1]->chainID() );
-		$this->assertContains( TestERC20Address::L2_TUSD()->value(), array_map( fn( $ret ) => $ret->address()->value(), $result_l2 ) );
-		$this->assertContains( TestERC20Address::L2_TJPY()->value(), array_map( fn( $ret ) => $ret->address()->value(), $result_l2 ) );
+		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[0]->chain_id );
+		$this->assertEquals( ChainID::PRIVATENET_L2, $result_l2[1]->chain_id );
+		$this->assertContains( TestERC20Address::L2_TUSD()->value(), array_map( fn( $ret ) => $ret->address, $result_l2 ) );
+		$this->assertContains( TestERC20Address::L2_TJPY()->value(), array_map( fn( $ret ) => $ret->address, $result_l2 ) );
 	}
 }

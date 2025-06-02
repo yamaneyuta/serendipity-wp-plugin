@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
-use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Repository\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceTable;
@@ -17,7 +16,6 @@ use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 use Cornix\Serendipity\Core\Entity\Token;
 
 /**
@@ -90,17 +88,17 @@ class PayableTokensInitializer {
 		$payable_tokens = new PayableTokens();
 
 		// メインネット
-		$payable_tokens->save( ChainID::ETH_MAINNET, array( Token::from( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18 ) ) );
+		$payable_tokens->save( ChainID::ETH_MAINNET, array( Token::from( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18, true ) ) );
 
 		// テストネット
-		$payable_tokens->save( ChainID::SEPOLIA, array( Token::from( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18 ) ) );
+		$payable_tokens->save( ChainID::SEPOLIA, array( Token::from( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18, true ) ) );
 
 		// 開発モード時はプライベートネットも設定
 		if ( ( new Environment() )->isDevelopmentMode() ) {
 			// Privatenet L1
-			$payable_tokens->save( ChainID::PRIVATENET_L1, array( Token::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 ) ) );
+			$payable_tokens->save( ChainID::PRIVATENET_L1, array( Token::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18, true ) ) );
 			// Privatenet L2
-			$payable_tokens->save( ChainID::PRIVATENET_L2, array( Token::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18 ) ) );
+			$payable_tokens->save( ChainID::PRIVATENET_L2, array( Token::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18, true ) ) );
 		}
 	}
 }
@@ -213,16 +211,16 @@ class TokenTableRecordInitializer {
 		$token_table = new TokenTable( $this->wpdb );
 
 		// メインネットのネイティブトークンを登録
-		$token_table->insert( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18 );
+		$token_table->save( Token::from( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18, true ) );
 
 		// テストネットのネイティブトークンを登録
-		$token_table->insert( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18 );
-		$token_table->insert( ChainID::SONEIUM_MINATO, Ethers::zeroAddress(), 'ETH', 18 );
+		$token_table->save( Token::from( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18, true ) );
+		$token_table->save( TOken::from( ChainID::SONEIUM_MINATO, Ethers::zeroAddress(), 'ETH', 18, true ) );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( ( new Environment() )->isDevelopmentMode() ) {
-			$token_table->insert( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18 );
-			$token_table->insert( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18 );
+			$token_table->save( Token::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18, true ) );
+			$token_table->save( Token::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18, true ) );
 		}
 	}
 }

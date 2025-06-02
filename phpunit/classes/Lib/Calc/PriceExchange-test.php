@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\Price;
@@ -28,10 +29,10 @@ class PriceExchangeTest extends IntegrationTestBase {
 		$this->sut            = new PriceExchange( $this->rate_data_stub, $this->oracle_stub );
 
 		// ERC20トークンの情報をテーブルに保存
-		$token_table = new TokenTable();
-		$token_table->insert( ChainID::ETH_MAINNET, new Address( '0x0D8775F648430679A709E98d2b0Cb6250d2887EF' ), 'BAT', 18 );
-		$token_table->insert( ChainID::ETH_MAINNET, new Address( '0x514910771AF9Ca656af840dff83E8264EcF986CA' ), 'LINK', 18 );
-		$token_table->insert( ChainID::ETH_MAINNET, new Address( '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' ), 'USDC', 6 );
+		$token_table = new TokenTable( $GLOBALS['wpdb'] );
+		$token_table->save( Token::from( ChainID::ETH_MAINNET, new Address( '0x0D8775F648430679A709E98d2b0Cb6250d2887EF' ), 'BAT', 18, true ) );
+		$token_table->save( Token::from( ChainID::ETH_MAINNET, new Address( '0x514910771AF9Ca656af840dff83E8264EcF986CA' ), 'LINK', 18, true ) );
+		$token_table->save( Token::from( ChainID::ETH_MAINNET, new Address( '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' ), 'USDC', 6, true ) );
 
 		// $this->rate_data_mockのgetメソッドを任意の引数に対して任意の戻り値を返すように設定
 		$this->rate_data_stub->method( 'get' )->willReturnCallback(
