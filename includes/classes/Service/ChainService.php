@@ -28,7 +28,7 @@ class ChainService {
 	/** RPC URLを取得します */
 	public function rpcURL(): ?string {
 		$record = $this->record();
-		return is_null( $record ) ? null : $record->rpc_url;
+		return is_null( $record ) ? null : $record->rpcURL();
 	}
 
 	/** RPC URLを設定します */
@@ -40,7 +40,7 @@ class ChainService {
 	public function connectable(): bool {
 		$record = $this->record();
 		// RPC URLが設定されていれば接続可能とする
-		return ! is_null( $record ) && ! is_null( $record->rpc_url ) && ! empty( $record->rpc_url );
+		return ! is_null( $record ) && ! is_null( $record->rpcURL() ) && ! empty( $record->rpcURL() );
 	}
 
 	/** このチェーンのネットワークカテゴリを取得します */
@@ -60,7 +60,7 @@ class ChainService {
 	 */
 	public function confirmations() {
 		$record = $this->record();
-		return is_null( $record ) ? null : $record->confirmations;
+		return is_null( $record ) ? null : $record->confirmations();
 	}
 
 	/**

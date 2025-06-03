@@ -5,12 +5,19 @@ namespace Cornix\Serendipity\Core\ValueObject\TableRecord;
 
 use stdClass;
 
-class InvoiceNonceTableRecord {
+class InvoiceNonceTableRecord extends TableRecordBase {
 	public function __construct( stdClass $record ) {
-		$this->invoice_id = $record->invoice_id;
-		$this->nonce      = $record->nonce;
+		$this->import( $record );
 	}
 
-	public string $invoice_id;
-	public string $nonce;
+	protected string $invoice_id;
+	protected string $nonce;
+
+	public function invoiceID(): string {
+		return $this->invoice_id;
+	}
+
+	public function nonce(): string {
+		return $this->nonce;
+	}
 }

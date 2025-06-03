@@ -30,7 +30,7 @@ class ChainsService {
 	 * @return int[]
 	 */
 	public function chainIDs( NetworkCategory $network_category = null ): array {
-		$chain_ids = array_values( array_map( fn ( $record ) => $record->chain_id, $this->records() ) );
+		$chain_ids = array_values( array_map( fn ( $record ) => $record->chainID(), $this->records() ) );
 
 		if ( ! is_null( $network_category ) ) {
 			$chain_ids = array_values(

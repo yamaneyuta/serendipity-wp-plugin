@@ -5,9 +5,10 @@ namespace Cornix\Serendipity\Core\ValueObject\TableRecord;
 
 use stdClass;
 
-class TableRecordBase {
+abstract class TableRecordBase {
 	/**
 	 * このインスタンスのプロパティをレコードの値で初期化します。
+	 * ※ フィールドにアクセスできるように子クラスのフィールドはpublicまたはprotectedで定義してください。
 	 *
 	 * @param stdClass $record テーブルから取得したレコード
 	 */

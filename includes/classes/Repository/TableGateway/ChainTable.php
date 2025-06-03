@@ -74,7 +74,7 @@ class ChainTable {
 		if ( ! is_null( $chain_ID ) ) {
 			$chain_table_records = array_filter(
 				$chain_table_records,
-				fn( $record ) => $record->chain_id === $chain_ID
+				fn( $record ) => $record->chainID() === $chain_ID
 			);
 			assert( count( $chain_table_records ) <= 1, '[9A6ADAB1] should return at most one record.' );
 		}

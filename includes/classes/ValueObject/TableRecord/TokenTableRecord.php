@@ -10,9 +10,25 @@ class TokenTableRecord extends TableRecordBase {
 		$this->import( $record );
 	}
 
-	public int $chain_id;
-	public string $address;
-	public string $symbol;
-	public int $decimals;
-	public bool $is_payable;
+	protected int $chain_id;
+	protected string $address;
+	protected string $symbol;
+	protected int $decimals;
+	protected bool $is_payable;
+
+	public function chainID(): int {
+		return $this->chain_id;
+	}
+	public function address(): string {
+		return $this->address;
+	}
+	public function symbol(): string {
+		return $this->symbol;
+	}
+	public function decimals(): int {
+		return $this->decimals;
+	}
+	public function isPayable(): bool {
+		return $this->is_payable;
+	}
 }

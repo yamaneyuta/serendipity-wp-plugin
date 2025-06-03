@@ -75,9 +75,14 @@ class InvoiceTable extends TableBase {
 
 		$sql = $this->wpdb()->prepare( $sql, $invoice_ID->ulid() );
 
-		$result = $this->wpdb()->get_row( $sql );
+		$record = $this->wpdb()->get_row( $sql );
+		if ( null !== $record ) {
+			$record->post_id          = (int) $record->post_id;
+			$record->chain_id         = (int) $record->chain_id;
+			$record->selling_decimals = (int) $record->selling_decimals;
+		}
 
-		return is_null( $result ) ? null : new InvoiceTableRecord( $result );
+		return is_null( $record ) ? null : new InvoiceTableRecord( $record );
 	}
 
 	public function insert( InvoiceID $invoice_id, int $post_ID, int $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, string $payment_amount_hex, Address $consumer_address ) {

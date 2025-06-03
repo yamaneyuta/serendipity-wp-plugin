@@ -14,7 +14,7 @@ class SellableSymbols {
 	 *
 	 * @return string[]
 	 */
-	public function get( NetworkCategory $network_category ): array {
+	public function get( NetworkCategory $_ ): array {
 		// 方針: Oracleテーブルに登録されているbase及びquoteの通貨シンボルは販売可能な通貨シンボルとして扱う。
 		// 　　　その上で、現時点で販売価格として設定できるものはRPC URLが設定されているものとする。
 
