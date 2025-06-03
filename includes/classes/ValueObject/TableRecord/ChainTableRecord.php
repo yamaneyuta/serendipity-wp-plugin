@@ -10,8 +10,24 @@ class ChainTableRecord extends TableRecordBase {
 		$this->import( $record );
 	}
 
-	public int $chain_id;
-	public string $name;
-	public ?string $rpc_url;
-	public string $confirmations; // テーブル定義はvarcharなのでstring型で定義する
+	protected int $chain_id;
+	protected string $name;
+	protected ?string $rpc_url;
+	protected string $confirmations; // テーブル定義はvarcharなのでstring型で定義する
+
+	public function chainID(): int {
+		return $this->chain_id;
+	}
+
+	public function name(): string {
+		return $this->name;
+	}
+
+	public function rpcURL(): ?string {
+		return $this->rpc_url;
+	}
+
+	public function confirmations(): string {
+		return $this->confirmations;
+	}
 }

@@ -31,10 +31,10 @@ class Chain {
 
 	public static function fromTableRecord( ChainTableRecord $record ): self {
 		return new self(
-			$record->chain_id,
-			$record->name,
-			$record->rpc_url,
-			is_numeric( $record->confirmations ) ? (int) $record->confirmations : $record->confirmations,
+			$record->chainID(),
+			$record->name(),
+			$record->rpcURL(),
+			is_numeric( $record->confirmations() ) ? (int) $record->confirmations() : $record->confirmations(),
 		);
 	}
 
