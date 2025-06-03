@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\Service\TokenService;
 use Cornix\Serendipity\Core\ValueObject\Address;
 
 /**
@@ -24,24 +24,14 @@ class RegisterERC20TokenResolver extends ResolverBase {
 		/** @var null|bool */
 		$is_payable = $args['isPayable'] ?? null;
 
-		if ( ! is_bool( $is_payable ) ) {
+		if ( null === $address ) {
+			throw new \InvalidArgumentException( '[B42FC6FA] Invalid address provided.' );
+		} elseif ( ! is_bool( $is_payable ) ) {
 			throw new \InvalidArgumentException( '[E80F8B39] isPayable must be a boolean value.' );
 		}
 
-		// TODO: トークンのバイトコードを取得し、存在しない場合はエラーとする処理をここに追加
-
-		// ERC20トークンを登録
-		( new TokenData() )->addERC20( $chain_ID, $address );
-		// 支払可能状態を更新
-		if ( $is_payable ) {
-			$root_value['addPayableTokens'](
-				$root_value,
-				array(
-					'chainID'        => $chain_ID,
-					'tokenAddresses' => array( $address->value() ),
-				)
-			);
-		}
+		// トークン情報を保存
+		( new TokenService() )->saveERC20Token( $chain_ID, $address, $is_payable );
 
 		return true;
 	}

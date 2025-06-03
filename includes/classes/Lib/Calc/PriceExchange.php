@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
+use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
 use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Repository\RateData;
-use Cornix\Serendipity\Core\Repository\TokenData;
+use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\ValueObject\Price;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 use phpseclib\Math\BigInteger;
@@ -93,8 +95,9 @@ class PriceExchange {
 	 * ※ ネットワークを跨いだ比較を行い、最大値を取得します。
 	 */
 	private function getMaxDecimals( string $symbol ): int {
-		$token_data = ( new TokenData() )->select( null, null, $symbol );
-		$decimals   = array_map( fn( $token ) => $token->decimals(), $token_data );
+		$tokens_filter = ( new TokensFilter() )->bySymbol( $symbol );
+		$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
+		$decimals      = array_map( fn( Token $token ) => $token->decimals(), $tokens->toArray() );
 		return max( $decimals );
 	}
 

@@ -6,10 +6,14 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Lib\Option\ArrayOption;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\Entity\Tokens;
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
 use Cornix\Serendipity\Core\ValueObject\Address;
 
 /**
  * 管理者が設定した購入者が支払い可能なトークン一覧を取得または保存するクラス。
+ *
+ * @deprecated
  */
 class PayableTokens {
 
@@ -27,13 +31,11 @@ class PayableTokens {
 	 * 指定したチェーンIDで購入可能なトークン一覧を取得します。
 	 *
 	 * @param int $chain_ID
-	 * @return Token[]
+	 * @return Tokens
 	 */
-	public function get( int $chain_ID ): array {
-		$token_address_values = $this->getPayableTokenAddressesOption( $chain_ID )->get( array() );
-
-		// Tokenオブジェクトに変換
-		return array_map( fn( $token_address_value ) => ( new TokenData() )->get( $chain_ID, Address::from( $token_address_value ) ), $token_address_values );
+	public function get( int $chain_ID ): Tokens {
+		$tokens_filter = ( new TokensFilter() )->byIsPayable( true );
+		return $tokens_filter->apply( ( new TokenRepository() )->all() );
 	}
 
 	/**
@@ -66,12 +68,11 @@ class PayableTokens {
 	 * @param Token $token
 	 */
 	public function exists( Token $token ): bool {
-		/** @var Token[] */
 		$tokens = $this->get( $token->chainID() );
 
 		$token_address = $token->address();
 		return array_reduce(
-			$tokens,
+			$tokens->toArray(),
 			function ( $carry, $t ) use ( $token_address ) {
 				return $carry || $t->address()->equals( $token_address );
 			},

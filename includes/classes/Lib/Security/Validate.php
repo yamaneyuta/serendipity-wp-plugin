@@ -177,27 +177,6 @@ class Validate {
 		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
 	}
 
-
-	/** 購入者が支払可能なトークンかどうかを返します。 */
-	public static function isPayableToken( Token $token ): bool {
-		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
-		$payable_tokens = ( new PayableTokens() )->get( $token->chainID() );
-
-		return in_array( $token, $payable_tokens, true );
-	}
-
-	/**
-	 * 購入者が支払可能なトークンでない場合は例外をスローします。
-	 *
-	 * @param Token $token
-	 * @throws \InvalidArgumentException
-	 */
-	public static function checkPayableToken( Token $token ): void {
-		if ( ! self::isPayableToken( $token ) ) {
-			throw new \InvalidArgumentException( '[30970153] Invalid payable token. - chain id: ' . $token->chainID() . ', address: ' . $token->address() );
-		}
-	}
-
 	/**
 	 * 引数として渡されたバージョンが現在の販売者向け利用規約バージョンと一致しない場合は例外をスローします。
 	 *
