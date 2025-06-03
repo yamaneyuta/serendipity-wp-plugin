@@ -8,7 +8,6 @@ use Cornix\Serendipity\Core\Repository\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Repository\Name\ClassName;
-use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
@@ -149,16 +148,17 @@ class ContentIoHook {
 		}
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
-		$attributes        = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
-		$paid_content_data = new PaidContentData( $post_id );
+		$attributes   = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
+		$post_service = new PostService();
 		if ( is_null( $attributes ) ) {
 			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
-			$paid_content_data->delete();
+			$post_service->deletePaidContent( $post_id );
 		} else {
 			$paid_content = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
 			assert( ! is_null( $paid_content ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
 			// ウィジェットが含まれている場合は有料記事の情報を保存
-			$paid_content_data->save(
+			$post_service->savePaidContent(
+				$post_id,
 				$paid_content,
 				$attributes->sellingNetworkCategory(),
 				$attributes->sellingPrice()
@@ -178,7 +178,7 @@ class ContentIoHook {
 		}
 
 		// 投稿が削除された時に有料記事の情報も削除
-		( new PaidContentData( $post_id ) )->delete();
+		( new PostService() )->deletePaidContent( $post_id );
 	}
 
 	/**

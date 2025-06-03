@@ -27,11 +27,20 @@ class Post {
 	public function paidContent(): ?string {
 		return $this->paid_content;
 	}
+	public function setPaidContent( ?string $paid_content ): void {
+		$this->paid_content = $paid_content;
+	}
 	public function sellingNetworkCategory(): ?NetworkCategory {
 		return $this->selling_network_category;
 	}
+	public function setSellingNetworkCategory( ?NetworkCategory $selling_network_category ): void {
+		$this->selling_network_category = $selling_network_category;
+	}
 	public function sellingPrice(): ?Price {
 		return $this->selling_price;
+	}
+	public function setSellingPrice( ?Price $selling_price ): void {
+		$this->selling_price = $selling_price;
 	}
 
 	public static function fromTableRecord( PaidContentTableRecord $record ): self {

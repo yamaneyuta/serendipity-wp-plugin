@@ -28,4 +28,20 @@ class PostRepository {
 
 		return $record ? Post::fromTableRecord( $record ) : new Post( $post_id, null, null, null );
 	}
+
+	public function save( Post $post ): void {
+
+		if ( null === $post->paidContent() ) {
+			// 有料記事の内容がnullの場合は、テーブルから削除
+			$this->paid_content_table->delete( $post->id() );
+		} else {
+			// 有料記事の内容がある場合は、テーブルに保存
+			$this->paid_content_table->set(
+				$post->id(),
+				$post->paidContent(),
+				$post->sellingNetworkCategory(),
+				$post->sellingPrice()
+			);
+		}
+	}
 }

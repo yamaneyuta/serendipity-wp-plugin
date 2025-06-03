@@ -34,10 +34,10 @@ class PaidContentTable extends TableBase {
 				`updated_at`                   timestamp            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`post_id`                      bigint     unsigned  NOT NULL,
 				`paid_content`                 longtext             NOT NULL,
-				`selling_network_category_id`  int                  NOT NULL,
-				`selling_amount_hex`           varchar(191)         NOT NULL,
-				`selling_decimals`             int                  NOT NULL,
-				`selling_symbol`               varchar(191)         NOT NULL,
+				`selling_network_category_id`  int,
+				`selling_amount_hex`           varchar(191),
+				`selling_decimals`             int,
+				`selling_symbol`               varchar(191),
 				PRIMARY KEY (`post_id`)
 			) {$charset};
 		SQL;
