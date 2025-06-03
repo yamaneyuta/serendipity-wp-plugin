@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\ValueObject\Price;
 class PaidContentData {
 	public function __construct( int $post_ID ) {
 		$this->post_ID = $post_ID;
-		$this->table   = new PaidContentTable();
+		$this->table   = new PaidContentTable( $GLOBALS['wpdb'] );
 	}
 	private int $post_ID;
 	private PaidContentTable $table;

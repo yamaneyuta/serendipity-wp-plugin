@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
-use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
@@ -11,17 +10,11 @@ use Cornix\Serendipity\Core\ValueObject\Price;
 /**
  * 有料記事の情報を記録するテーブル
  */
-class PaidContentTable {
+class PaidContentTable extends TableBase {
 
-	public function __construct( \wpdb $wpdb = null ) {
-		$this->wpdb       = $wpdb ?? $GLOBALS['wpdb'];
-		$this->mysqli     = ( new MySQLiFactory() )->create( $this->wpdb );
-		$this->table_name = ( new TableName() )->paidContent();
+	public function __construct( \wpdb $wpdb ) {
+		parent::__construct( $wpdb, ( new TableName() )->paidContent() );
 	}
-
-	private \wpdb $wpdb;
-	private \mysqli $mysqli;
-	private string $table_name;
 
 	/**
 	 * テーブルを作成します。
@@ -33,9 +26,9 @@ class PaidContentTable {
 		// 投稿が削除された場合や、リビジョンが削除された場合は
 		// このテーブルからも削除されます。(Hooksディレクトリ内を参照)
 
-		$charset = $this->wpdb->get_charset_collate();
+		$charset = $this->wpdb()->get_charset_collate();
 		$sql     = <<<SQL
-			CREATE TABLE `{$this->table_name}` (
+			CREATE TABLE `{$this->tableName()}` (
 				`created_at`                   timestamp            NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`                   timestamp            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`post_id`                      bigint     unsigned  NOT NULL,
@@ -48,7 +41,7 @@ class PaidContentTable {
 			) {$charset};
 		SQL;
 
-		$result = $this->mysqli->query( $sql );
+		$result = $this->mysqli()->query( $sql );
 		assert( true === $result );
 	}
 
@@ -67,12 +60,12 @@ class PaidContentTable {
 	public function select( int $post_id ) {
 		$sql = <<<SQL
 			SELECT *
-			FROM `{$this->table_name}`
+			FROM `{$this->tableName()}`
 			WHERE `post_id` = %d
 		SQL;
 
-		$sql    = $this->wpdb->prepare( $sql, $post_id );
-		$result = $this->wpdb->get_row( $sql );
+		$sql    = $this->wpdb()->prepare( $sql, $post_id );
+		$result = $this->wpdb()->get_row( $sql );
 
 		if ( ! is_null( $result ) ) {
 			$result->post_id                     = (int) $result->post_id;
@@ -85,7 +78,7 @@ class PaidContentTable {
 
 	public function set( int $post_id, string $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
 		$sql = <<<SQL
-			INSERT INTO `{$this->table_name}` (
+			INSERT INTO `{$this->tableName()}` (
 				`post_id`,
 				`paid_content`,
 				`selling_network_category_id`,
@@ -107,7 +100,7 @@ class PaidContentTable {
 		$selling_price_decimals      = is_null( $selling_price ) ? null : $selling_price->decimals();
 		$selling_price_symbol        = is_null( $selling_price ) ? null : $selling_price->symbol();
 
-		$sql = $this->wpdb->prepare(
+		$sql = $this->wpdb()->prepare(
 			$sql,
 			array(
 				$post_id,
@@ -124,7 +117,7 @@ class PaidContentTable {
 			)
 		);
 
-		$result = $this->wpdb->query( $sql );
+		$result = $this->wpdb()->query( $sql );
 
 		if ( false === $result ) {
 			throw new \Exception( '[8DAB2BCF] Failed to set paid content data.' );
@@ -134,11 +127,11 @@ class PaidContentTable {
 
 	public function delete( int $post_id ): void {
 		$sql = <<<SQL
-			DELETE FROM `{$this->table_name}` WHERE `post_id` = %d
+			DELETE FROM `{$this->tableName()}` WHERE `post_id` = %d
 		SQL;
 
-		$sql    = $this->wpdb->prepare( $sql, $post_id );
-		$result = $this->wpdb->query( $sql );
+		$sql    = $this->wpdb()->prepare( $sql, $post_id );
+		$result = $this->wpdb()->query( $sql );
 
 		if ( false === $result ) {
 			throw new \Exception( '[C40F74D9] Failed to delete paid content data.' );
@@ -150,18 +143,6 @@ class PaidContentTable {
 	 * テーブルが存在するかどうかを取得します。
 	 */
 	public function exists(): bool {
-		return (bool) $this->wpdb->get_var( "SHOW TABLES LIKE '{$this->table_name}'" );
-	}
-
-	/**
-	 * テーブルを削除します。
-	 */
-	public function drop(): void {
-		$sql = <<<SQL
-			DROP TABLE IF EXISTS `{$this->table_name}`;
-		SQL;
-
-		$result = $this->mysqli->query( $sql );
-		assert( true === $result );
+		return (bool) $this->wpdb()->get_var( "SHOW TABLES LIKE '{$this->tableName()}'" );
 	}
 }

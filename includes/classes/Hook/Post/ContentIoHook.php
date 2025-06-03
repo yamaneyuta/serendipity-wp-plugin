@@ -167,7 +167,7 @@ class ContentIoHook {
 		// テスト実行中、テストツールによって投稿が削除される。
 		// その際、このフックが呼び出されるが、テーブル作成前に呼び出されるとエラーになるため
 		// テスト中かつテーブルが存在しない場合は何もしない
-		if ( ( new Environment() )->isTesting() && ! ( new PaidContentTable() )->exists() ) {
+		if ( ( new Environment() )->isTesting() && ! ( new PaidContentTable( $GLOBALS['wpdb'] ) )->exists() ) {
 			return; // テスト中に限り、テーブルが存在しない場合は何もしない
 		}
 
