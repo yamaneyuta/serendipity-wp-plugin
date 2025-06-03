@@ -36,18 +36,18 @@ class Invoice {
 
 	public static function fromTableRecord( InvoiceTableRecord $invoice_record, ?InvoiceNonceTableRecord $invoice_nonce_record ): self {
 		return new self(
-			InvoiceID::from( $invoice_record->id ),
-			$invoice_record->post_id,
-			$invoice_record->chain_id,
+			InvoiceID::from( $invoice_record->id() ),
+			$invoice_record->postID(),
+			$invoice_record->chainID(),
 			new Price(
-				$invoice_record->selling_amount_hex,
-				$invoice_record->selling_decimals,
-				$invoice_record->selling_symbol
+				$invoice_record->sellingAmountHex(),
+				$invoice_record->sellingDecimals(),
+				$invoice_record->sellingSymbol()
 			),
-			Address::from( $invoice_record->seller_address ),
-			Address::from( $invoice_record->payment_token_address ),
-			$invoice_record->payment_amount_hex,
-			Address::from( $invoice_record->consumer_address ),
+			Address::from( $invoice_record->sellerAddress() ),
+			Address::from( $invoice_record->paymentTokenAddress() ),
+			$invoice_record->paymentAmountHex(),
+			Address::from( $invoice_record->consumerAddress() ),
 			( $invoice_nonce_record ? new InvoiceNonce( $invoice_nonce_record->nonce() ) : null )
 		);
 	}
