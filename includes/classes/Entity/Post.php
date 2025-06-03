@@ -44,15 +44,20 @@ class Post {
 	}
 
 	public static function fromTableRecord( PaidContentTableRecord $record ): self {
+		$selling_amount_hex = $record->sellingAmountHex();
+		$selling_decimals = $record->sellingDecimals();
+		$selling_symbol = $record->sellingSymbol();
+		if ( null === $selling_amount_hex || null === $selling_decimals || null === $selling_symbol ) {
+			$selling_price = null;
+		} else {
+			$selling_price = new Price( $selling_amount_hex, $selling_decimals, $selling_symbol );
+		}
+
 		return new self(
 			$record->postID(),
 			$record->paidContent(),
 			NetworkCategory::from( $record->sellingNetworkCategoryID() ),
-			new Price(
-				$record->sellingAmountHex(),
-				$record->sellingDecimals(),
-				$record->sellingSymbol()
-			)
+			$selling_price,
 		);
 	}
 }

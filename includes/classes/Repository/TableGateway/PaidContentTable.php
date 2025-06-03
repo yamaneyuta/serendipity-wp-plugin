@@ -61,14 +61,19 @@ class PaidContentTable extends TableBase {
 
 		if ( ! is_null( $row ) ) {
 			$row->post_id                     = (int) $row->post_id;
-			$row->selling_network_category_id = (int) $row->selling_network_category_id;
-			$row->selling_decimals            = (int) $row->selling_decimals;
+			$row->selling_network_category_id = is_null( $row->selling_network_category_id ) ? null : (int) $row->selling_network_category_id;
+			$row->selling_decimals            = is_null( $row->selling_decimals ) ? null : (int) $row->selling_decimals;
 		}
 
 		return is_null( $row ) ? null : new PaidContentTableRecord( $row );
 	}
 
 	public function set( int $post_id, string $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
+		$selling_network_category_id = is_null( $selling_network_category ) ? null : $selling_network_category->id();
+		$selling_price_amount_hex    = is_null( $selling_price ) ? null : $selling_price->amountHex();
+		$selling_price_decimals      = is_null( $selling_price ) ? null : $selling_price->decimals();
+		$selling_price_symbol        = is_null( $selling_price ) ? null : $selling_price->symbol();
+
 		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}` (
 				`post_id`,
@@ -78,34 +83,24 @@ class PaidContentTable extends TableBase {
 				`selling_decimals`,
 				`selling_symbol`
 			) VALUES (
-				%d, %s, %d, %s, %d, %s
+				:post_id, :paid_content, :selling_network_category_id, :selling_amount_hex, :selling_decimals, :selling_symbol
 			) ON DUPLICATE KEY UPDATE
-				`paid_content` = %s,
-				`selling_network_category_id` = %d,
-				`selling_amount_hex` = %s,
-				`selling_decimals` = %d,
-				`selling_symbol` = %s
+				`paid_content` = :paid_content,
+				`selling_network_category_id` = :selling_network_category_id,
+				`selling_amount_hex` = :selling_amount_hex,
+				`selling_decimals` = :selling_decimals,
+				`selling_symbol` = :selling_symbol
 		SQL;
 
-		$selling_network_category_id = is_null( $selling_network_category ) ? null : $selling_network_category->id();
-		$selling_price_amount_hex    = is_null( $selling_price ) ? null : $selling_price->amountHex();
-		$selling_price_decimals      = is_null( $selling_price ) ? null : $selling_price->decimals();
-		$selling_price_symbol        = is_null( $selling_price ) ? null : $selling_price->symbol();
-
-		$sql = $this->wpdb()->prepare(
+		$sql = $this->namedPrepare(
 			$sql,
 			array(
-				$post_id,
-				$paid_content,
-				$selling_network_category_id,
-				$selling_price_amount_hex,
-				$selling_price_decimals,
-				$selling_price_symbol,
-				$paid_content,
-				$selling_network_category_id,
-				$selling_price_amount_hex,
-				$selling_price_decimals,
-				$selling_price_symbol,
+				':post_id'                     => $post_id,
+				':paid_content'                => $paid_content,
+				':selling_network_category_id' => $selling_network_category_id,
+				':selling_amount_hex'          => $selling_price_amount_hex,
+				':selling_decimals'            => $selling_price_decimals,
+				':selling_symbol'              => $selling_price_symbol,
 			)
 		);
 
