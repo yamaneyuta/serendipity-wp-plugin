@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Repository\TableGateway;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\PaidContentTableRecord;
 
 /**
  * 有料記事の情報を記録するテーブル
@@ -46,34 +47,25 @@ class PaidContentTable extends TableBase {
 	}
 
 	/**
-	 * @return null|object{
-	 *   created_at: string,
-	 *   updated_at: string,
-	 *   post_id: int,
-	 *   paid_content: string,
-	 *   selling_network_category_id: int,
-	 *   selling_amount_hex: string,
-	 *   selling_decimals: int,
-	 *   selling_symbol: string
-	 * }
+	 * @return null|PaidContentTableRecord
 	 */
 	public function select( int $post_id ) {
 		$sql = <<<SQL
-			SELECT *
+			SELECT `post_id`, `paid_content`, `selling_network_category_id`, `selling_amount_hex`, `selling_decimals`, `selling_symbol`
 			FROM `{$this->tableName()}`
 			WHERE `post_id` = %d
 		SQL;
 
-		$sql    = $this->wpdb()->prepare( $sql, $post_id );
-		$result = $this->wpdb()->get_row( $sql );
+		$sql = $this->wpdb()->prepare( $sql, $post_id );
+		$row = $this->wpdb()->get_row( $sql );
 
-		if ( ! is_null( $result ) ) {
-			$result->post_id                     = (int) $result->post_id;
-			$result->selling_network_category_id = (int) $result->selling_network_category_id;
-			$result->selling_decimals            = (int) $result->selling_decimals;
+		if ( ! is_null( $row ) ) {
+			$row->post_id                     = (int) $row->post_id;
+			$row->selling_network_category_id = (int) $row->selling_network_category_id;
+			$row->selling_decimals            = (int) $row->selling_decimals;
 		}
 
-		return $result;
+		return is_null( $row ) ? null : new PaidContentTableRecord( $row );
 	}
 
 	public function set( int $post_id, string $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
