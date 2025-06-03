@@ -11,6 +11,13 @@ class AppContract {
 		$this->address = $address;
 	}
 
-	public Chain $chain;
-	public Address $address;
+	private Chain $chain;
+	private Address $address;
+
+	public function chain(): Chain {
+		return $this->chain;
+	}
+	public function address(): Address {
+		return $this->address;
+	}
 }
