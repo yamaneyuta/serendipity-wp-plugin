@@ -79,7 +79,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		$server_message = SolidityStrings::valueToHexString( $chain_ID )
 			. SolidityStrings::addressToHexString( $seller_address )
 			. SolidityStrings::addressToHexString( $consumer_address )
-			. SolidityStrings::valueToHexString( $invoice->id->hex() )
+			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
 			. SolidityStrings::valueToHexString( $post_ID )
 			. SolidityStrings::addressToHexString( $token_address )
 			. SolidityStrings::valueToHexString( $payment_amount_hex )
@@ -98,8 +98,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		}
 
 		return array(
-			'invoiceIdHex'     => $invoice->id->hex(),
-			'nonce'            => $invoice->nonce->value(),
+			'invoiceIdHex'     => $invoice->id()->hex(),
+			'nonce'            => $invoice->nonce()->value(),
 			'serverMessage'    => $server_message,
 			'serverSignature'  => $server_signature,
 			'paymentAmountHex' => $payment_amount_hex,

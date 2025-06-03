@@ -43,7 +43,7 @@ class InvoiceService {
 			$consumer_address,
 			InvoiceNonce::generate() // 新規nonce
 		);
-		assert( $this->invoice_repository->exists( $invoice->id ) === false, '[A9E90E49] Duplicate invoice ID detected.' );
+		assert( $this->invoice_repository->exists( $invoice->id() ) === false, '[A9E90E49] Duplicate invoice ID detected.' );
 
 		// 請求書情報を保存
 		$this->invoice_repository->add( $invoice );

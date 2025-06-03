@@ -25,19 +25,19 @@ class InvoiceRepository {
 	public function add( Invoice $invoice ): void {
 		// 請求書情報を保存
 		$invoice_ID = $this->invoice_table->insert(
-			$invoice->id,
-			$invoice->post_ID,
-			$invoice->chain_ID,
-			$invoice->selling_price,
-			$invoice->seller_address,
-			$invoice->payment_token_address,
-			$invoice->payment_amount_hex,
-			$invoice->consumer_address
+			$invoice->id(),
+			$invoice->postID(),
+			$invoice->chainID(),
+			$invoice->sellingPrice(),
+			$invoice->sellerAddress(),
+			$invoice->paymentTokenAddress(),
+			$invoice->paymentAmountHex(),
+			$invoice->consumerAddress()
 		);
 
 		// 請求書に紐づくnonceを保存
-		if ( ! is_null( $invoice->nonce ) ) {
-			$this->invoice_nonce_table->setNonce( $invoice_ID, $invoice->nonce );
+		if ( ! is_null( $invoice->nonce() ) ) {
+			$this->invoice_nonce_table->setNonce( $invoice_ID, $invoice->nonce() );
 		}
 	}
 
