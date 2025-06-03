@@ -1,0 +1,38 @@
+<?php
+declare(strict_types=1);
+
+namespace Cornix\Serendipity\Core\Lib\Algorithm\Filter;
+
+use Cornix\Serendipity\Core\Entity\Oracle;
+use Cornix\Serendipity\Core\Entity\Oracles;
+use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\SymbolPair;
+
+class OraclesFilter {
+
+	private array $filters = array();
+
+	public function byChainID( int $chain_id ): self {
+		$this->filters[] = fn ( Oracle $oracle ) => $oracle->chainID() === $chain_id;
+		return $this;
+	}
+	public function byAddress( Address $address ): self {
+		$this->filters[] = fn ( Oracle $oracle ) => $oracle->oracleAddress()->equals( $address );
+		return $this;
+	}
+	public function bySymbolPair( SymbolPair $symbol_pair ): self {
+		$this->filters[] = fn ( Oracle $oracle ) => $oracle->baseSymbol() === $symbol_pair->base()
+			&& $oracle->quoteSymbol() === $symbol_pair->quote();
+		return $this;
+	}
+
+	/**
+	 * フィルタを適用した結果を返します。
+	 */
+	public function apply( Oracles $oracles ): Oracles {
+		foreach ( $this->filters as $filter ) {
+			$oracles = $oracles->filter( $filter );
+		}
+		return $oracles;
+	}
+}
