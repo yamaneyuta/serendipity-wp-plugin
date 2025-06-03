@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Database;
+namespace Cornix\Serendipity\Core\Repository\TableGateway;
+
+use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 
 abstract class TableBase implements ITable {
 	public function __construct( \wpdb $wpdb, string $table_name ) {
