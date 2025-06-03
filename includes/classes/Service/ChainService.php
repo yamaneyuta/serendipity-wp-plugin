@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 class ChainService {
 	public function __construct( int $chian_ID, ?\wpdb $wpdb = null ) {
 		$this->chain_ID    = $chian_ID;
-		$this->chain_table = new ChainTable( $wpdb );
+		$this->chain_table = new ChainTable( $wpdb ?? $GLOBALS['wpdb'] );
 	}
 
 	private int $chain_ID;

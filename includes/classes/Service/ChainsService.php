@@ -11,8 +11,8 @@ use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
  * 本プラグインで扱うチェーンの情報を取得するクラス
  */
 class ChainsService {
-	public function __construct() {
-		$this->chain_table = new ChainTable();
+	public function __construct( \wpdb $wpdb = null ) {
+		$this->chain_table = new ChainTable( $wpdb ?? $GLOBALS['wpdb'] );
 	}
 
 	private ChainTable $chain_table;
