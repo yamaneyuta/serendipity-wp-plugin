@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
-use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\TableRecord\OracleTableRecord;
@@ -11,27 +10,21 @@ use Cornix\Serendipity\Core\ValueObject\TableRecord\OracleTableRecord;
 /**
  * Oracleの情報を記録するテーブル
  */
-class OracleTable {
+class OracleTable extends TableBase {
 
-	public function __construct( \wpdb $wpdb = null ) {
-		$this->wpdb       = $wpdb ?? $GLOBALS['wpdb'];
-		$this->mysqli     = ( new MySQLiFactory() )->create( $this->wpdb );
-		$this->table_name = ( new TableName() )->oracle();
+	public function __construct( \wpdb $wpdb ) {
+		parent::__construct( $wpdb, ( new TableName() )->oracle() );
 	}
-
-	private \wpdb $wpdb;
-	private \mysqli $mysqli;
-	private string $table_name;
 
 	/**
 	 * テーブルを作成します。
 	 */
 	public function create(): void {
-		$charset         = $this->wpdb->get_charset_collate();
-		$unique_key_name = "uq_{$this->table_name}_C269159C";
+		$charset         = $this->wpdb()->get_charset_collate();
+		$unique_key_name = "uq_{$this->tableName()}_C269159C";
 
 		$sql = <<<SQL
-			CREATE TABLE `{$this->table_name}` (
+			CREATE TABLE `{$this->tableName()}` (
 				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`chain_id`       bigint        unsigned  NOT NULL,
@@ -43,7 +36,7 @@ class OracleTable {
 			) {$charset};
 		SQL;
 
-		$result = $this->mysqli->query( $sql );
+		$result = $this->mysqli()->query( $sql );
 		assert( true === $result );
 	}
 
@@ -56,10 +49,10 @@ class OracleTable {
 		// Oracleのデータ量は少ないので絞り込みは上位で行う
 		$sql = <<<SQL
 			SELECT `chain_id`, `address`, `base_symbol`, `quote_symbol`
-			FROM `{$this->table_name}`
+			FROM `{$this->tableName()}`
 		SQL;
 
-		$result = $this->wpdb->get_results( $sql );
+		$result = $this->wpdb()->get_results( $sql );
 		if ( false === $result ) {
 			throw new \Exception( '[AE20156F] Failed to get oracle data.' );
 		}
@@ -86,28 +79,16 @@ class OracleTable {
 		Validate::checkSymbol( $quote_symbol );
 
 		$sql = <<<SQL
-			INSERT INTO `{$this->table_name}`
+			INSERT INTO `{$this->tableName()}`
 			(`chain_id`, `address`, `base_symbol`, `quote_symbol`)
 			VALUES (%d, %s, %s, %s)
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $chain_ID, $address, $base_symbol, $quote_symbol );
+		$sql = $this->wpdb()->prepare( $sql, $chain_ID, $address, $base_symbol, $quote_symbol );
 
-		$result = $this->wpdb->query( $sql );
+		$result = $this->wpdb()->query( $sql );
 		if ( false === $result ) {
 			throw new \Exception( '[91E6A6C0] Failed to add oracle data.' );
 		}
-	}
-
-	/**
-	 * テーブルを削除します。
-	 */
-	public function drop(): void {
-		$sql = <<<SQL
-			DROP TABLE IF EXISTS `{$this->table_name}`;
-		SQL;
-
-		$result = $this->mysqli->query( $sql );
-		assert( true === $result );
 	}
 }
