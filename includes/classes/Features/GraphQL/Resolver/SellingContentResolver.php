@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Post\ContentAnalyzer;
-use Cornix\Serendipity\Core\Repository\PaidContentData;
+use Cornix\Serendipity\Core\Service\PostService;
 
 class SellingContentResolver extends ResolverBase {
 
@@ -23,7 +23,7 @@ class SellingContentResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new PaidContentData( $post_ID ) )->content();
+		$paid_content = ( new PostService() )->get( $post_ID )->paidContent();
 
 		// 有料部分のコンテンツが取得できなかった場合はnullを返す
 		if ( null === $paid_content ) {

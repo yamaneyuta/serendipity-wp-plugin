@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\ValueObject\TableRecord\PaidContentTableRecord;
 
 class Post {
 
-	public function __construct( int $post_id, string $paid_content, NetworkCategory $selling_network_category, Price $selling_price ) {
+	public function __construct( int $post_id, ?string $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ) {
 		$this->post_id                  = $post_id;
 		$this->paid_content             = $paid_content;
 		$this->selling_network_category = $selling_network_category;
@@ -17,20 +17,20 @@ class Post {
 	}
 
 	private int $post_id;
-	private string $paid_content;
-	private Price $selling_price;
-	private NetworkCategory $selling_network_category;
+	private ?string $paid_content;
+	private ?Price $selling_price;
+	private ?NetworkCategory $selling_network_category;
 
 	public function id(): int {
 		return $this->post_id;
 	}
-	public function paidContent(): string {
+	public function paidContent(): ?string {
 		return $this->paid_content;
 	}
-	public function sellingNetworkCategory(): NetworkCategory {
+	public function sellingNetworkCategory(): ?NetworkCategory {
 		return $this->selling_network_category;
 	}
-	public function sellingPrice(): Price {
+	public function sellingPrice(): ?Price {
 		return $this->selling_price;
 	}
 

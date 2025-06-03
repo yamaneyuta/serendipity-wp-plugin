@@ -17,8 +17,15 @@ class PostRepository {
 	/**
 	 * 指定した投稿IDの情報を取得します
 	 */
-	public function get( int $post_id ): ?Post {
+	public function get( int $post_id ): Post {
+		if ( false === get_post_status( $post_id ) ) {
+			// 投稿が存在しない場合は例外を投げる
+			throw new \InvalidArgumentException( "[7D8F3E0D] Post with ID {$post_id} does not exist." );
+		}
+
+		// テーブルから有料記事情報を取得
 		$record = $this->paid_content_table->select( $post_id );
-		return null === $record ? null : Post::fromTableRecord( $record );
+
+		return $record ? Post::fromTableRecord( $record ) : new Post( $post_id, null, null, null );
 	}
 }
