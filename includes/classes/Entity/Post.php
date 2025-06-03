@@ -45,8 +45,8 @@ class Post {
 
 	public static function fromTableRecord( PaidContentTableRecord $record ): self {
 		$selling_amount_hex = $record->sellingAmountHex();
-		$selling_decimals = $record->sellingDecimals();
-		$selling_symbol = $record->sellingSymbol();
+		$selling_decimals   = $record->sellingDecimals();
+		$selling_symbol     = $record->sellingSymbol();
 		if ( null === $selling_amount_hex || null === $selling_decimals || null === $selling_symbol ) {
 			$selling_price = null;
 		} else {
