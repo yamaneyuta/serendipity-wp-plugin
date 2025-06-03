@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\TokenData;
+use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Repository\TokenRepository;
 
 class ChainResolver extends ResolverBase {
 
@@ -36,8 +38,11 @@ class ChainResolver extends ResolverBase {
 		$tokens_callback = function () use ( $root_value, $chain ) {
 			Validate::checkHasAdminRole(); // 管理者権限が必要
 
+			$tokens_filter = ( new TokensFilter() )->byChainID( $chain->id );
+			$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
+
 			return array_map(
-				function ( $token ) use ( $root_value ) {
+				function ( Token $token ) use ( $root_value ) {
 					return $root_value['token'](
 						$root_value,
 						array(
@@ -46,7 +51,7 @@ class ChainResolver extends ResolverBase {
 						)
 					);
 				},
-				( new TokenData() )->select( $chain->id )
+				$tokens->toArray()
 			);
 		};
 

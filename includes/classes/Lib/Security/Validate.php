@@ -5,12 +5,9 @@ namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Constant\ChainID;
-use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
-use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
-use Cornix\Serendipity\Core\Entity\Token;
 
 /**
  * 本システムにおいて`check～`は、引数の値を検証し、不正な値の場合は例外をスローする動作を行います。
@@ -175,27 +172,6 @@ class Validate {
 	public static function isSymbol( string $symbol ): bool {
 		// 様々な通貨記号が存在するため、空文字列以外であれば有効とする。
 		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
-	}
-
-
-	/** 購入者が支払可能なトークンかどうかを返します。 */
-	public static function isPayableToken( Token $token ): bool {
-		// 管理者が保存した、購入者が支払時に使用可能なトークン一覧を取得
-		$payable_tokens = ( new PayableTokens() )->get( $token->chainID() );
-
-		return in_array( $token, $payable_tokens, true );
-	}
-
-	/**
-	 * 購入者が支払可能なトークンでない場合は例外をスローします。
-	 *
-	 * @param Token $token
-	 * @throws \InvalidArgumentException
-	 */
-	public static function checkPayableToken( Token $token ): void {
-		if ( ! self::isPayableToken( $token ) ) {
-			throw new \InvalidArgumentException( '[30970153] Invalid payable token. - chain id: ' . $token->chainID() . ', address: ' . $token->address() );
-		}
 	}
 
 	/**

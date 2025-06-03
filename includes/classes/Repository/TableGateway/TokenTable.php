@@ -3,137 +3,103 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
-use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
-use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Entity\Token;
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\Lib\Database\TableBase;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\TokenTableRecord;
 
 /**
  * トークンの情報を記録するテーブル
- * ※ ユーザーが登録するERC20等のデータ。ネイティブトークンに関してはプラグインアップデート時に不具合が入りそうなので記録しない。(ネイティブトークンの定義はPHPファイルで行う)
  */
-class TokenTable {
+class TokenTable extends TableBase {
 
-	public function __construct( \wpdb $wpdb = null ) {
-		$this->wpdb       = $wpdb ?? $GLOBALS['wpdb'];
-		$this->mysqli     = ( new MySQLiFactory() )->create( $this->wpdb );
-		$this->table_name = ( new TableName() )->token();
+	public function __construct( \wpdb $wpdb ) {
+		parent::__construct( $wpdb, ( new TableName() )->token() );
 	}
-
-	private \wpdb $wpdb;
-	private \mysqli $mysqli;
-	private string $table_name;
 
 	/**
 	 * テーブルを作成します。
 	 */
 	public function create(): void {
-		$charset = $this->wpdb->get_charset_collate();
+		$charset = $this->wpdb()->get_charset_collate();
 
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
-			CREATE TABLE `{$this->table_name}` (
+			CREATE TABLE `{$this->tableName()}` (
 				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`chain_id`       bigint        unsigned  NOT NULL,
 				`address`        varchar(191)            NOT NULL,
 				`symbol`         varchar(191)            NOT NULL,
 				`decimals`       int                     NOT NULL,
+				`is_payable`     boolean                 NOT NULL,
 				PRIMARY KEY (`chain_id`, `address`)
 			) {$charset};
 		SQL;
 
-		$result = $this->mysqli->query( $sql );
-		assert( true === $result );
+		$result = $this->mysqli()->query( $sql );
+		if ( true !== $result ) {
+			throw new \RuntimeException( '[] Failed to create token table. ' . $this->mysqli()->error );
+		}
 	}
 
 	/**
-	 * ネイティブトークンを除くトークンデータ一覧を取得します。
-	 * パラメータでチェーンID、アドレス、シンボルを指定することで絞り込みができます。
+	 * テーブルに保存されているトークンデータ一覧を取得します。
 	 *
-	 * @param int|null     $chain_ID チェーンID
-	 * @param Address|null $address トークンアドレス
-	 * @param string|null  $symbol トークンシンボル
-	 * @return Token[]
+	 * @return TokenTableRecord[]
 	 */
-	public function select( ?int $chain_ID = null, ?Address $contract_address = null, ?string $symbol = null ): array {
+	public function all(): array {
 		$sql = <<<SQL
-			SELECT `chain_id`, `address`, `symbol`, `decimals`
-			FROM `{$this->table_name}`
+			SELECT `chain_id`, `address`, `symbol`, `decimals`, `is_payable`
+			FROM `{$this->tableName()}`
 		SQL;
 
-		// 条件がある場合はWHERE句を追加
-		$wheres = array();
-		if ( ! is_null( $chain_ID ) ) {
-			Validate::checkChainID( $chain_ID );
-			$wheres[] = $this->wpdb->prepare( '`chain_id` = %d', $chain_ID );
-		}
-		if ( ! is_null( $contract_address ) ) {
-			$wheres[] = $this->wpdb->prepare( '`address` = %s', (string) $contract_address );
-		}
-		if ( ! is_null( $symbol ) ) {
-			Validate::checkSymbol( $symbol );
-			$wheres[] = $this->wpdb->prepare( '`symbol` = %s', $symbol );
-		}
-
-		if ( ! empty( $wheres ) ) {
-			$sql .= ' WHERE ' . implode( ' AND ', $wheres );
-		}
-
-		$result = $this->wpdb->get_results( $sql );
+		$result = $this->wpdb()->get_results( $sql );
 		if ( false === $result ) {
 			throw new \Exception( '[CA8FE52D] Failed to get token data.' );
 		}
 
 		$records = array();
 		foreach ( $result as $row ) {
-			$chain_ID = (int) $row->chain_id;
-			$address  = (string) $row->address;
-			$symbol   = (string) $row->symbol;
-			$decimals = (int) $row->decimals;
+			$row->chain_id   = (int) $row->chain_id;
+			$row->address    = (string) $row->address;
+			$row->symbol     = (string) $row->symbol;
+			$row->decimals   = (int) $row->decimals;
+			$row->is_payable = (bool) $row->is_payable;
 
-			assert( Validate::isChainID( $chain_ID ), '[C4D50120] Invalid chain ID. ' . $chain_ID );
-			assert( Validate::isSymbol( $symbol ), '[C08FC67D] Invalid symbol. ' . $symbol );
-			assert( Validate::isDecimals( $decimals ), '[79794512] Invalid decimals. ' . $decimals );
-
-			$records[] = Token::from( $chain_ID, Address::from( $address ), $symbol, $decimals );
+			$records[] = new TokenTableRecord( $row );
 		}
 
 		return $records;
 	}
 
 	/**
-	 * テーブルにトークンを追加します。
+	 * トークン情報を保存します。
 	 */
-	public function insert( int $chain_ID, Address $contract_address, string $symbol, int $decimals ): void {
-		Validate::checkChainID( $chain_ID );
-		Validate::checkSymbol( $symbol );
-		Validate::checkDecimals( $decimals );
+	public function save( Token $token ): void {
 
+		// データが存在する時はレコードの更新を行うが、symbol, decimalsの値は変更しない
 		$sql = <<<SQL
-			INSERT INTO `{$this->table_name}`
-			(`chain_id`, `address`, `symbol`, `decimals`)
-			VALUES (%d, %s, %s, %d)
+			INSERT INTO `{$this->tableName()}`
+			(`chain_id`, `address`, `symbol`, `decimals`, `is_payable`)
+			VALUES (%d, %s, %s, %d, %d)
+			ON DUPLICATE KEY UPDATE
+				`is_payable` = %d
 		SQL;
 
-		$sql = $this->wpdb->prepare( $sql, $chain_ID, $contract_address->value(), $symbol, $decimals );
+		$sql = $this->wpdb()->prepare(
+			$sql,
+			$token->chainID(),
+			$token->address()->value(),
+			$token->symbol(),
+			$token->decimals(),
+			$token->isPayable(),
+			$token->isPayable(),
+		);
 
-		$result = $this->wpdb->query( $sql );
+		$result = $this->wpdb()->query( $sql );
 		if ( false === $result ) {
 			throw new \Exception( '[7217F4B3] Failed to add token data.' );
 		}
-	}
-
-	/**
-	 * テーブルを削除します。
-	 */
-	public function drop(): void {
-		$sql = <<<SQL
-			DROP TABLE IF EXISTS `{$this->table_name}`;
-		SQL;
-
-		$result = $this->mysqli->query( $sql );
-		assert( true === $result );
 	}
 }

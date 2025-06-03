@@ -15,13 +15,8 @@ use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceTableRecord;
  */
 class InvoiceTable extends TableBase {
 	public function __construct( \wpdb $wpdb ) {
-		parent::__construct( $wpdb );
-
-		$table_name               = new TableName();
-		$this->invoice_table_name = $table_name->invoice();
+		parent::__construct( $wpdb, ( new TableName() )->invoice() );
 	}
-
-	private string $invoice_table_name;
 
 	/**
 	 * @inheritdoc
@@ -29,11 +24,11 @@ class InvoiceTable extends TableBase {
 	 */
 	public function create(): void {
 		$charset    = $this->wpdb()->get_charset_collate();
-		$index_name = "idx_{$this->invoice_table_name}_2D6F4376";
+		$index_name = "idx_{$this->tableName()}_2D6F4376";
 
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
-			CREATE TABLE `{$this->invoice_table_name}` (
+			CREATE TABLE `{$this->tableName()}` (
 				`created_at`             timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`id`                     varchar(191)            NOT NULL,
 				`post_id`			     bigint        unsigned  NOT NULL,
@@ -74,7 +69,7 @@ class InvoiceTable extends TableBase {
 				`payment_token_address`,
 				`payment_amount_hex`,
 				`consumer_address`
-			FROM `{$this->invoice_table_name}`
+			FROM `{$this->tableName()}`
 			WHERE `id` = %s
 		SQL;
 
@@ -91,7 +86,7 @@ class InvoiceTable extends TableBase {
 		$selling_symbol     = $selling_price->symbol();
 
 		$result = $this->wpdb()->insert(
-			$this->invoice_table_name,
+			$this->tableName(),
 			array(
 				'id'                    => $invoice_id->ulid(),
 				'post_id'               => $post_ID,
@@ -110,17 +105,5 @@ class InvoiceTable extends TableBase {
 		}
 
 		return $invoice_id;
-	}
-
-	/**
-	 * 購入用請求書テーブルを削除します。
-	 */
-	public function drop(): void {
-		$sql = <<<SQL
-			DROP TABLE IF EXISTS `{$this->invoice_table_name}`;
-		SQL;
-
-		$result = $this->mysqli()->query( $sql );
-		assert( true === $result );
 	}
 }

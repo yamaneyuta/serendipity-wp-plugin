@@ -11,11 +11,11 @@ use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
-use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
+use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\ValueObject\Address;
 
 class IssueInvoiceResolver extends ResolverBase {
@@ -33,14 +33,19 @@ class IssueInvoiceResolver extends ResolverBase {
 		$token_address    = Address::from( $args['tokenAddress'] ?? null );
 		$consumer_address = Address::from( $args['consumerAddress'] ?? null ); // 購入者のアドレス
 
-		assert( null !== $token_address, '[5D2F1CF4] Token address must not be null.' );
-		assert( null !== $consumer_address, '[3AF96606] Consumer address must not be null.' );
+		if ( null === $token_address ) {
+			throw new \InvalidArgumentException( '[[5D2F1CF4] Token address must not be null.' );
+		} elseif ( null === $consumer_address ) {
+			throw new \InvalidArgumentException( '[3AF96606] Consumer address must not be null.' );
+		}
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 		// 指定されたトークンアドレスが支払可能な設定になっているかどうかをチェック
-		$token = ( new TokenData() )->get( $chain_ID, $token_address );
-		Validate::checkPayableToken( $token );
+		$token = ( new TokenRepository() )->get( $chain_ID, $token_address );
+		if ( null === $token || ! $token->isPayable() ) {
+			throw new \InvalidArgumentException( '[4381A464] The specified token is not payable.' );
+		}
 
 		// 販売者情報を取得
 		$seller_agreed_terms = new SellerAgreedTerms();

@@ -44,6 +44,8 @@ class OptionFactory {
 
 	/**
 	 * 指定したチェーンIDで、購入者が支払可能なトークンアドレス一覧を取得または保存するオブジェクトを取得します。
+	 *
+	 * @deprecated
 	 */
 	public function payableTokenAddresses( int $chain_ID ): ArrayOption {
 		return new ArrayOption( $this->getOptionKeyName( 'payable_token_addresses_' . $chain_ID ) );

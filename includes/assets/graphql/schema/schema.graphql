@@ -56,10 +56,10 @@ type Mutation {
 	# 販売者の利用規約同意情報を設定【管理者】
 	setSellerAgreedTerms(version: Int!, signature: String!): Boolean!
 
-	# 対象のチェーンで支払いに使用可能なトークンを追加【管理者】
-	addPayableTokens(chainID: Int!, tokenAddresses: [String!]!): Boolean!
-	# 対象のチェーンで支払いに使用可能なトークンを削除【管理者】
-	removePayableTokens(chainID: Int!, tokenAddresses: [String!]!): Boolean!
+	# # 対象のチェーンで支払いに使用可能なトークンを追加【管理者】
+	# addPayableTokens(chainID: Int!, tokenAddresses: [String!]!): Boolean!
+	# # 対象のチェーンで支払いに使用可能なトークンを削除【管理者】
+	# removePayableTokens(chainID: Int!, tokenAddresses: [String!]!): Boolean!
 
 	# ERC20トークン情報をブロックチェーンから取得【管理者】
 	getERC20Info(chainID: Int!, address: String!): ERC20Info!

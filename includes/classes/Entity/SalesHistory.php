@@ -4,10 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\Price;
 use DateTime;
-
+/**
+ * @deprecated
+ * TODO: Refactor
+ */
 class SalesHistory {
 
 	private const COLUMN_INVOICE_ID               = 'invoice_id';
@@ -140,11 +144,6 @@ class SalesHistory {
 
 	/** 支払いトークン */
 	public function paymentToken(): Token {
-		return Token::from(
-			(int) $this->record[ self::COLUMN_CHAIN_ID ],
-			new Address( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ),
-			(string) $this->record[ self::COLUMN_TOKEN_SYMBOL ],
-			(int) $this->record[ self::COLUMN_TOKEN_DECIMAL ]
-		);
+		return ( new TokenRepository() )->get( (int) $this->record[ self::COLUMN_CHAIN_ID ], Address::from( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
 	}
 }

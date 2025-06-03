@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\ValueObject;
 
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Repository\TokenData;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\Repository\TokenRepository;
 use phpseclib\Math\BigInteger;
 
 class Price {
@@ -43,12 +44,15 @@ class Price {
 	 */
 	public function toTokenAmount( int $chain_ID ): string {
 		// そのトークン1単位における小数点以下桁数。ETHであれば18。
-		$tokens = ( new TokenData() )->select( $chain_ID, null, $this->symbol );
-		if ( 1 !== count( $tokens ) ) {
-			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID . ', symbol: ' . $this->symbol . ', count: ' . count( $tokens ) );
-		}
+		$tokens_filter = ( new TokensFilter() )->byChainID( $chain_ID )->bySymbol( $this->symbol );
+		$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
 
-		$token_decimals = $tokens[0]->decimals();
+		if ( 1 !== $tokens->count() ) {
+			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID . ', symbol: ' . $this->symbol . ', count: ' . $tokens->count() );
+		}
+		$token = array_values( $tokens->toArray() )[0]; // 1つだけなので、配列の最初の要素を取得
+
+		$token_decimals = $token->decimals();
 
 		// 補正する小数点以下桁数。現在の値が0.01ETHの場合、Priceとしての小数点以下は2だが、
 		// ETH自体の小数点以下桁数が18なので、補正する桁数は18-2=16。

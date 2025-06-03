@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\PayableTokens;
-use Cornix\Serendipity\Core\Repository\TokenData;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\Repository\TokenRepository;
+use Cornix\Serendipity\Core\ValueObject\Address;
 
 class TokenResolver extends ResolverBase {
 
@@ -17,21 +16,19 @@ class TokenResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
 		$chain_id = $args['chainID'];
-		/** @var string */
-		$address = $args['address'];
+		$address  = Address::from( $args['address'] ?? null );
 
-		$token = ( new TokenData() )->get( $chain_id, $address );
+		if ( null === $address ) {
+			throw new \InvalidArgumentException( '[C0B26B53] Invalid address provided.' );
+		}
 
-		$is_payable_callback = function () use ( $token ) {
-			Validate::checkHasAdminRole();  // 管理者権限が必要
-			return ( new PayableTokens() )->exists( $token );
-		};
+		$token = ( new TokenRepository() )->get( $chain_id, $address );
 
 		return array(
 			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainID' => $chain_id ) ),
 			'address'   => $address,
 			'symbol'    => fn() => $token->symbol(),
-			'isPayable' => $is_payable_callback,
+			'isPayable' => fn() => $token->isPayable(),
 		);
 	}
 }

@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Service\ChainsService;
 use Cornix\Serendipity\Core\Repository\PaidContentData;
-use Cornix\Serendipity\Core\Repository\PayableTokens;
+use Cornix\Serendipity\Core\Repository\TokenRepository;
 
 class PostResolver extends ResolverBase {
 
@@ -48,7 +49,8 @@ class PostResolver extends ResolverBase {
 
 		$result = array();
 		foreach ( $chain_IDs as $chain_ID ) {
-			$payable_tokens = ( new PayableTokens() )->get( $chain_ID );
+			$tokens_filter  = ( new TokensFilter() )->byChainID( $chain_ID )->byIsPayable( true );
+			$payable_tokens = $tokens_filter->apply( ( new TokenRepository() )->all() );
 			foreach ( $payable_tokens as $token ) {
 				$result[] = $root_value['token'](
 					$root_value,
