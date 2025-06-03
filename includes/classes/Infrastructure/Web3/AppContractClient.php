@@ -16,7 +16,7 @@ use Web3\Contract;
 
 class AppContractClient {
 	public function __construct( AppContract $app_contract ) {
-		$rpc_url = $app_contract->chain()->rpc_url;
+		$rpc_url = $app_contract->chain()->rpcURL();
 		$address = $app_contract->address();
 		// このインスタンスを生成する前に接続可能かどうかをチェックしてください。
 		assert( is_string( $rpc_url ) && Validate::isUrl( $rpc_url ), '[A5ED369D] rpc_url: ' . var_export( $rpc_url, true ) );
