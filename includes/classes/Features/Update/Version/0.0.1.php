@@ -13,7 +13,6 @@ use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransactionTabl
 use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Repository\Environment;
-use Cornix\Serendipity\Core\Repository\PayableTokens;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Entity\Token;
@@ -26,9 +25,6 @@ class v001 {
 	public function up() {
 		// 署名用ウォレットの秘密鍵を初期化
 		( new ServerSignerData() )->initialize();
-
-		// 購入者が支払可能なトークンの初期値を設定
-		( new PayableTokensInitializer() )->initialize();
 
 		global $wpdb;
 		// チェーン情報を管理するためのテーブルを作成
@@ -76,30 +72,6 @@ class v001 {
 		( new UnlockPaywallTransactionTable( $wpdb ) )->drop();
 		// ペイウォール解除時のトークン転送イベントの内容を記録するテーブルを削除
 		( new UnlockPaywallTransferEventTable( $wpdb ) )->drop();
-	}
-}
-
-
-class PayableTokensInitializer {
-	/**
-	 * 購入者が支払可能なトークンの初期値を設定します。
-	 */
-	public function initialize(): void {
-		$payable_tokens = new PayableTokens();
-
-		// メインネット
-		$payable_tokens->save( ChainID::ETH_MAINNET, array( Token::from( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18, true ) ) );
-
-		// テストネット
-		$payable_tokens->save( ChainID::SEPOLIA, array( Token::from( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18, true ) ) );
-
-		// 開発モード時はプライベートネットも設定
-		if ( ( new Environment() )->isDevelopmentMode() ) {
-			// Privatenet L1
-			$payable_tokens->save( ChainID::PRIVATENET_L1, array( Token::from( ChainID::PRIVATENET_L1, Ethers::zeroAddress(), 'ETH', 18, true ) ) );
-			// Privatenet L2
-			$payable_tokens->save( ChainID::PRIVATENET_L2, array( Token::from( ChainID::PRIVATENET_L2, Ethers::zeroAddress(), 'MATIC', 18, true ) ) );
-		}
 	}
 }
 
@@ -210,12 +182,12 @@ class TokenTableRecordInitializer {
 	public function initialize(): void {
 		$token_table = new TokenTable( $this->wpdb );
 
-		// メインネットのネイティブトークンを登録
+		// メインネットのネイティブトークンを登録(Ethereum Mainnetのみ支払可能として指定)
 		$token_table->save( Token::from( ChainID::ETH_MAINNET, Ethers::zeroAddress(), 'ETH', 18, true ) );
 
-		// テストネットのネイティブトークンを登録
+		// テストネットのネイティブトークンを登録(Sepoliaのみ支払可能として指定)
 		$token_table->save( Token::from( ChainID::SEPOLIA, Ethers::zeroAddress(), 'ETH', 18, true ) );
-		$token_table->save( TOken::from( ChainID::SONEIUM_MINATO, Ethers::zeroAddress(), 'ETH', 18, true ) );
+		$token_table->save( TOken::from( ChainID::SONEIUM_MINATO, Ethers::zeroAddress(), 'ETH', 18, false ) );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( ( new Environment() )->isDevelopmentMode() ) {
