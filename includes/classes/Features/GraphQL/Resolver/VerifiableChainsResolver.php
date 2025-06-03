@@ -36,7 +36,7 @@ class VerifiableChainsResolver extends ResolverBase {
 		foreach ( $chain_IDs as $chain_ID ) {
 			// アプリケーションコントラクトがデプロイされており、チェーンに接続可能な場合は、検証可能なチェーンとして返す
 			$app_contract         = ( new AppContractRepository() )->get( $chain_ID );
-			$app_contract_address = is_null( $app_contract ) ? null : $app_contract->address;
+			$app_contract_address = is_null( $app_contract ) ? null : $app_contract->address();
 			if ( ! is_null( $app_contract_address ) && ( new ChainService( $chain_ID ) )->connectable() ) {
 				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
 			}

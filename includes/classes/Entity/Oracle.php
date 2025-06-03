@@ -8,9 +8,6 @@ use Cornix\Serendipity\Core\ValueObject\Address;
 
 class Oracle {
 
-	/** @var Oracle[] */
-	private static array $cache = array();
-
 	private function __construct( int $chain_ID, Address $address, string $base_symbol, string $quote_symbol ) {
 		$this->chain_ID     = $chain_ID;
 		$this->address      = $address;
@@ -55,10 +52,6 @@ class Oracle {
 		assert( Validate::isSymbol( $base_symbol ), '[CD285CC7] Invalid base symbol. ' . $base_symbol );
 		assert( Validate::isSymbol( $quote_symbol ), '[BA65690D] Invalid quote symbol. ' . $quote_symbol );
 
-		if ( is_null( self::$cache[ $chain_ID ][ $address->value() ] ?? null ) ) {
-			self::$cache[ $chain_ID ][ $address->value() ] = new self( $chain_ID, $address, $base_symbol, $quote_symbol );
-		}
-
-		return self::$cache[ $chain_ID ][ $address->value() ];
+		return new self( $chain_ID, $address, $base_symbol, $quote_symbol );
 	}
 }

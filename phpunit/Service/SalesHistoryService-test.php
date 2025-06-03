@@ -118,7 +118,7 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 	private function insertTableData( wpdb $wpdb ): void {
 		$sales_test_data = new SalesTestData( $wpdb );
 		$chain_ID        = ChainID::PRIVATENET_L1;
-		$app_address     = ( new AppContractRepository() )->get( $chain_ID )->address;
+		$app_address     = ( new AppContractRepository() )->get( $chain_ID )->address();
 		$invoice_ID      = self::INVOICE_IDS[0]; // 請求書ID
 		$alice_address   = HardhatSignerFactory::alice()->address();  // 販売者アドレス
 		$bob_address     = HardhatSignerFactory::bob()->address();      // 購入者アドレス
@@ -144,7 +144,7 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 	private function insertTableData2( wpdb $wpdb ): void {
 		$sales_test_data = new SalesTestData( $wpdb );
 		$chain_ID        = ChainID::PRIVATENET_L1;
-		$app_address     = ( new AppContractRepository() )->get( $chain_ID )->address;
+		$app_address     = ( new AppContractRepository() )->get( $chain_ID )->address();
 		$invoice_ID      = self::INVOICE_IDS[1];    // 請求書ID
 		$alice_address   = HardhatSignerFactory::alice()->address();      // 販売者アドレス
 		$charlie_address = HardhatSignerFactory::charlie()->address();  // 購入者アドレス

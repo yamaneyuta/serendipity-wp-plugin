@@ -30,15 +30,15 @@ class ChainResolver extends ResolverBase {
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
 		$app_contract_callback = function () use ( $chain ) {
 			// 権限チェック不要
-			$app_contract = ( new AppContractRepository() )->get( $chain->id );
-			$address      = is_null( $app_contract ) ? null : $app_contract->address;
+			$app_contract = ( new AppContractRepository() )->get( $chain->id() );
+			$address      = is_null( $app_contract ) ? null : $app_contract->address();
 			return is_null( $address ) ? null : array( 'address' => $address->value() );
 		};
 
 		$tokens_callback = function () use ( $root_value, $chain ) {
 			Validate::checkHasAdminRole(); // 管理者権限が必要
 
-			$tokens_filter = ( new TokensFilter() )->byChainID( $chain->id );
+			$tokens_filter = ( new TokensFilter() )->byChainID( $chain->id() );
 			$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
 
 			return array_map(
@@ -67,10 +67,10 @@ class ChainResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'              => $chain->id,
+			'id'              => $chain->id(),
 			'appContract'     => $app_contract_callback,
-			'confirmations'   => (string) $chain->confirmations,    // string型にして返す(GraphQLの定義した型に変換)
-			'rpcURL'          => $chain->rpc_url,
+			'confirmations'   => (string) $chain->confirmations(),    // string型にして返す(GraphQLの定義した型に変換)
+			'rpcURL'          => $chain->rpcURL(),
 			'tokens'          => $tokens_callback,
 			'networkCategory' => $network_category_callback,
 		);

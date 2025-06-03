@@ -50,15 +50,15 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID_hex );
 		}
 
-		$db_nonce = $invoice->nonce; // DBから取得したnonce
+		$db_nonce = $invoice->nonce(); // DBから取得したnonce
 		if ( is_null( $db_nonce ) || $nonce !== $db_nonce->value() ) {
 			// nonceが無効な場合はドメインエラーとして返す
 			return $error_result_callback( self::ERROR_CODE_INVALID_NONCE );
 		}
 
-		$post_ID          = $invoice->post_ID;
-		$chain            = ( new ChainRepository() )->getChain( $invoice->chain_ID );
-		$consumer_address = $invoice->consumer_address;
+		$post_ID          = $invoice->postID();
+		$chain            = ( new ChainRepository() )->getChain( $invoice->chainID() );
+		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
@@ -70,7 +70,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// ブロックチェーンに問い合わせる
-		$app_contract          = ( new AppContractRepository() )->get( $chain->id );
+		$app_contract          = ( new AppContractRepository() )->get( $chain->id() );
 		$app                   = new AppContractClient( $app_contract );
 		$server_signer_address = ( new ServerSignerData() )->getAddress();
 		$payment_status        = $app->getPaywallStatus( $server_signer_address, $post_ID, $consumer_address );
@@ -78,7 +78,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		if ( ! $payment_status->isUnlocked() ) {
 			// 最新のブロックでもペイウォールの解除が確認できなかった場合
 			return $error_result_callback( self::ERROR_CODE_PAYWALL_LOCKED );
-		} elseif ( ! $this->isConfirmed( $chain->id, $payment_status->unlockedBlockNumber() ) ) {
+		} elseif ( ! $this->isConfirmed( $chain->id(), $payment_status->unlockedBlockNumber() ) ) {
 			// 最新のブロックではペイウォールの解除が確認できたが、
 			// トランザクションの待機ブロック数が管理者が指定した数を下回っている場合
 			return $error_result_callback( self::ERROR_CODE_TRANSACTION_UNCONFIRMED );
@@ -100,7 +100,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	private function isConfirmed( int $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
 		$chain         = ( new ChainRepository() )->getChain( $chain_ID );
-		$confirmations = $chain->confirmations;
+		$confirmations = $chain->confirmations();
 
 		if ( is_int( $confirmations ) ) {
 			// 最新のブロック番号を取得

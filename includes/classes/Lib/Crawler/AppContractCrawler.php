@@ -162,7 +162,7 @@ class UnlockPaywallTransferCrawler {
 			array(
 				'fromBlock' => $from_block->hex(),
 				'toBlock'   => $to_block->hex(),
-				'address'   => ( new AppContractRepository() )->get( $chain_ID )->address,
+				'address'   => ( new AppContractRepository() )->get( $chain_ID )->address()->value(),
 				'topics'    => $this->topics,
 			),
 			function ( $err, $logs ) use ( &$logs_result ) {

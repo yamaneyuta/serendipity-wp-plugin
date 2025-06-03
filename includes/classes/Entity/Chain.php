@@ -23,19 +23,37 @@ class Chain {
 		$this->confirmations = $confirmations;
 	}
 
-	public int $id;
-	public string $name;
-	public ?string $rpc_url;
+	private int $id;
+	private string $name;
+	private ?string $rpc_url;
 	/** @var int|string */
-	public $confirmations;
+	private $confirmations;
 
 	public static function fromTableRecord( ChainTableRecord $record ): self {
+		/** @var string $confirmations */
+		$confirmations = $record->confirmations();
 		return new self(
 			$record->chainID(),
 			$record->name(),
 			$record->rpcURL(),
-			is_numeric( $record->confirmations() ) ? (int) $record->confirmations() : $record->confirmations(),
+			is_numeric( $confirmations ) ? (int) $confirmations : $confirmations,
 		);
+	}
+
+	public function id(): int {
+		return $this->id;
+	}
+	public function name(): string {
+		return $this->name;
+	}
+	public function rpcURL(): ?string {
+		return $this->rpc_url;
+	}
+	/**
+	 * @return int|string
+	 */
+	public function confirmations() {
+		return $this->confirmations;
 	}
 
 	/** このチェーンに接続可能かどうかを取得します。 */

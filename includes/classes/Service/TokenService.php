@@ -29,7 +29,7 @@ class TokenService {
 
 			// チェーンに接続してERC20コントラクトから少数点以下桁数とシンボルを取得する
 			$chain        = $this->chain_repository->getChain( $chain_ID );
-			$token_client = new TokenClient( $chain->rpc_url, $address );
+			$token_client = new TokenClient( $chain->rpcURL(), $address );
 			$decimals     = $token_client->decimals();
 			$symbol       = $token_client->symbol();
 

@@ -11,7 +11,7 @@ class ChainsFilter {
 	private array $filters = array();
 
 	public function byChainID( int $chain_id ): self {
-		$this->filters[] = fn ( Chain $chain ) => $chain->id === $chain_id;
+		$this->filters[] = fn ( Chain $chain ) => $chain->id() === $chain_id;
 		return $this;
 	}
 

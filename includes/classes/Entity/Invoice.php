@@ -24,15 +24,43 @@ class Invoice {
 		$this->nonce                 = $nonce;
 	}
 
-	public InvoiceID $id;
-	public int $post_ID;
-	public int $chain_ID;
-	public Price $selling_price;
-	public Address $seller_address;
-	public Address $payment_token_address;
-	public string $payment_amount_hex;
-	public Address $consumer_address;
-	public ?InvoiceNonce $nonce;
+	private InvoiceID $id;
+	private int $post_ID;
+	private int $chain_ID;
+	private Price $selling_price;
+	private Address $seller_address;
+	private Address $payment_token_address;
+	private string $payment_amount_hex;
+	private Address $consumer_address;
+	private ?InvoiceNonce $nonce;
+
+	public function id(): InvoiceID {
+		return $this->id;
+	}
+	public function postID(): int {
+		return $this->post_ID;
+	}
+	public function chainID(): int {
+		return $this->chain_ID;
+	}
+	public function sellingPrice(): Price {
+		return $this->selling_price;
+	}
+	public function sellerAddress(): Address {
+		return $this->seller_address;
+	}
+	public function paymentTokenAddress(): Address {
+		return $this->payment_token_address;
+	}
+	public function paymentAmountHex(): string {
+		return $this->payment_amount_hex;
+	}
+	public function consumerAddress(): Address {
+		return $this->consumer_address;
+	}
+	public function nonce(): ?InvoiceNonce {
+		return $this->nonce;
+	}
 
 	public static function fromTableRecord( InvoiceTableRecord $invoice_record, ?InvoiceNonceTableRecord $invoice_nonce_record ): self {
 		return new self(
