@@ -15,7 +15,7 @@ final class Tokens extends EntityArrayBase {
 	/**
 	 * @param Token|Token[] $tokens
 	 */
-	public static function from( $tokens ): self {
+	private static function from( $tokens ): self {
 		$tokens = is_array( $tokens ) ? $tokens : array( $tokens );
 		foreach ( $tokens as $token ) {
 			if ( ! ( $token instanceof Token ) ) {
