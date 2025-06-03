@@ -48,7 +48,7 @@ class Invoice {
 			Address::from( $invoice_record->payment_token_address ),
 			$invoice_record->payment_amount_hex,
 			Address::from( $invoice_record->consumer_address ),
-			( $invoice_nonce_record ? new InvoiceNonce( $invoice_nonce_record->nonce ) : null )
+			( $invoice_nonce_record ? new InvoiceNonce( $invoice_nonce_record->nonce() ) : null )
 		);
 	}
 }
