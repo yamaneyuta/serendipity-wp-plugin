@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
-class UnlockPaywallTransferEvent {
+class UnlockPaywallTransferEventRepository {
 
 	public function __construct( \wpdb $wpdb ) {
 		$this->table = new UnlockPaywallTransferEventTable( $wpdb );

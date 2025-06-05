@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Convert\Padding;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransactionRepository;
-use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
+use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEventRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
@@ -89,7 +89,7 @@ class AppContractCrawler {
 	 */
 	private function saveUnlockPaywallTransfer( \wpdb $wpdb, array $unlock_paywall_transfer_logs ): void {
 
-		$transfer_event_repository = new UnlockPaywallTransferEvent( $wpdb );
+		$transfer_event_repository = new UnlockPaywallTransferEventRepository( $wpdb );
 
 		foreach ( $unlock_paywall_transfer_logs as $unlock_paywall_transfer_log ) {
 			$event_args = $this->app_abi->decodeEventParameters( $unlock_paywall_transfer_log );
