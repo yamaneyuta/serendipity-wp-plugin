@@ -6,7 +6,7 @@ use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\ValueObject\Rate;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
-use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\Service\OracleService;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransactionTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 

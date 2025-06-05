@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Entity\Oracles;
-use Cornix\Serendipity\Core\Repository\TableGateway\OracleTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\OracleTable;
 
 class OracleRepository {
 
