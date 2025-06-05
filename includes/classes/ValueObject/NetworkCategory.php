@@ -59,25 +59,8 @@ final class NetworkCategory {
 		return self::$cache[ $network_category_id ];
 	}
 
-	/**
-	 * メインネットを表すネットワークカテゴリインスタンスを取得します。
-	 */
-	public static function mainnet(): NetworkCategory {
-		return self::from( NetworkCategoryID::MAINNET );
-	}
-
-	/**
-	 * テストネットを表すネットワークカテゴリインスタンスを取得します。
-	 */
-	public static function testnet(): NetworkCategory {
-		return self::from( NetworkCategoryID::TESTNET );
-	}
-
-	/**
-	 * プライベートネットを表すネットワークカテゴリインスタンスを取得します。
-	 */
-	public static function privatenet(): NetworkCategory {
-		return self::from( NetworkCategoryID::PRIVATENET );
+	public function equals( NetworkCategory $other ): bool {
+		return $this->id === $other->id;
 	}
 
 	/**
