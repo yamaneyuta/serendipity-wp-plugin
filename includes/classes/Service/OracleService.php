@@ -41,6 +41,6 @@ class OracleService {
 		$oracles        = $oracles_filter->apply( ( new OracleRepository() )->all() );
 		assert( $oracles->count() <= 1 );
 
-		return $oracles->count() === 0 ? null : array_values( $oracles->toArray() )[0]->oracleAddress();
+		return $oracles->count() === 0 ? null : array_values( $oracles->toArray() )[0]->address();
 	}
 }

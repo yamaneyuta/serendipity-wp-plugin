@@ -9,7 +9,7 @@ use Web3\Contract;
 
 class OracleClient {
 	public function __construct( string $rpc_url, Oracle $oracle ) {
-		$this->oracle_contract = ( new ContractFactory() )->create( $rpc_url, ( new OracleAbi() )->get(), $oracle->oracleAddress() );
+		$this->oracle_contract = ( new ContractFactory() )->create( $rpc_url, ( new OracleAbi() )->get(), $oracle->address() );
 	}
 	private Contract $oracle_contract;
 

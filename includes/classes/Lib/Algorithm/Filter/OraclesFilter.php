@@ -17,7 +17,7 @@ class OraclesFilter {
 		return $this;
 	}
 	public function byAddress( Address $address ): self {
-		$this->filters[] = fn ( Oracle $oracle ) => $oracle->oracleAddress()->equals( $address );
+		$this->filters[] = fn ( Oracle $oracle ) => $oracle->address()->equals( $address );
 		return $this;
 	}
 	public function bySymbolPair( SymbolPair $symbol_pair ): self {

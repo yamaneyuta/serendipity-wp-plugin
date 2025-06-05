@@ -25,7 +25,7 @@ class Oracle {
 		return $this->chain_ID;
 	}
 
-	public function oracleAddress(): Address {
+	public function address(): Address {
 		return $this->address;
 	}
 
