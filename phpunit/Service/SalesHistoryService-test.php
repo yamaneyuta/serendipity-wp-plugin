@@ -14,6 +14,7 @@ use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\TransactionHash;
 
 class SalesHistoryServiceTest extends IntegrationTestBase {
 
@@ -128,7 +129,7 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 		$sales_test_data->insertInvoiceData( '2025-02-07 04:37:14', $invoice_ID, '49', $chain_ID, '0x3e8', '0', 'JPY', $alice_address, $token_address, '0x089e9b46556754', $bob_address );
 
 		// unlock_paywall_transactionテーブルへデータ挿入
-		$sales_test_data->insertTransactionData( '2025-02-07 04:58:04', $invoice_ID, $chain_ID, '276', '0x7117fd9b43492484bf18d93a834de4c39ec2e00687ee235594b77129426bb236' );
+		$sales_test_data->insertTransactionData( '2025-02-07 04:58:04', $invoice_ID, $chain_ID, '276', TransactionHash::from( '0x7117fd9b43492484bf18d93a834de4c39ec2e00687ee235594b77129426bb236' ) );
 
 		// unlock_paywall_transfer_eventテーブルへデータ挿入
 		$sales_test_data->insertTransferEventData( '2025-02-07 04:58:04', $invoice_ID, 0, $bob_address, $app_address, $token_address, '0x1610e9a9d064', UnlockPaywallTransferType::HANDLING_FEE );
@@ -154,7 +155,7 @@ class SalesHistoryServiceTest extends IntegrationTestBase {
 		$sales_test_data->insertInvoiceData( '2025-02-07 10:36:48', $invoice_ID, '49', "{$chain_ID}", '0x3e8', '0', 'JPY', $alice_address, $token_address, '0x087f79088eac8e', $charlie_address );
 
 		// unlock_paywall_transactionテーブルへデータ挿入
-		$sales_test_data->insertTransactionData( '2025-02-07 10:50:25', $invoice_ID, "{$chain_ID}", '2068', '0xe6355e851a760d4bb2c283f59fc0cc6af03d983341671ba9789b475ab6d2c4ce' );
+		$sales_test_data->insertTransactionData( '2025-02-07 10:50:25', $invoice_ID, "{$chain_ID}", '2068', TransactionHash::from( '0xe6355e851a760d4bb2c283f59fc0cc6af03d983341671ba9789b475ab6d2c4ce' ) );
 
 		// unlock_paywall_transfer_eventテーブルへデータ挿入
 		$sales_test_data->insertTransferEventData( '2025-02-07 10:50:25', $invoice_ID, 0, $charlie_address, $app_address, $token_address, '0x15c135d8777c', UnlockPaywallTransferType::HANDLING_FEE );
@@ -231,7 +232,7 @@ class SalesTestData {
 		assert( 1 === $result, '[E54B5988] ' . $this->wpdb->last_error );
 	}
 
-	public function insertTransactionData( $created_at, $invoice_id, $chain_id, $block_number, $transaction_hash ) {
+	public function insertTransactionData( $created_at, $invoice_id, $chain_id, $block_number, TransactionHash $transaction_hash ) {
 		$transaction_table_name = ( new TableName() )->unlockPaywallTransaction();
 		$result                 = $this->wpdb->insert(
 			$transaction_table_name,
@@ -240,7 +241,7 @@ class SalesTestData {
 				'invoice_id'       => $invoice_id,
 				'chain_id'         => $chain_id,
 				'block_number'     => $block_number,
-				'transaction_hash' => $transaction_hash,
+				'transaction_hash' => $transaction_hash->value(),
 			)
 		);
 		assert( 1 === $result, '[9811DF9A] ' . $this->wpdb->last_error );

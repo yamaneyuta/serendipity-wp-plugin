@@ -15,6 +15,7 @@ use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\TransactionHash;
 use phpseclib\Math\BigInteger;
 use stdClass;
 
@@ -69,9 +70,7 @@ class AppContractCrawler {
 				$saved_invoice_id_hex_array[] = $invoice_ID->hex();
 			}
 
-			/** @var string */
-			$transaction_hash = $unlock_paywall_transfer_log->transactionHash;
-			assert( Validate::isHex( $transaction_hash ), '[4EF0D70F] transactionHash is not hex. ' . var_export( $transaction_hash, true ) );
+			$transaction_hash = TransactionHash::from( $unlock_paywall_transfer_log->transactionHash );
 			/** @var string */
 			$block_number_hex = $unlock_paywall_transfer_log->blockNumber;
 			assert( Validate::isHex( $block_number_hex ), '[067CCE00] blockNumber is not hex. ' . var_export( $block_number_hex, true ) );

@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\TransactionHash;
 
 /**
  * ペイウォール解除時のトランザクションに関するデータを記録するテーブル
@@ -44,9 +45,8 @@ class UnlockPaywallTransactionTable extends TableBase {
 	}
 
 
-	public function save( InvoiceID $invoice_id, int $chain_id, BlockNumber $block_number, string $transaction_hash ): void {
+	public function save( InvoiceID $invoice_id, int $chain_id, BlockNumber $block_number, TransactionHash $transaction_hash ): void {
 		Validate::checkChainID( $chain_id );
-		Validate::checkHex( $transaction_hash );
 
 		// ※ 現時点ではreorgの影響を考慮していないため上書き処理は行わない
 		$sql = <<<SQL
@@ -55,7 +55,7 @@ class UnlockPaywallTransactionTable extends TableBase {
 			VALUES (%s, %d, %d, %s)
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid(), $chain_id, $block_number->int(), $transaction_hash );
+		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid(), $chain_id, $block_number->int(), $transaction_hash->value() );
 
 		$result = $this->wpdb()->query( $sql );
 		if ( false === $result ) {
