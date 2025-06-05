@@ -4,14 +4,14 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hook\Post;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
-use Cornix\Serendipity\Core\Repository\TableGateway\PaidContentTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Repository\Name\ClassName;
-use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
+use Cornix\Serendipity\Core\Service\PostService;
 
 /**
  * 投稿内容を保存、または取得時のhooksを登録するクラス
@@ -63,8 +63,12 @@ class ContentIoHook {
 	 *   - wp/v2/posts等のAPIにアクセスした時
 	 */
 	public function restPreparePostFilter( \WP_REST_Response $response, \WP_Post $post, \WP_REST_Request $request ): \WP_REST_Response {
-		$paid_content = ( new PaidContentData( $post->ID ) )->content();
-		if ( ( new Access() )->canCurrentUserEditPost( $post->ID ) && ! is_null( $paid_content ) ) {
+		if ( ! ( new Access() )->canCurrentUserEditPost( $post->ID ) ) {
+			return $response;   // 投稿の編集権限がない場合は何もしない
+		}
+
+		$paid_content = ( new PostService() )->get( $post->ID )->paidContent();
+		if ( ! is_null( $paid_content ) ) {
 			// このメソッドが呼び出されたタイミングでは$response->data['content']['raw']に無料部分のみ格納された状態。
 			$free_content = $response->data['content']['raw'] ?? '';
 
@@ -108,7 +112,8 @@ class ContentIoHook {
 			// 有料部分を含めた全体をオリジナルの投稿内容として保持する。
 			$revision     = (int) $_GET['revision'];
 			$free_content = $data['post_content'] ?? ''; // リビジョンからの復元の場合、ここは無料部分のみが入っている
-			$paid_content = ( new PaidContentData( $revision ) )->content(); // リビジョンの有料部分を取得
+
+			$paid_content = ( new PostService() )->get( $revision )->paidContent();   // リビジョンの有料部分を取得
 			if ( is_string( $paid_content ) ) {
 				// 有料部分が存在する場合は、ウィジェットと有料部分を結合して保持
 				self::$unsaved_original_content =
@@ -143,16 +148,17 @@ class ContentIoHook {
 		}
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
-		$attributes        = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
-		$paid_content_data = new PaidContentData( $post_id );
+		$attributes   = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
+		$post_service = new PostService();
 		if ( is_null( $attributes ) ) {
 			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
-			$paid_content_data->delete();
+			$post_service->deletePaidContent( $post_id );
 		} else {
 			$paid_content = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
 			assert( ! is_null( $paid_content ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
 			// ウィジェットが含まれている場合は有料記事の情報を保存
-			$paid_content_data->save(
+			$post_service->savePaidContent(
+				$post_id,
 				$paid_content,
 				$attributes->sellingNetworkCategory(),
 				$attributes->sellingPrice()
@@ -167,12 +173,12 @@ class ContentIoHook {
 		// テスト実行中、テストツールによって投稿が削除される。
 		// その際、このフックが呼び出されるが、テーブル作成前に呼び出されるとエラーになるため
 		// テスト中かつテーブルが存在しない場合は何もしない
-		if ( ( new Environment() )->isTesting() && ! ( new PaidContentTable() )->exists() ) {
+		if ( ( new Environment() )->isTesting() && ! ( new PaidContentTable( $GLOBALS['wpdb'] ) )->exists() ) {
 			return; // テスト中に限り、テーブルが存在しない場合は何もしない
 		}
 
 		// 投稿が削除された時に有料記事の情報も削除
-		( new PaidContentData( $post_id ) )->delete();
+		( new PostService() )->deletePaidContent( $post_id );
 	}
 
 	/**
@@ -191,7 +197,8 @@ class ContentIoHook {
 		assert( is_int( $post_id ), '[97CAA15C] Post ID is not an integer. - ' . json_encode( $post_id ) );
 
 		// 有料記事の情報がある場合はウィジェットを結合して返す
-		if ( is_int( $post_id ) && is_string( ( new PaidContentData( $post_id ) )->content() ) ) {
+		$paid_content = ( new PostService() )->get( $post_id )->paidContent();
+		if ( is_string( $paid_content ) ) {
 			// HTMLコメントを除去したウィジェットを追加
 			$content .= "\n\n" . HtmlFormat::removeHtmlComments( $this->createWidgetContent( $post_id ) );
 		}
@@ -205,7 +212,7 @@ class ContentIoHook {
 	 */
 	public function wpPostRevisionFieldPostContentFilter( string $revision_field_content, string $field, \WP_Post $revision_post, string $context ) {
 		$post_id      = $revision_post->ID;
-		$paid_content = ( new PaidContentData( $post_id ) )->content();
+		$paid_content = ( new PostService() )->get( $post_id )->paidContent();
 
 		if ( is_string( $paid_content ) ) {
 			// 記事の有料部分の情報がある場合はウィジェットと有料部分を結合して返す
@@ -218,11 +225,11 @@ class ContentIoHook {
 
 class WidgetContentBuilder {
 	public function build( int $post_id ): string {
-		$paid_content = new PaidContentData( $post_id );
-		$block_name   = ( new BlockName() )->get();
-		$attrs        = WidgetAttributes::from( $paid_content->sellingNetworkCategory(), $paid_content->sellingPrice() )->toArray();
-		$attrs_str    = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-		$class_name   = ( new ClassName() )->getBlock();
+		$post_data  = ( new PostService() )->get( $post_id );
+		$block_name = ( new BlockName() )->get();
+		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategory(), $post_data->sellingPrice() )->toArray();
+		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+		$class_name = ( new ClassName() )->getBlock();
 		return "<!-- wp:{$block_name} {$attrs_str} -->\n"
 			. "<aside class=\"wp-block-create-block-qik-chain-pay {$class_name}\"></aside>\n"
 			. "<!-- /wp:{$block_name} -->";

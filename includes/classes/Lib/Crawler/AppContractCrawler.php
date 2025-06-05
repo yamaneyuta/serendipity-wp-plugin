@@ -6,12 +6,13 @@ namespace Cornix\Serendipity\Core\Lib\Crawler;
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Convert\Padding;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
-use Cornix\Serendipity\Core\Repository\UnlockPaywallTransaction;
-use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
+use Cornix\Serendipity\Core\Repository\UnlockPaywallTransactionRepository;
+use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEventRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use phpseclib\Math\BigInteger;
@@ -48,7 +49,7 @@ class AppContractCrawler {
 	 * UnlockPaywallTransferイベントが発生した時のトランザクション情報をDBに保存します。
 	 */
 	private function saveUnlockPaywallTransaction( \wpdb $wpdb, int $chain_ID, array $unlock_paywall_transfer_logs ): void {
-		$transaction_repository = new UnlockPaywallTransaction( $wpdb );
+		$transaction_repository = new UnlockPaywallTransactionRepository( $wpdb );
 
 		/** @var string[] */
 		$saved_invoice_id_hex_array = array(); // DBに保存済みのinvoiceIDのリスト(DBへのアクセス回数を減らすために使用)
@@ -89,19 +90,16 @@ class AppContractCrawler {
 	 */
 	private function saveUnlockPaywallTransfer( \wpdb $wpdb, array $unlock_paywall_transfer_logs ): void {
 
-		$transfer_event_repository = new UnlockPaywallTransferEvent( $wpdb );
+		$transfer_event_repository = new UnlockPaywallTransferEventRepository( $wpdb );
 
 		foreach ( $unlock_paywall_transfer_logs as $unlock_paywall_transfer_log ) {
 			$event_args = $this->app_abi->decodeEventParameters( $unlock_paywall_transfer_log );
 			assert( is_array( $event_args ), '[66C28129] event_args is not array' );
 
 			// イベント発行時の引数を取得
-			/** @var string */
-			$from = $event_args['from'];
-			/** @var string */
-			$to = $event_args['to'];
-			/** @var string */
-			$token_address = $event_args['token'];
+			$from          = Address::from( $event_args['from'] ?? null );
+			$to            = Address::from( $event_args['to'] ?? null );
+			$token_address = Address::from( $event_args['token'] );
 			/** @var BigInteger */
 			$amount = $event_args['amount'];
 			/** @var BigInteger */

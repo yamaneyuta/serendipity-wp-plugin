@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\TableGateway;
+namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Lib\Database\TableBase;
 use Cornix\Serendipity\Core\ValueObject\TableRecord\TokenTableRecord;
 
 /**

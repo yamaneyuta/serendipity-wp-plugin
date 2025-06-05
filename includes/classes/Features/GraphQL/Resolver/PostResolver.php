@@ -6,8 +6,8 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Service\ChainsService;
-use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Service\PostService;
 
 class PostResolver extends ResolverBase {
 
@@ -37,7 +37,7 @@ class PostResolver extends ResolverBase {
 	 */
 	private function payableTokens( array $root_value, int $post_ID ) {
 		// 販売ネットワークカテゴリを取得
-		$selling_network_category = ( new PaidContentData( $post_ID ) )->sellingNetworkCategory();
+		$selling_network_category = ( new PostService() )->get( $post_ID )->sellingNetworkCategory();
 
 		if ( is_null( $selling_network_category ) ) {
 			Logger::warn( '[21B2C2DD] Selling network category is null for post ID: ' . $post_ID );

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Repository\TableGateway\ChainTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 
 /**
@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 class ChainService {
 	public function __construct( int $chian_ID, ?\wpdb $wpdb = null ) {
 		$this->chain_ID    = $chian_ID;
-		$this->chain_table = new ChainTable( $wpdb );
+		$this->chain_table = new ChainTable( $wpdb ?? $GLOBALS['wpdb'] );
 	}
 
 	private int $chain_ID;

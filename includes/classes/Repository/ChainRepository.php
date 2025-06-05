@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Entity\Chain;
-use Cornix\Serendipity\Core\Repository\TableGateway\ChainTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 
 class ChainRepository {
 
 	public function __construct( ?ChainTable $chain_table = null ) {
-		$this->chain_table = $chain_table ?? new ChainTable();
+		$this->chain_table = $chain_table ?? new ChainTable( $GLOBALS['wpdb'] );
 	}
 
 	private ChainTable $chain_table;

@@ -1,10 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository\TableGateway;
+namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\TableRecord\ChainTableRecord;
@@ -12,28 +11,22 @@ use Cornix\Serendipity\Core\ValueObject\TableRecord\ChainTableRecord;
 /**
  * チェーンの情報を記録するテーブル
  */
-class ChainTable {
+class ChainTable extends TableBase {
 
-	public function __construct( \wpdb $wpdb = null ) {
-		$this->wpdb       = $wpdb ?? $GLOBALS['wpdb'];
-		$this->mysqli     = ( new MySQLiFactory() )->create( $this->wpdb );
-		$this->table_name = ( new TableName() )->chain();
+	public function __construct( \wpdb $wpdb ) {
+		parent::__construct( $wpdb, ( new TableName() )->chain() );
 	}
-
-	private \wpdb $wpdb;
-	private \mysqli $mysqli;
-	private string $table_name;
 
 	/**
 	 * テーブルを作成します。
 	 */
 	public function create(): void {
-		$charset = $this->wpdb->get_charset_collate();
+		$charset = $this->wpdb()->get_charset_collate();
 
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		// - `confirmations`は将来的に`latest`のような文字列が入る可能性があるため、`varchar(191)`とする
 		$sql = <<<SQL
-			CREATE TABLE `{$this->table_name}` (
+			CREATE TABLE `{$this->tableName()}` (
 				`created_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				`updated_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`chain_id`                     bigint        unsigned  NOT NULL,
@@ -44,7 +37,7 @@ class ChainTable {
 			) {$charset};
 		SQL;
 
-		$result = $this->mysqli->query( $sql );
+		$result = $this->mysqli()->query( $sql );
 		assert( true === $result );
 	}
 
@@ -55,9 +48,9 @@ class ChainTable {
 		// レコード数は少ないのですべてのレコードを取得してからフィルタリングする
 		$sql     = <<<SQL
 			SELECT `chain_id`, `name`, `rpc_url`, `confirmations`
-			FROM `{$this->table_name}`
+			FROM `{$this->tableName()}`
 		SQL;
-		$results = $this->wpdb->get_results( $sql );
+		$results = $this->wpdb()->get_results( $sql );
 		assert( is_array( $results ), '[583DBBE7] Invalid result type. Expected array, got ' . gettype( $results ) );
 
 		$chain_table_records = array_map(
@@ -91,8 +84,8 @@ class ChainTable {
 	public function insert( int $chain_ID, string $name ) {
 		Validate::checkChainID( $chain_ID );
 
-		$this->wpdb->insert(
-			$this->table_name,
+		$this->wpdb()->insert(
+			$this->tableName(),
 			array(
 				'chain_id'      => $chain_ID,
 				'name'          => $name,
@@ -101,8 +94,8 @@ class ChainTable {
 			),
 			array( '%d', '%s', '%s', '%s', '%s' )
 		);
-		if ( $this->wpdb->last_error ) {
-			throw new \Exception( '[E8B777B8] Failed to insert or update chain data. ' . $this->wpdb->last_error );
+		if ( $this->wpdb()->last_error ) {
+			throw new \Exception( '[E8B777B8] Failed to insert or update chain data. ' . $this->wpdb()->last_error );
 		}
 	}
 
@@ -111,8 +104,8 @@ class ChainTable {
 		Validate::checkChainID( $chain_ID );
 		( ! is_null( $rpc_url ) ) && Validate::checkURL( $rpc_url );
 
-		$result = $this->wpdb->update(
-			$this->table_name,                  // table
+		$result = $this->wpdb()->update(
+			$this->tableName(),                 // table
 			array( 'rpc_url' => $rpc_url ),     // data
 			array( 'chain_id' => $chain_ID ),   // where
 			array( '%s' ),                      // format
@@ -122,8 +115,8 @@ class ChainTable {
 		if ( 1 < $result ) {
 			throw new \Exception( '[8314C8C0] Failed to update RPC URL. result: ' . var_export( $result, true ) );
 		}
-		if ( $this->wpdb->last_error ) {
-			throw new \Exception( '[BD9BA6FD] Failed to update RPC URL. ' . $this->wpdb->last_error );
+		if ( $this->wpdb()->last_error ) {
+			throw new \Exception( '[BD9BA6FD] Failed to update RPC URL. ' . $this->wpdb()->last_error );
 		}
 	}
 
@@ -140,8 +133,8 @@ class ChainTable {
 		// confirmationsがint型の場合は文字列に変換
 		$confirmations = is_int( $confirmations ) ? (string) $confirmations : $confirmations;
 
-		$result = $this->wpdb->update(
-			$this->table_name,                  // table
+		$result = $this->wpdb()->update(
+			$this->tableName(),                 // table
 			array( 'confirmations' => $confirmations ), // data
 			array( 'chain_id' => $chain_ID ),   // where
 			array( '%s' ),                      // format
@@ -151,20 +144,8 @@ class ChainTable {
 		if ( 1 < $result ) {
 			throw new \Exception( '[7B341BB3] Failed to update confirmations. result: ' . var_export( $result, true ) );
 		}
-		if ( $this->wpdb->last_error ) {
-			throw new \Exception( '[584805B9] Failed to update confirmations. ' . $this->wpdb->last_error );
+		if ( $this->wpdb()->last_error ) {
+			throw new \Exception( '[584805B9] Failed to update confirmations. ' . $this->wpdb()->last_error );
 		}
-	}
-
-	/**
-	 * テーブルを削除します。
-	 */
-	public function drop(): void {
-		$sql = <<<SQL
-			DROP TABLE IF EXISTS `{$this->table_name}`;
-		SQL;
-
-		$result = $this->mysqli->query( $sql );
-		assert( true === $result );
 	}
 }

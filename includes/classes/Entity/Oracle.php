@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\TableRecord\OracleTableRecord;
 
 class Oracle {
 
@@ -53,5 +54,14 @@ class Oracle {
 		assert( Validate::isSymbol( $quote_symbol ), '[BA65690D] Invalid quote symbol. ' . $quote_symbol );
 
 		return new self( $chain_ID, $address, $base_symbol, $quote_symbol );
+	}
+
+	public static function fromTableRecord( OracleTableRecord $record ): self {
+		return self::from(
+			$record->chainID(),
+			new Address( $record->address() ),
+			$record->baseSymbol(),
+			$record->quoteSymbol()
+		);
 	}
 }

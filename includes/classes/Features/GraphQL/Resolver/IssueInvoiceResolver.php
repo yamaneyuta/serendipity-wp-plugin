@@ -8,14 +8,13 @@ use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
 use Cornix\Serendipity\Core\Service\InvoiceService;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
-use Cornix\Serendipity\Core\Repository\PaidContentData;
 use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\Signer;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Service\PostService;
 use Cornix\Serendipity\Core\ValueObject\Address;
 
 class IssueInvoiceResolver extends ResolverBase {
@@ -55,7 +54,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		$seller_address = Ethers::verifyMessage( $seller_agreed_terms->message(), $seller_agreed_terms->signature() );
 
 		// 販売価格を取得
-		$selling_price = ( new PaidContentData( $post_ID ) )->sellingPrice();
+		$selling_price = ( new PostService() )->get( $post_ID )->sellingPrice();
 		assert( ! is_null( $selling_price ), '[F8524488] Selling price is null for post ID: ' . $post_ID );
 
 		// 支払うトークンにおける価格を計算

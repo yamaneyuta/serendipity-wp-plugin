@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Service;
 
-use Cornix\Serendipity\Core\Repository\TableGateway\OracleTable;
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\OraclesFilter;
+use Cornix\Serendipity\Core\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
@@ -16,10 +17,12 @@ class OracleService {
 	 * @return int[]
 	 */
 	public function connectableChainIDs( SymbolPair $symbol_pair ): array {
+		$oracles_filter = ( new OraclesFilter() )->bySymbolPair( $symbol_pair );
+		$oracles        = $oracles_filter->apply( ( new OracleRepository() )->all() );
 		// oracleテーブルに登録されている情報から、baseとquoteが一致するもののチェーンID一覧を取得
 		$chain_IDs = array_map(
 			fn( $oracle ) => $oracle->chainID(),
-			( new OracleTable() )->select( null, null, $symbol_pair->base(), $symbol_pair->quote() )
+			$oracles->toArray()
 		);
 
 		// 接続可能なチェーンIDに絞り込み
@@ -33,9 +36,11 @@ class OracleService {
 	 * 指定したチェーン、通貨ペアのOracleコントラクトのアドレスを取得します。
 	 */
 	public function address( int $chain_ID, SymbolPair $symbol_pair ): ?Address {
-		$oracles = ( new OracleTable() )->select( $chain_ID, null, $symbol_pair->base(), $symbol_pair->quote() );
-		assert( count( $oracles ) <= 1 );
+		$oracles_filter = ( new OraclesFilter() )->byChainID( $chain_ID )
+			->bySymbolPair( $symbol_pair );
+		$oracles        = $oracles_filter->apply( ( new OracleRepository() )->all() );
+		assert( $oracles->count() <= 1 );
 
-		return count( $oracles ) === 0 ? null : $oracles[0]->oracleAddress();
+		return $oracles->count() === 0 ? null : array_values( $oracles->toArray() )[0]->oracleAddress();
 	}
 }

@@ -1,7 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Database;
+namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
+
+use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
+use Cornix\Serendipity\Core\Util\NamedPlaceholder;
 
 abstract class TableBase implements ITable {
 	public function __construct( \wpdb $wpdb, string $table_name ) {
@@ -25,6 +28,17 @@ abstract class TableBase implements ITable {
 			$this->mysqli_cache = ( new MySQLiFactory() )->create( $this->wpdb );
 		}
 		return $this->mysqli_cache;
+	}
+
+	/**
+	 * Named placeholder を使用して SQL クエリを構築します
+	 * ※プレースホルダは、キーがコロンで始まる形式（例: `:key`）で指定してください。
+	 *
+	 * @param string               $query
+	 * @param array<string,string> $args プレースホルダに対応する値の連想配列
+	 */
+	protected function namedPrepare( string $query, array $args ): string {
+		return ( new NamedPlaceholder( $this->wpdb ) )->prepare( $query, $args );
 	}
 
 

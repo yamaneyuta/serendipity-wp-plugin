@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
-use Cornix\Serendipity\Core\Repository\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceNonceTable;
-use Cornix\Serendipity\Core\Repository\TableGateway\InvoiceTable;
-use Cornix\Serendipity\Core\Repository\TableGateway\OracleTable;
-use Cornix\Serendipity\Core\Repository\TableGateway\PaidContentTable;
-use Cornix\Serendipity\Core\Repository\TableGateway\TokenTable;
-use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransactionTable;
-use Cornix\Serendipity\Core\Repository\TableGateway\UnlockPaywallTransferEventTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceNonceTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\OracleTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTransactionTable;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;

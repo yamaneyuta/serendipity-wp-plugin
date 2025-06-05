@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Database;
+namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 interface ITable {
 	/**
