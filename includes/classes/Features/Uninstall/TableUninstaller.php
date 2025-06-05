@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\Uninstall;
 
-use Cornix\Serendipity\Core\Lib\Database\MySQLiFactory;
+use Cornix\Serendipity\Core\Infrastructure\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
