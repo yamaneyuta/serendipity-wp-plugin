@@ -25,13 +25,6 @@ final class NetworkCategory {
 	}
 
 	/**
-	 * ネットワークカテゴリを表すインスタンスのキャッシュ。
-	 *
-	 * @var NetworkCategory[]
-	 */
-	private static array $cache = array();
-
-	/**
 	 * ネットワークカテゴリID(数値)からインスタンスを取得します。
 	 * 引数がnullの場合はnullを返します。
 	 */
@@ -39,45 +32,19 @@ final class NetworkCategory {
 		if ( is_null( $network_category_id ) ) {
 			return null;
 		}
-
-		// キャッシュに存在する場合はキャッシュから取得
-		if ( isset( self::$cache[ $network_category_id ] ) ) {
-			return self::$cache[ $network_category_id ];
-		}
+		// ネットワークカテゴリIDとして正しい値が渡されているかどうかを検証
+		Validate::checkNetworkCategoryID( $network_category_id );
 
 		// 開発環境でない環境でPrivatenetの値を渡された場合は例外をスローする
 		if ( $network_category_id === NetworkCategoryID::PRIVATENET && ! ( $environment ?? new Environment() )->isDevelopmentMode() ) {
 			throw new \LogicException( '[F9EF95EC] Invalid network category ID. - network_category_id: ' . $network_category_id );
 		}
 
-		// ネットワークカテゴリIDとして正しい値が渡されているかどうかを検証
-		Validate::checkNetworkCategoryID( $network_category_id );
-
-		assert( ! isset( self::$cache[ $network_category_id ] ), '[87F07910] NetworkCategory cache is already set. network_category_id: ' . $network_category_id );
-		self::$cache[ $network_category_id ] = new NetworkCategory( $network_category_id );
-
-		return self::$cache[ $network_category_id ];
+		return new self( $network_category_id );
 	}
 
-	/**
-	 * メインネットを表すネットワークカテゴリインスタンスを取得します。
-	 */
-	public static function mainnet(): NetworkCategory {
-		return self::from( NetworkCategoryID::MAINNET );
-	}
-
-	/**
-	 * テストネットを表すネットワークカテゴリインスタンスを取得します。
-	 */
-	public static function testnet(): NetworkCategory {
-		return self::from( NetworkCategoryID::TESTNET );
-	}
-
-	/**
-	 * プライベートネットを表すネットワークカテゴリインスタンスを取得します。
-	 */
-	public static function privatenet(): NetworkCategory {
-		return self::from( NetworkCategoryID::PRIVATENET );
+	public function equals( NetworkCategory $other ): bool {
+		return $this->id === $other->id;
 	}
 
 	/**
