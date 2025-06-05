@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
 /**
@@ -44,7 +45,7 @@ class UnlockPaywallTransferEventTable extends TableBase {
 		}
 	}
 
-	public function save( InvoiceID $invoice_id, int $log_index, string $from_address, string $to_address, string $token_address, string $amount_hex, int $transfer_type ): void {
+	public function save( InvoiceID $invoice_id, int $log_index, Address $from, Address $to, Address $token_address, string $amount_hex, int $transfer_type ): void {
 		Validate::checkAmountHex( $amount_hex );
 
 		$sql = <<<SQL
@@ -53,7 +54,7 @@ class UnlockPaywallTransferEventTable extends TableBase {
 			VALUES (%s, %d, %s, %s, %s, %s, %d)
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid(), $log_index, $from_address, $to_address, $token_address, $amount_hex, $transfer_type );
+		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid(), $log_index, $from->value(), $to->value(), $token_address->value(), $amount_hex, $transfer_type );
 
 		$result = $this->wpdb()->query( $sql );
 		if ( false === $result ) {

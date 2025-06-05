@@ -12,6 +12,7 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use phpseclib\Math\BigInteger;
@@ -96,12 +97,9 @@ class AppContractCrawler {
 			assert( is_array( $event_args ), '[66C28129] event_args is not array' );
 
 			// イベント発行時の引数を取得
-			/** @var string */
-			$from = $event_args['from'];
-			/** @var string */
-			$to = $event_args['to'];
-			/** @var string */
-			$token_address = $event_args['token'];
+			$from          = Address::from( $event_args['from'] ?? null );
+			$to            = Address::from( $event_args['to'] ?? null );
+			$token_address = Address::from( $event_args['token'] );
 			/** @var BigInteger */
 			$amount = $event_args['amount'];
 			/** @var BigInteger */
