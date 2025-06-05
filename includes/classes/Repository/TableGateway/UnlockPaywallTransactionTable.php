@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\TableGateway;
 
+use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-
+use Cornix\Serendipity\Core\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
 /**
  * ペイウォール解除時のトランザクションに関するデータを記録するテーブル
@@ -38,6 +40,26 @@ class UnlockPaywallTransactionTable extends TableBase {
 		$result = $this->mysqli()->query( $sql );
 		if ( true !== $result ) {
 			throw new \RuntimeException( '[36AD2361] Failed to create unlock paywall transaction table. ' . $this->mysqli()->error );
+		}
+	}
+
+
+	public function save( InvoiceID $invoice_id, int $chain_id, BlockNumber $block_number, string $transaction_hash ): void {
+		Validate::checkChainID( $chain_id );
+		Validate::checkHex( $transaction_hash );
+
+		// ※ 現時点ではreorgの影響を考慮していないため上書き処理は行わない
+		$sql = <<<SQL
+			INSERT INTO `{$this->tableName()}`
+			(`invoice_id`, `chain_id`, `block_number`, `transaction_hash`)
+			VALUES (%s, %d, %d, %s)
+		SQL;
+
+		$sql = $this->wpdb()->prepare( $sql, $invoice_id->ulid(), $chain_id, $block_number->int(), $transaction_hash );
+
+		$result = $this->wpdb()->query( $sql );
+		if ( false === $result ) {
+			throw new \RuntimeException( '[CA6349AD] Failed to save unlock paywall transaction. ' . $this->wpdb()->last_error );
 		}
 	}
 }
