@@ -104,27 +104,6 @@ class Validate {
 		return in_array( $chain_ID, $all_chain_ids, true );
 	}
 
-	/** 指定されたネットワークカテゴリIDが定義されていない値の場合は例外をスローします。 */
-	public static function checkNetworkCategoryID( int $network_category_id ): void {
-		if ( ! self::isNetworkCategoryID( $network_category_id ) ) {
-			throw new \InvalidArgumentException( '[E3D44CFD] Invalid network category ID. - network_category_id: ' . $network_category_id );
-		}
-	}
-
-	/**
-	 * 指定された値がネットワークカテゴリIDとして有効かどうか(NetworkCategoryIDに定義されているかどうか)を返します。
-	 * ※ あくまで定義されているかどうかの判定のため、本番環境でPrivatenetの値が渡されてもtrueを返すことに注意。
-	 */
-	private static function isNetworkCategoryID( int $network_category_id ): bool {
-		// リフレクションを使用して、クラス定数を取得
-		$reflection = new \ReflectionClass( NetworkCategoryID::class );
-		$constants  = $reflection->getConstants();
-		/** @var int[] */
-		$all_network_category_ids = array_values( $constants );
-
-		return in_array( $network_category_id, $all_network_category_ids, true );
-	}
-
 	/**
 	 * 数量として有効な16進数表記でない場合は例外をスローします。
 	 *
