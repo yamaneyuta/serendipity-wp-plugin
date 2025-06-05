@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Lib\Crawler;
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Convert\Padding;
 use Cornix\Serendipity\Core\Repository\ServerSignerData;
-use Cornix\Serendipity\Core\Repository\UnlockPaywallTransaction;
+use Cornix\Serendipity\Core\Repository\UnlockPaywallTransactionRepository;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEvent;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
@@ -48,7 +48,7 @@ class AppContractCrawler {
 	 * UnlockPaywallTransferイベントが発生した時のトランザクション情報をDBに保存します。
 	 */
 	private function saveUnlockPaywallTransaction( \wpdb $wpdb, int $chain_ID, array $unlock_paywall_transfer_logs ): void {
-		$transaction_repository = new UnlockPaywallTransaction( $wpdb );
+		$transaction_repository = new UnlockPaywallTransactionRepository( $wpdb );
 
 		/** @var string[] */
 		$saved_invoice_id_hex_array = array(); // DBに保存済みのinvoiceIDのリスト(DBへのアクセス回数を減らすために使用)
