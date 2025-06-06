@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Lib\Post\ContentAnalyzer;
 use Cornix\Serendipity\Core\Service\PostService;
 
 class SellingContentResolver extends ResolverBase {
@@ -31,17 +29,9 @@ class SellingContentResolver extends ResolverBase {
 			return null;
 		}
 
-		// HTMLコメントを除去
-		$paid_content = HtmlFormat::removeHtmlComments( $paid_content );
-
-		// 有料部分のコンテンツの文字数と画像数を取得
-		$analyzer        = new ContentAnalyzer( $paid_content );
-		$character_count = $analyzer->getCharacterCount();
-		$image_count     = $analyzer->getImageCount();
-
 		return array(
-			'characterCount' => $character_count,
-			'imageCount'     => $image_count,
+			'characterCount' => $paid_content->characterCount(),
+			'imageCount'     => $paid_content->imageCount(),
 		);
 	}
 }

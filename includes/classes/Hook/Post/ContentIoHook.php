@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Hook\Post;
 
+use Cornix\Serendipity\Core\Entity\PaidContent;
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Repository\Environment;
@@ -75,7 +76,7 @@ class ContentIoHook {
 			// この投稿の編集権限があり、かつ有料記事の情報が存在する場合はウィジェットと有料部分を結合して返す。
 			$widget_content = $this->createWidgetContent( $post->ID );
 
-			$full_content = $free_content . "\n\n" . $widget_content . "\n\n" . $paid_content;
+			$full_content = $free_content . "\n\n" . $widget_content . "\n\n" . $paid_content->text();
 
 			// レスポンスの内容を加工
 			$response->data['content']['raw']      = $full_content;
@@ -114,12 +115,12 @@ class ContentIoHook {
 			$free_content = $data['post_content'] ?? ''; // リビジョンからの復元の場合、ここは無料部分のみが入っている
 
 			$paid_content = ( new PostService() )->get( $revision )->paidContent();   // リビジョンの有料部分を取得
-			if ( is_string( $paid_content ) ) {
+			if ( ! is_null( $paid_content ) ) {
 				// 有料部分が存在する場合は、ウィジェットと有料部分を結合して保持
 				self::$unsaved_original_content =
 					$free_content . "\n\n"
 					. $this->createWidgetContent( $revision ) . "\n\n"
-					. $paid_content;
+					. $paid_content->text();
 			} else {
 				// 有料部分が存在しない場合は無料部分のみを保持
 				self::$unsaved_original_content = $free_content;
@@ -154,9 +155,10 @@ class ContentIoHook {
 			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
 			$post_service->deletePaidContent( $post_id );
 		} else {
-			$paid_content = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
-			assert( ! is_null( $paid_content ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
+			$paid_content_text = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
+			assert( ! is_null( $paid_content_text ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
 			// ウィジェットが含まれている場合は有料記事の情報を保存
+			$paid_content = PaidContent::from( $paid_content_text );
 			$post_service->savePaidContent(
 				$post_id,
 				$paid_content,
@@ -198,7 +200,7 @@ class ContentIoHook {
 
 		// 有料記事の情報がある場合はウィジェットを結合して返す
 		$paid_content = ( new PostService() )->get( $post_id )->paidContent();
-		if ( is_string( $paid_content ) ) {
+		if ( ! is_null( $paid_content ) ) {
 			// HTMLコメントを除去したウィジェットを追加
 			$content .= "\n\n" . HtmlFormat::removeHtmlComments( $this->createWidgetContent( $post_id ) );
 		}
@@ -214,10 +216,10 @@ class ContentIoHook {
 		$post_id      = $revision_post->ID;
 		$paid_content = ( new PostService() )->get( $post_id )->paidContent();
 
-		if ( is_string( $paid_content ) ) {
+		if ( ! is_null( $paid_content ) ) {
 			// 記事の有料部分の情報がある場合はウィジェットと有料部分を結合して返す
 			$widget_content          = $this->createWidgetContent( $post_id );
-			$revision_field_content .= "\n\n" . $widget_content . "\n\n" . $paid_content; // ウィジェットと有料部分を追加
+			$revision_field_content .= "\n\n" . $widget_content . "\n\n" . $paid_content->text(); // ウィジェットと有料部分を追加
 		}
 		return $revision_field_content;
 	}

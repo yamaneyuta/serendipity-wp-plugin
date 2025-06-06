@@ -1,16 +1,15 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Lib\Post;
+namespace Cornix\Serendipity\Core\Util;
 
+use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 class ContentAnalyzer {
 
 	public function __construct( string $content ) {
-		// $contentは、コメントを含まないHTMLタグ
-		assert( ! Strings::strpos( $content, '<!--' ), "[5F89E24A] Invalid content. - content: $content" );
-
-		$this->content = $content;
+		// HTMLタグは分析対象から除外
+		$this->content = HtmlFormat::removeHtmlComments( $content );
 	}
 
 	/** 投稿内容(HTMLコメントは含まない / HTMLタグを含む) */

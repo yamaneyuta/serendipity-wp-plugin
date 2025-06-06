@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Service;
 
+use Cornix\Serendipity\Core\Entity\PaidContent;
 use Cornix\Serendipity\Core\Entity\Post;
 use Cornix\Serendipity\Core\Repository\PostRepository;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
@@ -19,7 +20,7 @@ class PostService {
 		return $this->post_repository->get( $post_id );
 	}
 
-	public function savePaidContent( int $post_id, string $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
+	public function savePaidContent( int $post_id, PaidContent $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
 		$post = $this->post_repository->get( $post_id );
 
 		// 有料記事の内容を更新

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
+use Cornix\Serendipity\Core\Entity\PaidContent;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
@@ -68,7 +69,8 @@ class PaidContentTable extends TableBase {
 		return is_null( $row ) ? null : new PaidContentTableRecord( $row );
 	}
 
-	public function set( int $post_id, string $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
+	public function set( int $post_id, ?PaidContent $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
+		$paid_content_text           = is_null( $paid_content ) ? null : $paid_content->text();
 		$selling_network_category_id = is_null( $selling_network_category ) ? null : $selling_network_category->id();
 		$selling_price_amount_hex    = is_null( $selling_price ) ? null : $selling_price->amountHex();
 		$selling_price_decimals      = is_null( $selling_price ) ? null : $selling_price->decimals();
@@ -96,7 +98,7 @@ class PaidContentTable extends TableBase {
 			$sql,
 			array(
 				':post_id'                     => $post_id,
-				':paid_content'                => $paid_content,
+				':paid_content'                => $paid_content_text,
 				':selling_network_category_id' => $selling_network_category_id,
 				':selling_amount_hex'          => $selling_price_amount_hex,
 				':selling_decimals'            => $selling_price_decimals,
