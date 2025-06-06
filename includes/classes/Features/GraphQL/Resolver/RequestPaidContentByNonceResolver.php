@@ -86,10 +86,10 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 		// 有料部分のコンテンツを取得
 		$paid_content = ( new PostService() )->get( $post_ID )->paidContent();
-		assert( is_string( $paid_content ), '[391C0A77] Paid content must be a string.' );
+		assert( ! is_null( $paid_content ), '[391C0A77] Paid content should not be null.' );
 
 		return array(
-			'content'   => HtmlFormat::removeHtmlComments( $paid_content ), // HTMLコメントを除去
+			'content'   => apply_filters( 'the_content', $paid_content->text() ),
 			'errorCode' => null,
 		);
 	}
