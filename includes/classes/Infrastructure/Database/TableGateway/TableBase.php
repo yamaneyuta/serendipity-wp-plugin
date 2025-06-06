@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\MySQLiFactory;
-use Cornix\Serendipity\Core\Util\NamedPlaceholder;
+use Cornix\Serendipity\Core\Infrastructure\Database\Util\NamedPlaceholder;
 
 abstract class TableBase implements ITable {
 	public function __construct( \wpdb $wpdb, string $table_name ) {

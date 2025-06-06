@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Util;
+namespace Cornix\Serendipity\Core\Infrastructure\Database\Util;
 
 use InvalidArgumentException;
 use wpdb;
