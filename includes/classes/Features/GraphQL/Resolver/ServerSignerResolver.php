@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\ServerSignerData;
+use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 
 class ServerSignerResolver extends ResolverBase {
 
@@ -13,8 +13,9 @@ class ServerSignerResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
+		$server_signer = ( new ServerSignerServiceFactory() )->create( $GLOBALS['wpdb'] )->getServerSigner();
 		return array(
-			'address' => fn() => ( new ServerSignerData() )->getAddress(),
+			'address' => fn() => $server_signer->address()->value(),
 		);
 	}
 }
