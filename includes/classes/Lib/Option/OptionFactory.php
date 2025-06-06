@@ -22,13 +22,6 @@ class OptionFactory {
 	}
 
 	/**
-	 * 本プラグインが使用する署名用ウォレットの情報を取得または保存するオブジェクトを取得します。
-	 */
-	public function serverSignerData(): ArrayOption {
-		return new ArrayOption( $this->getOptionKeyName( 'server_signer_data' ) );
-	}
-
-	/**
 	 * 指定されたチェーンが最初に有効になった(≒取引が開始された)ブロック番号を取得または保存するオブジェクトを取得します。
 	 */
 	public function activeSinceBlockNumberHex( int $chain_ID ): StringOption {
