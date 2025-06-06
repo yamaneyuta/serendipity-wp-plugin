@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Entity\Signer;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Lib\Web3\Signer;
 
 class EthersTest extends IntegrationTestBase {
 

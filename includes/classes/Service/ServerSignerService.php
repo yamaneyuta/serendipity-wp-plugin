@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Service;
 
+use Cornix\Serendipity\Core\Entity\Signer;
 use Cornix\Serendipity\Core\Infrastructure\System\OpenSslChecker;
-use Cornix\Serendipity\Core\Lib\Web3\Signer;
 use Cornix\Serendipity\Core\Repository\ServerSignerPrivateKeyRepository;
 
 class ServerSignerService {
