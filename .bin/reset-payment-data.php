@@ -22,10 +22,10 @@ use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 
 global $wpdb;
 
-$server_signer_service = (new ServerSignerServiceFactory())->create( $wpdb );
-$prevAddress        = $server_signer_service->getServerSigner()->address();
-(new ServerSignerTable( $wpdb ))->drop();
-(new ServerSignerTable( $wpdb ))->create();
+$server_signer_service = ( new ServerSignerServiceFactory() )->create( $wpdb );
+$prevAddress           = $server_signer_service->getServerSigner()->address();
+( new ServerSignerTable( $wpdb ) )->drop();
+( new ServerSignerTable( $wpdb ) )->create();
 $server_signer_service->initializeServerSigner();
 $newAddress = $server_signer_service->getServerSigner()->address();
 

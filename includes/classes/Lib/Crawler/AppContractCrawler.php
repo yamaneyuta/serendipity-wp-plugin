@@ -5,13 +5,13 @@ namespace Cornix\Serendipity\Core\Lib\Crawler;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Convert\Padding;
-use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransactionRepository;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEventRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
@@ -134,8 +134,8 @@ class UnlockPaywallTransferCrawler {
 		$topic_hash = ( new AppContractAbi() )->topicHash( 'UnlockPaywallTransfer' );
 
 		// サーバーの署名用ウォレットアドレス
-		$server_signer_address         = ( new ServerSignerData() )->getAddress();
-		$server_signer_address_bytes32 = ( new Padding() )->toBytes32Hex( $server_signer_address ); // topicsは32バイトで記録されているため変換
+		$server_signer                 = ( new ServerSignerServiceFactory() )->create( $GLOBALS['wpdb'] )->getServerSigner();
+		$server_signer_address_bytes32 = ( new Padding() )->toBytes32Hex( $server_signer->address()->value() ); // topicsは32バイトで記録されているため変換
 
 		$this->topics = array(
 			$topic_hash,

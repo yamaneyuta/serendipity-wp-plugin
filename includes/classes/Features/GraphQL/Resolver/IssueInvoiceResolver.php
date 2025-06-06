@@ -9,11 +9,10 @@ use Cornix\Serendipity\Core\Service\InvoiceService;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
-use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
-use Cornix\Serendipity\Core\Lib\Web3\Signer;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
 use Cornix\Serendipity\Core\ValueObject\Address;
 
@@ -86,7 +85,8 @@ class IssueInvoiceResolver extends ResolverBase {
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 );  // TODO: アフィリエイト報酬率
 		// サーバーの署名用ウォレットで署名
-		$server_signer    = new Signer( ( new ServerSignerData() )->getPrivateKey() );
+		global $wpdb;
+		$server_signer    = ( new ServerSignerServiceFactory() )->create( $wpdb )->getServerSigner();
 		$server_signature = $server_signer->signMessage( $server_message );
 
 		// 最後に、有効になったブロック番号が設定されていない場合は設定

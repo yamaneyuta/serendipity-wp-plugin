@@ -5,12 +5,12 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
-use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
@@ -70,10 +70,10 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// ブロックチェーンに問い合わせる
-		$app_contract          = ( new AppContractRepository() )->get( $chain->id() );
-		$app                   = new AppContractClient( $app_contract );
-		$server_signer_address = ( new ServerSignerData() )->getAddress();
-		$payment_status        = $app->getPaywallStatus( $server_signer_address, $post_ID, $consumer_address );
+		$app_contract   = ( new AppContractRepository() )->get( $chain->id() );
+		$app            = new AppContractClient( $app_contract );
+		$server_signer  = ( new ServerSignerServiceFactory() )->create( $GLOBALS['wpdb'] )->getServerSigner();
+		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_ID, $consumer_address );
 
 		if ( ! $payment_status->isUnlocked() ) {
 			// 最新のブロックでもペイウォールの解除が確認できなかった場合
