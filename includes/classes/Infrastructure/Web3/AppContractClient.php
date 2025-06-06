@@ -5,12 +5,12 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
+use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\ContractFactory;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\ValueObject\Web3\GetPaywallStatusResult;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
