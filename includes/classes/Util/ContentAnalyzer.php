@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Lib\Post;
+namespace Cornix\Serendipity\Core\Util;
 
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 

@@ -5,8 +5,8 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Lib\Post\ContentAnalyzer;
 use Cornix\Serendipity\Core\Service\PostService;
+use Cornix\Serendipity\Core\Util\ContentAnalyzer;
 
 class SellingContentResolver extends ResolverBase {
 
