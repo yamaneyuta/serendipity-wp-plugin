@@ -56,4 +56,8 @@ class TableName {
 	public function paidContent(): string {
 		return $this->addPrefix( 'paid_content' );
 	}
+
+	public function serverSigner(): string {
+		return $this->addPrefix( 'server_signer' );
+	}
 }
