@@ -20,6 +20,10 @@ class Signer {
 
 	private PrivateKey $private_key;
 
+	public static function generateRandom(): self {
+		return new self( Ethers::generatePrivateKey() );
+	}
+
 	public function privateKey(): PrivateKey {
 		return $this->private_key;
 	}
