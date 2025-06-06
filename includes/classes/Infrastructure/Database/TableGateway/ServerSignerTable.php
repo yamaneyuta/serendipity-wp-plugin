@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\ServerSignerTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ServerSignerTableRecord;
 
 /**
  * 署名用ウォレットの情報を記録するテーブル

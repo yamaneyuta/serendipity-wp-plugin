@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\ValueObject\TableRecord;
+namespace Cornix\Serendipity\Core\Infrastructure\Database\ValueObject;
 
 use stdClass;
 

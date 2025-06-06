@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Entity;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\ChainTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
 
 class Chain {
 	/**

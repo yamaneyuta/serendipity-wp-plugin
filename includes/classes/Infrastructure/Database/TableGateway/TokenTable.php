@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\TokenTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\TokenTableRecord;
 
 /**
  * トークンの情報を記録するテーブル

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Entity\EntityArrayBase;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\OracleTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\OracleTableRecord;
 
 final class Oracles extends EntityArrayBase {
 

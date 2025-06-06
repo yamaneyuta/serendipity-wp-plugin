@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\Price;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceTableRecord;
 
 /**
  * 発行した請求書の情報を保存するテーブル

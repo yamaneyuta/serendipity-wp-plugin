@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\OracleTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\OracleTableRecord;
 
 /**
  * Oracleの情報を記録するテーブル

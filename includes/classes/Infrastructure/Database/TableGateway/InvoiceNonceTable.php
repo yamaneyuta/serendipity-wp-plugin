@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceNonceTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceNonceTableRecord;
 
 /**
  * 発行した請求書IDとnonceの紐づきを保存するテーブル

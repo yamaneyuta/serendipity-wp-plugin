@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\PaidContentTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTableRecord;
 
 /**
  * 有料記事の情報を記録するテーブル

@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\PaidContentTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTableRecord;
 
 class Post {
 

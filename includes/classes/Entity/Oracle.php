@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Entity;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\OracleTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\OracleTableRecord;
 
 class Oracle {
 

@@ -7,8 +7,8 @@ use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\ValueObject\Price;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceNonceTableRecord;
-use Cornix\Serendipity\Core\ValueObject\TableRecord\InvoiceTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceNonceTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceTableRecord;
 
 class Invoice {
 
