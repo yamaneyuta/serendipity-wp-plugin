@@ -13,9 +13,10 @@ use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTr
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTransferEventTable;
 use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Repository\Environment;
-use Cornix\Serendipity\Core\Repository\ServerSignerData;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ServerSignerTable;
+use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 
 /**
  * Ver0.0.1(インストール直後に実行されるように一番小さいバージョンで仮作成)
@@ -23,12 +24,11 @@ use Cornix\Serendipity\Core\Entity\Token;
 class v001 {
 
 	public function up() {
-		// 署名用ウォレットの秘密鍵を初期化
-		( new ServerSignerData() )->initialize();
-
 		global $wpdb;
 		// チェーン情報を管理するためのテーブルを作成
 		( new ChainTable( $wpdb ) )->create();
+		// 署名用ウォレットの秘密鍵を保存するテーブルを作成
+		( new ServerSignerTable( $wpdb ) )->create();
 		// 有料記事を管理するためのテーブルを作成
 		( new PaidContentTable( $wpdb ) )->create();
 		// 請求書情報テーブルを作成
@@ -44,6 +44,7 @@ class v001 {
 		// ペイウォール解除時のトークン転送イベントの内容を記録するテーブルを作成
 		( new UnlockPaywallTransferEventTable( $wpdb ) )->create();
 
+		( new ServerSignerServiceFactory() )->create( $wpdb )->initializeServerSigner();
 		// チェーンテーブルの初期値を設定
 		( new ChainTableRecordInitializer( $wpdb ) )->initialize();
 		// oracleテーブルの初期値を設定
@@ -58,6 +59,8 @@ class v001 {
 		global $wpdb;
 		// チェーン情報を管理するためのテーブルを削除
 		( new ChainTable( $wpdb ) )->drop();
+		// 署名用ウォレットの秘密鍵を保存するテーブルを削除
+		( new ServerSignerTable( $wpdb ) )->drop();
 		// 有料記事を管理するためのテーブルを削除
 		( new PaidContentTable( $wpdb ) )->drop();
 		// 請求書情報テーブルを削除
