@@ -20,6 +20,10 @@ class Signer {
 
 	private PrivateKey $private_key;
 
+	public function privateKey(): PrivateKey {
+		return $this->private_key;
+	}
+
 	/**
 	 * ウォレットアドレスを取得します。
 	 */
