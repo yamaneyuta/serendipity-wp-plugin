@@ -75,6 +75,14 @@ class Ethers {
 		return self::computeAddress( $key_pair->getPublic() );
 	}
 
+	/**
+	 * ランダムな秘密鍵を生成します。
+	 */
+	public static function generatePrivateKey(): PrivateKey {
+		$ec       = new EC( 'secp256k1' );
+		$key_pair = $ec->genKeyPair();
+		return PrivateKey::from( $key_pair->getPrivate( 'hex' ) );
+	}
 
 	/**
 	 * 公開鍵からウォレットアドレスを取得します。
