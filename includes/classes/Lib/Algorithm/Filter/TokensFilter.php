@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Algorithm\Filter;
 
 use Cornix\Serendipity\Core\Entity\Token;
-use Cornix\Serendipity\Core\Entity\Tokens;
 use Cornix\Serendipity\Core\ValueObject\Address;
 
 class TokensFilter {
@@ -33,10 +32,13 @@ class TokensFilter {
 
 	/**
 	 * フィルタを適用した結果を返します。
+	 *
+	 * @param Token[] $tokens
+	 * @return Token[]
 	 */
-	public function apply( Tokens $tokens ): Tokens {
+	public function apply( array $tokens ): array {
 		foreach ( $this->filters as $filter ) {
-			$tokens = $tokens->filter( $filter );
+			$tokens = array_filter( $tokens, $filter );
 		}
 		return $tokens;
 	}
