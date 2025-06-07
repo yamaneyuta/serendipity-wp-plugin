@@ -20,6 +20,11 @@ class ChainsFilter {
 		return $this;
 	}
 
+	public function byConnectable(): self {
+		$this->filters[] = fn ( Chain $chain ) => $chain->connectable();
+		return $this;
+	}
+
 	/**
 	 * フィルタを適用してチェーンの配列を返します。
 	 *

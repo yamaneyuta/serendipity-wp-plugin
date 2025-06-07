@@ -7,10 +7,9 @@ use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Entity\Oracle;
-use Cornix\Serendipity\Core\Service\ChainService;
 use Cornix\Serendipity\Core\Lib\Transient\TransientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\OracleClient;
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\ValueObject\Rate;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
@@ -55,11 +54,11 @@ class OracleRate {
 			$contract_address = ( new OracleService() )->address( $chain_ID, $symbol_pair );
 			assert( ! is_null( $contract_address ) );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
 
-			$chain_data = new ChainService( $chain_ID );
-			if ( $chain_data->connectable() ) {
+			$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
+			if ( $chain->connectable() ) {
 				// Oracleに問い合わせ
 				$oracle        = Oracle::from( $chain_ID, $contract_address, $symbol_pair->base(), $symbol_pair->quote() );
-				$oracle_client = new OracleClient( $chain_data->rpcURL(), $oracle );
+				$oracle_client = new OracleClient( $chain->rpcURL(), $oracle );
 				$decimals      = $oracle_client->decimals();
 				$answer_hex    = Hex::from( $oracle_client->latestAnswer() );
 

@@ -7,8 +7,8 @@ use Cornix\Serendipity\Core\Entity\Token;
 use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 
 class ChainResolver extends ResolverBase {
 
@@ -20,7 +20,8 @@ class ChainResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
 		$chain_ID = $args['chainID'];
-		$chain    = ( new ChainRepository() )->getChain( $chain_ID );
+
+		$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
 
 		if ( is_null( $chain ) ) {
 			throw new \InvalidArgumentException( '[CA31D9B5] chain data is not found. chain id: ' . $chain_ID );

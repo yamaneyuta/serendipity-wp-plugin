@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\ChainsFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Service\ChainService;
-use Cornix\Serendipity\Core\Service\ChainsService;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
 
 class VerifiableChainsResolver extends ResolverBase {
@@ -29,16 +29,18 @@ class VerifiableChainsResolver extends ResolverBase {
 			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
 		}
 
-		// 投稿の販売ネットワークカテゴリに属する全てのチェーンIDを取得
-		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new ChainsService() )->chainIDs( $selling_network_category );
+		// 投稿の販売ネットワークカテゴリに属するチェーン一覧を取得
+		$chains_filter = ( new ChainsFilter() )->byNetworkCategory( $selling_network_category );
+		$chain_service = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] );
+		$chains        = $chains_filter->apply( $chain_service->getAllChains() );
 
 		$result = array();
-		foreach ( $chain_IDs as $chain_ID ) {
+		foreach ( $chains as $chain ) {
 			// アプリケーションコントラクトがデプロイされており、チェーンに接続可能な場合は、検証可能なチェーンとして返す
-			$app_contract         = ( new AppContractRepository() )->get( $chain_ID );
+			$app_contract         = ( new AppContractRepository() )->get( $chain->id() );
 			$app_contract_address = is_null( $app_contract ) ? null : $app_contract->address();
-			if ( ! is_null( $app_contract_address ) && ( new ChainService( $chain_ID ) )->connectable() ) {
-				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain_ID ) );
+			if ( ! is_null( $app_contract_address ) && $chain->connectable() ) {
+				$result[] = $root_value['chain']( $root_value, array( 'chainID' => $chain->id() ) );
 			}
 		}
 

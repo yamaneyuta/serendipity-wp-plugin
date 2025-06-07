@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\ChainsFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Service\ChainService;
-use Cornix\Serendipity\Core\Service\ChainsService;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 
 class ChainsResolver extends ResolverBase {
 
@@ -26,39 +25,27 @@ class ChainsResolver extends ResolverBase {
 		/** @var bool|null */
 		$filter_is_connectable = $filter['isConnectable'] ?? null;
 
-		// チェーンID一覧を取得
-		$chain_ids = ( new ChainsService() )->chainIDs();
+		// フィルタ処理
+		$chains_filter = new ChainsFilter();
+		// チェーンIDでフィルタ
+		$chains_filter = isset( $filter_chain_ID ) ? $chains_filter->byChainID( $filter_chain_ID ) : $chains_filter;
+		// 接続可能なチェーンでフィルタ
+		$chains_filter = isset( $filter_is_connectable ) ? $chains_filter->byConnectable() : $chains_filter;
 
-		$chains = ( new ChainRepository() )->getAllChains();
-
-		// チェーンIDでフィルタする場合
-		if ( isset( $filter_chain_ID ) ) {
-			$chain_ids = array_values(
-				array_filter(
-					$chain_ids,
-					fn( $chain_id ) => $chain_id === $filter_chain_ID
-				)
-			);
-		}
-
-		// 接続可能なチェーンIDでの絞り込みが指定されている場合はRPC URLが登録されいてるもののみ抽出
-		if ( isset( $filter_is_connectable ) ) {
-			$chain_ids = array_values(
-				array_filter(
-					$chain_ids,
-					fn( $chain_id ) => ( new ChainService( $chain_id ) )->connectable()
-				)
-			);
-		}
+		// フィルタを適用したチェーン一覧を取得
+		global $wpdb;
+		$chain_service = ( new ChainServiceFactory() )->create( $wpdb );
+		$chains        = $chain_service->getAllChains();
+		$chains        = $chains_filter->apply( $chains );
 
 		return array_map(
-			fn( $chain_id ) => $root_value['chain'](
+			fn( $chain ) => $root_value['chain'](
 				$root_value,
 				array(
-					'chainID' => $chain_id,
+					'chainID' => $chain->id(),
 				)
 			),
-			$chain_ids
+			$chains
 		);
 	}
 }

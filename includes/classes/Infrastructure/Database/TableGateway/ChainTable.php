@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Constant\Config;
+use Cornix\Serendipity\Core\Entity\Chain;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
@@ -43,6 +44,7 @@ class ChainTable extends TableBase {
 
 	/**
 	 * @return ChainTableRecord[]
+	 * TODO: 引数を削除
 	 */
 	public function select( ?int $chain_ID = null ): array {
 		// レコード数は少ないのですべてのレコードを取得してからフィルタリングする
@@ -75,11 +77,39 @@ class ChainTable extends TableBase {
 		return array_values( $chain_table_records );
 	}
 
+	public function save( Chain $chain ): void {
+		$sql = <<<SQL
+			INSERT INTO `{$this->tableName()}`
+				(`chain_id`, `name`, `rpc_url`, `confirmations`)
+			VALUES
+				(:chain_id, :name, :rpc_url, :confirmations)
+			ON DUPLICATE KEY UPDATE
+				`name` = VALUES(`name`),
+				`rpc_url` = VALUES(`rpc_url`),
+				`confirmations` = VALUES(`confirmations`)
+		SQL;
+		$sql = $this->namedPrepare(
+			$sql,
+			array(
+				':chain_id'      => $chain->id(),
+				':name'          => $chain->name(),
+				':rpc_url'       => $chain->rpcURL(),
+				':confirmations' => (string) $chain->confirmations(),
+			)
+		);
+
+		$result = $this->wpdb()->query( $sql );
+		if ( false === $result ) {
+			throw new \Exception( '[E01C7DE3] Failed to insert or update chain data. ' . $this->wpdb()->last_error );
+		}
+	}
+
 	/**
 	 * チェーン情報を新規作成します
 	 *
 	 * @param int    $chain_ID
 	 * @param string $name
+	 * @deprecated
 	 */
 	public function insert( int $chain_ID, string $name ) {
 		Validate::checkChainID( $chain_ID );
@@ -99,7 +129,7 @@ class ChainTable extends TableBase {
 		}
 	}
 
-	/** RPC URLを更新します。 */
+	/** @deprecated */
 	public function updateRpcURL( int $chain_ID, ?string $rpc_url ): void {
 		Validate::checkChainID( $chain_ID );
 		( ! is_null( $rpc_url ) ) && Validate::checkURL( $rpc_url );
@@ -125,6 +155,7 @@ class ChainTable extends TableBase {
 	 *
 	 * @param int        $chain_ID
 	 * @param int|string $confirmations
+	 * @deprecated
 	 */
 	public function updateConfirmations( int $chain_ID, $confirmations ): void {
 		Validate::checkChainID( $chain_ID );

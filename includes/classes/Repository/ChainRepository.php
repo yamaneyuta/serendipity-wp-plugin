@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\ChainsFilter;
 
 class ChainRepository {
 
@@ -18,14 +19,18 @@ class ChainRepository {
 	 * 指定したチェーンIDに合致するチェーンを取得します。
 	 */
 	public function getChain( int $chain_id ): ?Chain {
-		$records = $this->chain_table->select( $chain_id );
-		assert( count( $records ) <= 1, '[1605F71E] should return at most one record.' );
 
-		return empty( $records ) ? null : Chain::fromTableRecord( $records[0] );
+		$chains          = $this->getAllChains();
+		$chains_filter   = ( new ChainsFilter() )->byChainID( $chain_id );
+		$filtered_chains = $chains_filter->apply( $chains );
+		assert( count( $filtered_chains ) <= 1, '[BB8A90CF] should return at most one record.' );
+		return empty( $filtered_chains ) ? null : array_values( $filtered_chains )[0];
 	}
 
 	/**
 	 * データが存在するチェーン一覧(すべて)を取得します。
+	 *
+	 * @return Chain[]
 	 */
 	public function getAllChains() {
 		$records = $this->chain_table->select();
@@ -36,5 +41,9 @@ class ChainRepository {
 				$records
 			)
 		);
+	}
+
+	public function save( Chain $chain ): void {
+		$this->chain_table->save( $chain );
 	}
 }

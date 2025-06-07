@@ -10,6 +10,8 @@ use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 /**
  * 指定したチェーンが最初に有効になった(≒取引が開始された)ブロック番号を取得するためのクラス
  * ※ このブロック番号からイベントを取得すれば、サイトでの取引全てが取得できる
+ *
+ * @deprecated Chainのプロパティとして実装する
  */
 class BlockNumberActiveSince {
 	/**

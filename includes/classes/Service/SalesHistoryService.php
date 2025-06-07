@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Service;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Service\ChainsService;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use wpdb;
 
 /**
@@ -113,9 +113,9 @@ class AppContractTmpTable {
 		);
 
 		// テーブルにデータを挿入
-		$chain_IDs = ( new ChainsService() )->chainIDs();
-		foreach ( $chain_IDs as $chain_ID ) {
-			$app_contract = ( new AppContractRepository() )->get( $chain_ID );
+		$chains = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getAllChains();
+		foreach ( $chains as $chain ) {
+			$app_contract = ( new AppContractRepository() )->get( $chain->id() );
 			if ( is_null( $app_contract ) ) {
 				continue;   // アプリケーションコントラクトが取得できないチェーンはスキップ
 			}
@@ -123,9 +123,9 @@ class AppContractTmpTable {
 				INSERT INTO `{$table_name}` (`chain_id`, `address`)
 				VALUES (%d, %s)
 			SQL;
-			$sql    = $this->wpdb->prepare( $sql, $chain_ID, $app_contract->address()->value() );
+			$sql    = $this->wpdb->prepare( $sql, $chain->id(), $app_contract->address()->value() );
 			$result = $this->wpdb->query( $sql );
-			assert( 1 === $result, "[5549D888] Failed to insert app contract address for chain ID {$chain_ID}" );
+			assert( 1 === $result, "[5549D888] Failed to insert app contract address for chain ID {$chain->id()}" );
 		}
 	}
 

@@ -3,72 +3,69 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Service;
 
-use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Repository\ChainRepository;
+use InvalidArgumentException;
 
 /**
  * チェーンの情報を取得するクラス
  */
 class ChainService {
-	public function __construct( int $chian_ID, ?\wpdb $wpdb = null ) {
-		$this->chain_ID    = $chian_ID;
-		$this->chain_table = new ChainTable( $wpdb ?? $GLOBALS['wpdb'] );
+	public function __construct( ChainRepository $repository ) {
+		$this->repository = $repository;
 	}
+	private ChainRepository $repository;
 
-	private int $chain_ID;
-	private ChainTable $chain_table;
-
-	private function record() {
-		$records = $this->chain_table->select( $this->chain_ID );
-		assert( count( $records ) <= 1, '[3E69C835] ChainData::record() should return at most one record.' );
-		return empty( $records ) ? null : $records[0];
-	}
-
-	/** RPC URLを取得します */
-	public function rpcURL(): ?string {
-		$record = $this->record();
-		return is_null( $record ) ? null : $record->rpcURL();
-	}
-
-	/** RPC URLを設定します */
-	public function setRpcURL( ?string $rpc_url ): void {
-		$this->chain_table->updateRpcURL( $this->chain_ID, $rpc_url );
-	}
-
-	/** このチェーンに接続可能かどうかを取得します */
-	public function connectable(): bool {
-		$record = $this->record();
-		// RPC URLが設定されていれば接続可能とする
-		return ! is_null( $record ) && ! is_null( $record->rpcURL() ) && ! empty( $record->rpcURL() );
-	}
-
-	/** このチェーンのネットワークカテゴリを取得します */
-	public function networkCategory(): NetworkCategory {
-		$network_category = NetworkCategory::from( Config::NETWORK_CATEGORIES[ $this->chain_ID ] ?? null );
-		if ( is_null( $network_category ) ) {
-			throw new \UnexpectedValueException( '[B3FE6205] Network category ID is not defined for chain ID: ' . var_export( $this->chain_ID, true ) );
-		}
-
-		return $network_category;
+	public function getChain( int $chain_id ): ?Chain {
+		return $this->repository->getChain( $chain_id );
 	}
 
 	/**
-	 * このチェーンでの待機ブロック数を取得します
+	 * リポジトリに登録されているチェーン一覧を取得します。
 	 *
-	 * @return null|int|string
+	 * @return Chain[]
 	 */
-	public function confirmations() {
-		$record = $this->record();
-		return is_null( $record ) ? null : $record->confirmations();
+	public function getAllChains(): array {
+		return $this->repository->getAllChains();
 	}
 
 	/**
-	 * このチェーンの待機ブロック数を設定します
+	 * チェーン情報を更新します。
 	 *
+	 * @param Chain $chain
+	 */
+	private function saveChain( Chain $chain ): void {
+		$this->repository->save( $chain );
+	}
+
+	/**
+	 * 指定したチェーンの情報を更新し、保存します。
+	 *
+	 * @param int                  $chain_id
+	 * @param callback(Chain):void $updater
+	 */
+	private function updatePropertyAndSave( int $chain_id, $updater ): void {
+		$chain = $this->getChain( $chain_id );
+		if ( $chain === null ) {
+			throw new \InvalidArgumentException( "[465AB29B] Chain with ID {$chain_id} does not exist." );
+		}
+		$updater( $chain );
+		$this->saveChain( $chain );
+	}
+
+	public function saveRpcURL( int $chain_id, ?string $rpc_url ): void {
+		$this->updatePropertyAndSave( $chain_id, fn( Chain $chain ) => $chain->setRpcURL( $rpc_url ) );
+	}
+
+	/**
+	 *
+	 * @param int        $chain_id
 	 * @param int|string $confirmations
 	 */
-	public function setConfirmations( $confirmations ): void {
-		$this->chain_table->updateConfirmations( $this->chain_ID, $confirmations );
+	public function saveConfirmations( int $chain_id, $confirmations ): void {
+		if ( ! is_int( $confirmations ) && ! is_string( $confirmations ) ) {
+			throw new InvalidArgumentException( '[5ED6D745] Confirmations must be an integer or a string.' );
+		}
+		$this->updatePropertyAndSave( $chain_id, fn( Chain $chain ) => $chain->setConfirmations( $confirmations ) );
 	}
 }
