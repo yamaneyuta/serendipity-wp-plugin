@@ -3,26 +3,27 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Entity;
 
+use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\OracleTableRecord;
 
 class Oracle {
 
-	private function __construct( int $chain_ID, Address $address, string $base_symbol, string $quote_symbol ) {
-		$this->chain_ID     = $chain_ID;
+	private function __construct( Chain $chain, Address $address, string $base_symbol, string $quote_symbol ) {
+		$this->chain        = $chain;
 		$this->address      = $address;
 		$this->base_symbol  = $base_symbol;
 		$this->quote_symbol = $quote_symbol;
 	}
 
-	private int $chain_ID;
+	private Chain $chain;
 	private Address $address;
 	private string $base_symbol;
 	private string $quote_symbol;
 
-	public function chainID(): int {
-		return $this->chain_ID;
+	public function chain(): Chain {
+		return $this->chain;
 	}
 
 	public function address(): Address {
@@ -40,7 +41,7 @@ class Oracle {
 	public function __toString() {
 		return json_encode(
 			array(
-				'chain_ID'     => $this->chain_ID,
+				'chain_ID'     => $this->chain,
 				'address'      => $this->address,
 				'base_symbol'  => $this->base_symbol,
 				'quote_symbol' => $this->quote_symbol,
@@ -48,20 +49,19 @@ class Oracle {
 		);
 	}
 
-	public static function from( int $chain_ID, Address $address, string $base_symbol, string $quote_symbol ): Oracle {
-		assert( Validate::isChainID( $chain_ID ), '[403AD6AB] Invalid chain ID. chain id: ' . $chain_ID );
+	public static function from( Chain $chain, Address $address, string $base_symbol, string $quote_symbol ): Oracle {
 		assert( Validate::isSymbol( $base_symbol ), '[CD285CC7] Invalid base symbol. ' . $base_symbol );
 		assert( Validate::isSymbol( $quote_symbol ), '[BA65690D] Invalid quote symbol. ' . $quote_symbol );
 
-		return new self( $chain_ID, $address, $base_symbol, $quote_symbol );
+		return new self( $chain, $address, $base_symbol, $quote_symbol );
 	}
 
-	public static function fromTableRecord( OracleTableRecord $record ): self {
+	public static function fromTableRecord( OracleTableRecord $oracle_record, ChainTableRecord $chain_record ): self {
 		return self::from(
-			$record->chainID(),
-			new Address( $record->address() ),
-			$record->baseSymbol(),
-			$record->quoteSymbol()
+			Chain::fromTableRecord( $chain_record ),
+			new Address( $oracle_record->address() ),
+			$oracle_record->baseSymbol(),
+			$oracle_record->quoteSymbol()
 		);
 	}
 }
