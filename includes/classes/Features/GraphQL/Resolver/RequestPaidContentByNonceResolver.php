@@ -4,12 +4,11 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
-use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
@@ -57,7 +56,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		$post_ID          = $invoice->postID();
-		$chain            = ( new ChainRepository() )->getChain( $invoice->chainID() );
+		$chain            = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $invoice->chainID() );
 		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
@@ -99,7 +98,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( int $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$chain         = ( new ChainRepository() )->getChain( $chain_ID );
+		$chain         = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
 		$confirmations = $chain->confirmations();
 
 		if ( is_int( $confirmations ) ) {

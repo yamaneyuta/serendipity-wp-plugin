@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
-use Cornix\Serendipity\Core\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
@@ -34,7 +34,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
 
-		$chain = ( new ChainRepository() )->getChain( $chain_ID );
+		$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
 		if ( is_null( $chain ) ) {
 			throw new \InvalidArgumentException( '[DC8E36E6] chain data is not found. chain id: ' . $chain_ID );
 		} elseif ( ! $chain->connectable() ) {

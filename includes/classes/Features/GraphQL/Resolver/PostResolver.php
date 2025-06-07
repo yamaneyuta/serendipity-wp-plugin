@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Lib\Algorithm\Filter\ChainsFilter;
 use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Service\ChainsService;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
 
 class PostResolver extends ResolverBase {
@@ -44,12 +45,15 @@ class PostResolver extends ResolverBase {
 			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
 		}
 
-		// 投稿に設定されている販売ネットワークカテゴリに属するチェーンID一覧を取得
-		$chain_IDs = is_null( $selling_network_category ) ? array() : ( new ChainsService() )->chainIDs( $selling_network_category );
+		global $wpdb;
+		// 投稿に設定されている販売ネットワークカテゴリに属するチェーン一覧を取得
+		$chains = ( new ChainsFilter() )
+			->byNetworkCategory( $selling_network_category )
+			->apply( ( new ChainServiceFactory() )->create( $wpdb )->getAllChains() );
 
 		$result = array();
-		foreach ( $chain_IDs as $chain_ID ) {
-			$tokens_filter  = ( new TokensFilter() )->byChainID( $chain_ID )->byIsPayable( true );
+		foreach ( $chains as $chain ) {
+			$tokens_filter  = ( new TokensFilter() )->byChainID( $chain->id() )->byIsPayable( true );
 			$payable_tokens = $tokens_filter->apply( ( new TokenRepository() )->all() );
 			foreach ( $payable_tokens as $token ) {
 				$result[] = $root_value['token'](

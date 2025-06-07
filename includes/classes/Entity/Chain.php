@@ -49,11 +49,25 @@ class Chain {
 	public function rpcURL(): ?string {
 		return $this->rpc_url;
 	}
+	public function setRpcURL( ?string $rpc_url ): void {
+		$this->rpc_url = $rpc_url;
+	}
 	/**
 	 * @return int|string
 	 */
 	public function confirmations() {
 		return $this->confirmations;
+	}
+	/**
+	 * このチェーンの待機ブロック数を設定します
+	 *
+	 * @param int|string $confirmations
+	 */
+	public function setConfirmations( $confirmations ): void {
+		if ( ! is_int( $confirmations ) && ! is_string( $confirmations ) ) {
+			throw new \InvalidArgumentException( '[E8113094] Confirmations must be an integer or a string representing an integer.' );
+		}
+		$this->confirmations = $confirmations;
 	}
 
 	/** このチェーンに接続可能かどうかを取得します。 */

@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
-use Cornix\Serendipity\Core\Service\ChainService;
+use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 
 class SetRpcUrlResolver extends ResolverBase {
 
@@ -38,7 +38,8 @@ class SetRpcUrlResolver extends ResolverBase {
 		try {
 			global $wpdb;
 			$wpdb->query( 'START TRANSACTION' );
-			( new ChainService( $chain_ID, $wpdb ) )->setRpcURL( $rpc_url );
+			$chain_service = ( new ChainServiceFactory() )->create( $wpdb );
+			$chain_service->saveRpcURL( $chain_ID, $rpc_url );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );
