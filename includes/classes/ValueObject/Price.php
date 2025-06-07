@@ -47,10 +47,10 @@ class Price {
 		$tokens_filter = ( new TokensFilter() )->byChainID( $chain_ID )->bySymbol( $this->symbol );
 		$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
 
-		if ( 1 !== $tokens->count() ) {
-			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID . ', symbol: ' . $this->symbol . ', count: ' . $tokens->count() );
+		if ( 1 !== count( $tokens ) ) {
+			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID . ', symbol: ' . $this->symbol . ', count: ' . count( $tokens ) );
 		}
-		$token = array_values( $tokens->toArray() )[0]; // 1つだけなので、配列の最初の要素を取得
+		$token = array_values( $tokens )[0]; // 1つだけなので、配列の最初の要素を取得
 
 		$token_decimals = $token->decimals();
 

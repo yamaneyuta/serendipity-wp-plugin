@@ -52,7 +52,7 @@ class ChainResolver extends ResolverBase {
 						)
 					);
 				},
-				$tokens->toArray()
+				$tokens
 			);
 		};
 
