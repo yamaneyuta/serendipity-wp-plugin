@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Lib\Algorithm\Filter\OraclesFilter;
 use Cornix\Serendipity\Core\Repository\OracleRepository;
-use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
@@ -22,20 +21,14 @@ class OracleService {
 	 * @return int[]
 	 */
 	public function connectableChainIDs( SymbolPair $symbol_pair ): array {
-		$oracles_filter = ( new OraclesFilter() )->bySymbolPair( $symbol_pair );
+		$oracles_filter = ( new OraclesFilter() )
+			->bySymbolPair( $symbol_pair )
+			->byConnectable();
 		$oracles        = $oracles_filter->apply( $this->oracle_repository->all() );
-		// oracleテーブルに登録されている情報から、baseとquoteが一致するもののチェーンID一覧を取得
-		$chain_IDs = array_map(
-			fn( $oracle ) => $oracle->chainID(),
-			$oracles->toArray()
-		);
 
-		// 接続可能なチェーンIDに絞り込み
-		// TODO: リファクタ Oracleにchainプロパティを付与後、ここのロジックを修正
-		$chain_service = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] );
-		$chain_IDs     = array_filter(
-			$chain_IDs,
-			fn( $chain_ID ) => $chain_service->getChain( $chain_ID )->connectable()
+		$chain_IDs = array_map(
+			fn( $oracle ) => $oracle->chain()->id(),
+			$oracles
 		);
 
 		// 重複を削除し、インデックスを振り直した配列を返す
@@ -49,8 +42,8 @@ class OracleService {
 		$oracles_filter = ( new OraclesFilter() )->byChainID( $chain_ID )
 			->bySymbolPair( $symbol_pair );
 		$oracles        = $oracles_filter->apply( $this->oracle_repository->all() );
-		assert( $oracles->count() <= 1 );
+		assert( count( $oracles ) <= 1 );
 
-		return $oracles->count() === 0 ? null : array_values( $oracles->toArray() )[0]->address();
+		return 0 === count( $oracles ) ? null : array_values( $oracles )[0]->address();
 	}
 }
