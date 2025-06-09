@@ -8,11 +8,11 @@ use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
 use Cornix\Serendipity\Core\Service\InvoiceService;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
-use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
+use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
 use Cornix\Serendipity\Core\ValueObject\Address;
 
@@ -46,11 +46,9 @@ class IssueInvoiceResolver extends ResolverBase {
 		}
 
 		// 販売者情報を取得
-		$seller_agreed_terms = new SellerAgreedTerms();
-		if ( ! $seller_agreed_terms->exists() ) {
-			throw new \Exception( '[88C95394] SellerAgreedTerms not found' );
-		}
-		$seller_address = Ethers::verifyMessage( $seller_agreed_terms->message(), $seller_agreed_terms->signature() );
+		$seller_singed_terms = ( new TermsServiceFactory() )->create()->getSignedSellerTerms();
+		assert( $seller_singed_terms, '[88C95394] SellerAgreedTerms not found' );
+		$seller_address = Ethers::verifyMessage( $seller_singed_terms->terms()->message(), $seller_singed_terms->signature() );
 
 		// 販売価格を取得
 		$selling_price = ( new PostService() )->get( $post_ID )->sellingPrice();

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
+use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 
 class SellerResolver extends ResolverBase {
 
@@ -17,12 +17,13 @@ class SellerResolver extends ResolverBase {
 
 		$agreed_terms = null;
 
-		$seller_agreed_terms = new SellerAgreedTerms();
-		if ( $seller_agreed_terms->exists() ) {
+		$signed_seller_terms = ( new TermsServiceFactory() )->create()->getSignedSellerTerms();
+
+		if ( null !== $signed_seller_terms ) {
 			$agreed_terms = array(
-				'version'   => $seller_agreed_terms->version(),
-				'message'   => $seller_agreed_terms->message(),
-				'signature' => $seller_agreed_terms->signature(),
+				'version'   => $signed_seller_terms->terms()->version()->value(),
+				'message'   => $signed_seller_terms->terms()->message(),
+				'signature' => $signed_seller_terms->signature(),
 			);
 		}
 

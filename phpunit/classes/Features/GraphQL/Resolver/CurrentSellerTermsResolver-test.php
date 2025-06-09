@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
+use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 
 class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 
@@ -34,7 +34,7 @@ class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 	 */
 	public function requestCurrentSellerTermsSuccess( string $user_type ) {
 		// ARRANGE
-		// Do nothing
+		$current_seller_terms = ( new TermsServiceFactory() )->create()->getCurrentSellerTerms();
 
 		// ACT
 		$data = $this->requestCurrentSellerTerms( $user_type );
@@ -43,10 +43,8 @@ class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
 
 		// Repositoryから取得した値と一致していることを確認
-		$version = ( new SellerTermsRepository() )->currentVersion();
-		$message = ( new SellerTermsRepository() )->message( $version );
-		$this->assertEquals( $version, $data['data']['currentSellerTerms']['version'] );
-		$this->assertEquals( $message, $data['data']['currentSellerTerms']['message'] );
+		$this->assertEquals( $current_seller_terms->version()->value(), $data['data']['currentSellerTerms']['version'] );
+		$this->assertEquals( $current_seller_terms->message(), $data['data']['currentSellerTerms']['message'] );
 	}
 
 	/**
