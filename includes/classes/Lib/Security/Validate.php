@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Constant\ChainID;
-use Cornix\Serendipity\Core\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 
@@ -166,7 +166,7 @@ class Validate {
 		}
 	}
 	private static function isCurrentSellerTermsVersion( int $seller_terms_version ): bool {
-		$current_version = ( new SellerTerms() )->currentVersion();  // 現在の販売者向け利用規約バージョン
+		$current_version = ( new SellerTermsRepository() )->currentVersion();  // 現在の販売者向け利用規約バージョン
 		return $seller_terms_version === $current_version;
 	}
 

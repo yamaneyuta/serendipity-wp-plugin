@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
-use Cornix\Serendipity\Core\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 
 class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
@@ -38,8 +38,8 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		// ARRANGE
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice                = HardhatSignerFactory::alice();
-		$seller_terms_version = ( new SellerTerms() )->currentVersion();
-		$seller_terms_message = ( new SellerTerms() )->message( $seller_terms_version );
+		$seller_terms_version = ( new SellerTermsRepository() )->currentVersion();
+		$seller_terms_message = ( new SellerTermsRepository() )->message( $seller_terms_version );
 		$signature            = $alice->signMessage( $seller_terms_message );
 		// 事前チェック
 		$this->assertFalse( ( new SellerAgreedTerms() )->exists() );  // データは保存されていないこと
@@ -71,8 +71,8 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		// ARRANGE
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice                = HardhatSignerFactory::alice();
-		$seller_terms_version = ( new SellerTerms() )->currentVersion();
-		$seller_terms_message = ( new SellerTerms() )->message( $seller_terms_version );
+		$seller_terms_version = ( new SellerTermsRepository() )->currentVersion();
+		$seller_terms_message = ( new SellerTermsRepository() )->message( $seller_terms_version );
 		$signature            = $alice->signMessage( $seller_terms_message );
 		// 事前チェック
 		$this->assertFalse( ( new SellerAgreedTerms() )->exists() );  // データは保存されていないこと

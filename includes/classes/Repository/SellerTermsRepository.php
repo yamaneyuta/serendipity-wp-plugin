@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 /**
  * 本プラグインにおける販売者向け利用規約の情報を取得するためのクラス
  */
-class SellerTerms {
+class SellerTermsRepository {
 
 	/**
 	 * このプラグインに同梱されている販売者向け利用規約のバージョンを取得します。

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
-use Cornix\Serendipity\Core\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 
 class SellerResolverTest extends IntegrationTestBase {
@@ -63,8 +63,8 @@ class SellerResolverTest extends IntegrationTestBase {
 		// ARRANGE
 		// Aliceが販売者用利用規約に署名しデータを保存
 		$alice                = HardhatSignerFactory::alice();
-		$seller_terms_version = ( new SellerTerms() )->currentVersion();
-		$seller_terms_message = ( new SellerTerms() )->message( $seller_terms_version );
+		$seller_terms_version = ( new SellerTermsRepository() )->currentVersion();
+		$seller_terms_message = ( new SellerTermsRepository() )->message( $seller_terms_version );
 		$signature            = $alice->signMessage( $seller_terms_message );
 		( new SellerAgreedTerms() )->save( $seller_terms_version, $signature );
 

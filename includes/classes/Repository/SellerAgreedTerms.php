@@ -24,7 +24,7 @@ class SellerAgreedTerms {
 	 */
 	public function message(): ?string {
 		$agreed_version = $this->version();
-		return is_null( $agreed_version ) ? null : ( new SellerTerms() )->message( $agreed_version );
+		return is_null( $agreed_version ) ? null : ( new SellerTermsRepository() )->message( $agreed_version );
 	}
 
 	/**

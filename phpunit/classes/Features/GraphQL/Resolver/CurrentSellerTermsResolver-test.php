@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Repository\SellerTerms;
+use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
 
 class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 
@@ -43,8 +43,8 @@ class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
 
 		// Repositoryから取得した値と一致していることを確認
-		$version = ( new SellerTerms() )->currentVersion();
-		$message = ( new SellerTerms() )->message( $version );
+		$version = ( new SellerTermsRepository() )->currentVersion();
+		$message = ( new SellerTermsRepository() )->message( $version );
 		$this->assertEquals( $version, $data['data']['currentSellerTerms']['version'] );
 		$this->assertEquals( $message, $data['data']['currentSellerTerms']['message'] );
 	}
