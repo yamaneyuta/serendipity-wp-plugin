@@ -36,7 +36,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * ブロック番号をRPC URLにアクセスして取得するテスト
 	 *
 	 * @test
-	 * @testdox [20B19A08] RPC::getBlockNumberHex() - chain_ID: $chain_ID
+	 * @testdox [20B19A08] RPC::getBlockNumber() - chain_ID: $chain_ID
 	 * @dataProvider getBlockNumberHexDataProvider
 	 */
 	public function getBlockNumberHex( int $chain_ID ) {

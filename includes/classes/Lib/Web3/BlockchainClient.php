@@ -82,53 +82,53 @@ class BlockchainClient {
 	public function getBlockNumber( string $tag = 'latest' ): BlockNumber {
 		Validate::checkBlockTagName( $tag );
 
-		/** @var string|null */
-		$block_number_hex = null;
 		if ( $tag === 'latest' ) {
-			$block_number_hex = $this->getLatestBlockNumberHex();
+			return $this->getLatestBlockNumber();
 		} else {
-			$block_number_hex = $this->getBlockNumberByTag( $tag );
+			return $this->getBlockNumberByTag( $tag );
 		}
-
-		return BlockNumber::from( $block_number_hex );
 	}
 
 	/**
-	 * 最新のブロック番号(HEX)を取得します。
+	 * 最新のブロック番号を取得します。
 	 */
-	private function getLatestBlockNumberHex(): string {
-		/** @var string|null */
-		$block_number_hex = null;
+	private function getLatestBlockNumber(): BlockNumber {
+		/** @var BlockNumber|null */
+		$block_number = null;
 		$this->retryer->execute(
-			function () use ( &$block_number_hex ) {
+			function () use ( &$block_number ) {
 				$this->eth()->blockNumber(
-					function ( $err, BigInteger $res ) use ( &$block_number_hex ) {
+					function ( $err, BigInteger $res ) use ( &$block_number ) {
 						if ( $err ) {
 							throw $err;
 						}
-						$block_number_hex = Hex::from( $res );
+						$block_number = BlockNumber::from( $res );
 					}
 				);
 			}
 		);
-		assert( ! is_null( $block_number_hex ), '[C38AC4D1] Failed to get block number.' );
-		Validate::checkAmountHex( $block_number_hex );
 
-		return $block_number_hex;
+		return $block_number;
 	}
 
 	/**
-	 * eth_getBlockByNumberの呼び出しを行い、そのブロック番号をHEXで返します
+	 * eth_getBlockByNumberの呼び出しを行い、そのブロック番号を返します
+	 *
+	 * @param BlockNumber|string $quantity_or_tag
 	 */
-	private function getBlockNumberByTag( string $tag ): string {
+	private function getBlockNumberByTag( $quantity_or_tag ): BlockNumber {
 		// @see https://docs.chainstack.com/reference/ethereum-getblockbynumber#parameters
+		assert( $quantity_or_tag instanceof BlockNumber || is_string( $quantity_or_tag ), '[6900A10E] $quantity_or_tag must be an BlockNumber or a string.' );
+		if ( $quantity_or_tag instanceof BlockNumber ) {
+			$quantity_or_tag = $quantity_or_tag->hex(); // BlockNumberインスタンスの場合は16進数に変換
+		}
 
 		/** @var string|null */
 		$block_number_hex = null;
 		$this->retryer->execute(
-			function () use ( $tag, &$block_number_hex ) {
+			function () use ( $quantity_or_tag, &$block_number_hex ) {
 				$this->eth()->getBlockByNumber(
-					$tag,
+					$quantity_or_tag,
 					false,  // false: トランザクションの詳細を取得しない
 					function ( $err, $res ) use ( &$block_number_hex ) {
 						if ( $err ) {
@@ -141,10 +141,7 @@ class BlockchainClient {
 			}
 		);
 
-		assert( ! is_null( $block_number_hex ), '[D3B8A88E] Failed to get block number.' );
-		Validate::checkHex( $block_number_hex );
-
-		return $block_number_hex;
+		return BlockNumber::from( $block_number_hex );
 	}
 
 
