@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Crawler;
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Lib\Convert\Padding;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransactionRepository;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEventRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
@@ -135,7 +134,7 @@ class UnlockPaywallTransferCrawler {
 
 		// サーバーの署名用ウォレットアドレス
 		$server_signer                 = ( new ServerSignerServiceFactory() )->create( $GLOBALS['wpdb'] )->getServerSigner();
-		$server_signer_address_bytes32 = ( new Padding() )->toBytes32Hex( $server_signer->address()->value() ); // topicsは32バイトで記録されているため変換
+		$server_signer_address_bytes32 = $server_signer->address()->toBytes32Hex();
 
 		$this->topics = array(
 			$topic_hash,

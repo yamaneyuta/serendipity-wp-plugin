@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\ValueObject;
 
+use Cornix\Serendipity\Core\Lib\Convert\Padding;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 /**
@@ -23,6 +24,10 @@ final class Address {
 
 	public function value(): string {
 		return $this->address_value;
+	}
+
+	public function toBytes32Hex(): string {
+		return ( new Padding() )->toBytes32Hex( $this->value() );
 	}
 
 	public function __toString() {
