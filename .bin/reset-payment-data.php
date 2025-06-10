@@ -8,7 +8,6 @@ require_once __DIR__ . '/../includes/vendor/autoload.php';
  * このスクリプトをpackage.jsonから呼び出されます。
  */
 
-use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ServerSignerTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTransactionTable;
@@ -40,5 +39,3 @@ echo "New Address: $newAddress\n";
 ( new UnlockPaywallTransferEventTable( $wpdb ) )->create();
 ( new InvoiceTable( $wpdb ) )->drop();
 ( new InvoiceTable( $wpdb ) )->create();
-( new InvoiceNonceTable( $wpdb ) )->drop();
-( new InvoiceNonceTable( $wpdb ) )->create();
