@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 
 class CurrentSellerTermsResolver extends ResolverBase {
 
@@ -18,10 +18,10 @@ class CurrentSellerTermsResolver extends ResolverBase {
 		Validate::checkHasAdminRole(); // 管理者権限が必要
 
 		// 最新の販売者向け利用規約の情報を取得
-		$seller_terms = new SellerTerms();
+		$current_seller_terms = ( new TermsServiceFactory() )->create()->getCurrentSellerTerms();
 		return array(
-			'version' => $seller_terms->currentVersion(),
-			'message' => $seller_terms->message( $seller_terms->currentVersion() ),
+			'version' => $current_seller_terms->version()->value(),
+			'message' => $current_seller_terms->message(),
 		);
 	}
 }

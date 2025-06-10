@@ -168,6 +168,13 @@ class OracleTableRecordInitializer {
 		// $oracle_table->insert( ChainID::ETH_MAINNET, '0xe25277fF4bbF9081C75Ab0EB13B4A13a721f3E13', 'SGD', 'USD' );
 		// Crypto
 		$oracle_table->insert( ChainID::ETH_MAINNET, '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', 'ETH', 'USD' );
+
+		// テスト中はプライベートネットのOracleを登録
+		if ( ( new Environment() )->isTesting() ) {
+			// プライベートネットのOracleを登録
+			$oracle_table->insert( ChainID::PRIVATENET_L1, '0x3F3B6a555F3a7DeD78241C787e0cDD8E431A64A8', 'ETH', 'USD' );
+			$oracle_table->insert( ChainID::PRIVATENET_L1, '0xc886d2C1BEC5819b4B8F84f35A9885519869A8EE', 'JPY', 'USD' );
+		}
 	}
 }
 

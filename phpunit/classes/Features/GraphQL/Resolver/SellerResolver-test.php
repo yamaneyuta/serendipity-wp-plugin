@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
-use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 
 class SellerResolverTest extends IntegrationTestBase {
 
@@ -62,11 +61,11 @@ class SellerResolverTest extends IntegrationTestBase {
 	public function requestSellerSuccessWithSignData( string $user_type ) {
 		// ARRANGE
 		// Aliceが販売者用利用規約に署名しデータを保存
-		$alice                = HardhatSignerFactory::alice();
-		$seller_terms_version = ( new SellerTerms() )->currentVersion();
-		$seller_terms_message = ( new SellerTerms() )->message( $seller_terms_version );
-		$signature            = $alice->signMessage( $seller_terms_message );
-		( new SellerAgreedTerms() )->save( $seller_terms_version, $signature );
+		$alice         = HardhatSignerFactory::alice();
+		$terms_service = ( new TermsServiceFactory() )->create();
+		$seller_terms  = $terms_service->getCurrentSellerTerms();
+		$signature     = $alice->signMessage( $seller_terms->message() );
+		$terms_service->saveSellerSignature( $signature );
 
 		// ACT
 		$data = $this->requestSeller( $user_type );
@@ -74,8 +73,8 @@ class SellerResolverTest extends IntegrationTestBase {
 		// ASSERT
 		// 保存した値が取得できること
 		$agreed_terms = $data['data']['seller']['agreedTerms'];
-		$this->assertEquals( $seller_terms_version, $agreed_terms['version'] );
-		$this->assertEquals( $seller_terms_message, $agreed_terms['message'] );
+		$this->assertEquals( $seller_terms->version()->value(), $agreed_terms['version'] );
+		$this->assertEquals( $seller_terms->message(), $agreed_terms['message'] );
 		$this->assertEquals( $signature, $agreed_terms['signature'] );
 		// 保存されたメッセージと署名からアドレスを取得できること
 		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $agreed_terms['message'], $agreed_terms['signature'] ) );

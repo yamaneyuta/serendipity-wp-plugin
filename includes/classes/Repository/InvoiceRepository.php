@@ -19,7 +19,7 @@ class InvoiceRepository {
 	private InvoiceNonceTable $invoice_nonce_table;
 
 	public function exists( InvoiceID $invoice_ID ): bool {
-		return (bool) is_null( $this->get( $invoice_ID ) );
+		return ! is_null( $this->get( $invoice_ID ) );
 	}
 
 	public function add( Invoice $invoice ): void {

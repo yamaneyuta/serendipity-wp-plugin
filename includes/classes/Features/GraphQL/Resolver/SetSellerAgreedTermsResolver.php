@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\SellerAgreedTerms;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 
 class SetSellerAgreedTermsResolver extends ResolverBase {
 
@@ -22,8 +22,12 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 		// 管理者権限を持っているかどうかをチェック
 		Validate::checkHasAdminRole();
 
-		// 販売者の署名情報を保存
-		( new SellerAgreedTerms() )->save( $version, $signature );
+		//
+		// TODO: 引数にアドレスを追加し、署名を検証するロジックを追加
+		//
+
+		// 販売者の署名を保存
+		( new TermsServiceFactory() )->create()->saveSellerSignature( $signature );
 
 		return true;
 	}

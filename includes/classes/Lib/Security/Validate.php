@@ -5,9 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Constant\ChainID;
-use Cornix\Serendipity\Core\Repository\SellerTerms;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 
 /**
  * 本システムにおいて`check～`は、引数の値を検証し、不正な値の場合は例外をスローする動作を行います。
@@ -151,23 +149,6 @@ class Validate {
 	public static function isSymbol( string $symbol ): bool {
 		// 様々な通貨記号が存在するため、空文字列以外であれば有効とする。
 		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
-	}
-
-	/**
-	 * 引数として渡されたバージョンが現在の販売者向け利用規約バージョンと一致しない場合は例外をスローします。
-	 *
-	 * @param int $seller_terms_version
-	 * @return void
-	 * @throws \InvalidArgumentException
-	 */
-	public static function checkCurrentSellerTermsVersion( int $seller_terms_version ): void {
-		if ( ! self::isCurrentSellerTermsVersion( $seller_terms_version ) ) {
-			throw new \InvalidArgumentException( '[93398C5C] Invalid version. seller_terms_version: ' . $seller_terms_version );
-		}
-	}
-	private static function isCurrentSellerTermsVersion( int $seller_terms_version ): bool {
-		$current_version = ( new SellerTerms() )->currentVersion();  // 現在の販売者向け利用規約バージョン
-		return $seller_terms_version === $current_version;
 	}
 
 	/**
