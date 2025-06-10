@@ -136,16 +136,6 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 	/** @var WP_REST_Server */
 	private $server;
 
-	/**
-	 * テスト用の投稿コンテンツを作成します。
-	 *
-	 * @param WidgetAttributes $widget_attributes
-	 * @return string
-	 */
-	protected function createTestPostContent( WidgetAttributes $widget_attributes ): string {
-		return ( new TestPostContent( $widget_attributes ) )->create();
-	}
-
 	// ----- PHPUnitの差異を吸収 -----
 
 	/**
@@ -198,49 +188,6 @@ class TableHandler {
 		// setUpで削除するため、tearDownでの処理は不要
 	}
 }
-
-/**
- * テスト用の投稿コンテンツを作成するクラス
- */
-class TestPostContent {
-	public function __construct( WidgetAttributes $widget_attributes ) {
-		$this->widget_attributes = $widget_attributes;
-	}
-
-	private WidgetAttributes $widget_attributes;
-
-	public function create() {
-		$class_name = ( new ClassName() )->getBlock();
-		$html       = "<div class=\"{$class_name}\"></div>";
-		// https://developer.wordpress.org/reference/functions/serialize_blocks/#parameters
-		return serialize_blocks(
-			array(
-				array(
-					'blockName'    => 'core/paragraph',
-					'attrs'        => array(),
-					'innerBlocks'  => array(),
-					'innerHTML'    => '<p>FREE_AREA</p>',
-					'innerContent' => array( '<p>FREE_AREA</p>' ),
-				),
-				array(
-					'blockName'    => BlockName::get(),
-					'attrs'        => $this->widget_attributes->toArray(),
-					'innerBlocks'  => array(),
-					'innerHTML'    => $html,
-					'innerContent' => array( $html ),
-				),
-				array(
-					'blockName'    => 'core/paragraph',
-					'attrs'        => array(),
-					'innerBlocks'  => array(),
-					'innerHTML'    => '<p>PAID_AREA</p>',
-					'innerContent' => array( '<p>PAID_AREA</p>' ),
-				),
-			)
-		);
-	}
-}
-
 
 class UserType {
 	public const ADMINISTRATOR       = 'admin';  // ユーザー名は`admin`

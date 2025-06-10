@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\Update\Version;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceNonceTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\OracleTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
@@ -33,8 +32,6 @@ class v001 {
 		( new PaidContentTable( $wpdb ) )->create();
 		// 請求書情報テーブルを作成
 		( new InvoiceTable( $wpdb ) )->create();
-		// 請求書とnonceの紐づきを保存するテーブルを作成
-		( new InvoiceNonceTable( $wpdb ) )->create();
 		// Oracleの情報を記録するテーブルを作成
 		( new OracleTable( $wpdb ) )->create();
 		// トークンの情報を記録するテーブルを作成
@@ -65,8 +62,6 @@ class v001 {
 		( new PaidContentTable( $wpdb ) )->drop();
 		// 請求書情報テーブルを削除
 		( new InvoiceTable( $wpdb ) )->drop();
-		// 請求書とnonceの紐づきを保存するテーブルを削除
-		( new InvoiceNonceTable( $wpdb ) )->drop();
 		// Oracleの情報を記録するテーブルを削除
 		( new OracleTable( $wpdb ) )->drop();
 		// トークンの情報を記録するテーブルを削除
