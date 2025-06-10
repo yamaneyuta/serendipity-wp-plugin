@@ -17,14 +17,13 @@ class AppContractClient {
 	public function __construct( AppContract $app_contract, ?AppContractAbi $app_contract_abi = null ) {
 		assert( $app_contract->chain()->connectable(), '[A5ED369D]' );   // 接続可能なチェーンであること
 
-		$address = $app_contract->address();
-		// このインスタンスを生成する前に接続可能かどうかをチェックしてください。
-		$app_contract_abi   = $app_contract_abi ?? new AppContractAbi();
-		$this->contract     = ( new ContractFactory() )->create( $app_contract->chain()->rpcURL(), $app_contract_abi->get(), $address );
-		$this->app_contract = $app_contract;
+		$this->contract = ( new ContractFactory() )->create(
+			$app_contract->chain()->rpcURL(),
+			( $app_contract_abi ?? new AppContractAbi() )->get(),
+			$app_contract->address()
+		);
 	}
 	private Contract $contract;
-	private AppContract $app_contract;
 
 	protected function contract(): Contract {
 		return $this->contract;
@@ -58,12 +57,5 @@ class AppContractClient {
 
 		assert( ! is_null( $result ) );
 		return $result;
-	}
-
-	/**
-	 * 接続するコントラクトアドレスを取得します。
-	 */
-	public function address(): Address {
-		return $this->app_contract->address();
 	}
 }
