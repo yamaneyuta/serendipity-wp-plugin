@@ -26,5 +26,16 @@ class OptionUninstaller {
 		foreach ( $option_names as $option_name ) {
 			delete_option( $option_name );
 		}
+
+		// `transient`も削除する
+		$query           = <<<SQL
+			SELECT `option_name`
+			FROM {$wpdb->options}
+			WHERE `option_name` LIKE '_transient_{$prefix}%'
+		SQL;
+		$transient_names = $wpdb->get_col( $query );
+		foreach ( $transient_names as $transient_name ) {
+			delete_transient( str_replace( '_transient_', '', $transient_name ) );
+		}
 	}
 }
