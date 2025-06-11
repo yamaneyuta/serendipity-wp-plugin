@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Constant;
 
 /** トークンの転送種別。コントラクトで定義している内容と一致させる必要がある */
-final class UnlockPaywallTransferType {
+final class UnlockPaywallTransferTypeID {
 	/** 販売手数料 */
 	public const HANDLING_FEE = 1;
 
