@@ -6,24 +6,38 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 use Cornix\Serendipity\Core\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
+use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
+use Cornix\Serendipity\Core\Lib\Calc\Hex;
+use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Lib\Web3\ContractFactory;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\ValueObject\TransactionHash;
+use Cornix\Serendipity\Core\ValueObject\UnlockPaywallTransferType;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 
 class AppContractClient {
+
+	private const EVENT_NAME_UNLOCK_PAYWALL_TRANSFER = 'UnlockPaywallTransfer';
+
 	public function __construct( AppContract $app_contract, ?AppContractAbi $app_contract_abi = null ) {
 		assert( $app_contract->chain()->connectable(), '[A5ED369D]' );   // 接続可能なチェーンであること
 
-		$this->contract = ( new ContractFactory() )->create(
+		$this->app_contract      = $app_contract;
+		$this->abi               = $app_contract_abi ?? new AppContractAbi();
+		$this->contract          = ( new ContractFactory() )->create(
 			$app_contract->chain()->rpcURL(),
-			( $app_contract_abi ?? new AppContractAbi() )->get(),
+			$this->abi->get(),
 			$app_contract->address()
 		);
+		$this->blockchain_client = new BlockchainClient( $app_contract->chain()->rpcURL() );
 	}
 	private Contract $contract;
+	private AppContractAbi $abi;
+	private AppContract $app_contract;
+	private BlockchainClient $blockchain_client;
 
 	protected function contract(): Contract {
 		return $this->contract;
@@ -57,5 +71,53 @@ class AppContractClient {
 
 		assert( ! is_null( $result ) );
 		return $result;
+	}
+
+	public function getUnlockPaywallTransferEvents(
+		BlockNumber $from_block,
+		BlockNumber $to_block,
+		Address $server_signer_address
+	) {
+		assert( $from_block->compare( $to_block ) <= 0, '[438F5DEE] from_block must be less than or equal to to_block.' );
+
+		$filter = array(
+			'fromBlock' => $from_block->hex(),
+			'toBlock'   => $to_block->hex(),
+			'address'   => $this->app_contract->address()->value(),
+			'topics'    => array(
+				( new AppContractAbi() )->topicHash( self::EVENT_NAME_UNLOCK_PAYWALL_TRANSFER ),
+				$server_signer_address->toBytes32Hex(),
+			),
+		);
+
+		/** @var UnlockPaywallTransferEvent[] */
+		$results = array();
+		$this->blockchain_client->getLogs(
+			$filter,
+			function ( $err, $logs ) use ( &$results ) {
+				if ( $err ) {
+					throw $err;
+				}
+
+				$results = array();
+				foreach ( $logs as $log ) {
+					$decoded_event_parameters = $this->abi->decodeEventParameters( $log );
+					$results[]                = new UnlockPaywallTransferEvent(
+						BlockNumber::from( $log->blockNumber ), // block_number
+						hexdec( $log->logIndex ), // log_index
+						TransactionHash::from( $log->transactionHash ), // transaction_hash
+						InvoiceID::from( $decoded_event_parameters['invoiceID'] ), // invoice_id
+						Address::from( $decoded_event_parameters['signer'] ), // server_signer_address
+						Address::from( $decoded_event_parameters['from'] ), // from_address
+						Address::from( $decoded_event_parameters['to'] ), // to_address
+						Address::from( $decoded_event_parameters['token'] ), // token_address
+						Hex::from( $decoded_event_parameters['amount'] ), // amount_hex
+						UnlockPaywallTransferType::from( (int) ( $decoded_event_parameters['transferType'] )->toString() ) // transfer_type
+					);
+				}
+			}
+		);
+
+		return $results;
 	}
 }
