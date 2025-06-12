@@ -17,12 +17,11 @@ class ServerSignerService {
 	private const CIPHER_ALGO       = 'AES-256-CBC';
 	private const CIPHER_KEY_LENGTH = 32; // AES-256のキー長は32バイト
 
-	/** 署名用ウォレットの初期化を行います */
-	public function initializeServerSigner(): void {
+	/** 署名用ウォレット情報を生成します */
+	public function generateServerSignerData(): ?GeneratedServerSignerData {
 		if ( ! is_null( $this->repository->privateKeyData() ) ) {
-			// すでにウォレットの秘密鍵が保存されている場合はログ出力して処理抜け
-			// TODO: ログ出力
-			return;
+			// すでにウォレットの秘密鍵が保存されている場合は例外をスロー
+			throw new \RuntimeException( '[F0443E8A] Server signer private key already exists. Cannot generate a new one.' );
 		}
 
 		// 新しくウォレットを生成
@@ -56,9 +55,8 @@ class ServerSignerService {
 			$iv               = base64_encode( $iv );
 		}
 
-		// リポジトリに保存
-		$this->repository->save(
-			$server_signer->address(),
+		return new GeneratedServerSignerData(
+			$server_signer->address()->value(),
 			$private_key_data,
 			$key,
 			$iv
@@ -91,5 +89,35 @@ class ServerSignerService {
 		assert( $serverSigner->address()->equals( $this->repository->address() ), '[ED4952AA] Address mismatch between stored and generated signer.' );
 
 		return $serverSigner;
+	}
+}
+
+class GeneratedServerSignerData {
+	public function __construct( string $address, string $private_key_data, ?string $encryption_key, ?string $encryption_iv ) {
+		$this->address          = $address;
+		$this->private_key_data = $private_key_data;
+		$this->encryption_key   = $encryption_key;
+		$this->encryption_iv    = $encryption_iv;
+	}
+
+	private string $address;
+	private string $private_key_data;
+	private ?string $encryption_key;
+	private ?string $encryption_iv;
+
+	public function address(): string {
+		return $this->address;
+	}
+
+	public function privateKeyData(): string {
+		return $this->private_key_data;
+	}
+
+	public function encryptionKey(): ?string {
+		return $this->encryption_key;
+	}
+
+	public function encryptionIv(): ?string {
+		return $this->encryption_iv;
 	}
 }
