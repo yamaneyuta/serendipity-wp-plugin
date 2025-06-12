@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Hook\Update;
 
-use Cornix\Serendipity\Core\Features\Update\PluginUpdater;
-use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
+use Cornix\Serendipity\Core\Infrastructure\Database\OptionGateway\PluginVersionOption;
+use Cornix\Serendipity\Core\Repository\Environment;
+use Cornix\Serendipity\Core\Service\DatabaseMigrationService;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
 
 // ■プラグインがインストールされた時や更新時のhookに関して
@@ -34,45 +35,34 @@ class PluginUpdateHook {
 	public function addActionAdminInit(): void {
 		assert( is_admin() );
 
-		// 方針:
-		// optionsテーブルに保存されているプラグインのバージョン(最後にインストールされたバージョン)を取得し、
-		// 現在のプラグインのバージョンと比較する。
-		// 現在のプラグインバージョンの方が新しい場合は、プラグインのアップデート処理を実行する。
-		// プラグインのアップデート処理が完了後、optionsテーブルに保存されているプラグインのバージョンを更新する。
+		try {
+			$db_plugin_version = ( new PluginVersionOption() )->get();    // DBに記録されているプラグインバージョン
+			$plugin_version    = ( new PluginInfo() )->version();          // 現在のプラグインバージョン
 
-		$option = ( new OptionFactory() )->lastInstalledPluginVersion();
-		/** @var string|null */
-		$last_ver    = $option->get( null ); // 最後にインストールされたプラグインバージョン
-		$current_ver = ( new PluginInfo() )->version(); // 現在のプラグインバージョン
+			if ( is_null( $db_plugin_version ) || version_compare( $db_plugin_version, $plugin_version, '<' ) ) {
+				// プラグインのバージョンが更新されている場合、または取得できない(新規インストール)場合はアップグレード処理を実行
+				( new DatabaseMigrationService( $GLOBALS['wpdb'], new Environment() ) )->migrate( $db_plugin_version );
 
-		if ( ! $this->isUpgradeNeeded( $last_ver, $current_ver ) ) {
-			// アップグレード不要な場合は処理抜け
-			// ※ ダウングレード(非推奨)された場合もここを通ることに注意
-			// 　 ダウングレードしても動作する可能性がゼロではないので、エラーとはしていない
-			return;
+				// DBに記録されているプラグインのバージョンを更新
+				// ※ 管理画面でのみ必要となる項目のため、autoloadはfalseに設定
+				( new PluginVersionOption() )->update( $plugin_version, false );
+			}
+		} catch ( \Throwable $e ) {
+			// アップデートに失敗した場合はプラグインを無効化
+			$this->deactivatePlugin();
+			// wp_redirect( admin_url( 'plugins.php' ) ); // プラグイン一覧ページにリダイレクト
+
+			// エラー内容を画面に表示
+			echo (string) $e;
+			exit;
 		}
-
-		// 更新処理
-		( new PluginUpdater() )->update( $last_ver, $current_ver );
-
-		// プラグインのバージョンを保存
-		$option->update( $current_ver );
-
-		// ※ 更新処理が失敗した時、エラーの無限ループに陥る可能性がある。
-		// 　 エラー発生時にプラグインを無効化することを検討したが、
-		// 　 無効化されたことに気づかない(有料部分が見える状態の)ままになるリスクがあると判断し
-		// 　 プラグインの無効化処理は実装していない。
 	}
 
-	/** アップグレード処理が必要かどうかを取得します。 */
-	private function isUpgradeNeeded( ?string $last_version, string $current_version ): bool {
-		// 初回インストール時はアップグレードが必要
-		if ( null === $last_version ) {
-			return true;
+	private function deactivatePlugin(): void {
+		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-
-		// バージョンを比較して現在のプラグインバージョンの方が新しい場合、アップグレードが必要
-		// ※ ダウングレード(非推奨)された場合はアップグレード不要の判定
-		return version_compare( $last_version, $current_version, '<' );
+		// プラグインを無効化
+		deactivate_plugins( plugin_basename( ( new PluginInfo() )->mainFilePath() ) );
 	}
 }
