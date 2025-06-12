@@ -38,6 +38,11 @@ class TableName {
 		return $this->addPrefix( 'unlock_paywall_transfer_event' );
 	}
 
+	/** Appコントラクトの情報を記録するテーブル名 */
+	public function appContract(): string {
+		return $this->addPrefix( 'app_contract' );
+	}
+
 	/** (支払時に使用する)トークンの情報を記録するテーブル名 */
 	public function chain(): string {
 		return $this->addPrefix( 'chain' );
