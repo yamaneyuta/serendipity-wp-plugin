@@ -23,11 +23,6 @@ class TableName {
 		return $this->addPrefix( 'invoice' );
 	}
 
-	/** クライアントと署名無しでやり取りする際に用いるnonceを格納するテーブル名 */
-	public function invoiceNonce(): string {
-		return $this->addPrefix( 'invoice_nonce' );
-	}
-
 	/** ペイウォール解除時のトランザクションに関するデータを記録するテーブル名 */
 	public function unlockPaywallTransaction(): string {
 		return $this->addPrefix( 'unlock_paywall_transaction' );
