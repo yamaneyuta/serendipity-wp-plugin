@@ -33,7 +33,7 @@ class TokenService {
 			$decimals     = $token_client->decimals();
 			$symbol       = $token_client->symbol();
 
-			$token = Token::from( $chain_ID, $address, $symbol, $decimals, $is_payable );
+			$token = new Token( $chain_ID, $address, $symbol, $decimals, $is_payable );
 		} else {
 			$token->setIsPayable( $is_payable );
 		}

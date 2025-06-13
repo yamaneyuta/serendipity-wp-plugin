@@ -9,7 +9,11 @@ use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\TokenTableRecord
 
 class Token {
 
-	private function __construct( int $chain_ID, Address $address, string $symbol, int $decimals, bool $is_payable ) {
+	public function __construct( int $chain_ID, Address $address, string $symbol, int $decimals, bool $is_payable ) {
+		Validate::checkChainID( $chain_ID );
+		Validate::checkSymbol( $symbol );
+		Validate::checkDecimals( $decimals );
+
 		$this->chain_ID   = $chain_ID;
 		$this->address    = $address;
 		$this->symbol     = $symbol;
@@ -58,17 +62,8 @@ class Token {
 		);
 	}
 
-
-	public static function from( int $chain_ID, Address $address, string $symbol, int $decimals, bool $payable ): self {
-		Validate::checkChainID( $chain_ID );
-		Validate::checkSymbol( $symbol );
-		Validate::checkDecimals( $decimals );
-
-		return new Token( $chain_ID, $address, $symbol, $decimals, $payable );
-	}
-
 	public static function fromTableRecord( TokenTableRecord $record ): self {
-		return self::from(
+		return new self(
 			$record->chainID(),
 			Address::from( $record->address() ),
 			$record->symbol(),
