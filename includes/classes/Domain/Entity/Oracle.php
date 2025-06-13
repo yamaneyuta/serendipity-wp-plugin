@@ -4,10 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Infrastructure\Database\Entity\ChainImpl;
-use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
 use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\OracleTableRecord;
 
 class Oracle {
 
@@ -47,15 +44,6 @@ class Oracle {
 				'base_symbol'  => $this->base_symbol,
 				'quote_symbol' => $this->quote_symbol,
 			)
-		);
-	}
-
-	public static function fromTableRecord( OracleTableRecord $oracle_record, ChainTableRecord $chain_record ): self {
-		return new self(
-			ChainImpl::fromTableRecord( $chain_record ),
-			new Address( $oracle_record->address() ),
-			$oracle_record->baseSymbol(),
-			$oracle_record->quoteSymbol()
 		);
 	}
 }
