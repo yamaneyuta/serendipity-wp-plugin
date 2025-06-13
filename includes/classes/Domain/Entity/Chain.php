@@ -6,7 +6,6 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
-use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
 
 class Chain {
 	/**
@@ -16,7 +15,7 @@ class Chain {
 	 * @param null|string $rpc_url
 	 * @param int|string  $confirmations
 	 */
-	private function __construct( int $chain_id, string $name, ?string $rpc_url, $confirmations ) {
+	protected function __construct( int $chain_id, string $name, ?string $rpc_url, $confirmations ) {
 		$this->id            = $chain_id;
 		$this->name          = $name;
 		$this->rpc_url       = $rpc_url;
@@ -28,17 +27,6 @@ class Chain {
 	private ?string $rpc_url;
 	/** @var int|string */
 	private $confirmations;
-
-	public static function fromTableRecord( ChainTableRecord $record ): self {
-		/** @var string $confirmations */
-		$confirmations = $record->confirmations();
-		return new self(
-			$record->chainID(),
-			$record->name(),
-			$record->rpcURL(),
-			is_numeric( $confirmations ) ? (int) $confirmations : $confirmations,
-		);
-	}
 
 	public function id(): int {
 		return $this->id;
