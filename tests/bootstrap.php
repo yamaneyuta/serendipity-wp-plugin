@@ -8,8 +8,8 @@
 
 use Yoast\WPTestUtils\WPIntegration;
 
-// `.phpunit/composer.json`でインストールした、テスト用のユーティリティを読み込む
-require_once dirname( __DIR__ ) . '/.phpunit/vendor/yoast/wp-test-utils/src/WPIntegration/bootstrap-functions.php';
+// `tests/composer.json`でインストールした、テスト用のユーティリティを読み込む
+require_once dirname( __DIR__ ) . '/tests/vendor/yoast/wp-test-utils/src/WPIntegration/bootstrap-functions.php';
 
 // `tests_add_filter`関数を使えるようにする
 // ※ WPIntegration\get_path_to_wp_test_dir() => `/wordpress-phpunit/`
