@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <phpunit
-	bootstrap="phpunit/bootstrap.php"
+	bootstrap="tests/bootstrap.php"
 	backupGlobals="false"
 	colors="true"
 	convertErrorsToExceptions="true"
@@ -17,11 +17,17 @@
 		<whitelist>
 			<directory suffix=".php">./includes/classes</directory>
 		</whitelist>
+		<exclude>
+			<directory>./tests/vendor</directory>
+		</exclude>
 	</filter>
 
 	<testsuites>
 		<testsuite name="testing">
-			<directory suffix="Test.php">./phpunit/</directory>
+			<directory suffix="Test.php">./tests/</directory>
+			<exclude>
+				<directory>./tests/vendor</directory>
+			</exclude>
 		</testsuite>
 	</testsuites>
 </phpunit>

@@ -30,7 +30,10 @@ coverage
 
 # Dependency directories
 node_modules/
-/.phpunit
+
+/tests/composer.json
+/tests/composer.lock
+/tests/vendor/
 .phpunit.result.cache
 /includes/vendor/
 

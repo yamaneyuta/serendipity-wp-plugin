@@ -9,7 +9,7 @@
 	"intelephense.environment.phpVersion": "7.4",
 	"intelephense.environment.includePaths": [
 		".devcontainer/.intelephense-includes/wordpress-develop/tests/phpunit/includes",
-		".phpunit/vendor"
+		"tests/vendor"
 	],
 	"jest.runMode": "on-demand",
 	"php.suggest.basic": false

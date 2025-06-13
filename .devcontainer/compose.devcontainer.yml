@@ -18,7 +18,7 @@ services:
       - ../../serendipity-resources/i18n:/workspaces/i18n
       - ../../serendipity-resources/graphql/schema:/workspaces/includes/assets/graphql/schema
       - node_modules:/workspaces/node_modules
-      - dot_phpunit:/workspaces/.phpunit
+      - tests_vendor:/workspaces/tests/vendor
       - includes_vendor:/workspaces/includes/vendor
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
@@ -32,5 +32,5 @@ services:
 
 volumes:
   node_modules:
-  dot_phpunit:
+  tests_vendor:
   includes_vendor:

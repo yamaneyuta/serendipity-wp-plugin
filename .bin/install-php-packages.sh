@@ -19,8 +19,7 @@ function main() {
 }
 
 function install_phpunit() {
-	mkdir -p .phpunit
-	cd .phpunit
+	cd tests
 
 	# PHPのバージョンが変更されている可能性があるため、ファイルをすべて削除
 	rm -rf vendor/* composer.json composer.lock

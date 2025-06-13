@@ -54,7 +54,7 @@
 		"start:docker": "run-p env:start my-docker:start",
 		"test": "run-s test:js test:php",
 		"// 1つのファイルをテストする場合はテスト対象ファイルのパスを後ろに付与してください => npm run test:php ./phpunit/classes/path-to-test-file.php": "",
-		"test:php": "npm run clean:php-cache && npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli .phpunit/vendor/bin/phpunit -- -c phpunit.xml --testdox",
+		"test:php": "npm run clean:php-cache && npx wp-env run --env-cwd=\"wp-content/plugins/${PWD##*/}\" tests-cli tests/vendor/bin/phpunit -- -c phpunit.xml --testdox",
 		"test:js": "jest",
 		"test:storybook": "npm run build-storybook && concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npx http-server storybook-static --port 6006 --silent\" \"npx wait-on tcp:6006 && npm run test-storybook\"",
 		"test-storybook": "test-storybook --url http://localhost:6006 --coverage --browsers firefox chromium",
