@@ -34,8 +34,6 @@ class Signer {
 
 	/**
 	 * メッセージに署名を行います。
-	 *
-	 * @see https://ethereum.stackexchange.com/a/86503
 	 */
 	public function signMessage( string $message ): string {
 		return Ethers::signMessage( $this->private_key, $message );
