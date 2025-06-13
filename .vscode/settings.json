@@ -4,6 +4,7 @@
 		"coverage/": true,
 		"storybook-static/": true,
 		".phpunit.result.cache": true,
+		"tests/vendor/": true,
 	},
 	"git.autorefresh": true,
 	"intelephense.environment.phpVersion": "7.4",
