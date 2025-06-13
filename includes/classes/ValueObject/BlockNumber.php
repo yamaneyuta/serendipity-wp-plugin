@@ -18,6 +18,9 @@ class BlockNumber {
 
 	private BigInteger $block_number;
 
+	/**
+	 * @param int|string|BigInteger $block_number
+	 */
 	public static function from( $block_number ): BlockNumber {
 		if ( is_int( $block_number ) ) {
 			return new BlockNumber( new BigInteger( $block_number, 10 ) );
