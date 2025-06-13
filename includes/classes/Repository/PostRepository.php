@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\Post;
+use Cornix\Serendipity\Core\Infrastructure\Database\Entity\PostImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
 
 class PostRepository {
@@ -26,7 +27,7 @@ class PostRepository {
 		// テーブルから有料記事情報を取得
 		$record = $this->paid_content_table->select( $post_id );
 
-		return $record ? Post::fromTableRecord( $record ) : new Post( $post_id, null, null, null );
+		return $record ? PostImpl::fromTableRecord( $record ) : new Post( $post_id, null, null, null );
 	}
 
 	public function save( Post $post ): void {
