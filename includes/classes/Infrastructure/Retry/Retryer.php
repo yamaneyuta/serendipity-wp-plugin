@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Algorithm;
+namespace Cornix\Serendipity\Core\Infrastructure\Retry;
 
 class Retryer {
 	/**
