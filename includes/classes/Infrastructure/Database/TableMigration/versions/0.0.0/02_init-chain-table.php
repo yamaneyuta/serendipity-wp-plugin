@@ -1,0 +1,130 @@
+<?php
+declare(strict_types=1);
+
+namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
+
+use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
+use Cornix\Serendipity\Core\Repository\Name\TableName;
+
+return new class() extends DatabaseMigrationBase {
+
+	public function __construct() {
+		$this->table_name = ( new TableName() )->chain();
+	}
+	private string $table_name;
+
+	/** @inheritdoc */
+	public function up(): void {
+		// テーブルを作成
+		$this->createTable();
+
+		// 初期データを挿入
+		$this->insertInitialData();
+	}
+
+	/** @inheritdoc */
+	public function down(): void {
+		$sql    = "DROP TABLE IF EXISTS `{$this->table_name}`;";
+		$result = $this->mysqli()->query( $sql );
+		if ( true !== $result ) {
+			throw new \RuntimeException( '[123E2963] Error: ' . $this->mysqli()->error );
+		}
+	}
+
+	private function createTable(): void {
+
+		$charset = $this->wpdb()->get_charset_collate();
+
+		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
+		// - `confirmations`は将来的に`latest`のような文字列が入る可能性があるため、`varchar(191)`とする
+		$sql = <<<SQL
+			CREATE TABLE `{$this->table_name}` (
+				`created_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`updated_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`chain_id`                     bigint        unsigned  NOT NULL,
+				`name`                         varchar(191)            NOT NULL,
+				`rpc_url`                      varchar(191),
+				`confirmations`                varchar(191)            NOT NULL,
+				PRIMARY KEY (`chain_id`)
+			) {$charset};
+		SQL;
+
+		$result = $this->mysqli()->query( $sql );
+		if ( true !== $result ) {
+			throw new \RuntimeException( '[FB0D1E30] Error: ' . $this->mysqli()->error );
+		}
+	}
+
+	private function insertInitialData(): void {
+
+		$Record = new class( 1, '', null ) {
+			public function __construct(
+				int $chain_id,
+				string $name,
+				?string $rpc_url,
+				string $confirmations = '1' // デフォルトの確認数は1
+			) {
+				$this->chain_id      = $chain_id;
+				$this->name          = $name;
+				$this->rpc_url       = $rpc_url;
+				$this->confirmations = $confirmations;
+			}
+			public int $chain_id;
+			public string $name;
+			public ?string $rpc_url;
+			public string $confirmations;
+		};
+
+		$records = array(
+			new $Record( ChainID::ETH_MAINNET, 'Ethereum Mainnet', null ),
+			new $Record( ChainID::SEPOLIA, 'Sepolia', null ),
+			new $Record( ChainID::SONEIUM_MINATO, 'Soneium Testnet Minato', null ),
+		);
+		// 開発モード時はプライベートネットのチェーン情報も登録
+		if ( $this->environment()->isDevelopmentMode() ) {
+			$records[] = new $Record( ChainID::PRIVATENET_L1, 'Privatenet1', $this->getPrivatenetRpcURL( ChainID::PRIVATENET_L1 ) );
+			$records[] = new $Record( ChainID::PRIVATENET_L2, 'Privatenet2', $this->getPrivatenetRpcURL( ChainID::PRIVATENET_L2 ) );
+		}
+
+		foreach ( $records as $record ) {
+			$result = $this->wpdb()->insert(
+				$this->table_name,
+				array(
+					'chain_id'      => $record->chain_id,
+					'name'          => $record->name,
+					'rpc_url'       => $record->rpc_url,
+					'confirmations' => $record->confirmations,
+				)
+			);
+			if ( 1 !== $result ) {
+				throw new \RuntimeException( '[D0746EC0] result: ' . $result . ', Error: ' . $this->wpdb()->last_error );
+			}
+		}
+	}
+
+
+	/**
+	 * 指定されたチェーンIDに対応するプライベートネットのRPC URLを取得します。
+	 *
+	 * @param int $chain_ID
+	 */
+	private function getPrivatenetRpcURL( int $chain_ID ): ?string {
+
+		// プライベートネットのURLを取得する関数
+		$privatenet = function ( int $number ): string {
+			assert( in_array( $number, array( 1, 2 ), true ) );
+			$prefix = $this->environment()->isTesting() ? 'tests-' : '';
+			return "http://{$prefix}privatenet-{$number}.local";
+		};
+
+		switch ( $chain_ID ) {
+			case ChainID::PRIVATENET_L1:
+				return $privatenet( 1 );
+			case ChainID::PRIVATENET_L2:
+				return $privatenet( 2 );
+			default:
+				throw new \InvalidArgumentException( '[9739363E] Invalid chain ID. ' . $chain_ID );
+		}
+	}
+};

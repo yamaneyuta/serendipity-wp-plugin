@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Lib\Option;
 
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
 
+/** @deprecated */
 class OptionFactory {
 
 	/**
@@ -12,13 +13,6 @@ class OptionFactory {
 	 */
 	private function getOptionKeyName( string $raw_option_key_name ): string {
 		return ( new Prefix() )->optionKeyPrefix() . $raw_option_key_name;
-	}
-
-	/**
-	 * 本プラグインがインストールされた時のバージョンを取得または保存するオブジェクトを取得します。
-	 */
-	public function lastInstalledPluginVersion(): StringOption {
-		return new StringOption( $this->getOptionKeyName( 'last_installed_plugin_version' ) );
 	}
 
 	/**

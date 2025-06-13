@@ -23,31 +23,6 @@ class ServerSignerTable extends TableBase {
 		parent::__construct( $wpdb, ( new TableName() )->serverSigner() );
 	}
 
-	/**
-	 * テーブルを作成します。
-	 */
-	public function create(): void {
-		$charset = $this->wpdb()->get_charset_collate();
-
-		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
-		$sql = <<<SQL
-			CREATE TABLE `{$this->tableName()}` (
-				`created_at`        timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`        timestamp      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				`address`           varchar(191)   NOT NULL,
-				`private_key_data`  varchar(191)   NOT NULL,
-				`encryption_key`    varchar(191),
-				`encryption_iv`     varchar(191),
-				PRIMARY KEY (`address`)
-			) {$charset};
-		SQL;
-
-		$result = $this->mysqli()->query( $sql );
-		if ( true !== $result ) {
-			throw new \RuntimeException( '[731EE9CF] Failed to create server signer table. ' . $this->mysqli()->error );
-		}
-	}
-
 	public function get(): ?ServerSignerTableRecord {
 		$sql = <<<SQL
 			SELECT `address`, `private_key_data`, `encryption_key`, `encryption_iv`

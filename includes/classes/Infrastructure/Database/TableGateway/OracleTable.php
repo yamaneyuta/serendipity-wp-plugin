@@ -17,30 +17,6 @@ class OracleTable extends TableBase {
 	}
 
 	/**
-	 * テーブルを作成します。
-	 */
-	public function create(): void {
-		$charset         = $this->wpdb()->get_charset_collate();
-		$unique_key_name = "uq_{$this->tableName()}_C269159C";
-
-		$sql = <<<SQL
-			CREATE TABLE `{$this->tableName()}` (
-				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				`chain_id`       bigint        unsigned  NOT NULL,
-				`address`        varchar(191)            NOT NULL,
-				`base_symbol`    varchar(191)            NOT NULL,
-				`quote_symbol`   varchar(191)            NOT NULL,
-				PRIMARY KEY (`chain_id`, `address`),
-				UNIQUE KEY `{$unique_key_name}` (`chain_id`, `base_symbol`, `quote_symbol`)
-			) {$charset};
-		SQL;
-
-		$result = $this->mysqli()->query( $sql );
-		assert( true === $result );
-	}
-
-	/**
 	 * Oracleデータ一覧を取得します。
 	 *
 	 * @return OracleTableRecord[]
