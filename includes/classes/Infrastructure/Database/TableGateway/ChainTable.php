@@ -19,30 +19,6 @@ class ChainTable extends TableBase {
 	}
 
 	/**
-	 * テーブルを作成します。
-	 */
-	public function create(): void {
-		$charset = $this->wpdb()->get_charset_collate();
-
-		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
-		// - `confirmations`は将来的に`latest`のような文字列が入る可能性があるため、`varchar(191)`とする
-		$sql = <<<SQL
-			CREATE TABLE `{$this->tableName()}` (
-				`created_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				`chain_id`                     bigint        unsigned  NOT NULL,
-				`name`                         varchar(191)            NOT NULL,
-				`rpc_url`                      varchar(191),
-				`confirmations`                varchar(191)            NOT NULL,
-				PRIMARY KEY (`chain_id`)
-			) {$charset};
-		SQL;
-
-		$result = $this->mysqli()->query( $sql );
-		assert( true === $result );
-	}
-
-	/**
 	 * @return ChainTableRecord[]
 	 * TODO: 引数を削除
 	 */

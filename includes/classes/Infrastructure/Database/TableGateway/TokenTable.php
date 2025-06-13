@@ -17,32 +17,6 @@ class TokenTable extends TableBase {
 	}
 
 	/**
-	 * テーブルを作成します。
-	 */
-	public function create(): void {
-		$charset = $this->wpdb()->get_charset_collate();
-
-		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
-		$sql = <<<SQL
-			CREATE TABLE `{$this->tableName()}` (
-				`created_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`     timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				`chain_id`       bigint        unsigned  NOT NULL,
-				`address`        varchar(191)            NOT NULL,
-				`symbol`         varchar(191)            NOT NULL,
-				`decimals`       int                     NOT NULL,
-				`is_payable`     boolean                 NOT NULL,
-				PRIMARY KEY (`chain_id`, `address`)
-			) {$charset};
-		SQL;
-
-		$result = $this->mysqli()->query( $sql );
-		if ( true !== $result ) {
-			throw new \RuntimeException( '[] Failed to create token table. ' . $this->mysqli()->error );
-		}
-	}
-
-	/**
 	 * テーブルに保存されているトークンデータ一覧を取得します。
 	 *
 	 * @return TokenTableRecord[]
