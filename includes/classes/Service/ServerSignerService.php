@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Entity\Signer;
 use Cornix\Serendipity\Core\Infrastructure\System\OpenSslChecker;
+use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Repository\ServerSignerPrivateKeyRepository;
 
 class ServerSignerService {
@@ -25,7 +26,7 @@ class ServerSignerService {
 		}
 
 		// 新しくウォレットを生成
-		$server_signer = Signer::generateRandom();
+		$server_signer = new Signer( Ethers::generatePrivateKey() );
 
 		/** @var null|string */
 		$private_key_data = $server_signer->privateKey()->value();  // 保存する秘密鍵データ(平文/暗号化済み) ここでは一旦平文を設定
