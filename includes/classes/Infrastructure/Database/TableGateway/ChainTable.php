@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;

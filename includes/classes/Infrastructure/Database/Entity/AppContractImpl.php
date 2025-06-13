@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\Entity;
 
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;

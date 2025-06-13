@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Entity;
 
+use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\Address;
