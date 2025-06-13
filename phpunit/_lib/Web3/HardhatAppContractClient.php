@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
-use Cornix\Serendipity\Core\Entity\Signer;
+use Cornix\Serendipity\Core\Domain\Entity\Signer;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;

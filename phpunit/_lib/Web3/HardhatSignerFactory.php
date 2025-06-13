@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Entity\Signer;
+use Cornix\Serendipity\Core\Domain\Entity\Signer;
 
 class HardhatSignerFactory {
 
