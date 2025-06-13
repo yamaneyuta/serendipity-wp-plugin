@@ -76,7 +76,7 @@ class ContentIoHook {
 			// この投稿の編集権限があり、かつ有料記事の情報が存在する場合はウィジェットと有料部分を結合して返す。
 			$widget_content = $this->createWidgetContent( $post->ID );
 
-			$full_content = $free_content . "\n\n" . $widget_content . "\n\n" . $paid_content->text();
+			$full_content = $free_content . "\n\n" . $widget_content . "\n\n" . $paid_content->value();
 
 			// レスポンスの内容を加工
 			$response->data['content']['raw']      = $full_content;
@@ -120,7 +120,7 @@ class ContentIoHook {
 				self::$unsaved_original_content =
 					$free_content . "\n\n"
 					. $this->createWidgetContent( $revision ) . "\n\n"
-					. $paid_content->text();
+					. $paid_content->value();
 			} else {
 				// 有料部分が存在しない場合は無料部分のみを保持
 				self::$unsaved_original_content = $free_content;
@@ -219,7 +219,7 @@ class ContentIoHook {
 		if ( ! is_null( $paid_content ) ) {
 			// 記事の有料部分の情報がある場合はウィジェットと有料部分を結合して返す
 			$widget_content          = $this->createWidgetContent( $post_id );
-			$revision_field_content .= "\n\n" . $widget_content . "\n\n" . $paid_content->text(); // ウィジェットと有料部分を追加
+			$revision_field_content .= "\n\n" . $widget_content . "\n\n" . $paid_content->value(); // ウィジェットと有料部分を追加
 		}
 		return $revision_field_content;
 	}

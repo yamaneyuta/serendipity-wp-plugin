@@ -18,7 +18,7 @@ class PaidContent {
 		return new self( $paid_content_text );
 	}
 
-	public function text(): string {
+	public function value(): string {
 		return $this->content_text;
 	}
 

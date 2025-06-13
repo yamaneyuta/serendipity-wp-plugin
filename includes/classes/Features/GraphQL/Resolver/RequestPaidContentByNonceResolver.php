@@ -88,7 +88,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		assert( ! is_null( $paid_content ), '[391C0A77] Paid content should not be null.' );
 
 		return array(
-			'content'   => apply_filters( 'the_content', $paid_content->text() ),
+			'content'   => apply_filters( 'the_content', $paid_content->value() ),
 			'errorCode' => null,
 		);
 	}
