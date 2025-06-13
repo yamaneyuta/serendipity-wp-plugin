@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Entity;
 
-use Cornix\Serendipity\Core\Util\ContentAnalyzer;
+use Cornix\Serendipity\Core\Infrastructure\Content\ContentAnalyzer;
 
 /** 記事の有料部分を表現するクラス */
 class PaidContent {
