@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Entity\AppContract;
+use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 
