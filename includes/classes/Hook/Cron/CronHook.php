@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Repository\CrawledBlockNumber;
 use Cornix\Serendipity\Core\Repository\Name\CronActionName;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Lib\Algorithm\Filter\ChainsFilter;
+use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;

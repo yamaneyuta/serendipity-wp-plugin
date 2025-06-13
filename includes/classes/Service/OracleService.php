@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Service;
 
-use Cornix\Serendipity\Core\Lib\Algorithm\Filter\OraclesFilter;
+use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Repository\OracleRepository;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Service;
 
-use Cornix\Serendipity\Core\Entity\PaidContent;
-use Cornix\Serendipity\Core\Entity\Post;
+use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
+use Cornix\Serendipity\Core\Domain\Entity\Post;
 use Cornix\Serendipity\Core\Repository\PostRepository;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;

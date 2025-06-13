@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Service;
 
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
 use InvalidArgumentException;
 

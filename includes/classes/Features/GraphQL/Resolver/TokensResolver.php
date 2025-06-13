@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Entity\Token;
-use Cornix\Serendipity\Core\Lib\Algorithm\Filter\TokensFilter;
+use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\ValueObject\Address;
@@ -45,7 +45,7 @@ class TokensResolver extends ResolverBase {
 					'address' => $token->address(),
 				)
 			),
-			$tokens->toArray()
+			$tokens
 		);
 	}
 }

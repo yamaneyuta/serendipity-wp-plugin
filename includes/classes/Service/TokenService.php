@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Service;
 
-use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
@@ -33,7 +33,7 @@ class TokenService {
 			$decimals     = $token_client->decimals();
 			$symbol       = $token_client->symbol();
 
-			$token = Token::from( $chain_ID, $address, $symbol, $decimals, $is_payable );
+			$token = new Token( $chain_ID, $address, $symbol, $decimals, $is_payable );
 		} else {
 			$token->setIsPayable( $is_payable );
 		}

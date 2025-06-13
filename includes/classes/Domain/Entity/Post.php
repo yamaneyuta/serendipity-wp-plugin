@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Entity;
+namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
-use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTableRecord;
 
 class Post {
 
@@ -41,23 +40,5 @@ class Post {
 	}
 	public function setSellingPrice( ?Price $selling_price ): void {
 		$this->selling_price = $selling_price;
-	}
-
-	public static function fromTableRecord( PaidContentTableRecord $record ): self {
-		$selling_amount_hex = $record->sellingAmountHex();
-		$selling_decimals   = $record->sellingDecimals();
-		$selling_symbol     = $record->sellingSymbol();
-		if ( null === $selling_amount_hex || null === $selling_decimals || null === $selling_symbol ) {
-			$selling_price = null;
-		} else {
-			$selling_price = new Price( $selling_amount_hex, $selling_decimals, $selling_symbol );
-		}
-
-		return new self(
-			$record->postID(),
-			PaidContent::from( $record->paidContent() ),
-			NetworkCategory::from( $record->sellingNetworkCategoryID() ),
-			$selling_price,
-		);
 	}
 }

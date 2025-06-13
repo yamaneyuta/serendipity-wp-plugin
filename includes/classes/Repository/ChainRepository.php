@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Entity\Chain;
+use Cornix\Serendipity\Core\Domain\Entity\Chain;
+use Cornix\Serendipity\Core\Infrastructure\Database\Entity\ChainImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\Lib\Algorithm\Filter\ChainsFilter;
+use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 
 class ChainRepository {
 
@@ -37,7 +38,7 @@ class ChainRepository {
 
 		return array_values(
 			array_map(
-				fn( $record ) => Chain::fromTableRecord( $record ),
+				fn( $record ) => ChainImpl::fromTableRecord( $record ),
 				$records
 			)
 		);

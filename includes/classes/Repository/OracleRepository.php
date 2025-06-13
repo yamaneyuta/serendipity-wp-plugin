@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Entity\Oracle;
+use Cornix\Serendipity\Core\Domain\Entity\Oracle;
+use Cornix\Serendipity\Core\Infrastructure\Database\Entity\OracleImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\OracleTable;
 
@@ -29,7 +30,7 @@ class OracleRepository {
 		$results = array();
 		foreach ( $oracle_records as $record ) {
 			$chain_record = $this->chain_table->select( $record->chainID() );
-			$results[]    = Oracle::fromTableRecord( $record, array_values( $chain_record )[0] );
+			$results[]    = OracleImpl::fromTableRecord( $record, array_values( $chain_record )[0] );
 		}
 
 		return $results;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
-use Cornix\Serendipity\Core\Entity\Oracle;
+use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
-use Cornix\Serendipity\Core\Entity\PaidContent;
+use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
@@ -41,7 +41,7 @@ class PaidContentTable extends TableBase {
 	}
 
 	public function set( int $post_id, ?PaidContent $paid_content, ?NetworkCategory $selling_network_category, ?Price $selling_price ): void {
-		$paid_content_text           = is_null( $paid_content ) ? null : $paid_content->text();
+		$paid_content_text           = is_null( $paid_content ) ? null : $paid_content->value();
 		$selling_network_category_id = is_null( $selling_network_category ) ? null : $selling_network_category->id();
 		$selling_price_amount_hex    = is_null( $selling_price ) ? null : $selling_price->amountHex();
 		$selling_price_decimals      = is_null( $selling_price ) ? null : $selling_price->decimals();
