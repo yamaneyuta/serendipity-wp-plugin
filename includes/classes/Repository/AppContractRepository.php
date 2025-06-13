@@ -3,40 +3,29 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Entity\AppContract;
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\Infrastructure\Database\Entity\AppContractImpl;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTable;
 
 class AppContractRepository {
-	public function __construct( ?ChainRepository $chain_repository = null, ?Environment $environment = null ) {
-		$this->chain_repository = $chain_repository ?? new ChainRepository();
-		$this->environment      = $environment ?? new Environment();
+	public function __construct( ?AppContractTable $app_contract_table = null, ?ChainRepository $chain_repository = null ) {
+		$this->app_contract_table = $app_contract_table ?? new AppContractTable( $GLOBALS['wpdb'] );
+		$this->chain_repository   = $chain_repository ?? new ChainRepository();
 	}
+	private AppContractTable $app_contract_table;
 	private ChainRepository $chain_repository;
-	private Environment $environment;
-
 
 	public function get( int $chain_id ): ?AppContract {
-		$chain   = $this->chain_repository->getChain( $chain_id );
-		$address = $this->getAddress( $chain_id );
-		if ( is_null( $chain ) || is_null( $address ) ) {
-			return null;
-		}
-		return new AppContract( $chain, $address );
-	}
+		$records = $this->app_contract_table->all();
+		$records = array_filter(
+			$records,
+			fn( $record ) => $record->chainID() === $chain_id
+		);
+		assert( count( $records ) <= 1, '[68E05B97] should return at most one record.' );
 
-	/**
-	 * 指定したチェーンにデプロイされているAppコントラクトのアドレスを取得します。
-	 */
-	private function getAddress( int $chain_id ): ?Address {
-		/** @var null|string */
-		$address_str = null;
-		if ( $this->environment->isDevelopmentMode() ) {
-			$address_str = Config::DEV_APP_CONTRACT_ADDRESSES[ $chain_id ] ?? null;
-		} else {
-			$address_str = Config::APP_CONTRACT_ADDRESSES[ $chain_id ] ?? null;
-		}
-
-		return is_null( $address_str ) ? null : new Address( $address_str );
+		return empty( $records ) ? null : AppContractImpl::fromTableRecord(
+			$this->chain_repository->getChain( $chain_id ),
+			array_values( $records )[0]
+		);
 	}
 }
