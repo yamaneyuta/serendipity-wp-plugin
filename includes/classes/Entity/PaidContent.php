@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Entity;
 
-use Cornix\Serendipity\Core\Infrastructure\Content\ContentAnalyzer;
+use Cornix\Serendipity\Core\Infrastructure\Content\HtmlContentAnalyzer;
 
 /** 記事の有料部分を表現するクラス */
 class PaidContent {
 	private function __construct( string $paid_content_text ) {
 		$this->content_text = $paid_content_text;
-		$this->analyzer     = new ContentAnalyzer( $paid_content_text );
+		$this->analyzer     = new HtmlContentAnalyzer( $paid_content_text );
 	}
 	private string $content_text;
-	private ContentAnalyzer $analyzer;
+	private HtmlContentAnalyzer $analyzer;
 
 	public static function from( string $paid_content_text ): self {
 		return new self( $paid_content_text );

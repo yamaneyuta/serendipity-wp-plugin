@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Content;
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
-class ContentAnalyzer {
+class HtmlContentAnalyzer {
 
 	public function __construct( string $content ) {
 		// HTMLタグは分析対象から除外
