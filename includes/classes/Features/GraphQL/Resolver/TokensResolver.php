@@ -45,7 +45,7 @@ class TokensResolver extends ResolverBase {
 					'address' => $token->address(),
 				)
 			),
-			$tokens->toArray()
+			$tokens
 		);
 	}
 }
