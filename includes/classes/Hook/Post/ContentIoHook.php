@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Hook\Post;
 
-use Cornix\Serendipity\Core\Entity\PaidContent;
+use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Repository\Environment;

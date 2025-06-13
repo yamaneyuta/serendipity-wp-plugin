@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Entity\Post;
+use Cornix\Serendipity\Core\Domain\Entity\Post;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
 
 class PostRepository {
