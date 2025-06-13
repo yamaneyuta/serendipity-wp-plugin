@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Entity;
+namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\ChainImpl;
