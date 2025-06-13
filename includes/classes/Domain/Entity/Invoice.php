@@ -7,7 +7,6 @@ use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\ValueObject\Price;
-use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceTableRecord;
 
 class Invoice {
 
@@ -59,23 +58,5 @@ class Invoice {
 	}
 	public function nonce(): ?InvoiceNonce {
 		return $this->nonce;
-	}
-
-	public static function fromTableRecord( InvoiceTableRecord $invoice_record ): self {
-		return new self(
-			InvoiceID::from( $invoice_record->id() ),
-			$invoice_record->postID(),
-			$invoice_record->chainID(),
-			new Price(
-				$invoice_record->sellingAmountHex(),
-				$invoice_record->sellingDecimals(),
-				$invoice_record->sellingSymbol()
-			),
-			Address::from( $invoice_record->sellerAddress() ),
-			Address::from( $invoice_record->paymentTokenAddress() ),
-			$invoice_record->paymentAmountHex(),
-			Address::from( $invoice_record->consumerAddress() ),
-			$invoice_record->nonce() ? new InvoiceNonce( $invoice_record->nonce() ) : null
-		);
 	}
 }
