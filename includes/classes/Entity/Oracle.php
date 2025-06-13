@@ -6,13 +6,12 @@ namespace Cornix\Serendipity\Core\Entity;
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\ChainImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\OracleTableRecord;
 
 class Oracle {
 
-	private function __construct( Chain $chain, Address $address, string $base_symbol, string $quote_symbol ) {
+	public function __construct( Chain $chain, Address $address, string $base_symbol, string $quote_symbol ) {
 		$this->chain        = $chain;
 		$this->address      = $address;
 		$this->base_symbol  = $base_symbol;
@@ -51,15 +50,8 @@ class Oracle {
 		);
 	}
 
-	public static function from( Chain $chain, Address $address, string $base_symbol, string $quote_symbol ): Oracle {
-		assert( Validate::isSymbol( $base_symbol ), '[CD285CC7] Invalid base symbol. ' . $base_symbol );
-		assert( Validate::isSymbol( $quote_symbol ), '[BA65690D] Invalid quote symbol. ' . $quote_symbol );
-
-		return new self( $chain, $address, $base_symbol, $quote_symbol );
-	}
-
 	public static function fromTableRecord( OracleTableRecord $oracle_record, ChainTableRecord $chain_record ): self {
-		return self::from(
+		return new self(
 			ChainImpl::fromTableRecord( $chain_record ),
 			new Address( $oracle_record->address() ),
 			$oracle_record->baseSymbol(),

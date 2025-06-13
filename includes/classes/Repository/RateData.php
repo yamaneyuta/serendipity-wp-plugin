@@ -57,7 +57,7 @@ class OracleRate {
 			$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
 			if ( $chain->connectable() ) {
 				// Oracleに問い合わせ
-				$oracle        = Oracle::from( $chain, $contract_address, $symbol_pair->base(), $symbol_pair->quote() );
+				$oracle        = new Oracle( $chain, $contract_address, $symbol_pair->base(), $symbol_pair->quote() );
 				$oracle_client = new OracleClient( $chain->rpcURL(), $oracle );
 				$decimals      = $oracle_client->decimals();
 				$answer_hex    = Hex::from( $oracle_client->latestAnswer() );
