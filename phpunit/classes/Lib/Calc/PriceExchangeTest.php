@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Constant\ChainID;
-use Cornix\Serendipity\Core\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\Price;
