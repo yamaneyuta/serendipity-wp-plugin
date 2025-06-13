@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\ChainImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
-use Cornix\Serendipity\Core\Lib\Algorithm\Filter\ChainsFilter;
+use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 
 class ChainRepository {
 
