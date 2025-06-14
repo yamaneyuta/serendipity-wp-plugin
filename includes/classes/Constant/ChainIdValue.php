@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Constant;
 
-final class ChainID {
+final class ChainIdValue {
 	// ==================== Mainnet ====================
 	/** イーサリアムメインネット(L1) */
 	public const ETH_MAINNET = 1;

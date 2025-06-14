@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
 
-use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\Constant\ChainIdValue;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 
@@ -77,14 +77,14 @@ return new class() extends DatabaseMigrationBase {
 		};
 
 		$records = array(
-			new $Record( ChainID::ETH_MAINNET, 'Ethereum Mainnet', null ),
-			new $Record( ChainID::SEPOLIA, 'Sepolia', null ),
-			new $Record( ChainID::SONEIUM_MINATO, 'Soneium Testnet Minato', null ),
+			new $Record( ChainIdValue::ETH_MAINNET, 'Ethereum Mainnet', null ),
+			new $Record( ChainIdValue::SEPOLIA, 'Sepolia', null ),
+			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', null ),
 		);
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment()->isDevelopmentMode() ) {
-			$records[] = new $Record( ChainID::PRIVATENET_L1, 'Privatenet1', $this->getPrivatenetRpcURL( ChainID::PRIVATENET_L1 ) );
-			$records[] = new $Record( ChainID::PRIVATENET_L2, 'Privatenet2', $this->getPrivatenetRpcURL( ChainID::PRIVATENET_L2 ) );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ) );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ) );
 		}
 
 		foreach ( $records as $record ) {
@@ -119,9 +119,9 @@ return new class() extends DatabaseMigrationBase {
 		};
 
 		switch ( $chain_ID ) {
-			case ChainID::PRIVATENET_L1:
+			case ChainIdValue::PRIVATENET_L1:
 				return $privatenet( 1 );
-			case ChainID::PRIVATENET_L2:
+			case ChainIdValue::PRIVATENET_L2:
 				return $privatenet( 2 );
 			default:
 				throw new \InvalidArgumentException( '[9739363E] Invalid chain ID. ' . $chain_ID );

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
 
-use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\Constant\ChainIdValue;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 
@@ -86,16 +86,16 @@ return new class() extends DatabaseMigrationBase {
 		// curl -s https://reference-data-directory.vercel.app/feeds-mainnet.json | jq '.[] | select(.docs.assetClass == "Fiat")'
 		if ( 'ja' === substr( get_locale(), 0, 2 ) || $this->environment()->isDevelopmentMode() ) {
 			// サイトの言語が日本語の場合、もしくは開発モード時は、`JPY / USD`を登録
-			$records[] = new $Record( ChainID::ETH_MAINNET, '0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3', 'JPY', 'USD' );
+			$records[] = new $Record( ChainIdValue::ETH_MAINNET, '0xBcE206caE7f0ec07b545EddE332A47C2F75bbeb3', 'JPY', 'USD' );
 		}
 		// ■ Crypto
-		$records[] = new $Record( ChainID::ETH_MAINNET, '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', 'ETH', 'USD' );
+		$records[] = new $Record( ChainIdValue::ETH_MAINNET, '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', 'ETH', 'USD' );
 
 		// テスト中はプライベートネットのOracleを登録
 		if ( $this->environment()->isTesting() ) {
 			// プライベートネットのOracleを登録
-			$records[] = new $Record( ChainID::PRIVATENET_L1, '0x3F3B6a555F3a7DeD78241C787e0cDD8E431A64A8', 'ETH', 'USD' );
-			$records[] = new $Record( ChainID::PRIVATENET_L1, '0xc886d2C1BEC5819b4B8F84f35A9885519869A8EE', 'JPY', 'USD' );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, '0x3F3B6a555F3a7DeD78241C787e0cDD8E431A64A8', 'ETH', 'USD' );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, '0xc886d2C1BEC5819b4B8F84f35A9885519869A8EE', 'JPY', 'USD' );
 		}
 
 		foreach ( $records as $record ) {

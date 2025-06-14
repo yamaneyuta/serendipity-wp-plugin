@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Constant;
 
-use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\Constant\ChainIdValue;
 use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 
 /**
@@ -50,12 +50,12 @@ class Config {
 	 * @var array<int,int>
 	 */
 	public const NETWORK_CATEGORIES = array(
-		ChainID::ETH_MAINNET            => NetworkCategoryID::MAINNET,
-		ChainID::POLYGON_ZK_EVM         => NetworkCategoryID::MAINNET,
-		ChainID::SEPOLIA                => NetworkCategoryID::TESTNET,
-		ChainID::POLYGON_ZK_EVM_CARDONA => NetworkCategoryID::TESTNET,
-		ChainID::SONEIUM_MINATO         => NetworkCategoryID::TESTNET,
-		ChainID::PRIVATENET_L1          => NetworkCategoryID::PRIVATENET,
-		ChainID::PRIVATENET_L2          => NetworkCategoryID::PRIVATENET,
+		ChainIdValue::ETH_MAINNET            => NetworkCategoryID::MAINNET,
+		ChainIdValue::POLYGON_ZK_EVM         => NetworkCategoryID::MAINNET,
+		ChainIdValue::SEPOLIA                => NetworkCategoryID::TESTNET,
+		ChainIdValue::POLYGON_ZK_EVM_CARDONA => NetworkCategoryID::TESTNET,
+		ChainIdValue::SONEIUM_MINATO         => NetworkCategoryID::TESTNET,
+		ChainIdValue::PRIVATENET_L1          => NetworkCategoryID::PRIVATENET,
+		ChainIdValue::PRIVATENET_L2          => NetworkCategoryID::PRIVATENET,
 	);
 }

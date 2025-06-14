@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
 
-use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\Constant\ChainIdValue;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
@@ -83,16 +83,16 @@ return new class() extends DatabaseMigrationBase {
 		$records = array();
 
 		// メインネットのネイティブトークンを登録(Ethereum Mainnetのみ支払可能として指定)
-		$records[] = new $Record( ChainID::ETH_MAINNET, $zero_address, 'ETH', 18, true );
+		$records[] = new $Record( ChainIdValue::ETH_MAINNET, $zero_address, 'ETH', 18, true );
 
 		// テストネットのネイティブトークンを登録(Sepoliaのみ支払可能として指定)
-		$records[] = new $Record( ChainID::SEPOLIA, $zero_address, 'ETH', 18, true );
-		$records[] = new $Record( ChainID::SONEIUM_MINATO, $zero_address, 'ETH', 18, false );
+		$records[] = new $Record( ChainIdValue::SEPOLIA, $zero_address, 'ETH', 18, true );
+		$records[] = new $Record( ChainIdValue::SONEIUM_MINATO, $zero_address, 'ETH', 18, false );
 
 		// 開発モード時はプライベートネットのネイティブトークンを登録
 		if ( $this->environment()->isDevelopmentMode() ) {
-			$records[] = new $Record( ChainID::PRIVATENET_L1, $zero_address, 'ETH', 18, true );
-			$records[] = new $Record( ChainID::PRIVATENET_L2, $zero_address, 'MATIC', 18, true );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, $zero_address, 'ETH', 18, true );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, $zero_address, 'MATIC', 18, true );
 		}
 
 		foreach ( $records as $record ) {
