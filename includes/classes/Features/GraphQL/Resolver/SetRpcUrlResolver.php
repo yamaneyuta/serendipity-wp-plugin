@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class SetRpcUrlResolver extends ResolverBase {
 
@@ -16,21 +17,19 @@ class SetRpcUrlResolver extends ResolverBase {
 	 * @return bool
 	 */
 	public function resolve( array $root_value, array $args ) {
-		/** @var int */
-		$chain_ID = $args['chainID'];
+		$chain_ID = new ChainID( $args['chainID'] );
 		/** @var string|null */
 		$rpc_url = $args['rpcURL'] ?? null;
 
 		Validate::checkHasAdminRole(); // 管理者権限を持っているかどうかをチェック
-		Validate::checkChainID( $chain_ID );
 		( ! is_null( $rpc_url ) ) && Validate::checkURL( $rpc_url );
 
 		// RPC URLを登録する場合は実際にアクセスしてチェーンIDを取得し、
 		// 引数のチェーンIDと一致していることを確認する
 		if ( ! is_null( $rpc_url ) ) {
 			$actual_chain_ID_hex = ( new BlockchainClient( $rpc_url ) )->getChainIDHex();
-			if ( Hex::from( $chain_ID ) !== $actual_chain_ID_hex ) {
-				throw new \InvalidArgumentException( '[0AD91082] Invalid chain ID. expected: ' . var_export( Hex::from( $chain_ID ), true ) . ', actual: ' . var_export( $actual_chain_ID_hex, true ) );
+			if ( Hex::from( $chain_ID->value() ) !== $actual_chain_ID_hex ) {
+				throw new \InvalidArgumentException( '[0AD91082] Invalid chain ID. expected: ' . var_export( Hex::from( $chain_ID->value() ), true ) . ', actual: ' . var_export( $actual_chain_ID_hex, true ) );
 			}
 		}
 

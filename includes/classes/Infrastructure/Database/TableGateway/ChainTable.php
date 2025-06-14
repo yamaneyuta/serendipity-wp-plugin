@@ -20,9 +20,8 @@ class ChainTable extends TableBase {
 
 	/**
 	 * @return ChainTableRecord[]
-	 * TODO: 引数を削除
 	 */
-	public function select( ?int $chain_ID = null ): array {
+	public function all(): array {
 		// レコード数は少ないのですべてのレコードを取得してからフィルタリングする
 		$sql     = <<<SQL
 			SELECT `chain_id`, `name`, `rpc_url`, `confirmations`
@@ -31,26 +30,17 @@ class ChainTable extends TableBase {
 		$results = $this->wpdb()->get_results( $sql );
 		assert( is_array( $results ), '[583DBBE7] Invalid result type. Expected array, got ' . gettype( $results ) );
 
-		$chain_table_records = array_map(
-			function ( $row ) {
-				// 型をテーブル定義を一致させる
-				$row->chain_id = (int) $row->chain_id;
+		return array_values(
+			array_map(
+				function ( $row ) {
+					// 型をテーブル定義を一致させる
+					$row->chain_id = (int) $row->chain_id;
 
-				return new ChainTableRecord( $row );
-			},
-			$results
+					return new ChainTableRecord( $row );
+				},
+				$results
+			)
 		);
-
-		// チェーンIDでフィルタ
-		if ( ! is_null( $chain_ID ) ) {
-			$chain_table_records = array_filter(
-				$chain_table_records,
-				fn( $record ) => $record->chainID() === $chain_ID
-			);
-			assert( count( $chain_table_records ) <= 1, '[9A6ADAB1] should return at most one record.' );
-		}
-
-		return array_values( $chain_table_records );
 	}
 
 	public function save( Chain $chain ): void {
@@ -67,7 +57,7 @@ class ChainTable extends TableBase {
 		$sql = $this->namedPrepare(
 			$sql,
 			array(
-				':chain_id'      => $chain->id(),
+				':chain_id'      => $chain->id()->value(),
 				':name'          => $chain->name(),
 				':rpc_url'       => $chain->rpcURL(),
 				':confirmations' => (string) $chain->confirmations(),
@@ -88,8 +78,6 @@ class ChainTable extends TableBase {
 	 * @deprecated
 	 */
 	public function insert( int $chain_ID, string $name ) {
-		Validate::checkChainID( $chain_ID );
-
 		$this->wpdb()->insert(
 			$this->tableName(),
 			array(
@@ -107,7 +95,6 @@ class ChainTable extends TableBase {
 
 	/** @deprecated */
 	public function updateRpcURL( int $chain_ID, ?string $rpc_url ): void {
-		Validate::checkChainID( $chain_ID );
 		( ! is_null( $rpc_url ) ) && Validate::checkURL( $rpc_url );
 
 		$result = $this->wpdb()->update(
@@ -134,7 +121,6 @@ class ChainTable extends TableBase {
 	 * @deprecated
 	 */
 	public function updateConfirmations( int $chain_ID, $confirmations ): void {
-		Validate::checkChainID( $chain_ID );
 		Validate::checkConfirmations( $confirmations );
 
 		// confirmationsがint型の場合は文字列に変換

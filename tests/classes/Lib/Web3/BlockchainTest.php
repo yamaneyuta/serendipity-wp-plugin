@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class BlockchainTest extends IntegrationTestBase {
 
@@ -13,7 +13,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @testdox [463DA15C] RPC::getChainIDHex() - chain_ID: $chain_ID
 	 * @dataProvider getChainIDHexDataProvider
 	 */
-	public function getChainIDHex( int $chain_ID ) {
+	public function getChainIDHex( ChainID $chain_ID ) {
 		// ARRANGE
 		$rpc_url = ( new HardhatRpcUrl() )->get( $chain_ID );
 		$sut     = new BlockchainClient( $rpc_url );
@@ -22,13 +22,13 @@ class BlockchainTest extends IntegrationTestBase {
 		$chain_ID_hex = $sut->getChainIDHex();
 
 		// ASSERT
-		$this->assertEquals( $chain_ID, hexdec( $chain_ID_hex ) );
+		$this->assertEquals( $chain_ID->value(), hexdec( $chain_ID_hex ) );
 	}
 
 	public function getChainIDHexDataProvider() {
 		return array(
-			array( ChainID::PRIVATENET_L1 ),
-			array( ChainID::PRIVATENET_L2 ),
+			array( ChainID::privatenet1() ),
+			array( ChainID::privatenet2() ),
 		);
 	}
 
@@ -39,7 +39,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @testdox [20B19A08] RPC::getBlockNumber() - chain_ID: $chain_ID
 	 * @dataProvider getBlockNumberHexDataProvider
 	 */
-	public function getBlockNumberHex( int $chain_ID ) {
+	public function getBlockNumberHex( ChainID $chain_ID ) {
 		// ARRANGE
 		$rpc_url = ( new HardhatRpcUrl() )->get( $chain_ID );
 		$sut     = new BlockchainClient( $rpc_url );
@@ -53,8 +53,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBlockNumberHexDataProvider() {
 		return array(
-			array( ChainID::PRIVATENET_L1 ),
-			array( ChainID::PRIVATENET_L2 ),
+			array( ChainID::privatenet1() ),
+			array( ChainID::privatenet2() ),
 		);
 	}
 
@@ -65,7 +65,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @testdox [B94DD0E4] RPC::getBalanceHex() - chain_ID: $chain_ID
 	 * @dataProvider getBalanceHexDataProvider
 	 */
-	public function getBalanceHex( int $chain_ID ) {
+	public function getBalanceHex( ChainID $chain_ID ) {
 		// ARRANGE
 		$rpc_url         = ( new HardhatRpcUrl() )->get( $chain_ID );
 		$hardhat_account = ( new HardhatAccount() )->deployer();    // hardhat デプロイ用アカウント
@@ -81,8 +81,8 @@ class BlockchainTest extends IntegrationTestBase {
 
 	public function getBalanceHexDataProvider() {
 		return array(
-			array( ChainID::PRIVATENET_L1 ),
-			array( ChainID::PRIVATENET_L2 ),
+			array( ChainID::privatenet1() ),
+			array( ChainID::privatenet2() ),
 		);
 	}
 
@@ -93,7 +93,7 @@ class BlockchainTest extends IntegrationTestBase {
 	 * @testdox [DB4609C4] RPC::getFinalizedBlockNumberHex() - chain_ID: $chain_ID
 	 * @dataProvider getFinalizedBlockNumberProvider
 	 */
-	public function getFinalizedBlockNumberHex( int $chain_ID ) {
+	public function getFinalizedBlockNumberHex( ChainID $chain_ID ) {
 		// ARRANGE
 		$rpc_url = ( new HardhatRpcUrl() )->get( $chain_ID );
 		$sut     = new BlockchainClient( $rpc_url );
@@ -106,8 +106,8 @@ class BlockchainTest extends IntegrationTestBase {
 	}
 	public function getFinalizedBlockNumberProvider() {
 		return array(
-			array( ChainID::PRIVATENET_L1 ),
-			array( ChainID::PRIVATENET_L2 ),
+			array( ChainID::privatenet1() ),
+			array( ChainID::privatenet2() ),
 		);
 	}
 }

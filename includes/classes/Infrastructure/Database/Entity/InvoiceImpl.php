@@ -6,13 +6,14 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Entity;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceTableRecord;
 use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\ValueObject\Price;
 
 class InvoiceImpl extends Invoice {
 
-	public function __construct( InvoiceID $id, int $post_ID, int $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, string $payment_amount_hex, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
+	public function __construct( InvoiceID $id, int $post_ID, ChainID $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, string $payment_amount_hex, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
 		parent::__construct(
 			$id,
 			$post_ID,
@@ -30,7 +31,7 @@ class InvoiceImpl extends Invoice {
 		return new self(
 			InvoiceID::from( $invoice_record->id() ),
 			$invoice_record->postID(),
-			$invoice_record->chainID(),
+			new ChainID( $invoice_record->chainID() ),
 			new Price(
 				$invoice_record->sellingAmountHex(),
 				$invoice_record->sellingDecimals(),

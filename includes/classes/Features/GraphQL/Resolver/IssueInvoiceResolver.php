@@ -15,6 +15,7 @@ use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
 use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class IssueInvoiceResolver extends ResolverBase {
 
@@ -25,9 +26,8 @@ class IssueInvoiceResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$post_ID = $args['postID'];
-		/** @var int */
-		$chain_ID         = $args['chainID'];
+		$post_ID          = $args['postID'];
+		$chain_ID         = new ChainID( $args['chainID'] );
 		$token_address    = Address::from( $args['tokenAddress'] ?? null );
 		$consumer_address = Address::from( $args['consumerAddress'] ?? null ); // 購入者のアドレス
 
@@ -72,7 +72,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		}
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成
-		$server_message = SolidityStrings::valueToHexString( $chain_ID )
+		$server_message = SolidityStrings::valueToHexString( $chain_ID->value() )
 			. SolidityStrings::addressToHexString( $seller_address )
 			. SolidityStrings::addressToHexString( $consumer_address )
 			. SolidityStrings::valueToHexString( $invoice->id()->hex() )

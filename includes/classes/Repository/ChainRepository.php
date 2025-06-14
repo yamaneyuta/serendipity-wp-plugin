@@ -7,6 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\ChainImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class ChainRepository {
 
@@ -19,8 +20,7 @@ class ChainRepository {
 	/**
 	 * 指定したチェーンIDに合致するチェーンを取得します。
 	 */
-	public function getChain( int $chain_id ): ?Chain {
-
+	public function getChain( ChainID $chain_id ): ?Chain {
 		$chains          = $this->getAllChains();
 		$chains_filter   = ( new ChainsFilter() )->byChainID( $chain_id );
 		$filtered_chains = $chains_filter->apply( $chains );
@@ -34,7 +34,7 @@ class ChainRepository {
 	 * @return Chain[]
 	 */
 	public function getAllChains() {
-		$records = $this->chain_table->select();
+		$records = $this->chain_table->all();
 
 		return array_values(
 			array_map(

@@ -62,7 +62,7 @@ class TokenTable extends TableBase {
 
 		$sql = $this->wpdb()->prepare(
 			$sql,
-			$token->chainID(),
+			$token->chainID()->value(),
 			$token->address()->value(),
 			$token->symbol(),
 			$token->decimals(),

@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\ValueObject\Rate;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
-use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\ValueObject\Address;
@@ -30,9 +30,9 @@ class PriceExchangeTest extends IntegrationTestBase {
 
 		// ERC20トークンの情報をテーブルに保存
 		$token_table = new TokenTable( $GLOBALS['wpdb'] );
-		$token_table->save( new Token( ChainID::ETH_MAINNET, new Address( '0x0D8775F648430679A709E98d2b0Cb6250d2887EF' ), 'BAT', 18, true ) );
-		$token_table->save( new Token( ChainID::ETH_MAINNET, new Address( '0x514910771AF9Ca656af840dff83E8264EcF986CA' ), 'LINK', 18, true ) );
-		$token_table->save( new Token( ChainID::ETH_MAINNET, new Address( '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' ), 'USDC', 6, true ) );
+		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0x0D8775F648430679A709E98d2b0Cb6250d2887EF' ), 'BAT', 18, true ) );
+		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0x514910771AF9Ca656af840dff83E8264EcF986CA' ), 'LINK', 18, true ) );
+		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' ), 'USDC', 6, true ) );
 
 		// $this->rate_data_mockのgetメソッドを任意の引数に対して任意の戻り値を返すように設定
 		$this->rate_data_stub->method( 'get' )->willReturnCallback(
@@ -64,7 +64,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 		$this->oracle_stub->method( 'connectableChainIDs' )->willReturnCallback(
 			function ( SymbolPair $symbol_pair ) {
 				// レートが取得できる時はOracleに定義されていることにする(本来は逆の関係だが、テストなので問題ない)
-				return is_null( $this->rate_data_stub->get( $symbol_pair ) ) ? array() : array( ChainID::ETH_MAINNET );
+				return is_null( $this->rate_data_stub->get( $symbol_pair ) ) ? array() : array( ChainID::ethMainnet() );
 			}
 		);
 	}
@@ -108,7 +108,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 		$this->assertEquals( $ret->decimals(), $price->decimals() );
 		$this->assertEquals( $ret->symbol(), $price->symbol() );
 		$this->assertEquals( $ret->amountHex(), $price->amountHex() );
-		$this->assertEquals( $ret->toTokenAmount( ChainID::ETH_MAINNET ), Hex::from( new BigInteger( '100000000000000000', 10 ) ) );
+		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), Hex::from( new BigInteger( '100000000000000000', 10 ) ) );
 	}
 
 	/**
@@ -126,7 +126,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 
 		// ASSERT
 		$this->assertEquals( $ret->symbol(), 'ETH' );
-		$this->assertEquals( $ret->toTokenAmount( ChainID::ETH_MAINNET ), Hex::from( new BigInteger( '100000000000000000', 10 ) ) );
+		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), Hex::from( new BigInteger( '100000000000000000', 10 ) ) );
 	}
 
 	/**
@@ -144,7 +144,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 
 		// ASSERT
 		$this->assertEquals( $ret->symbol(), 'ETH' );
-		$this->assertEquals( $ret->toTokenAmount( ChainID::ETH_MAINNET ), Hex::from( new BigInteger( '100000000000000000', 10 ) ) );
+		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), Hex::from( new BigInteger( '100000000000000000', 10 ) ) );
 	}
 
 	/**
@@ -162,7 +162,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 
 		// ASSERT
 		$this->assertEquals( $ret->symbol(), 'ETH' );
-		$this->assertEquals( $ret->toTokenAmount( ChainID::ETH_MAINNET ), Hex::from( new BigInteger( '500000000000000000', 10 ) ) );
+		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), Hex::from( new BigInteger( '500000000000000000', 10 ) ) );
 	}
 
 	/**
@@ -180,7 +180,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 
 		// ASSERT
 		$this->assertEquals( $ret->symbol(), 'BAT' );
-		$this->assertEquals( $ret->toTokenAmount( ChainID::ETH_MAINNET ), Hex::from( new BigInteger( '100000000000000000000', 10 ) ) );
+		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), Hex::from( new BigInteger( '100000000000000000000', 10 ) ) );
 	}
 
 	/**
@@ -198,7 +198,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 
 		// ASSERT
 		$this->assertEquals( $ret->symbol(), 'USDC' );
-		$this->assertEquals( $ret->toTokenAmount( ChainID::ETH_MAINNET ), Hex::from( new BigInteger( '10000000', 10 ) ) );// USDCのdecimalsは6
+		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), Hex::from( new BigInteger( '10000000', 10 ) ) );// USDCのdecimalsは6
 	}
 
 	/**
@@ -216,6 +216,6 @@ class PriceExchangeTest extends IntegrationTestBase {
 
 		// ASSERT
 		$this->assertEquals( $ret->symbol(), 'LINK' );
-		$this->assertEquals( $ret->toTokenAmount( ChainID::ETH_MAINNET ), Hex::from( new BigInteger( '100000000000000000', 10 ) ) );
+		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), Hex::from( new BigInteger( '100000000000000000', 10 ) ) );
 	}
 }

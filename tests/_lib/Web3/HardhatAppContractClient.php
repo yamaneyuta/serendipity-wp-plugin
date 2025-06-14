@@ -11,13 +11,14 @@ use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class HardhatAppContractClient extends AppContractClient {
 	private function __construct( AppContract $app_contract, AppContractAbi $app_abi ) {
 		parent::__construct( $app_contract, $app_abi );
 	}
 
-	public static function fromChainID( int $chain_ID ): self {
+	public static function fromChainID( ChainID $chain_ID ): self {
 		assert( ( new ChainRepository() )->getChain( $chain_ID )->networkCategory()->equals( NetworkCategory::from( NetworkCategoryID::PRIVATENET ) ) );
 		$app_contract = ( new AppContractRepository() )->get( $chain_ID );
 		$app_abi      = new HardhatAppContractABI();

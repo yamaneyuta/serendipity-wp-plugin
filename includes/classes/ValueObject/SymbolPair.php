@@ -24,4 +24,12 @@ class SymbolPair {
 	public function quote(): string {
 		return $this->quote_symbol;
 	}
+
+	public function equals( SymbolPair $other ): bool {
+		return $this->base_symbol === $other->base_symbol && $this->quote_symbol === $other->quote_symbol;
+	}
+
+	public function __toString(): string {
+		return "{$this->base_symbol}/{$this->quote_symbol}";
+	}
 }

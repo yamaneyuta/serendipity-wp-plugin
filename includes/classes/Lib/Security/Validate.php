@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Security;
 
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 /**
@@ -83,23 +82,6 @@ class Validate {
 	 */
 	public static function isUrl( string $url ): bool {
 		return filter_var( $url, FILTER_VALIDATE_URL ) !== false && Strings::starts_with( $url, 'http' );
-	}
-
-	/** チェーンIDが正常でない場合は例外をスローします。 */
-	public static function checkChainID( int $chain_ID ): void {
-		if ( ! self::isChainID( $chain_ID ) ) {
-			throw new \InvalidArgumentException( '[84C80B37] Invalid chain ID. - chain ID: ' . $chain_ID );
-		}
-	}
-	/** 指定された値がチェーンIDとして有効かどうかを返します。 */
-	public static function isChainID( int $chain_ID ): bool {
-		// リフレクションを使用して、クラス定数を取得
-		$reflection = new \ReflectionClass( ChainID::class );
-		$constants  = $reflection->getConstants();
-		/** @var int[] */
-		$all_chain_ids = array_values( $constants );
-
-		return in_array( $chain_ID, $all_chain_ids, true );
 	}
 
 	/**

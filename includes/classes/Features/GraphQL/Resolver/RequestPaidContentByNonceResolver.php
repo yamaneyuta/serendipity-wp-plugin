@@ -12,6 +12,7 @@ use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
@@ -96,7 +97,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	/**
 	 * トランザクションが待機済みかどうかを判定します。
 	 */
-	private function isConfirmed( int $chain_ID, BlockNumber $unlocked_block_number ): bool {
+	private function isConfirmed( ChainID $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
 		$chain         = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
 		$confirmations = $chain->confirmations();

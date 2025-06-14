@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository\Settings;
 
+use Cornix\Serendipity\Core\ValueObject\ChainID;
+
 /**
  * ユーザーが設定を行っていない場合のデフォルト値を取得するためのクラス
  */
@@ -10,17 +12,17 @@ class DefaultValue {
 	/**
 	 * 指定したチェーンの待機ブロック数の既定値
 	 *
-	 * @param int $chain_ID
+	 * @param ChainID $chain_ID
 	 * @return int|string
 	 */
-	public function confirmations( int $chain_ID ) {
+	public function confirmations( ChainID $chain_ID ) {
 		return 1;
 	}
 
 	/**
 	 * `eth_getLogs`呼び出しで取得するブロック数の最大値
 	 */
-	public function getLogsMaxRange( int $chain_ID ): int {
+	public function getLogsMaxRange( ChainID $chain_ID ): int {
 		// 以下のスレッドで以下の制限があるとの記述あり
 		// https://github.com/bnb-chain/bsc/issues/113
 		// - BSC: 5000

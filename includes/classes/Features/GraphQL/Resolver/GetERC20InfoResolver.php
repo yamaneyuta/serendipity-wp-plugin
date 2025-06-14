@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Lib\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
 
 /**
@@ -24,11 +25,9 @@ class GetERC20InfoResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		Validate::checkHasAdminRole();  // 管理者権限が必要
 
-		/** @var int */
-		$chain_ID = $args['chainID'];
+		$chain_ID = new ChainID( $args['chainID'] );
 		$address  = new Address( $args['address'] );
 
-		Validate::checkChainID( $chain_ID );  // チェーンIDが有効であること
 		if ( $address === Ethers::zeroAddress() ) {
 			// ERC20トークンの情報を取得するResolverのため、アドレスゼロも不許可
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );

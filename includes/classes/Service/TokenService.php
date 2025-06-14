@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Lib\Web3\TokenClient;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class TokenService {
 
@@ -21,7 +22,7 @@ class TokenService {
 	/**
 	 * ERC20トークンの情報を保存します。
 	 */
-	public function saveERC20Token( int $chain_ID, Address $address, bool $is_payable ): Token {
+	public function saveERC20Token( ChainID $chain_ID, Address $address, bool $is_payable ): Token {
 
 		$token = $this->token_repository->get( $chain_ID, $address );
 		if ( null === $token ) {

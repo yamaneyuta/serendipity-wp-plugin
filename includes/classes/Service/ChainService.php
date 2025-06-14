@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use InvalidArgumentException;
 
 /**
@@ -16,7 +17,7 @@ class ChainService {
 	}
 	private ChainRepository $repository;
 
-	public function getChain( int $chain_id ): ?Chain {
+	public function getChain( ChainID $chain_id ): ?Chain {
 		return $this->repository->getChain( $chain_id );
 	}
 
@@ -41,28 +42,28 @@ class ChainService {
 	/**
 	 * 指定したチェーンの情報を更新し、保存します。
 	 *
-	 * @param int                  $chain_id
+	 * @param ChainID              $chain_id
 	 * @param callback(Chain):void $updater
 	 */
-	private function updatePropertyAndSave( int $chain_id, $updater ): void {
+	private function updatePropertyAndSave( ChainID $chain_id, $updater ): void {
 		$chain = $this->getChain( $chain_id );
 		if ( $chain === null ) {
-			throw new \InvalidArgumentException( "[465AB29B] Chain with ID {$chain_id} does not exist." );
+			throw new \InvalidArgumentException( "[465AB29B] Chain with ID {$chain_id->value()} does not exist." );
 		}
 		$updater( $chain );
 		$this->saveChain( $chain );
 	}
 
-	public function saveRpcURL( int $chain_id, ?string $rpc_url ): void {
+	public function saveRpcURL( ChainID $chain_id, ?string $rpc_url ): void {
 		$this->updatePropertyAndSave( $chain_id, fn( Chain $chain ) => $chain->setRpcURL( $rpc_url ) );
 	}
 
 	/**
 	 *
-	 * @param int        $chain_id
+	 * @param ChainID    $chain_id
 	 * @param int|string $confirmations
 	 */
-	public function saveConfirmations( int $chain_id, $confirmations ): void {
+	public function saveConfirmations( ChainID $chain_id, $confirmations ): void {
 		if ( ! is_int( $confirmations ) && ! is_string( $confirmations ) ) {
 			throw new InvalidArgumentException( '[5ED6D745] Confirmations must be an integer or a string.' );
 		}

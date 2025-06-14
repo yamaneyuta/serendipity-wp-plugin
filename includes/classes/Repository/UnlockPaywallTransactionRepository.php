@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\TransactionHash;
 
@@ -16,7 +17,7 @@ class UnlockPaywallTransactionRepository {
 
 	private UnlockPaywallTransactionTable $table;
 
-	public function save( InvoiceID $invoice_id, int $chain_id, BlockNumber $block_number, TransactionHash $transaction_hash ): void {
+	public function save( InvoiceID $invoice_id, ChainID $chain_id, BlockNumber $block_number, TransactionHash $transaction_hash ): void {
 		$this->table->save( $invoice_id, $chain_id, $block_number, $transaction_hash );
 	}
 }

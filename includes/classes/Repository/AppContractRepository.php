@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\AppContractImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTable;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class AppContractRepository {
 	public function __construct( ?AppContractTable $app_contract_table = null, ?ChainRepository $chain_repository = null ) {
@@ -15,11 +16,11 @@ class AppContractRepository {
 	private AppContractTable $app_contract_table;
 	private ChainRepository $chain_repository;
 
-	public function get( int $chain_id ): ?AppContract {
+	public function get( ChainID $chain_id ): ?AppContract {
 		$records = $this->app_contract_table->all();
 		$records = array_filter(
 			$records,
-			fn( $record ) => $record->chainID() === $chain_id
+			fn( $record ) => $record->chainID() === $chain_id->value()
 		);
 		assert( count( $records ) <= 1, '[68E05B97] should return at most one record.' );
 

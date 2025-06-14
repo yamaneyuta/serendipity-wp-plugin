@@ -123,7 +123,7 @@ class AppContractTmpTable {
 				INSERT INTO `{$table_name}` (`chain_id`, `address`)
 				VALUES (%d, %s)
 			SQL;
-			$sql    = $this->wpdb->prepare( $sql, $chain->id(), $app_contract->address()->value() );
+			$sql    = $this->wpdb->prepare( $sql, $chain->id()->value(), $app_contract->address()->value() );
 			$result = $this->wpdb->query( $sql );
 			assert( 1 === $result, "[5549D888] Failed to insert app contract address for chain ID {$chain->id()}" );
 		}

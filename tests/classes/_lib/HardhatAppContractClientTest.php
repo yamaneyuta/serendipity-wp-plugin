@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Web3\Ethers;
@@ -11,6 +10,7 @@ use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use kornrunner\Keccak;
 
 class HardhatAppContractClientTest extends IntegrationTestBase {
@@ -23,7 +23,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 	 */
 	public function testBar(): void {
 		// ARRANGE
-		$sut = HardhatAppContractClient::fromChainID( ChainID::PRIVATENET_L1 );
+		$sut = HardhatAppContractClient::fromChainID( ChainID::privatenet1() );
 
 		// 販売者はalice、購入者はbobとする
 		$seller   = HardhatSignerFactory::alice();
@@ -46,7 +46,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		);
 
 		// プライベートネット1のETHで支払う
-		$payment_chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( ChainID::PRIVATENET_L1 );
+		$payment_chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( ChainID::privatenet1() );
 		$payment_token = ( new TokenRepository() )->get(
 			$payment_chain->id(),
 			Ethers::zeroAddress() // ETH
@@ -65,7 +65,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		GRAPHQL;
 		$params = array(
 			'postID'          => $post_ID,
-			'chainID'         => $payment_token->chainID(),
+			'chainID'         => $payment_token->chainID()->value(),
 			'tokenAddress'    => $payment_token->address()->value(),
 			'consumerAddress' => $consumer->address()->value(),
 		);

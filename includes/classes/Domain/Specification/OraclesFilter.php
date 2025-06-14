@@ -6,13 +6,14 @@ namespace Cornix\Serendipity\Core\Domain\Specification;
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class OraclesFilter {
 
 	private array $filters = array();
 
-	public function byChainID( int $chain_id ): self {
-		$this->filters[] = fn ( Oracle $oracle ) => $oracle->chain()->id() === $chain_id;
+	public function byChainID( ChainID $chain_id ): self {
+		$this->filters[] = fn ( Oracle $oracle ) => $oracle->chain()->id()->equals( $chain_id );
 		return $this;
 	}
 	public function byAddress( Address $address ): self {

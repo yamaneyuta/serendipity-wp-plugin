@@ -52,7 +52,7 @@ class OracleRate {
 		foreach ( $chain_IDs as $chain_ID ) {
 			// コントラクトアドレスを取得
 			$contract_address = ( new OracleService() )->address( $chain_ID, $symbol_pair );
-			assert( ! is_null( $contract_address ) );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
+			assert( ! is_null( $contract_address ), "[460973B3] chain id: {$chain_ID}, symbol pair: {$symbol_pair}" );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
 
 			$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
 			if ( $chain->connectable() ) {

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
-use Cornix\Serendipity\Core\Constant\ChainID;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\Price;
 use phpseclib\Math\BigInteger;
 
@@ -17,7 +17,7 @@ class PriceTest extends IntegrationTestBase {
 		$sut = new Price( '0x01', 18, 'ETH' );    // 1wei
 
 		// ACT
-		$amount_hex = $sut->toTokenAmount( ChainID::ETH_MAINNET );
+		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
 		$amount_dec = ( new BigInteger( $amount_hex, 16 ) )->toString();
 
 		// ASSERT
@@ -33,7 +33,7 @@ class PriceTest extends IntegrationTestBase {
 		$sut = new Price( Hex::from( new BigInteger( 10 ** 18 ) ), 18, 'ETH' );   // 1ETH
 
 		// ACT
-		$amount_hex = $sut->toTokenAmount( ChainID::ETH_MAINNET );
+		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
 		$amount_dec = ( new BigInteger( $amount_hex, 16 ) )->toString();
 
 		// ASSERT
@@ -49,7 +49,7 @@ class PriceTest extends IntegrationTestBase {
 		$sut = new Price( '0x01', 2, 'ETH' ); // 0.01ETH
 
 		// ACT
-		$amount_hex = $sut->toTokenAmount( ChainID::ETH_MAINNET );
+		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
 		$amount_dec = ( new BigInteger( $amount_hex, 16 ) )->toString();
 
 		// ASSERT
@@ -65,7 +65,7 @@ class PriceTest extends IntegrationTestBase {
 		$sut = new Price( Hex::from( new BigInteger( 10 ** 16 ) ), 18, 'ETH' );   // 0.01ETH
 
 		// ACT
-		$amount_hex = $sut->toTokenAmount( ChainID::ETH_MAINNET );
+		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
 		$amount_dec = ( new BigInteger( $amount_hex, 16 ) )->toString();
 
 		// ASSERT
@@ -81,7 +81,7 @@ class PriceTest extends IntegrationTestBase {
 		$sut = new Price( '0x64', 20, 'ETH' );    // 1wei
 
 		// ACT
-		$amount_hex = $sut->toTokenAmount( ChainID::ETH_MAINNET );
+		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
 		$amount_dec = ( new BigInteger( $amount_hex, 16 ) )->toString();
 
 		// ASSERT
@@ -97,7 +97,7 @@ class PriceTest extends IntegrationTestBase {
 		$sut = new Price( Hex::from( new BigInteger( '100000000000000000000' ) ), 20, 'ETH' );    // 1ETH
 
 		// ACT
-		$amount_hex = $sut->toTokenAmount( ChainID::ETH_MAINNET );
+		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
 		$amount_dec = ( new BigInteger( $amount_hex, 16 ) )->toString();
 
 		// ASSERT

@@ -7,12 +7,12 @@ use Cornix\Serendipity\Core\Hook\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hook\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Logger\ILogger;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Constant\ChainID;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 /**
  * 結合テストの基底クラス
@@ -291,8 +291,8 @@ class TestUser {
 class HardhatController {
 	public function __construct() {
 		$this->rpc_urls = array(
-			( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L1 ),
-			( new HardhatRpcUrl() )->get( ChainID::PRIVATENET_L2 ),
+			( new HardhatRpcUrl() )->get( ChainID::privatenet1() ),
+			( new HardhatRpcUrl() )->get( ChainID::privatenet2() ),
 		);
 
 		$this->initialize();

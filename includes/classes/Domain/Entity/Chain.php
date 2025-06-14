@@ -5,30 +5,31 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 
 class Chain {
 	/**
 	 *
-	 * @param int         $chain_id
+	 * @param ChainID     $chain_id
 	 * @param string      $name
 	 * @param null|string $rpc_url
 	 * @param int|string  $confirmations
 	 */
-	protected function __construct( int $chain_id, string $name, ?string $rpc_url, $confirmations ) {
+	protected function __construct( ChainID $chain_id, string $name, ?string $rpc_url, $confirmations ) {
 		$this->id            = $chain_id;
 		$this->name          = $name;
 		$this->rpc_url       = $rpc_url;
 		$this->confirmations = $confirmations;
 	}
 
-	private int $id;
+	private ChainID $id;
 	private string $name;
 	private ?string $rpc_url;
 	/** @var int|string */
 	private $confirmations;
 
-	public function id(): int {
+	public function id(): ChainID {
 		return $this->id;
 	}
 	public function name(): string {
@@ -65,6 +66,6 @@ class Chain {
 	}
 
 	public function networkCategory(): NetworkCategory {
-		return NetworkCategory::from( Config::NETWORK_CATEGORIES[ $this->id ] );
+		return NetworkCategory::from( Config::NETWORK_CATEGORIES[ $this->id->value() ] );
 	}
 }

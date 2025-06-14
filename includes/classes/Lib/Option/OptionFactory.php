@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Option;
 
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 /** @deprecated */
 class OptionFactory {
@@ -18,15 +19,15 @@ class OptionFactory {
 	/**
 	 * 指定されたチェーンが最初に有効になった(≒取引が開始された)ブロック番号を取得または保存するオブジェクトを取得します。
 	 */
-	public function activeSinceBlockNumberHex( int $chain_ID ): StringOption {
-		return new StringOption( $this->getOptionKeyName( 'active_since_block_number_hex_' . $chain_ID ) );
+	public function activeSinceBlockNumberHex( ChainID $chain_ID ): StringOption {
+		return new StringOption( $this->getOptionKeyName( 'active_since_block_number_hex_' . $chain_ID->value() ) );
 	}
 
 	/**
 	 * 指定されたチェーン、ブロックタグで最後にクロールしたブロック番号を取得または保存するオブジェクトを取得します。
 	 */
-	public function crawledBlockNumberHex( int $chain_ID, string $block_tag ): StringOption {
-		return new StringOption( $this->getOptionKeyName( 'crawled_block_number_hex_' . $block_tag . '_' . $chain_ID ) );
+	public function crawledBlockNumberHex( ChainID $chain_ID, string $block_tag ): StringOption {
+		return new StringOption( $this->getOptionKeyName( 'crawled_block_number_hex_' . $block_tag . '_' . $chain_ID->value() ) );
 	}
 
 	/**

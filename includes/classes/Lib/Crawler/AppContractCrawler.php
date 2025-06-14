@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\ValueObject\Address;
 use Cornix\Serendipity\Core\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\ValueObject\TransactionHash;
 use phpseclib\Math\BigInteger;
@@ -29,7 +30,7 @@ class AppContractCrawler {
 	private AppContractAbi $app_abi;
 	private \wpdb $wpdb;
 
-	public function crawl( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): void {
+	public function crawl( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): void {
 		// UnlockPaywallTransferイベントのログを取得
 		$transfer_logs = $this->getUnlockPaywallTransferLogs( $chain_ID, $from_block, $to_block );
 		// トランザクション情報をDBに保存
@@ -41,14 +42,14 @@ class AppContractCrawler {
 	/**
 	 * UnlockPaywallTransferイベントのログを取得します。
 	 */
-	private function getUnlockPaywallTransferLogs( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
+	private function getUnlockPaywallTransferLogs( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
 		return ( new UnlockPaywallTransferCrawler() )->execute( $chain_ID, $from_block, $to_block );
 	}
 
 	/**
 	 * UnlockPaywallTransferイベントが発生した時のトランザクション情報をDBに保存します。
 	 */
-	private function saveUnlockPaywallTransaction( \wpdb $wpdb, int $chain_ID, array $unlock_paywall_transfer_logs ): void {
+	private function saveUnlockPaywallTransaction( \wpdb $wpdb, ChainID $chain_ID, array $unlock_paywall_transfer_logs ): void {
 		$transaction_repository = new UnlockPaywallTransactionRepository( $wpdb );
 
 		/** @var string[] */
@@ -149,7 +150,7 @@ class UnlockPaywallTransferCrawler {
 	 *
 	 * @return stdClass[]
 	 */
-	public function execute( int $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
+	public function execute( ChainID $chain_ID, BlockNumber $from_block, BlockNumber $to_block ): array {
 		$blockchain_client = ( new BlockchainClientFactory() )->create( $chain_ID );
 
 		/** @var array|null */

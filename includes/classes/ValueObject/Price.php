@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use phpseclib\Math\BigInteger;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 class Price {
 	public function __construct( $amount_hex, $decimals, $symbol ) {
@@ -42,13 +43,13 @@ class Price {
 	/**
 	 * 指定したネットワークにおけるトークンの数量に変換します。
 	 */
-	public function toTokenAmount( int $chain_ID ): string {
+	public function toTokenAmount( ChainID $chain_ID ): string {
 		// そのトークン1単位における小数点以下桁数。ETHであれば18。
 		$tokens_filter = ( new TokensFilter() )->byChainID( $chain_ID )->bySymbol( $this->symbol );
 		$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
 
 		if ( 1 !== count( $tokens ) ) {
-			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID . ', symbol: ' . $this->symbol . ', count: ' . count( $tokens ) );
+			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID->value() . ', symbol: ' . $this->symbol . ', count: ' . count( $tokens ) );
 		}
 		$token = array_values( $tokens )[0]; // 1つだけなので、配列の最初の要素を取得
 

@@ -14,6 +14,7 @@ use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\ValueObject\ChainID;
 
 /**
  * wp_cronを利用した処理を登録するクラス。
@@ -110,8 +111,6 @@ class AppContractCrawlCronProcedure {
 					continue;
 				}
 
-				$blockchain = ( new BlockchainClientFactory() )->create( $chain_ID );
-
 				// チェーンの最後にクロールしたブロック番号を取得
 				$last_crawled_block = ( new CrawledBlockNumber() )->get( $chain_ID, $block_tag );
 				// クロールが未実行の場合はアクティブになったブロック番号から開始
@@ -136,12 +135,12 @@ class AppContractCrawlCronProcedure {
 				}
 
 				// クロール終了ブロック番号が最終ブロック番号を超える場合、最終ブロック番号に合わせる
-				if ( $to_block_number->compare( $end_block_number_array[ $chain_ID ] ) > 0 ) {
-					$to_block_number = $end_block_number_array[ $chain_ID ];
+				if ( $to_block_number->compare( $end_block_number_array[ $chain_ID->value() ] ) > 0 ) {
+					$to_block_number = $end_block_number_array[ $chain_ID->value() ];
 				}
 
 				// クロール終了ブロック番号が最終ブロック番号に達していない場合、次回もクロールを継続
-				if ( $to_block_number->compare( $end_block_number_array[ $chain_ID ] ) < 0 ) {
+				if ( $to_block_number->compare( $end_block_number_array[ $chain_ID->value() ] ) < 0 ) {
 					$is_continue_crawling = true;   // 最後までクロールが完了しないため、次回もクロールを継続
 				}
 
@@ -174,7 +173,7 @@ class AppContractCrawlableChainIDs {
 	 * - チェーンに接続可能
 	 * - 請求書を発行したことがある
 	 *
-	 * @return int[]
+	 * @return ChainID[]
 	 */
 	public function get(): array {
 		// 接続可能なチェーン一覧を取得
