@@ -45,26 +45,4 @@ class OracleTable extends TableBase {
 
 		return $records;
 	}
-
-	/**
-	 * テーブルにOracleを追加します。
-	 */
-	public function insert( int $chain_ID, string $address, string $base_symbol, string $quote_symbol ): void {
-		Validate::checkChainID( $chain_ID );
-		Validate::checkSymbol( $base_symbol );
-		Validate::checkSymbol( $quote_symbol );
-
-		$sql = <<<SQL
-			INSERT INTO `{$this->tableName()}`
-			(`chain_id`, `address`, `base_symbol`, `quote_symbol`)
-			VALUES (%d, %s, %s, %s)
-		SQL;
-
-		$sql = $this->wpdb()->prepare( $sql, $chain_ID, $address, $base_symbol, $quote_symbol );
-
-		$result = $this->wpdb()->query( $sql );
-		if ( false === $result ) {
-			throw new \Exception( '[91E6A6C0] Failed to add oracle data.' );
-		}
-	}
 }
