@@ -11,21 +11,16 @@ use Cornix\Serendipity\Core\ValueObject\BlockNumber;
 
 class AppContractImpl extends AppContract {
 
-	private function __construct(
-		Chain $chain,
-		Address $address,
-		BlockNumber $activation_block_number,
-		BlockNumber $crawled_block_number
-	) {
-		parent::__construct( $chain, $address, $activation_block_number, $crawled_block_number );
-	}
-
-	public static function fromTableRecord( Chain $chain, AppContractTableRecord $record ): self {
-		return new self(
+	private function __construct( Chain $chain, AppContractTableRecord $record ) {
+		parent::__construct(
 			$chain,
 			Address::from( $record->addressValue() ),
 			BlockNumber::from( $record->activationBlockNumberValue() ),
 			BlockNumber::from( $record->crawledBlockNumberValue() )
 		);
+	}
+
+	public static function fromTableRecord( Chain $chain, AppContractTableRecord $record ): self {
+			return new self( $chain, $record );
 	}
 }

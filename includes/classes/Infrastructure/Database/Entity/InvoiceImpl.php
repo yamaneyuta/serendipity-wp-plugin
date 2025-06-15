@@ -13,22 +13,8 @@ use Cornix\Serendipity\Core\ValueObject\Price;
 
 class InvoiceImpl extends Invoice {
 
-	public function __construct( InvoiceID $id, int $post_ID, ChainID $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, string $payment_amount_hex, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
+	public function __construct( InvoiceTableRecord $invoice_record ) {
 		parent::__construct(
-			$id,
-			$post_ID,
-			$chain_ID,
-			$selling_price,
-			$seller_address,
-			$payment_token_address,
-			$payment_amount_hex,
-			$consumer_address,
-			$nonce
-		);
-	}
-
-	public static function fromTableRecord( InvoiceTableRecord $invoice_record ): self {
-		return new self(
 			InvoiceID::from( $invoice_record->idValue() ),
 			$invoice_record->postIdValue(),
 			new ChainID( $invoice_record->chainIdValue() ),
@@ -43,5 +29,9 @@ class InvoiceImpl extends Invoice {
 			Address::from( $invoice_record->consumerAddressValue() ),
 			$invoice_record->nonceValue() ? new InvoiceNonce( $invoice_record->nonceValue() ) : null
 		);
+	}
+
+	public static function fromTableRecord( InvoiceTableRecord $invoice_record ): self {
+		return new self( $invoice_record );
 	}
 }
