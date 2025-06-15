@@ -13,17 +13,17 @@ class PostImpl extends Post {
 
 	private function __construct( PaidContentTableRecord $record ) {
 		parent::__construct(
-			$record->postID(),
-			PaidContent::from( $record->paidContent() ),
-			NetworkCategory::from( $record->sellingNetworkCategoryID() ),
+			$record->postIdValue(),
+			PaidContent::from( $record->paidContentValue() ),
+			NetworkCategory::from( $record->sellingNetworkCategoryIdValue() ),
 			$this->getPriceFromRecord( $record ),
 		);
 	}
 
 	private function getPriceFromRecord( PaidContentTableRecord $record ): ?Price {
-		$selling_amount_hex = $record->sellingAmountHex();
-		$selling_decimals   = $record->sellingDecimals();
-		$selling_symbol     = $record->sellingSymbol();
+		$selling_amount_hex = $record->sellingAmountHexValue();
+		$selling_decimals   = $record->sellingDecimalsValue();
+		$selling_symbol     = $record->sellingSymbolValue();
 		if ( null === $selling_amount_hex || null === $selling_decimals || null === $selling_symbol ) {
 			return null;
 		} else {

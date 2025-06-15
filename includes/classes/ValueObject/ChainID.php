@@ -9,7 +9,7 @@ class ChainID {
 
 	public function __construct( int $chain_id_value ) {
 		if ( $chain_id_value <= 0 ) {
-			throw new \InvalidArgumentException( 'ChainIDは正の整数でなければなりません。' );
+			throw new \InvalidArgumentException( '[44CF8BCC] Chain ID must be a positive integer.' );
 		}
 		$this->chain_id_value = $chain_id_value;
 	}

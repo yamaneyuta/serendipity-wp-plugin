@@ -14,13 +14,13 @@ class UnlockPaywallTransactionTableRecord extends TableRecordBase {
 	protected int $block_number;
 	protected string $transaction_hash;
 
-	public function chainID(): int {
+	public function chainIdValue(): int {
 		return $this->chain_id;
 	}
-	public function blockNumber(): int {
+	public function blockNumberValue(): int {
 		return $this->block_number;
 	}
-	public function transactionHash(): string {
+	public function transactionHashValue(): string {
 		return $this->transaction_hash;
 	}
 }

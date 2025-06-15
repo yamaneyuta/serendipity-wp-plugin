@@ -20,7 +20,7 @@ class AppContractRepository {
 		$records = $this->app_contract_table->all();
 		$records = array_filter(
 			$records,
-			fn( $record ) => $record->chainID() === $chain_id->value()
+			fn( $record ) => $record->chainIdValue() === $chain_id->value()
 		);
 		assert( count( $records ) <= 1, '[68E05B97] should return at most one record.' );
 

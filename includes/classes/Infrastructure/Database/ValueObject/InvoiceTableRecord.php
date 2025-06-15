@@ -22,37 +22,37 @@ class InvoiceTableRecord extends TableRecordBase {
 	protected string $consumer_address;
 	protected string $nonce;
 
-	public function id(): string {
+	public function idValue(): string {
 		return $this->id;
 	}
-	public function postID(): int {
+	public function postIdValue(): int {
 		return $this->post_id;
 	}
-	public function chainID(): int {
+	public function chainIdValue(): int {
 		return $this->chain_id;
 	}
-	public function sellingAmountHex(): string {
+	public function sellingAmountHexValue(): string {
 		return $this->selling_amount_hex;
 	}
-	public function sellingDecimals(): int {
+	public function sellingDecimalsValue(): int {
 		return $this->selling_decimals;
 	}
-	public function sellingSymbol(): string {
+	public function sellingSymbolValue(): string {
 		return $this->selling_symbol;
 	}
-	public function sellerAddress(): string {
+	public function sellerAddressValue(): string {
 		return $this->seller_address;
 	}
-	public function paymentTokenAddress(): string {
+	public function paymentTokenAddressValue(): string {
 		return $this->payment_token_address;
 	}
-	public function paymentAmountHex(): string {
+	public function paymentAmountHexValue(): string {
 		return $this->payment_amount_hex;
 	}
-	public function consumerAddress(): string {
+	public function consumerAddressValue(): string {
 		return $this->consumer_address;
 	}
-	public function nonce(): string {
+	public function nonceValue(): string {
 		return $this->nonce;
 	}
 }

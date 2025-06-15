@@ -15,16 +15,16 @@ class OracleTableRecord extends TableRecordBase {
 	protected string $base_symbol;
 	protected string $quote_symbol;
 
-	public function chainID(): int {
+	public function chainIdValue(): int {
 		return $this->chain_id;
 	}
-	public function address(): string {
+	public function addressValue(): string {
 		return $this->address;
 	}
-	public function baseSymbol(): string {
+	public function baseSymbolValue(): string {
 		return $this->base_symbol;
 	}
-	public function quoteSymbol(): string {
+	public function quoteSymbolValue(): string {
 		return $this->quote_symbol;
 	}
 }
