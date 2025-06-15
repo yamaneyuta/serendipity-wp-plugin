@@ -54,10 +54,6 @@ class ChainService {
 		$this->saveChain( $chain );
 	}
 
-	public function saveRpcURL( ChainID $chain_id, ?string $rpc_url ): void {
-		$this->updatePropertyAndSave( $chain_id, fn( Chain $chain ) => $chain->setRpcURL( $rpc_url ) );
-	}
-
 	/**
 	 *
 	 * @param ChainID    $chain_id
