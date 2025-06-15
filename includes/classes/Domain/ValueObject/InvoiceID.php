@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use phpseclib\Math\BigInteger;
 use yamaneyuta\Ulid;
 
@@ -26,7 +26,7 @@ class InvoiceID {
 		if ( is_string( $invoice_ID_val ) ) {
 			return new InvoiceID( Ulid::from( $invoice_ID_val ) );
 		} elseif ( $invoice_ID_val instanceof BigInteger ) {
-			return new InvoiceID( Ulid::from( Hex::from( $invoice_ID_val ) ) );
+			return new InvoiceID( Ulid::from( HexFormat::from( $invoice_ID_val ) ) );
 		}
 		throw new \InvalidArgumentException( '[DEE2905B] Invalid invoice ID. ' . var_export( $invoice_ID_val, true ) );
 	}

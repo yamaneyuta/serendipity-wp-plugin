@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
@@ -28,8 +28,8 @@ class SetRpcUrlResolver extends ResolverBase {
 		// 引数のチェーンIDと一致していることを確認する
 		if ( ! is_null( $rpc_url ) ) {
 			$actual_chain_ID_hex = ( new BlockchainClient( $rpc_url ) )->getChainIDHex();
-			if ( Hex::from( $chain_ID->value() ) !== $actual_chain_ID_hex ) {
-				throw new \InvalidArgumentException( '[0AD91082] Invalid chain ID. expected: ' . var_export( Hex::from( $chain_ID->value() ), true ) . ', actual: ' . var_export( $actual_chain_ID_hex, true ) );
+			if ( HexFormat::from( $chain_ID->value() ) !== $actual_chain_ID_hex ) {
+				throw new \InvalidArgumentException( '[0AD91082] Invalid chain ID. expected: ' . var_export( HexFormat::from( $chain_ID->value() ), true ) . ', actual: ' . var_export( $actual_chain_ID_hex, true ) );
 			}
 		}
 

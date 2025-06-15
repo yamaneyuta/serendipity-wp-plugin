@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use phpseclib\Math\BigInteger;
@@ -68,12 +68,12 @@ class Price {
 			// 補正が必要な場合(0を増やす場合)
 			$amount = new BigInteger( $this->amount_hex, 16 );
 			$amount = $amount->multiply( new BigInteger( '1' . str_repeat( '0', $diff_decimals ), 10 ) );
-			$result = Hex::from( $amount );
+			$result = HexFormat::from( $amount );
 		} else {
 			// 補正が必要な場合(0を減らす場合)
 			$amount = new BigInteger( $this->amount_hex, 16 );
 			$amount = $amount->divide( new BigInteger( '1' . str_repeat( '0', -$diff_decimals ), 10 ) )[0]; // 商のみを取得
-			$result = Hex::from( $amount );
+			$result = HexFormat::from( $amount );
 		}
 
 		Validate::checkAmountHex( $result );   // トークンの数量としては256bit以内に収まっていないと困る

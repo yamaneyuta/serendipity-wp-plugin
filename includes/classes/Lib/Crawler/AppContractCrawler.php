@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Crawler;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransactionRepository;
 use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEventRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
@@ -111,12 +111,12 @@ class AppContractCrawler {
 
 			$transfer_event_repository->save(
 				InvoiceID::from( $invoice_ID_bi ),
-				Hex::toInt( $log_index_hex ),
+				HexFormat::toInt( $log_index_hex ),
 				$from,
 				$to,
 				$token_address,
-				Hex::from( $amount ),
-				Hex::toInt( '0x' . $transfer_type->toHex() ),
+				HexFormat::from( $amount ),
+				HexFormat::toInt( '0x' . $transfer_type->toHex() ),
 			);
 		}
 	}

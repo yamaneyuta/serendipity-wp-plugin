@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
@@ -38,7 +38,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 
 		// 販売価格1,000円で投稿を作成
 		$selling_network_category = NetworkCategory::from( NetworkCategoryID::PRIVATENET );
-		$selling_price            = new Price( Hex::from( 1000 ), 0, 'JPY' );
+		$selling_price            = new Price( HexFormat::from( 1000 ), 0, 'JPY' );
 		$post_ID                  = $this->getUser( UserType::CONTRIBUTOR )->createPost(
 			array(
 				'post_content' => ( new SamplePostContent() )->get( $selling_network_category, $selling_price ),

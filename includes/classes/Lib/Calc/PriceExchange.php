@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use phpseclib\Math\BigInteger;
 
 class PriceExchange {
@@ -23,7 +23,7 @@ class PriceExchange {
 
 	public function convert( Price $price, string $to_symbol ): Price {
 		// 元の価格が0の場合は変換後の値も0
-		if ( Hex::isZero( $price->amountHex() ) ) {
+		if ( HexFormat::isZero( $price->amountHex() ) ) {
 			return new Price( $price->amountHex(), $price->decimals(), $to_symbol );
 		}
 
@@ -67,7 +67,7 @@ class PriceExchange {
 			$amount          = new BigInteger( $price->amountHex(), 16 );
 			$result_amount   = $amount->multiply( new BigInteger( $rate->amountHex(), 16 ) );
 			$result_decimals = $price->decimals() + $rate->decimals();
-			return new Price( Hex::from( $result_amount ), $result_decimals, $to_symbol );
+			return new Price( HexFormat::from( $result_amount ), $result_decimals, $to_symbol );
 		} else {
 			// `1USD`を`ETH/USD`で`ETH`に変換するような場合
 			$rate = $this->rate_data->get( new SymbolPair( $to_symbol, $from_symbol ) );
@@ -80,14 +80,14 @@ class PriceExchange {
 			// 変換後の通貨シンボルで最小単位が求められるように、変換前の価格の桁数を調整
 			$diff_decimals = ( $to_decimals_max + $rate->decimals() ) - $price->decimals();
 			if ( $diff_decimals > 0 ) {
-				$price_amount_hex = Hex::from( ( new BigInteger( $price_amount_hex, 16 ) )->multiply( new BigInteger( '1' . str_repeat( '0', $diff_decimals ), 10 ) ) );
+				$price_amount_hex = HexFormat::from( ( new BigInteger( $price_amount_hex, 16 ) )->multiply( new BigInteger( '1' . str_repeat( '0', $diff_decimals ), 10 ) ) );
 				$price_decimals  += $diff_decimals;
 			}
 
 			$result_amount   = ( new BigInteger( $price_amount_hex, 16 ) )->divide( new BigInteger( $rate->amountHex(), 16 ) )[0]; // 商のみ取得
 			$result_decimals = $price_decimals - $rate->decimals();
 
-			return new Price( Hex::from( $result_amount ), $result_decimals, $to_symbol );
+			return new Price( HexFormat::from( $result_amount ), $result_decimals, $to_symbol );
 		}
 	}
 

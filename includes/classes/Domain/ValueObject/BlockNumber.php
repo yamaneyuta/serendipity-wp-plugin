@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use phpseclib\Math\BigInteger;
 
@@ -62,13 +62,13 @@ class BlockNumber {
 	 * ブロック番号を16進数表記で取得します。
 	 */
 	public function hex(): string {
-		return Hex::from( $this->block_number );
+		return HexFormat::from( $this->block_number );
 	}
 
 	/**
 	 * ブロック番号を整数で取得します。
 	 */
 	public function int(): int {
-		return Hex::toInt( $this->hex() );
+		return HexFormat::toInt( $this->hex() );
 	}
 }

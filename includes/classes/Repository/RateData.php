@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
@@ -60,7 +60,7 @@ class OracleRate {
 				$oracle        = new Oracle( $chain, $contract_address, $symbol_pair->base(), $symbol_pair->quote() );
 				$oracle_client = new OracleClient( $chain->rpcURL(), $oracle );
 				$decimals      = $oracle_client->decimals();
-				$answer_hex    = Hex::from( $oracle_client->latestAnswer() );
+				$answer_hex    = HexFormat::from( $oracle_client->latestAnswer() );
 
 				return new Rate( $symbol_pair, $answer_hex, $decimals );
 			}

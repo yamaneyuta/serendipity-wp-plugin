@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use phpseclib\Math\BigInteger;
@@ -30,7 +30,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount1ETH18(): void {
 		// ARRANGE
-		$sut = new Price( Hex::from( new BigInteger( 10 ** 18 ) ), 18, 'ETH' );   // 1ETH
+		$sut = new Price( HexFormat::from( new BigInteger( 10 ** 18 ) ), 18, 'ETH' );   // 1ETH
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
@@ -62,7 +62,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount001ETH18(): void {
 		// ARRANGE
-		$sut = new Price( Hex::from( new BigInteger( 10 ** 16 ) ), 18, 'ETH' );   // 0.01ETH
+		$sut = new Price( HexFormat::from( new BigInteger( 10 ** 16 ) ), 18, 'ETH' );   // 0.01ETH
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
@@ -94,7 +94,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount1ETH20(): void {
 		// ARRANGE
-		$sut = new Price( Hex::from( new BigInteger( '100000000000000000000' ) ), 20, 'ETH' );    // 1ETH
+		$sut = new Price( HexFormat::from( new BigInteger( '100000000000000000000' ) ), 20, 'ETH' );    // 1ETH
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );

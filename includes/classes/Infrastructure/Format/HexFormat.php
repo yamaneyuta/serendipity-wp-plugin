@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Format;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use phpseclib\Math\BigInteger;
 
-class Hex {
+class HexFormat {
 	/**
 	 * 整数を'0x'から開始する16進数文字列に変換します。
 	 *

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
-use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
@@ -65,7 +65,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$chain_ID_hex = Hex::from( $res );
+						$chain_ID_hex = HexFormat::from( $res );
 					}
 				);
 			}
@@ -160,7 +160,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$balance_hex = Hex::from( $res );
+						$balance_hex = HexFormat::from( $res );
 					}
 				);
 			}
