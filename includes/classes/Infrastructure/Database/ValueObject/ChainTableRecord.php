@@ -12,6 +12,7 @@ class ChainTableRecord extends TableRecordBase {
 
 	protected int $chain_id;
 	protected string $name;
+	protected int $network_category_id;
 	protected ?string $rpc_url;
 	protected string $confirmations; // テーブル定義はvarcharなのでstring型で定義する
 
@@ -21,6 +22,10 @@ class ChainTableRecord extends TableRecordBase {
 
 	public function nameValue(): string {
 		return $this->name;
+	}
+
+	public function networkCategoryIdValue(): int {
+		return $this->network_category_id;
 	}
 
 	public function rpcUrlValue(): ?string {

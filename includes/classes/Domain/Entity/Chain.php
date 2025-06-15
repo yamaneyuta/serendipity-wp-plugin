@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
@@ -11,20 +10,23 @@ use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 class Chain {
 	/**
 	 *
-	 * @param ChainID     $chain_id
-	 * @param string      $name
-	 * @param null|string $rpc_url
-	 * @param int|string  $confirmations
+	 * @param ChainID         $chain_id
+	 * @param string          $name
+	 * @param NetworkCategory $network_category
+	 * @param null|string     $rpc_url
+	 * @param int|string      $confirmations
 	 */
-	protected function __construct( ChainID $chain_id, string $name, ?string $rpc_url, $confirmations ) {
-		$this->id            = $chain_id;
-		$this->name          = $name;
-		$this->rpc_url       = $rpc_url;
-		$this->confirmations = $confirmations;
+	protected function __construct( ChainID $chain_id, string $name, NetworkCategory $network_category, ?string $rpc_url, $confirmations ) {
+		$this->id               = $chain_id;
+		$this->name             = $name;
+		$this->network_category = $network_category;
+		$this->rpc_url          = $rpc_url;
+		$this->confirmations    = $confirmations;
 	}
 
 	private ChainID $id;
 	private string $name;
+	private NetworkCategory $network_category;
 	private ?string $rpc_url;
 	/** @var int|string */
 	private $confirmations;
@@ -66,6 +68,6 @@ class Chain {
 	}
 
 	public function networkCategory(): NetworkCategory {
-		return NetworkCategory::from( Config::NETWORK_CATEGORIES[ $this->id->value() ] );
+		return $this->network_category;
 	}
 }

@@ -11,11 +11,11 @@ use Cornix\Serendipity\Core\Repository\Environment;
  */
 final class NetworkCategory {
 
-	private function __construct( int $network_category_id, Environment $environment ) {
+	private function __construct( int $network_category_id_value, Environment $environment ) {
 		// ネットワークカテゴリIDとして正しい値が渡されているかどうかを検証
-		self::checkNetworkCategoryID( $network_category_id, $environment );
+		self::checkNetworkCategoryID( $network_category_id_value, $environment );
 
-		$this->id = $network_category_id;
+		$this->id = $network_category_id_value;
 	}
 
 	/** ネットワークカテゴリID(数値) */
@@ -30,8 +30,8 @@ final class NetworkCategory {
 	 * ネットワークカテゴリID(数値)からインスタンスを取得します。
 	 * 引数がnullの場合はnullを返します。
 	 */
-	public static function from( ?int $network_category_id, Environment $environment = null ): ?NetworkCategory {
-		return is_null( $network_category_id ) ? null : new self( $network_category_id, $environment ?? new Environment() );
+	public static function from( ?int $network_category_id_value, Environment $environment = null ): ?NetworkCategory {
+		return is_null( $network_category_id_value ) ? null : new self( $network_category_id_value, $environment ?? new Environment() );
 	}
 
 	public function equals( NetworkCategory $other ): bool {

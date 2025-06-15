@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Constant;
 
-use Cornix\Serendipity\Core\Constant\ChainIdValue;
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
-
 /**
  * システム固定の設定値を取得するためのクラス
  */
@@ -42,20 +39,4 @@ class Config {
 	 * ブロックにトランザクションが取り込まれた時点で1とカウントする
 	 */
 	public const MIN_CONFIRMATIONS = 1; // 【変更不可】
-
-	/**
-	 * ネットワークカテゴリの定義
-	 * key: ChainID, value: NetworkCategoryID
-	 *
-	 * @var array<int,int>
-	 */
-	public const NETWORK_CATEGORIES = array(
-		ChainIdValue::ETH_MAINNET            => NetworkCategoryID::MAINNET,
-		ChainIdValue::POLYGON_ZK_EVM         => NetworkCategoryID::MAINNET,
-		ChainIdValue::SEPOLIA                => NetworkCategoryID::TESTNET,
-		ChainIdValue::POLYGON_ZK_EVM_CARDONA => NetworkCategoryID::TESTNET,
-		ChainIdValue::SONEIUM_MINATO         => NetworkCategoryID::TESTNET,
-		ChainIdValue::PRIVATENET_L1          => NetworkCategoryID::PRIVATENET,
-		ChainIdValue::PRIVATENET_L2          => NetworkCategoryID::PRIVATENET,
-	);
 }
