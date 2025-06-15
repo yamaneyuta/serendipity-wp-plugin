@@ -65,7 +65,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$chain_ID_hex = HexFormat::from( $res );
+						$chain_ID_hex = HexFormat::toHex( $res );
 					}
 				);
 			}
@@ -160,7 +160,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$balance_hex = HexFormat::from( $res );
+						$balance_hex = HexFormat::toHex( $res );
 					}
 				);
 			}

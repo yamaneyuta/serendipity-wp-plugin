@@ -13,7 +13,7 @@ class HexFormat {
 	 * @param int|BigInteger $num
 	 * @return string
 	 */
-	public static function from( $num ): string {
+	public static function toHex( $num ): string {
 		if ( is_int( $num ) ) {
 			$num = new BigInteger( $num );
 		} elseif ( $num instanceof BigInteger ) {

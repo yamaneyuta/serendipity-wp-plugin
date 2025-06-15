@@ -111,7 +111,7 @@ class AppContractClient {
 						Address::from( $decoded_event_parameters['from'] ), // from_address
 						Address::from( $decoded_event_parameters['to'] ), // to_address
 						Address::from( $decoded_event_parameters['token'] ), // token_address
-						HexFormat::from( $decoded_event_parameters['amount'] ), // amount_hex
+						HexFormat::toHex( $decoded_event_parameters['amount'] ), // amount_hex
 						UnlockPaywallTransferType::from( (int) ( $decoded_event_parameters['transferType'] )->toString() ) // transfer_type
 					);
 				}

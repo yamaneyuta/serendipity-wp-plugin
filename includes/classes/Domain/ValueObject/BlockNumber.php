@@ -62,7 +62,7 @@ class BlockNumber {
 	 * ブロック番号を16進数表記で取得します。
 	 */
 	public function hex(): string {
-		return HexFormat::from( $this->block_number );
+		return HexFormat::toHex( $this->block_number );
 	}
 
 	/**

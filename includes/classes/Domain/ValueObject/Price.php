@@ -68,12 +68,12 @@ class Price {
 			// 補正が必要な場合(0を増やす場合)
 			$amount = new BigInteger( $this->amount_hex, 16 );
 			$amount = $amount->multiply( new BigInteger( '1' . str_repeat( '0', $diff_decimals ), 10 ) );
-			$result = HexFormat::from( $amount );
+			$result = HexFormat::toHex( $amount );
 		} else {
 			// 補正が必要な場合(0を減らす場合)
 			$amount = new BigInteger( $this->amount_hex, 16 );
 			$amount = $amount->divide( new BigInteger( '1' . str_repeat( '0', -$diff_decimals ), 10 ) )[0]; // 商のみを取得
-			$result = HexFormat::from( $amount );
+			$result = HexFormat::toHex( $amount );
 		}
 
 		Validate::checkAmountHex( $result );   // トークンの数量としては256bit以内に収まっていないと困る

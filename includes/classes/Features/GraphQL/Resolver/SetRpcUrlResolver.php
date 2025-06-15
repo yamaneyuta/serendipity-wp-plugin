@@ -28,8 +28,8 @@ class SetRpcUrlResolver extends ResolverBase {
 		// 引数のチェーンIDと一致していることを確認する
 		if ( ! is_null( $rpc_url ) ) {
 			$actual_chain_ID_hex = ( new BlockchainClient( $rpc_url ) )->getChainIDHex();
-			if ( HexFormat::from( $chain_ID->value() ) !== $actual_chain_ID_hex ) {
-				throw new \InvalidArgumentException( '[0AD91082] Invalid chain ID. expected: ' . var_export( HexFormat::from( $chain_ID->value() ), true ) . ', actual: ' . var_export( $actual_chain_ID_hex, true ) );
+			if ( HexFormat::toHex( $chain_ID->value() ) !== $actual_chain_ID_hex ) {
+				throw new \InvalidArgumentException( '[0AD91082] Invalid chain ID. expected: ' . var_export( HexFormat::toHex( $chain_ID->value() ), true ) . ', actual: ' . var_export( $actual_chain_ID_hex, true ) );
 			}
 		}
 

@@ -67,7 +67,7 @@ class PriceExchange {
 			$amount          = new BigInteger( $price->amountHex(), 16 );
 			$result_amount   = $amount->multiply( new BigInteger( $rate->amountHex(), 16 ) );
 			$result_decimals = $price->decimals() + $rate->decimals();
-			return new Price( HexFormat::from( $result_amount ), $result_decimals, $to_symbol );
+			return new Price( HexFormat::toHex( $result_amount ), $result_decimals, $to_symbol );
 		} else {
 			// `1USD`を`ETH/USD`で`ETH`に変換するような場合
 			$rate = $this->rate_data->get( new SymbolPair( $to_symbol, $from_symbol ) );
@@ -80,14 +80,14 @@ class PriceExchange {
 			// 変換後の通貨シンボルで最小単位が求められるように、変換前の価格の桁数を調整
 			$diff_decimals = ( $to_decimals_max + $rate->decimals() ) - $price->decimals();
 			if ( $diff_decimals > 0 ) {
-				$price_amount_hex = HexFormat::from( ( new BigInteger( $price_amount_hex, 16 ) )->multiply( new BigInteger( '1' . str_repeat( '0', $diff_decimals ), 10 ) ) );
+				$price_amount_hex = HexFormat::toHex( ( new BigInteger( $price_amount_hex, 16 ) )->multiply( new BigInteger( '1' . str_repeat( '0', $diff_decimals ), 10 ) ) );
 				$price_decimals  += $diff_decimals;
 			}
 
 			$result_amount   = ( new BigInteger( $price_amount_hex, 16 ) )->divide( new BigInteger( $rate->amountHex(), 16 ) )[0]; // 商のみ取得
 			$result_decimals = $price_decimals - $rate->decimals();
 
-			return new Price( HexFormat::from( $result_amount ), $result_decimals, $to_symbol );
+			return new Price( HexFormat::toHex( $result_amount ), $result_decimals, $to_symbol );
 		}
 	}
 

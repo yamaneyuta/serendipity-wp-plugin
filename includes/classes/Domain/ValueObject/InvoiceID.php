@@ -26,7 +26,7 @@ class InvoiceID {
 		if ( is_string( $invoice_ID_val ) ) {
 			return new InvoiceID( Ulid::from( $invoice_ID_val ) );
 		} elseif ( $invoice_ID_val instanceof BigInteger ) {
-			return new InvoiceID( Ulid::from( HexFormat::from( $invoice_ID_val ) ) );
+			return new InvoiceID( Ulid::from( HexFormat::toHex( $invoice_ID_val ) ) );
 		}
 		throw new \InvalidArgumentException( '[DEE2905B] Invalid invoice ID. ' . var_export( $invoice_ID_val, true ) );
 	}
