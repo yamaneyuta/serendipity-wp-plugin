@@ -26,7 +26,7 @@ use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
 
 global $wpdb;
 
-$server_signer_service = ( new ServerSignerServiceFactory() )->create( $wpdb );
+$server_signer_service = ( new ServerSignerServiceFactory() )->create();
 
 // 変更前の署名用ウォレットアドレスを取得(最後に表示するために保持)
 $prevAddress = $server_signer_service->getServerSigner()->address();

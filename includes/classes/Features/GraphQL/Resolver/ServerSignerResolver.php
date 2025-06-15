@@ -13,7 +13,7 @@ class ServerSignerResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$server_signer = ( new ServerSignerServiceFactory() )->create( $GLOBALS['wpdb'] )->getServerSigner();
+		$server_signer = ( new ServerSignerServiceFactory() )->create()->getServerSigner();
 		return array(
 			'address' => fn() => $server_signer->address()->value(),
 		);

@@ -134,7 +134,7 @@ class UnlockPaywallTransferCrawler {
 		$topic_hash = ( new AppContractAbi() )->topicHash( 'UnlockPaywallTransfer' );
 
 		// サーバーの署名用ウォレットアドレス
-		$server_signer                 = ( new ServerSignerServiceFactory() )->create( $GLOBALS['wpdb'] )->getServerSigner();
+		$server_signer                 = ( new ServerSignerServiceFactory() )->create()->getServerSigner();
 		$server_signer_address_bytes32 = $server_signer->address()->toBytes32Hex();
 
 		$this->topics = array(

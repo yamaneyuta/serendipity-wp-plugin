@@ -59,7 +59,7 @@ return new class() extends DatabaseMigrationBase {
 			throw new \RuntimeException( '[FB57DCDE] Server signer table already has data. Cannot initialize.' );
 		}
 
-		$server_signer_data = ( new ServerSignerServiceFactory() )->create( $this->wpdb() )->generateServerSignerData();
+		$server_signer_data = ( new ServerSignerServiceFactory() )->create()->generateServerSignerData();
 
 		// テーブルにデータを挿入
 		$result = $this->wpdb()->insert(

@@ -8,8 +8,14 @@ use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ServerSignerPriva
 use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
 
 class ServerSignerServiceFactory {
-	public function create( \wpdb $wpdb ): ServerSignerService {
-		$table      = new ServerSignerTable( $wpdb );
+	public function __construct( \wpdb $wpdb = null ) {
+		$this->wpdb = $wpdb ?? $GLOBALS['wpdb'];
+	}
+
+	private \wpdb $wpdb;
+
+	public function create(): ServerSignerService {
+		$table      = new ServerSignerTable( $this->wpdb );
 		$repository = new ServerSignerPrivateKeyRepository( $table );
 		return new ServerSignerService( $repository );
 	}

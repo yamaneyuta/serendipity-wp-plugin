@@ -83,8 +83,7 @@ class IssueInvoiceResolver extends ResolverBase {
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 );  // TODO: アフィリエイト報酬率
 		// サーバーの署名用ウォレットで署名
-		global $wpdb;
-		$server_signer    = ( new ServerSignerServiceFactory() )->create( $wpdb )->getServerSigner();
+		$server_signer    = ( new ServerSignerServiceFactory() )->create()->getServerSigner();
 		$server_signature = $server_signer->signMessage( $server_message );
 
 		// 最後に、有効になったブロック番号が設定されていない場合は設定

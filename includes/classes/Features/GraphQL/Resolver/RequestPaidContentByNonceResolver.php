@@ -72,7 +72,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		// ブロックチェーンに問い合わせる
 		$app_contract   = ( new AppContractRepository() )->get( $chain->id() );
 		$app            = new AppContractClient( $app_contract );
-		$server_signer  = ( new ServerSignerServiceFactory() )->create( $GLOBALS['wpdb'] )->getServerSigner();
+		$server_signer  = ( new ServerSignerServiceFactory() )->create()->getServerSigner();
 		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_ID, $consumer_address );
 
 		if ( ! $payment_status->isUnlocked() ) {
