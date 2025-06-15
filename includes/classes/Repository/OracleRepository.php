@@ -32,9 +32,9 @@ class OracleRepository {
 			$chain_records = $this->chain_table->all();
 			$chain_record  = array_filter(
 				$chain_records,
-				fn( $chain_record ) => $chain_record->chainID() === $record->chainID()
+				fn( $chain_record ) => $chain_record->chainIdValue() === $record->chainIdValue()
 			);
-			assert( count( $chain_record ) === 1, '[761EC508] Chain record not found for Oracle: ' . $record->chainID() );
+			assert( count( $chain_record ) === 1, '[761EC508] Chain record not found for Oracle: ' . $record->chainIdValue() );
 
 			$results[] = OracleImpl::fromTableRecord( $record, array_values( $chain_record )[0] );
 		}

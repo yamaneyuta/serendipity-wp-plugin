@@ -29,19 +29,19 @@ class InvoiceImpl extends Invoice {
 
 	public static function fromTableRecord( InvoiceTableRecord $invoice_record ): self {
 		return new self(
-			InvoiceID::from( $invoice_record->id() ),
-			$invoice_record->postID(),
-			new ChainID( $invoice_record->chainID() ),
+			InvoiceID::from( $invoice_record->idValue() ),
+			$invoice_record->postIdValue(),
+			new ChainID( $invoice_record->chainIdValue() ),
 			new Price(
-				$invoice_record->sellingAmountHex(),
-				$invoice_record->sellingDecimals(),
-				$invoice_record->sellingSymbol()
+				$invoice_record->sellingAmountHexValue(),
+				$invoice_record->sellingDecimalsValue(),
+				$invoice_record->sellingSymbolValue()
 			),
-			Address::from( $invoice_record->sellerAddress() ),
-			Address::from( $invoice_record->paymentTokenAddress() ),
-			$invoice_record->paymentAmountHex(),
-			Address::from( $invoice_record->consumerAddress() ),
-			$invoice_record->nonce() ? new InvoiceNonce( $invoice_record->nonce() ) : null
+			Address::from( $invoice_record->sellerAddressValue() ),
+			Address::from( $invoice_record->paymentTokenAddressValue() ),
+			$invoice_record->paymentAmountHexValue(),
+			Address::from( $invoice_record->consumerAddressValue() ),
+			$invoice_record->nonceValue() ? new InvoiceNonce( $invoice_record->nonceValue() ) : null
 		);
 	}
 }

@@ -14,19 +14,19 @@ class ServerSignerPrivateKeyRepository {
 
 	public function encryptionKey(): ?string {
 		$record = $this->server_signer_table->get();
-		return is_null( $record ) ? null : $record->encryptionKey();
+		return is_null( $record ) ? null : $record->encryptionKeyValue();
 	}
 	public function encryptionIv(): ?string {
 		$record = $this->server_signer_table->get();
-		return is_null( $record ) ? null : $record->encryptionIv();
+		return is_null( $record ) ? null : $record->encryptionIvValue();
 	}
 	public function privateKeyData(): ?string {
 		$record = $this->server_signer_table->get();
-		return is_null( $record ) ? null : $record->privateKeyData();
+		return is_null( $record ) ? null : $record->privateKeyDataValue();
 	}
 	public function address(): ?Address {
 		$record = $this->server_signer_table->get();
-		return is_null( $record ) ? null : Address::from( $record->address() );
+		return is_null( $record ) ? null : Address::from( $record->addressValue() );
 	}
 
 	/**

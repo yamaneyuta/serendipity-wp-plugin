@@ -15,19 +15,19 @@ class AppContractTableRecord extends TableRecordBase {
 	protected int $activation_block_number;
 	protected int $crawled_block_number;
 
-	public function chainID(): int {
+	public function chainIdValue(): int {
 		return $this->chain_id;
 	}
 
-	public function address(): string {
+	public function addressValue(): string {
 		return $this->address;
 	}
 
-	public function activationBlockNumber(): int {
+	public function activationBlockNumberValue(): int {
 		return $this->activation_block_number;
 	}
 
-	public function crawledBlockNumber(): int {
+	public function crawledBlockNumberValue(): int {
 		return $this->crawled_block_number;
 	}
 }

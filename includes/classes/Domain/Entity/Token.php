@@ -64,11 +64,11 @@ class Token {
 
 	public static function fromTableRecord( TokenTableRecord $record ): self {
 		return new self(
-			new ChainID( $record->chainID() ),
-			Address::from( $record->address() ),
-			$record->symbol(),
-			$record->decimals(),
-			$record->isPayable()
+			new ChainID( $record->chainIdValue() ),
+			Address::from( $record->addressValue() ),
+			$record->symbolValue(),
+			$record->decimalsValue(),
+			$record->isPayableValue()
 		);
 	}
 }

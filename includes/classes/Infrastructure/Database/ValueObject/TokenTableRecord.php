@@ -16,19 +16,19 @@ class TokenTableRecord extends TableRecordBase {
 	protected int $decimals;
 	protected bool $is_payable;
 
-	public function chainID(): int {
+	public function chainIdValue(): int {
 		return $this->chain_id;
 	}
-	public function address(): string {
+	public function addressValue(): string {
 		return $this->address;
 	}
-	public function symbol(): string {
+	public function symbolValue(): string {
 		return $this->symbol;
 	}
-	public function decimals(): int {
+	public function decimalsValue(): int {
 		return $this->decimals;
 	}
-	public function isPayable(): bool {
+	public function isPayableValue(): bool {
 		return $this->is_payable;
 	}
 }

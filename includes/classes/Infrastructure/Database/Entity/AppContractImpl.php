@@ -23,9 +23,9 @@ class AppContractImpl extends AppContract {
 	public static function fromTableRecord( Chain $chain, AppContractTableRecord $record ): self {
 		return new self(
 			$chain,
-			Address::from( $record->address() ),
-			BlockNumber::from( $record->activationBlockNumber() ),
-			BlockNumber::from( $record->crawledBlockNumber() )
+			Address::from( $record->addressValue() ),
+			BlockNumber::from( $record->activationBlockNumberValue() ),
+			BlockNumber::from( $record->crawledBlockNumberValue() )
 		);
 	}
 }

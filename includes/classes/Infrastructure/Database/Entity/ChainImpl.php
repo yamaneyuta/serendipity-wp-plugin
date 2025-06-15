@@ -10,13 +10,12 @@ use Cornix\Serendipity\Core\ValueObject\ChainID;
 class ChainImpl extends Chain {
 
 	private function __construct( ChainTableRecord $record ) {
-		/** @var string $confirmations */
-		$confirmations = $record->confirmations();
+		$confirmations_value = $record->confirmationsValue();
 		parent::__construct(
-			new ChainID( $record->chainID() ),
-			$record->name(),
-			$record->rpcURL(),
-			is_numeric( $confirmations ) ? (int) $confirmations : $confirmations,
+			new ChainID( $record->chainIdValue() ),
+			$record->nameValue(),
+			$record->rpcUrlValue(),
+			is_numeric( $confirmations_value ) ? (int) $confirmations_value : $confirmations_value,
 		);
 	}
 
