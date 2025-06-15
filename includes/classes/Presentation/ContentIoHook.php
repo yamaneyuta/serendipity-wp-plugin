@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Application\Service\PostService;
+use Cornix\Serendipity\Core\Application\UseCase\SavePaidContent;
 
 /**
  * 投稿内容を保存、または取得時のhooksを登録するクラス
@@ -147,6 +148,7 @@ class ContentIoHook {
 			// 投稿内容が未保存の場合は何もしない(ゴミ箱に移動された時などが該当)
 			return;
 		}
+		global $wpdb;
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
 		$attributes   = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
@@ -158,10 +160,9 @@ class ContentIoHook {
 			$paid_content_text = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
 			assert( ! is_null( $paid_content_text ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
 			// ウィジェットが含まれている場合は有料記事の情報を保存
-			$paid_content = PaidContent::from( $paid_content_text );
-			$post_service->savePaidContent(
+			( new SavePaidContent( $wpdb ) )->handle(
 				$post_id,
-				$paid_content,
+				PaidContent::from( $paid_content_text ),
 				$attributes->sellingNetworkCategory(),
 				$attributes->sellingPrice()
 			);
