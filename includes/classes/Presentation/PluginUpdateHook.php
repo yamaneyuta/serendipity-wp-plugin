@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Hook\Update;
+namespace Cornix\Serendipity\Core\Presentation;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\OptionGateway\PluginVersionOption;
 use Cornix\Serendipity\Core\Repository\Environment;

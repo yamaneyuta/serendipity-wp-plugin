@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Cornix\Serendipity\Core\Hook\Cron;
+namespace Cornix\Serendipity\Core\Presentation;
 
 use Cornix\Serendipity\Core\Lib\Crawler\AppContractCrawler;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
