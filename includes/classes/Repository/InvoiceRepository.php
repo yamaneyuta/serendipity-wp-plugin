@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\InvoiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceTable;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 
 class InvoiceRepository {
 

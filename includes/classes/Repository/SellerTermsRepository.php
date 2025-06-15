@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
-use Cornix\Serendipity\Core\ValueObject\SignedTerms;
-use Cornix\Serendipity\Core\ValueObject\Terms;
-use Cornix\Serendipity\Core\ValueObject\TermsVersion;
+use Cornix\Serendipity\Core\Domain\ValueObject\SignedTerms;
+use Cornix\Serendipity\Core\Domain\ValueObject\Terms;
+use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 
 /**
  * 本プラグインにおける販売者向け利用規約の情報を取得するためのクラス

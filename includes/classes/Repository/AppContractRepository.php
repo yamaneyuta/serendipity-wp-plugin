@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\AppContractImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTable;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class AppContractRepository {
 	public function __construct( ?AppContractTable $app_contract_table = null, ?ChainRepository $chain_repository = null ) {

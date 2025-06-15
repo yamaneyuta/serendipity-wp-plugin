@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 
 class AppContract {
 	protected function __construct( Chain $chain, Address $address, ?BlockNumber $activation_block_number = null, ?BlockNumber $crawled_block_number = null ) {
