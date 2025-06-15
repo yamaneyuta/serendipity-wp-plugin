@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\OptionGateway\PluginVersionOption;
+use Cornix\Serendipity\Core\Infrastructure\Database\Service\DatabaseMigrationService;
 use Cornix\Serendipity\Core\Repository\Environment;
-use Cornix\Serendipity\Core\Service\DatabaseMigrationService;
 use Cornix\Serendipity\Core\Repository\PluginInfo;
 
 // ■プラグインがインストールされた時や更新時のhookに関して

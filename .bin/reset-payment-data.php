@@ -11,7 +11,7 @@ require_once __DIR__ . '/../includes/vendor/autoload.php';
 use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Service\DatabaseMigrationService;
+use Cornix\Serendipity\Core\Infrastructure\Database\Service\DatabaseMigrationService;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 
 // ■ 方針:
