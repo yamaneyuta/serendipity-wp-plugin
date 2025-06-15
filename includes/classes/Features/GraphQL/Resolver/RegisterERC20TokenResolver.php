@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Factory\TokenServiceFactory;
+use Cornix\Serendipity\Core\Application\UseCase\SaveERC20Token;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
@@ -21,17 +21,11 @@ class RegisterERC20TokenResolver extends ResolverBase {
 
 		$chain_ID = new ChainID( $args['chainID'] );
 		$address  = new Address( (string) $args['address'] );
-		/** @var null|bool */
+		/** @var bool */
 		$is_payable = $args['isPayable'] ?? null;
 
-		if ( null === $address ) {
-			throw new \InvalidArgumentException( '[B42FC6FA] Invalid address provided.' );
-		} elseif ( ! is_bool( $is_payable ) ) {
-			throw new \InvalidArgumentException( '[E80F8B39] isPayable must be a boolean value.' );
-		}
-
 		// トークン情報を保存
-		( new TokenServiceFactory() )->create()->saveERC20Token( $chain_ID, $address, $is_payable );
+		( new SaveERC20Token( $GLOBALS['wpdb'] ) )->handle( $chain_ID, $address, $is_payable );
 
 		return true;
 	}
