@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
 
 class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 

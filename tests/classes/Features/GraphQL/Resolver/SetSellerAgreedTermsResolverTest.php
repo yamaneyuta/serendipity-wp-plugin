@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
 
 class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 

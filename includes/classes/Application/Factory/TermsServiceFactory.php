@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Service\Factory;
+namespace Cornix\Serendipity\Core\Application\Factory;
 
 use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
 use Cornix\Serendipity\Core\Application\Service\TermsService;

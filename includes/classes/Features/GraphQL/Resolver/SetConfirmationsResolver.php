@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 
 class SetConfirmationsResolver extends ResolverBase {
 

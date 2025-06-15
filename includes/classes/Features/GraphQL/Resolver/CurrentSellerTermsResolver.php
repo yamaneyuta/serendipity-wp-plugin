@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
 
 class CurrentSellerTermsResolver extends ResolverBase {
 

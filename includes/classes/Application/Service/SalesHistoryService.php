@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 use wpdb;
 
 /**

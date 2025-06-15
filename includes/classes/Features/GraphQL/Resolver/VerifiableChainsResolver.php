@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Application\Service\PostService;
 
 class VerifiableChainsResolver extends ResolverBase {

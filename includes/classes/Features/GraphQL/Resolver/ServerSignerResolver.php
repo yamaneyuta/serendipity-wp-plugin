@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
 
 class ServerSignerResolver extends ResolverBase {
 

@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;

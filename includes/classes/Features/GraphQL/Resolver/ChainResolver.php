@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 
 class ChainResolver extends ResolverBase {
 
