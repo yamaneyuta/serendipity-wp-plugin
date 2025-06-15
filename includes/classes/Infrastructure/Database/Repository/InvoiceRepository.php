@@ -10,8 +10,8 @@ use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 
 class InvoiceRepository {
 
-	public function __construct( ?InvoiceTable $invoice_table = null ) {
-		$this->invoice_table = $invoice_table ?? new InvoiceTable( $GLOBALS['wpdb'] );
+	public function __construct( InvoiceTable $invoice_table ) {
+		$this->invoice_table = $invoice_table;
 	}
 
 	private InvoiceTable $invoice_table;

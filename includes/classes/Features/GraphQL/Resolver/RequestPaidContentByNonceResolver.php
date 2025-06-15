@@ -7,8 +7,8 @@ use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Application\Factory\InvoiceRepositoryFactory;
 use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Application\Service\PostService;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
@@ -44,7 +44,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			'errorCode' => $error_code,
 		);
 
-		$invoice = ( new InvoiceRepository() )->get( $invoice_ID );
+		$invoice = ( new InvoiceRepositoryFactory() )->create()->get( $invoice_ID );
 		if ( is_null( $invoice ) ) {
 			// 通常、ここは通らない
 			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID_hex );

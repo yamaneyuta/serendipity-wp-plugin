@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Application\Factory\InvoiceRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
@@ -14,7 +15,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 class InvoiceService {
 
 	public function __construct( ?InvoiceRepository $invoice_repository = null ) {
-		$this->invoice_repository = $invoice_repository ?? new InvoiceRepository();
+		$this->invoice_repository = $invoice_repository ?? ( new InvoiceRepositoryFactory() )->create();
 	}
 	private InvoiceRepository $invoice_repository;
 
