@@ -15,13 +15,15 @@ class Chain {
 	 * @param NetworkCategory $network_category
 	 * @param null|string     $rpc_url
 	 * @param int|string      $confirmations
+	 * @param null|string     $block_explorer_url
 	 */
-	protected function __construct( ChainID $chain_id, string $name, NetworkCategory $network_category, ?string $rpc_url, $confirmations ) {
-		$this->id               = $chain_id;
-		$this->name             = $name;
-		$this->network_category = $network_category;
-		$this->rpc_url          = $rpc_url;
-		$this->confirmations    = $confirmations;
+	protected function __construct( ChainID $chain_id, string $name, NetworkCategory $network_category, ?string $rpc_url, $confirmations, ?string $block_explorer_url ) {
+		$this->id                 = $chain_id;
+		$this->name               = $name;
+		$this->network_category   = $network_category;
+		$this->rpc_url            = $rpc_url;
+		$this->confirmations      = $confirmations;
+		$this->block_explorer_url = $block_explorer_url;
 	}
 
 	private ChainID $id;
@@ -30,6 +32,7 @@ class Chain {
 	private ?string $rpc_url;
 	/** @var int|string */
 	private $confirmations;
+	private ?string $block_explorer_url;
 
 	public function id(): ChainID {
 		return $this->id;
@@ -49,6 +52,11 @@ class Chain {
 	public function confirmations() {
 		return $this->confirmations;
 	}
+
+	public function blockExplorerURL(): ?string {
+		return $this->block_explorer_url;
+	}
+
 	/**
 	 * このチェーンの待機ブロック数を設定します
 	 *

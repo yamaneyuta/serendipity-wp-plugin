@@ -18,6 +18,7 @@ class ChainImpl extends Chain {
 			NetworkCategory::from( $record->networkCategoryIdValue() ),
 			$record->rpcUrlValue(),
 			is_numeric( $confirmations_value ) ? (int) $confirmations_value : $confirmations_value,
+			$record->blockExplorerUrlValue()
 		);
 	}
 

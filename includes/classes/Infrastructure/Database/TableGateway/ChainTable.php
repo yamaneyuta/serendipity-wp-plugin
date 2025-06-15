@@ -21,7 +21,7 @@ class ChainTable extends TableBase {
 	 */
 	public function all(): array {
 		$sql     = <<<SQL
-			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`
+			SELECT `chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `block_explorer_url`
 			FROM `{$this->tableName()}`
 		SQL;
 		$results = $this->wpdb()->get_results( $sql );
@@ -44,14 +44,15 @@ class ChainTable extends TableBase {
 	public function save( Chain $chain ): void {
 		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}`
-				(`chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`)
+				(`chain_id`, `name`, `network_category_id`, `rpc_url`, `confirmations`, `block_explorer_url`)
 			VALUES
-				(:chain_id, :name, :network_category_id, :rpc_url, :confirmations)
+				(:chain_id, :name, :network_category_id, :rpc_url, :confirmations, :block_explorer_url)
 			ON DUPLICATE KEY UPDATE
 				`name` = VALUES(`name`),
 				`network_category_id` = VALUES(`network_category_id`),
 				`rpc_url` = VALUES(`rpc_url`),
-				`confirmations` = VALUES(`confirmations`)
+				`confirmations` = VALUES(`confirmations`),
+				`block_explorer_url` = VALUES(`block_explorer_url`)
 		SQL;
 		$sql = $this->namedPrepare(
 			$sql,
@@ -61,6 +62,7 @@ class ChainTable extends TableBase {
 				':network_category_id' => $chain->networkCategory()->id(),
 				':rpc_url'             => $chain->rpcURL(),
 				':confirmations'       => (string) $chain->confirmations(),
+				':block_explorer_url'  => $chain->blockExplorerURL(),
 			)
 		);
 
