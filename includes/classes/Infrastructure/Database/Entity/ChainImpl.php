@@ -5,8 +5,8 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Entity;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
 
 class ChainImpl extends Chain {
 

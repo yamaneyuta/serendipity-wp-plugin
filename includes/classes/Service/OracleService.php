@@ -5,9 +5,9 @@ namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Repository\OracleRepository;
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class OracleService {
 

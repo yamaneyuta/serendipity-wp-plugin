@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
 
 class NetworkCategoriesResolver extends ResolverBase {
 

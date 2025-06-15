@@ -4,8 +4,8 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 use Cornix\Serendipity\Core\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
-use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class SamplePostContent {
 	public function __construct() {

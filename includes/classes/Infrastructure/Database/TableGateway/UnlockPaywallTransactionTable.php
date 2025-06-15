@@ -5,10 +5,10 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\ValueObject\TransactionHash;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 
 /**
  * ペイウォール解除時のトランザクションに関するデータを記録するテーブル

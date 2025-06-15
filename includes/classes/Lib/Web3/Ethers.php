@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Web3;
 
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\PrivateKey;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
 use Elliptic\EC;
 use kornrunner\Keccak;
 

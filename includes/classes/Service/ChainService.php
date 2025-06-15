@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use InvalidArgumentException;
 
 /**

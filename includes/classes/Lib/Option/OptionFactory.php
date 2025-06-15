@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Option;
 
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 /** @deprecated */
 class OptionFactory {

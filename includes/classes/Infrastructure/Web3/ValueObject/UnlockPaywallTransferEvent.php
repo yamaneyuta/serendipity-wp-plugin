@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
 
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\ValueObject\TransactionHash;
-use Cornix\Serendipity\Core\ValueObject\UnlockPaywallTransferType;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 
 class UnlockPaywallTransferEvent {
 	public function __construct(

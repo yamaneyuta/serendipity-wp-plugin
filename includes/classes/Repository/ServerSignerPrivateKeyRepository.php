@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ServerSignerTable;
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 
 class ServerSignerPrivateKeyRepository {
 	public function __construct( ServerSignerTable $server_signer_table ) {

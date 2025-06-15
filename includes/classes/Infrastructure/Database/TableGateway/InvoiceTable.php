@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceTableRecord;
 
 /**

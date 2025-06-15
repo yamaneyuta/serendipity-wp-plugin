@@ -10,11 +10,11 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransfe
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Lib\Web3\ContractFactory;
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\ValueObject\TransactionHash;
-use Cornix\Serendipity\Core\ValueObject\UnlockPaywallTransferType;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
+use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 use phpseclib\Math\BigInteger;
 use Web3\Contract;
 

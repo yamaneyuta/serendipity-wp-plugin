@@ -5,8 +5,8 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 /**
  * 指定したチェーンが最初に有効になった(≒取引が開始された)ブロック番号を取得するためのクラス

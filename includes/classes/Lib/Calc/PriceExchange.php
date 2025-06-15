@@ -8,8 +8,8 @@ use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Service\OracleService;
 use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
-use Cornix\Serendipity\Core\ValueObject\Price;
-use Cornix\Serendipity\Core\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use phpseclib\Math\BigInteger;
 
 class PriceExchange {

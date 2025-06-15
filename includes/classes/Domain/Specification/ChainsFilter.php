@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Specification;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class ChainsFilter {
 

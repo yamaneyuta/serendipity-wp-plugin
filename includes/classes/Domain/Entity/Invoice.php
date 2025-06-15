@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\ValueObject\InvoiceNonce;
-use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class Invoice {
 

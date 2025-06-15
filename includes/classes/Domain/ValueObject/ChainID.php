@@ -1,6 +1,6 @@
 <?php
 
-namespace Cornix\Serendipity\Core\ValueObject;
+namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 /**
  * チェーンIDを表す値オブジェクト

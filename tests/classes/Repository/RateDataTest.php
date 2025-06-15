@@ -8,9 +8,9 @@ use Cornix\Serendipity\Core\Repository\RateTransient;
 use Cornix\Serendipity\Core\Repository\OracleRate;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\ValueObject\Rate;
-use Cornix\Serendipity\Core\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
+use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class RateDataTest extends IntegrationTestBase {
 	private $rate_data;

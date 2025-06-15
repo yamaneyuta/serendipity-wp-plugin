@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Entity;
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\OracleTableRecord;
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 
 class OracleImpl extends Oracle {
 

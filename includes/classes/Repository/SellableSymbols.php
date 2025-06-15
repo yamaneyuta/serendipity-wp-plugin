@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
 
 class SellableSymbols {
 

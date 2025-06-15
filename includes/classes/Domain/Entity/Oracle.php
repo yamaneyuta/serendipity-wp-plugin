@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 
 class Oracle {
 

@@ -11,9 +11,9 @@ use Cornix\Serendipity\Core\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
-use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
 

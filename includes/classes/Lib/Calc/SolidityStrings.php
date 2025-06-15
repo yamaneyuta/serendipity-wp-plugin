@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Calc;
 
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use phpseclib\Math\BigInteger;
 
 /**

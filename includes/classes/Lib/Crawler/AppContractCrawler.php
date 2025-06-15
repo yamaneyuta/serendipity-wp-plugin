@@ -11,11 +11,11 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\ValueObject\TransactionHash;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 use phpseclib\Math\BigInteger;
 use stdClass;
 

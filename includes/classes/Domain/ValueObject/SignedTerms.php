@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\ValueObject;
+namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 /** 署名済み利用規約情報 */
 class SignedTerms {

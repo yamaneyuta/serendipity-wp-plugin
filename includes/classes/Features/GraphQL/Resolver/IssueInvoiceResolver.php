@@ -14,8 +14,8 @@ use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Service\PostService;
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class IssueInvoiceResolver extends ResolverBase {
 

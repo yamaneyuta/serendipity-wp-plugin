@@ -3,15 +3,15 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Lib\Calc\Hex;
 use Cornix\Serendipity\Core\Repository\RateData;
-use Cornix\Serendipity\Core\ValueObject\Rate;
-use Cornix\Serendipity\Core\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
+use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Service\OracleService;
-use Cornix\Serendipity\Core\ValueObject\Address;
-use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use phpseclib\Math\BigInteger;
 
 class PriceExchangeTest extends IntegrationTestBase {

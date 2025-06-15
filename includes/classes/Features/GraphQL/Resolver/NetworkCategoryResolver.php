@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
 
 class NetworkCategoryResolver extends ResolverBase {
 

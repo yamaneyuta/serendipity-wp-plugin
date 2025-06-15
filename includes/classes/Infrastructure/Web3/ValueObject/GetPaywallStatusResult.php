@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
 
-use Cornix\Serendipity\Core\ValueObject\BlockNumber;
-use Cornix\Serendipity\Core\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 
 class GetPaywallStatusResult {
 	public function __construct( bool $is_unlocked, InvoiceID $invoice_ID, BlockNumber $unlocked_block_number ) {

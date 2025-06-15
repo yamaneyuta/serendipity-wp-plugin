@@ -5,8 +5,8 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
-use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTableRecord;
 
 /**

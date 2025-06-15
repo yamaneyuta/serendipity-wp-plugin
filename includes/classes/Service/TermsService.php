@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Service;
 
 use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
-use Cornix\Serendipity\Core\ValueObject\SignedTerms;
-use Cornix\Serendipity\Core\ValueObject\Terms;
+use Cornix\Serendipity\Core\Domain\ValueObject\SignedTerms;
+use Cornix\Serendipity\Core\Domain\ValueObject\Terms;
 
 class TermsService {
 

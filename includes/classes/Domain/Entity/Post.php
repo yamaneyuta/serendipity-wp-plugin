@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
-use Cornix\Serendipity\Core\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class Post {
 

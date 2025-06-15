@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
-use Cornix\Serendipity\Core\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 /**
  * 結合テストの基底クラス

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 
 class HardhatAccount {
 	/**

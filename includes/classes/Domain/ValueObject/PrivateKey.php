@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\ValueObject;
+namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 class PrivateKey {
 
