@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Features\Uninstall\TableUninstaller;
-use Cornix\Serendipity\Core\Hook\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hook\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Logger\ILogger;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
@@ -13,6 +12,7 @@ use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Lib\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Presentation\GraphQLHook;
 
 /**
  * 結合テストの基底クラス

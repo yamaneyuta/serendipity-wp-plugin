@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hook;
 
-use Cornix\Serendipity\Core\Hook\API\GraphQLHook;
 use Cornix\Serendipity\Core\Hook\Page\AdminPageHook;
 use Cornix\Serendipity\Core\Hook\Cron\CronHook;
 use Cornix\Serendipity\Core\Hook\Page\PostEditHook;
@@ -10,6 +9,7 @@ use Cornix\Serendipity\Core\Hook\Page\ViewPageHook;
 use Cornix\Serendipity\Core\Hook\Post\ContentIoHook;
 use Cornix\Serendipity\Core\Hook\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
+use Cornix\Serendipity\Core\Presentation\GraphQLHook;
 
 /**
  * フック登録のエントリーポイント
