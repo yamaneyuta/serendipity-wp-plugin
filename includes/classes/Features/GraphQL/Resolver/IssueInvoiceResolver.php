@@ -5,7 +5,6 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
-use Cornix\Serendipity\Core\Application\Service\InvoiceService;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
@@ -14,6 +13,7 @@ use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Application\Service\PostService;
+use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
@@ -64,7 +64,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		global $wpdb;
 		try {
 			$wpdb->query( 'START TRANSACTION' );
-			$invoice = ( new InvoiceService() )->issue( $post_ID, $chain_ID, $selling_price, $seller_address, $token_address, $payment_amount_hex, $consumer_address );
+			$invoice = ( new IssueInvoice( $wpdb ) )->handle( $post_ID, $chain_ID, $selling_price, $seller_address, $token_address, $payment_amount_hex, $consumer_address );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );
