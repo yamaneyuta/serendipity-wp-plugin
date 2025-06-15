@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Application\Service\PostService;
+use Cornix\Serendipity\Core\Application\UseCase\DeletePaidContent;
 use Cornix\Serendipity\Core\Application\UseCase\SavePaidContent;
 
 /**
@@ -151,11 +152,10 @@ class ContentIoHook {
 		global $wpdb;
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
-		$attributes   = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
-		$post_service = new PostService();
+		$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
 		if ( is_null( $attributes ) ) {
 			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
-			$post_service->deletePaidContent( $post_id );
+			( new DeletePaidContent( $wpdb ) )->handle( $post_id );
 		} else {
 			$paid_content_text = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
 			assert( ! is_null( $paid_content_text ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
@@ -173,15 +173,16 @@ class ContentIoHook {
 	 * 投稿が削除された時のアクション。有料記事の情報も削除します。
 	 */
 	public function deletePostAction( int $post_id ): void {
+		global $wpdb;
 		// テスト実行中、テストツールによって投稿が削除される。
 		// その際、このフックが呼び出されるが、テーブル作成前に呼び出されるとエラーになるため
 		// テスト中かつテーブルが存在しない場合は何もしない
-		if ( ( new Environment() )->isTesting() && ! ( new PaidContentTable( $GLOBALS['wpdb'] ) )->exists() ) {
+		if ( ( new Environment() )->isTesting() && ! ( new PaidContentTable( $wpdb ) )->exists() ) {
 			return; // テスト中に限り、テーブルが存在しない場合は何もしない
 		}
 
 		// 投稿が削除された時に有料記事の情報も削除
-		( new PostService() )->deletePaidContent( $post_id );
+		( new DeletePaidContent( $wpdb ) )->handle( $post_id );
 	}
 
 	/**
