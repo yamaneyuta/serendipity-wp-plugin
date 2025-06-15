@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class ChainResolver extends ResolverBase {
 
@@ -18,8 +19,7 @@ class ChainResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		/** @var int */
-		$chain_ID = $args['chainID'];
+		$chain_ID = new ChainID( $args['chainID'] );
 
 		$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
 
@@ -47,7 +47,7 @@ class ChainResolver extends ResolverBase {
 					return $root_value['token'](
 						$root_value,
 						array(
-							'chainID' => $token->chainID(),
+							'chainID' => $token->chainID()->value(),
 							'address' => $token->address()->value(),
 						)
 					);
@@ -68,7 +68,7 @@ class ChainResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'              => $chain->id(),
+			'id'              => $chain->id()->value(),
 			'appContract'     => $app_contract_callback,
 			'confirmations'   => (string) $chain->confirmations(),    // string型にして返す(GraphQLの定義した型に変換)
 			'rpcURL'          => $chain->rpcURL(),

@@ -27,6 +27,10 @@ class ChainID {
 		return (string) $this->chain_id_value;
 	}
 
+	public static function fromNullableValue( ?int $chain_id_value ): ?ChainID {
+		return $chain_id_value === null ? null : new ChainID( $chain_id_value );
+	}
+
 	/** イーサリアムメインネット(L1) */
 	private const ETH_MAINNET = 1;
 	public static function ethMainnet(): ChainID {
