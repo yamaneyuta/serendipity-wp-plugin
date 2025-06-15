@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
 
 use Cornix\Serendipity\Core\Constant\ChainIdValue;
+use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\Config\InitialBlockExplorerURL;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 
@@ -44,8 +46,10 @@ return new class() extends DatabaseMigrationBase {
 				`updated_at`                   timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				`chain_id`                     bigint        unsigned  NOT NULL,
 				`name`                         varchar(191)            NOT NULL,
+				`network_category_id`          int           unsigned  NOT NULL,
 				`rpc_url`                      varchar(191),
 				`confirmations`                varchar(191)            NOT NULL,
+				`block_explorer_url`           varchar(191),
 				PRIMARY KEY (`chain_id`)
 			) {$charset};
 		SQL;
@@ -58,43 +62,51 @@ return new class() extends DatabaseMigrationBase {
 
 	private function insertInitialData(): void {
 
-		$Record = new class( 1, '', null ) {
+		$Record = new class( 1, '', 1, null, '', '' ) {
 			public function __construct(
 				int $chain_id,
 				string $name,
+				int $network_category_id,
 				?string $rpc_url,
-				string $confirmations = '1' // デフォルトの確認数は1
+				string $confirmations,
+				?string $block_explorer_url
 			) {
-				$this->chain_id      = $chain_id;
-				$this->name          = $name;
-				$this->rpc_url       = $rpc_url;
-				$this->confirmations = $confirmations;
+				$this->chain_id            = $chain_id;
+				$this->name                = $name;
+				$this->network_category_id = $network_category_id;
+				$this->rpc_url             = $rpc_url;
+				$this->confirmations       = $confirmations;
+				$this->block_explorer_url  = $block_explorer_url;
 			}
 			public int $chain_id;
 			public string $name;
+			public int $network_category_id;
 			public ?string $rpc_url;
 			public string $confirmations;
+			public ?string $block_explorer_url;
 		};
 
 		$records = array(
-			new $Record( ChainIdValue::ETH_MAINNET, 'Ethereum Mainnet', null ),
-			new $Record( ChainIdValue::SEPOLIA, 'Sepolia', null ),
-			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', null ),
+			new $Record( ChainIdValue::ETH_MAINNET, 'Ethereum Mainnet', NetworkCategoryID::MAINNET, null, '1', InitialBlockExplorerURL::ETH_MAINNET ),
+			new $Record( ChainIdValue::SEPOLIA, 'Sepolia', NetworkCategoryID::TESTNET, null, '1', InitialBlockExplorerURL::SEPOLIA ),
+			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', NetworkCategoryID::TESTNET, null, '1', InitialBlockExplorerURL::SONEIUM_MINATO ),
 		);
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment()->isDevelopmentMode() ) {
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ) );
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ) );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', NetworkCategoryID::PRIVATENET, $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ), '1', InitialBlockExplorerURL::PRIVATENET_L1 );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', NetworkCategoryID::PRIVATENET, $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ), '1', InitialBlockExplorerURL::PRIVATENET_L2 );
 		}
 
 		foreach ( $records as $record ) {
 			$result = $this->wpdb()->insert(
 				$this->table_name,
 				array(
-					'chain_id'      => $record->chain_id,
-					'name'          => $record->name,
-					'rpc_url'       => $record->rpc_url,
-					'confirmations' => $record->confirmations,
+					'chain_id'            => $record->chain_id,
+					'name'                => $record->name,
+					'network_category_id' => $record->network_category_id,
+					'rpc_url'             => $record->rpc_url,
+					'confirmations'       => $record->confirmations,
+					'block_explorer_url'  => $record->block_explorer_url,
 				)
 			);
 			if ( 1 !== $result ) {

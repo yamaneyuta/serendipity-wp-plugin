@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\ValueObject\ChainID;
 use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
@@ -11,23 +10,29 @@ use Cornix\Serendipity\Core\ValueObject\NetworkCategory;
 class Chain {
 	/**
 	 *
-	 * @param ChainID     $chain_id
-	 * @param string      $name
-	 * @param null|string $rpc_url
-	 * @param int|string  $confirmations
+	 * @param ChainID         $chain_id
+	 * @param string          $name
+	 * @param NetworkCategory $network_category
+	 * @param null|string     $rpc_url
+	 * @param int|string      $confirmations
+	 * @param null|string     $block_explorer_url
 	 */
-	protected function __construct( ChainID $chain_id, string $name, ?string $rpc_url, $confirmations ) {
-		$this->id            = $chain_id;
-		$this->name          = $name;
-		$this->rpc_url       = $rpc_url;
-		$this->confirmations = $confirmations;
+	protected function __construct( ChainID $chain_id, string $name, NetworkCategory $network_category, ?string $rpc_url, $confirmations, ?string $block_explorer_url ) {
+		$this->id                 = $chain_id;
+		$this->name               = $name;
+		$this->network_category   = $network_category;
+		$this->rpc_url            = $rpc_url;
+		$this->confirmations      = $confirmations;
+		$this->block_explorer_url = $block_explorer_url;
 	}
 
 	private ChainID $id;
 	private string $name;
+	private NetworkCategory $network_category;
 	private ?string $rpc_url;
 	/** @var int|string */
 	private $confirmations;
+	private ?string $block_explorer_url;
 
 	public function id(): ChainID {
 		return $this->id;
@@ -47,6 +52,11 @@ class Chain {
 	public function confirmations() {
 		return $this->confirmations;
 	}
+
+	public function blockExplorerURL(): ?string {
+		return $this->block_explorer_url;
+	}
+
 	/**
 	 * このチェーンの待機ブロック数を設定します
 	 *
@@ -66,6 +76,6 @@ class Chain {
 	}
 
 	public function networkCategory(): NetworkCategory {
-		return NetworkCategory::from( Config::NETWORK_CATEGORIES[ $this->id->value() ] );
+		return $this->network_category;
 	}
 }
