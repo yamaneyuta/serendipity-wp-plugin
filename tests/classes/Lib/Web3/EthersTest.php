@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Domain\Entity\Signer;
-use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 
 class EthersTest extends IntegrationTestBase {
 

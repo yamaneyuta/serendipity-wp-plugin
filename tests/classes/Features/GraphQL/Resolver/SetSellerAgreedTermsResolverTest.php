@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Web3\Ethers;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
 
 class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
