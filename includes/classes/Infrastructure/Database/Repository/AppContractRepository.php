@@ -9,9 +9,9 @@ use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTabl
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class AppContractRepository {
-	public function __construct( ?AppContractTable $app_contract_table = null, ?ChainRepository $chain_repository = null ) {
-		$this->app_contract_table = $app_contract_table ?? new AppContractTable( $GLOBALS['wpdb'] );
-		$this->chain_repository   = $chain_repository ?? new ChainRepository();
+	public function __construct( AppContractTable $app_contract_table, ChainRepository $chain_repository ) {
+		$this->app_contract_table = $app_contract_table;
+		$this->chain_repository   = $chain_repository;
 	}
 	private AppContractTable $app_contract_table;
 	private ChainRepository $chain_repository;

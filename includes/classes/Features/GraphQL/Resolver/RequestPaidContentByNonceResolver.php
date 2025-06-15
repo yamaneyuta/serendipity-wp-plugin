@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
@@ -70,7 +70,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// ブロックチェーンに問い合わせる
-		$app_contract   = ( new AppContractRepository() )->get( $chain->id() );
+		$app_contract   = ( new AppContractRepositoryFactory() )->create()->get( $chain->id() );
 		$app            = new AppContractClient( $app_contract );
 		$server_signer  = ( new ServerSignerServiceFactory() )->create()->getServerSigner();
 		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_ID, $consumer_address );

@@ -12,9 +12,9 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class TokenService {
 
-	public function __construct() {
-		$this->token_repository = new TokenRepository();
-		$this->chain_repository = new ChainRepository();
+	public function __construct( TokenRepository $token_repository, ChainRepository $chain_repository ) {
+		$this->token_repository = $token_repository;
+		$this->chain_repository = $chain_repository;
 	}
 	private TokenRepository $token_repository;
 	private ChainRepository $chain_repository;

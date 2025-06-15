@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Factory\TokenServiceFactory;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Application\Service\TokenService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 /**
  * ERC20トークンの情報をサーバーに登録します。
@@ -18,8 +19,7 @@ class RegisterERC20TokenResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		Validate::checkHasAdminRole();  // 管理者権限が必要
 
-		/** @var int */
-		$chain_ID = $args['chainID'];
+		$chain_ID = new ChainID( $args['chainID'] );
 		$address  = new Address( (string) $args['address'] );
 		/** @var null|bool */
 		$is_payable = $args['isPayable'] ?? null;
@@ -31,7 +31,7 @@ class RegisterERC20TokenResolver extends ResolverBase {
 		}
 
 		// トークン情報を保存
-		( new TokenService() )->saveERC20Token( $chain_ID, $address, $is_payable );
+		( new TokenServiceFactory() )->create()->saveERC20Token( $chain_ID, $address, $is_payable );
 
 		return true;
 	}

@@ -11,8 +11,8 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class ChainRepository {
 
-	public function __construct( ?ChainTable $chain_table = null ) {
-		$this->chain_table = $chain_table ?? new ChainTable( $GLOBALS['wpdb'] );
+	public function __construct( ChainTable $chain_table ) {
+		$this->chain_table = $chain_table;
 	}
 
 	private ChainTable $chain_table;

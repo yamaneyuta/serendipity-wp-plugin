@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
@@ -31,7 +31,7 @@ class ChainResolver extends ResolverBase {
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
 		$app_contract_callback = function () use ( $chain ) {
 			// 権限チェック不要
-			$app_contract = ( new AppContractRepository() )->get( $chain->id() );
+			$app_contract = ( new AppContractRepositoryFactory() )->create()->get( $chain->id() );
 			$address      = is_null( $app_contract ) ? null : $app_contract->address();
 			return is_null( $address ) ? null : array( 'address' => $address->value() );
 		};
