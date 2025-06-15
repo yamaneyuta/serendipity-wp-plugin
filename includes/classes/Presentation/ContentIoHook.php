@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Hook\Post;
+namespace Cornix\Serendipity\Core\Presentation;
 
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Lib\Convert\HtmlFormat;
