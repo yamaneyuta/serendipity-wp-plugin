@@ -57,7 +57,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		$post_ID          = $invoice->postID();
-		$chain            = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $invoice->chainID() );
+		$chain            = ( new ChainServiceFactory() )->create()->getChain( $invoice->chainID() );
 		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
@@ -99,7 +99,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( ChainID $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$chain         = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
+		$chain         = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
 		$confirmations = $chain->confirmations();
 
 		if ( is_int( $confirmations ) ) {

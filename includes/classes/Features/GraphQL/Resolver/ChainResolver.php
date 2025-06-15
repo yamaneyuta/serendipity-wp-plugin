@@ -21,7 +21,7 @@ class ChainResolver extends ResolverBase {
 	public function resolve( array $root_value, array $args ) {
 		$chain_ID = new ChainID( $args['chainID'] );
 
-		$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
+		$chain = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
 
 		if ( is_null( $chain ) ) {
 			throw new \InvalidArgumentException( '[CA31D9B5] chain data is not found. chain id: ' . $chain_ID );

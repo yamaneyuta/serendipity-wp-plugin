@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class SetConfirmationsResolver extends ResolverBase {
 
@@ -18,8 +19,7 @@ class SetConfirmationsResolver extends ResolverBase {
 		// 管理者権限を持っているかどうかをチェック
 		Validate::checkHasAdminRole();
 
-		/** @var int */
-		$chain_ID = $args['chainID'];
+		$chain_ID = new ChainID( $args['chainID'] );
 		/** @var string|null */
 		$confirmations = $args['confirmations'] ?? null;
 
@@ -35,7 +35,7 @@ class SetConfirmationsResolver extends ResolverBase {
 		try {
 			global $wpdb;
 			$wpdb->query( 'START TRANSACTION' );
-			$chain_service = ( new ChainServiceFactory() )->create( $wpdb );
+			$chain_service = ( new ChainServiceFactory( $wpdb ) )->create();
 			$chain_service->saveConfirmations( $chain_ID, $confirmations );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {

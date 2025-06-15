@@ -33,7 +33,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
 
-		$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
+		$chain = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
 		if ( is_null( $chain ) ) {
 			throw new \InvalidArgumentException( '[DC8E36E6] chain data is not found. chain id: ' . $chain_ID );
 		} elseif ( ! $chain->connectable() ) {

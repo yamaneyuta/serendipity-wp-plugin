@@ -113,7 +113,7 @@ class AppContractTmpTable {
 		);
 
 		// テーブルにデータを挿入
-		$chains = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getAllChains();
+		$chains = ( new ChainServiceFactory() )->create()->getAllChains();
 		foreach ( $chains as $chain ) {
 			$app_contract = ( new AppContractRepository() )->get( $chain->id() );
 			if ( is_null( $app_contract ) ) {

@@ -46,7 +46,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		);
 
 		// プライベートネット1のETHで支払う
-		$payment_chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( ChainID::privatenet1() );
+		$payment_chain = ( new ChainServiceFactory() )->create()->getChain( ChainID::privatenet1() );
 		$payment_token = ( new TokenRepository() )->get(
 			$payment_chain->id(),
 			Ethers::zeroAddress() // ETH

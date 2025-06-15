@@ -146,7 +146,7 @@ class RateDataTest extends IntegrationTestBase {
 		// ARRANGE
 		$rate_data     = new RateData();
 		$symbol_pair   = new SymbolPair( 'ETH', 'USD' );
-		$chain_service = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] );
+		$chain_service = ( new ChainServiceFactory() )->create();
 
 		$chain_service->saveRpcURL( ChainID::ethMainnet(), TestRpcUrl::ETH_MAINNET );  // テスト用のRPC URLを設定
 

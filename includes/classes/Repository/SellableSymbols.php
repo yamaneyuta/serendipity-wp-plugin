@@ -19,7 +19,7 @@ class SellableSymbols {
 
 		// テーブルに登録されているOracle情報をすべて取得
 		$oracles       = ( new OracleRepository() )->all();
-		$chain_service = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] );
+		$chain_service = ( new ChainServiceFactory() )->create();
 
 		// 接続可能なoracleに絞り込み
 		$oracles = array_filter(

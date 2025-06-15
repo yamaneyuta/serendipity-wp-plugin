@@ -177,7 +177,7 @@ class AppContractCrawlableChainIDs {
 	 */
 	public function get(): array {
 		// 接続可能なチェーン一覧を取得
-		$chains = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getAllChains();
+		$chains = ( new ChainServiceFactory() )->create()->getAllChains();
 		$chains = ( new ChainsFilter() )->byConnectable()->apply( $chains );
 
 		// アプリケーション用コントラクトアドレスが取得可能なチェーンに絞り込み

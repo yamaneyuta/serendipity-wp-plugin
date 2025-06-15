@@ -30,8 +30,7 @@ class NetworkCategoryResolver extends ResolverBase {
 		};
 
 		// ネットワークカテゴリで絞り込んだチェーン一覧を取得
-		global $wpdb;
-		$chain_service = ( new ChainServiceFactory() )->create( $wpdb );
+		$chain_service = ( new ChainServiceFactory() )->create();
 		$chains_filter = ( new ChainsFilter() )->byNetworkCategory( $network_category );
 		$chains        = $chains_filter->apply( $chain_service->getAllChains() );
 

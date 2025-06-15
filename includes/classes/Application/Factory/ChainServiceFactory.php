@@ -8,8 +8,14 @@ use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Application\Service\ChainService;
 
 class ChainServiceFactory {
-	public function create( \wpdb $wpdb ): ChainService {
-		$table      = new ChainTable( $wpdb );
+	public function __construct( \wpdb $wpdb = null ) {
+		$this->wpdb = $wpdb ?? $GLOBALS['wpdb'];
+	}
+
+	private \wpdb $wpdb;
+
+	public function create(): ChainService {
+		$table      = new ChainTable( $this->wpdb );
 		$repository = new ChainRepository( $table );
 		return new ChainService( $repository );
 	}

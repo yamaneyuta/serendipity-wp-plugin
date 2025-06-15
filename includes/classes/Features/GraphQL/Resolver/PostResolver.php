@@ -45,11 +45,10 @@ class PostResolver extends ResolverBase {
 			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
 		}
 
-		global $wpdb;
 		// 投稿に設定されている販売ネットワークカテゴリに属するチェーン一覧を取得
 		$chains = ( new ChainsFilter() )
 			->byNetworkCategory( $selling_network_category )
-			->apply( ( new ChainServiceFactory() )->create( $wpdb )->getAllChains() );
+			->apply( ( new ChainServiceFactory() )->create()->getAllChains() );
 
 		$result = array();
 		foreach ( $chains as $chain ) {

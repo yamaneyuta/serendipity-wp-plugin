@@ -37,7 +37,7 @@ class SetRpcUrlResolver extends ResolverBase {
 		try {
 			global $wpdb;
 			$wpdb->query( 'START TRANSACTION' );
-			$chain_service = ( new ChainServiceFactory() )->create( $wpdb );
+			$chain_service = ( new ChainServiceFactory( $wpdb ) )->create();
 			$chain_service->saveRpcURL( $chain_ID, $rpc_url );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {

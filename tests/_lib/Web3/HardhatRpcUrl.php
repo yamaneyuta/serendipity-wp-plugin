@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 class HardhatRpcUrl {
 	public function get( ChainID $chain_ID ): string {
 		assert( $chain_ID->equals( ChainID::privatenet1() ) || $chain_ID->equals( ChainID::privatenet2() ) );
-		$chain           = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
+		$chain           = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
 		$hardhat_rpc_url = $chain->rpcURL();
 		assert( ! is_null( $hardhat_rpc_url ) );
 		return $hardhat_rpc_url;

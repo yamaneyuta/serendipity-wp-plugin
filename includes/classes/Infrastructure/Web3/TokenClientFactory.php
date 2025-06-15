@@ -13,7 +13,7 @@ class TokenClientFactory {
 	 */
 	public function create( ChainID $chain_ID, Address $contract_address ): TokenClient {
 		// チェーンに接続するためのRPC URLを取得
-		$chain   = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
+		$chain   = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
 		$rpc_url = $chain->rpcURL();
 		assert( ! is_null( $rpc_url ), '[2CF9717C] RPC URL is not found. - ' . $chain_ID );
 

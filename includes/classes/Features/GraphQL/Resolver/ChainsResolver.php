@@ -37,8 +37,7 @@ class ChainsResolver extends ResolverBase {
 		}
 
 		// フィルタを適用したチェーン一覧を取得
-		global $wpdb;
-		$chain_service = ( new ChainServiceFactory() )->create( $wpdb );
+		$chain_service = ( new ChainServiceFactory() )->create();
 		$chains        = $chains_filter->apply( $chain_service->getAllChains() );
 
 		return array_map(

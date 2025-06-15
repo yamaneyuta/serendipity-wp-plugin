@@ -31,7 +31,7 @@ class VerifiableChainsResolver extends ResolverBase {
 
 		// 投稿の販売ネットワークカテゴリに属するチェーン一覧を取得
 		$chains_filter = ( new ChainsFilter() )->byNetworkCategory( $selling_network_category );
-		$chain_service = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] );
+		$chain_service = ( new ChainServiceFactory() )->create();
 		$chains        = $chains_filter->apply( $chain_service->getAllChains() );
 
 		$result = array();
