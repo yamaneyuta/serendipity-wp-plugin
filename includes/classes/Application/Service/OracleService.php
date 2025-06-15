@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
-use Cornix\Serendipity\Core\Repository\OracleRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;

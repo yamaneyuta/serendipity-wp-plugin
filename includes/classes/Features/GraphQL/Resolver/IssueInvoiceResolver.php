@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Application\Service\PostService;

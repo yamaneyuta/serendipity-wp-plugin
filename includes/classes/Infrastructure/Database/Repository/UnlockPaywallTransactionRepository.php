@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Repository;
+namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\UnlockPaywallTransactionTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;

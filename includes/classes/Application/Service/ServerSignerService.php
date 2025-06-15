@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 use Cornix\Serendipity\Core\Domain\Entity\Signer;
 use Cornix\Serendipity\Core\Infrastructure\System\OpenSslChecker;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Repository\ServerSignerPrivateKeyRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ServerSignerPrivateKeyRepository;
 
 class ServerSignerService {
 

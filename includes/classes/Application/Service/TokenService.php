@@ -5,8 +5,8 @@ namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
-use Cornix\Serendipity\Core\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 

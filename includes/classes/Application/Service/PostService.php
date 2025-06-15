@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Domain\Entity\Post;
-use Cornix\Serendipity\Core\Repository\PostRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 

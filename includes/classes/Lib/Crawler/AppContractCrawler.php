@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Lib\Crawler;
 
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
-use Cornix\Serendipity\Core\Repository\UnlockPaywallTransactionRepository;
-use Cornix\Serendipity\Core\Repository\UnlockPaywallTransferEventRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\UnlockPaywallTransactionRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\UnlockPaywallTransferEventRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
