@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
-use Cornix\Serendipity\Core\Service\InvoiceService;
+use Cornix\Serendipity\Core\Application\Service\InvoiceService;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
@@ -13,7 +13,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Service\Factory\TermsServiceFactory;
-use Cornix\Serendipity\Core\Service\PostService;
+use Cornix\Serendipity\Core\Application\Service\PostService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 

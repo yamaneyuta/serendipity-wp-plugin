@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
-use Cornix\Serendipity\Core\Service\OracleService;
+use Cornix\Serendipity\Core\Application\Service\OracleService;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use phpseclib\Math\BigInteger;

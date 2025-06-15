@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Service;
+namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;

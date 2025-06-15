@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Service\Factory;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ServerSignerTable;
 use Cornix\Serendipity\Core\Repository\ServerSignerPrivateKeyRepository;
-use Cornix\Serendipity\Core\Service\ServerSignerService;
+use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
 
 class ServerSignerServiceFactory {
 	public function create( \wpdb $wpdb ): ServerSignerService {

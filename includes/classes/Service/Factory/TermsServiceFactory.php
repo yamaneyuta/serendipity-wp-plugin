@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Service\Factory;
 
 use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
-use Cornix\Serendipity\Core\Service\TermsService;
+use Cornix\Serendipity\Core\Application\Service\TermsService;
 
 class TermsServiceFactory {
 	public function create(): TermsService {

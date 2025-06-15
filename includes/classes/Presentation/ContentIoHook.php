@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
-use Cornix\Serendipity\Core\Service\PostService;
+use Cornix\Serendipity\Core\Application\Service\PostService;
 
 /**
  * 投稿内容を保存、または取得時のhooksを登録するクラス

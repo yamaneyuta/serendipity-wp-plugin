@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Service\PostService;
+use Cornix\Serendipity\Core\Application\Service\PostService;
 
 class PostResolver extends ResolverBase {
 

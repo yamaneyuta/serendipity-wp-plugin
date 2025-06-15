@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Service\Factory\ServerSignerServiceFactory;
-use Cornix\Serendipity\Core\Service\PostService;
+use Cornix\Serendipity\Core\Application\Service\PostService;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;

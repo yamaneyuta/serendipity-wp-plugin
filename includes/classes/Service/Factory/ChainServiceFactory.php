@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Service\Factory;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Service\ChainService;
+use Cornix\Serendipity\Core\Application\Service\ChainService;
 
 class ChainServiceFactory {
 	public function create( \wpdb $wpdb ): ChainService {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Service;
+namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\SignedTerms;

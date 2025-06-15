@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
-use Cornix\Serendipity\Core\Service\OracleService;
+use Cornix\Serendipity\Core\Application\Service\OracleService;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\Lib\Transient\TransientFactory;
