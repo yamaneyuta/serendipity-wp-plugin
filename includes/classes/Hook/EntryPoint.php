@@ -2,11 +2,11 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Hook;
 
-use Cornix\Serendipity\Core\Hook\Cron\CronHook;
 use Cornix\Serendipity\Core\Hook\Post\ContentIoHook;
 use Cornix\Serendipity\Core\Hook\Update\PluginUpdateHook;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Presentation\AdminPageHook;
+use Cornix\Serendipity\Core\Presentation\CronHook;
 use Cornix\Serendipity\Core\Presentation\GraphQLHook;
 use Cornix\Serendipity\Core\Presentation\PostEditHook;
 use Cornix\Serendipity\Core\Presentation\ViewPageHook;
