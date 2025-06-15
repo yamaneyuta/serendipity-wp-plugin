@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Lib\Convert;
+namespace Cornix\Serendipity\Core\Infrastructure\Format;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 
