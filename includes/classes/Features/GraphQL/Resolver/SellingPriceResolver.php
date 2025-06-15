@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Application\Service\PostService;
+use Cornix\Serendipity\Core\Application\UseCase\GetSellingPrice;
 
 class SellingPriceResolver extends ResolverBase {
 
@@ -21,7 +21,7 @@ class SellingPriceResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// 販売価格をテーブルから取得して返す
-		$selling_price = ( new PostService() )->get( $post_ID )->sellingPrice();
+		$selling_price = ( new GetSellingPrice( $GLOBALS['wpdb'] ) )->handle( $post_ID );
 
 		if ( is_null( $selling_price ) ) {
 			Logger::warn( '[57B6E802] Selling price is null for post ID: ' . $post_ID );

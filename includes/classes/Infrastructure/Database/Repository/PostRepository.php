@@ -9,8 +9,8 @@ use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTabl
 
 class PostRepository {
 
-	public function __construct( ?PaidContentTable $oracle_table = null ) {
-		$this->paid_content_table = $oracle_table ?? new PaidContentTable( $GLOBALS['wpdb'] );
+	public function __construct( ?PaidContentTable $paid_content_table = null ) {
+		$this->paid_content_table = $paid_content_table ?? new PaidContentTable( $GLOBALS['wpdb'] );
 	}
 
 	private PaidContentTable $paid_content_table;

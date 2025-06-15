@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
@@ -12,7 +13,6 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
-use Cornix\Serendipity\Core\Application\Service\PostService;
 use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
@@ -51,7 +51,7 @@ class IssueInvoiceResolver extends ResolverBase {
 		$seller_address = Ethers::verifyMessage( $seller_singed_terms->terms()->message(), $seller_singed_terms->signature() );
 
 		// 販売価格を取得
-		$selling_price = ( new PostService() )->get( $post_ID )->sellingPrice();
+		$selling_price = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_ID )->sellingPrice();
 		assert( ! is_null( $selling_price ), '[F8524488] Selling price is null for post ID: ' . $post_ID );
 
 		// 支払うトークンにおける価格を計算
