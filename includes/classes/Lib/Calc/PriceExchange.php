@@ -10,6 +10,7 @@ use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
 use phpseclib\Math\BigInteger;
 
 class PriceExchange {

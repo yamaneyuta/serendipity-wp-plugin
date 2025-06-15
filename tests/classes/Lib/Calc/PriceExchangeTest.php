@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Calc\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
 use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;

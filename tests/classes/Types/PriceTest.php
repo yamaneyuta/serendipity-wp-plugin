@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Lib\Calc\Hex;
+use Cornix\Serendipity\Core\Infrastructure\Format\Hex;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use phpseclib\Math\BigInteger;
