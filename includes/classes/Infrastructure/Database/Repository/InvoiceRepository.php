@@ -16,10 +16,6 @@ class InvoiceRepository {
 
 	private InvoiceTable $invoice_table;
 
-	public function exists( InvoiceID $invoice_ID ): bool {
-		return ! is_null( $this->get( $invoice_ID ) );
-	}
-
 	public function add( Invoice $invoice ): void {
 		// 請求書情報を保存
 		$this->invoice_table->insert( $invoice );
