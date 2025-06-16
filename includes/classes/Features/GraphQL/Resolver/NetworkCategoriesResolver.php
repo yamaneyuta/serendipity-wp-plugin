@@ -44,7 +44,7 @@ class GetAllNetworkCategoryIDs {
 	/** @return NetworkCategoryID[] */
 	public function handle(): array {
 		$chain_repository = ( new ChainRepositoryFactory( $this->wpdb ) )->create();
-		$all_chains       = $chain_repository->getAllChains();
+		$all_chains       = $chain_repository->all();
 
 		$network_categories = array();
 		foreach ( $all_chains as $chain ) {

@@ -21,7 +21,7 @@ class ChainRepository {
 	 * 指定したチェーンIDに合致するチェーンを取得します。
 	 */
 	public function get( ChainID $chain_id ): ?Chain {
-		$chains          = $this->getAllChains();
+		$chains          = $this->all();
 		$chains_filter   = ( new ChainsFilter() )->byChainID( $chain_id );
 		$filtered_chains = $chains_filter->apply( $chains );
 		assert( count( $filtered_chains ) <= 1, '[BB8A90CF] should return at most one record.' );
@@ -33,7 +33,7 @@ class ChainRepository {
 	 *
 	 * @return Chain[]
 	 */
-	public function getAllChains() {
+	public function all() {
 		$records = $this->chain_table->all();
 
 		return array_values(

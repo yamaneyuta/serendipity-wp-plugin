@@ -27,7 +27,7 @@ class ChainService {
 	 * @return Chain[]
 	 */
 	public function getAllChains(): array {
-		return $this->repository->getAllChains();
+		return $this->repository->all();
 	}
 
 	/**

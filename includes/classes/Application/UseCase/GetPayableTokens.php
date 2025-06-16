@@ -40,7 +40,7 @@ class GetPayableTokens {
 		$payable_chains = ( new ChainsFilter() )
 			->byNetworkCategoryID( $selling_network_category )
 			->byConnectable()
-			->apply( $chain_repository->getAllChains() );
+			->apply( $chain_repository->all() );
 
 		/** @var Token[] */
 		$result = array();
