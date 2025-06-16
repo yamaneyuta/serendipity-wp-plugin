@@ -3,16 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
-use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
-use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
@@ -28,43 +24,17 @@ class IssueInvoiceResolver extends ResolverBase {
 		/** @var int */
 		$post_ID          = $args['postID'];
 		$chain_ID         = new ChainID( $args['chainID'] );
-		$token_address    = Address::from( $args['tokenAddress'] ?? null );
-		$consumer_address = Address::from( $args['consumerAddress'] ?? null ); // 購入者のアドレス
-
-		if ( null === $token_address ) {
-			throw new \InvalidArgumentException( '[[5D2F1CF4] Token address must not be null.' );
-		} elseif ( null === $consumer_address ) {
-			throw new \InvalidArgumentException( '[3AF96606] Consumer address must not be null.' );
-		}
+		$token_address    = new Address( $args['tokenAddress'] );
+		$consumer_address = new Address( $args['consumerAddress'] ); // 購入者のアドレス
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
-		// 指定されたトークンアドレスが支払可能な設定になっているかどうかをチェック
-		$token = ( new TokenRepository() )->get( $chain_ID, $token_address );
-		if ( null === $token || ! $token->isPayable() ) {
-			throw new \InvalidArgumentException( '[4381A464] The specified token is not payable.' );
-		}
-
-		// 販売者情報を取得
-		$seller_singed_terms = ( new TermsServiceFactory() )->create()->getSignedSellerTerms();
-		assert( $seller_singed_terms, '[88C95394] SellerAgreedTerms not found' );
-		$seller_address = Ethers::verifyMessage( $seller_singed_terms->terms()->message(), $seller_singed_terms->signature() );
-
-		// 販売価格を取得
-		$selling_price = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_ID )->sellingPrice();
-		assert( ! is_null( $selling_price ), '[F8524488] Selling price is null for post ID: ' . $post_ID );
-
-		// 支払うトークンにおける価格を計算
-		// ※ これは`1ETH`等の価格を表現するオブジェクトであり、実際に支払う数量(wei等)ではないことに注意
-		$payment_price = ( new PriceExchange() )->convert( $selling_price, $token->symbol() );
-		// 支払うトークン量を取得
-		$payment_amount_hex = $payment_price->toTokenAmount( $chain_ID );
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
 		try {
 			$wpdb->query( 'START TRANSACTION' );
-			$invoice = ( new IssueInvoice( $wpdb ) )->handle( $post_ID, $chain_ID, $selling_price, $seller_address, $token_address, $payment_amount_hex, $consumer_address );
+			$invoice = ( new IssueInvoice( $wpdb ) )->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );
@@ -73,12 +43,12 @@ class IssueInvoiceResolver extends ResolverBase {
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成
 		$server_message = SolidityStrings::valueToHexString( $chain_ID->value() )
-			. SolidityStrings::addressToHexString( $seller_address )
-			. SolidityStrings::addressToHexString( $consumer_address )
+			. SolidityStrings::addressToHexString( $invoice->sellerAddress() )
+			. SolidityStrings::addressToHexString( $invoice->consumerAddress() )
 			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
-			. SolidityStrings::valueToHexString( $post_ID )
-			. SolidityStrings::addressToHexString( $token_address )
-			. SolidityStrings::valueToHexString( $payment_amount_hex )
+			. SolidityStrings::valueToHexString( $invoice->postID() )
+			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
+			. SolidityStrings::valueToHexString( $invoice->paymentAmountHex() )
 			. SolidityStrings::valueToHexString( ( new ConsumerTerms() )->currentVersion() )
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 );  // TODO: アフィリエイト報酬率
@@ -98,7 +68,7 @@ class IssueInvoiceResolver extends ResolverBase {
 			'nonce'            => $invoice->nonce()->value(),
 			'serverMessage'    => $server_message,
 			'serverSignature'  => $server_signature,
-			'paymentAmountHex' => $payment_amount_hex,
+			'paymentAmountHex' => $invoice->paymentAmountHex(),
 		);
 	}
 }
