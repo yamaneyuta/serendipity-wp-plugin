@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Application\Service\OracleService;
 use Cornix\Serendipity\Core\Repository\RateData;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
@@ -97,7 +97,7 @@ class PriceExchange {
 	 */
 	private function getMaxDecimals( string $symbol ): int {
 		$tokens_filter = ( new TokensFilter() )->bySymbol( $symbol );
-		$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
+		$tokens        = $tokens_filter->apply( ( new TokenRepositoryImpl() )->all() );
 		$decimals      = array_map( fn( Token $token ) => $token->decimals(), $tokens );
 		return max( $decimals );
 	}

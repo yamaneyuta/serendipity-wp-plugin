@@ -16,7 +16,7 @@ class SaveRpcURL {
 	public function handle( ChainID $chain_id, ?string $rpc_url ): void {
 		$chain_repository = ( new ChainRepositoryFactory( $this->wpdb ) )->create();
 
-		$chain = $chain_repository->getChain( $chain_id );
+		$chain = $chain_repository->get( $chain_id );
 		assert( null !== $chain, "[517E4144] Chain with ID {$chain_id->value()} does not exist." );
 
 		// RPC URLプロパティに新しい値を設定

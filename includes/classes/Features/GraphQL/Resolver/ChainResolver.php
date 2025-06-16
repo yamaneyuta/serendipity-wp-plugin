@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
@@ -40,7 +40,7 @@ class ChainResolver extends ResolverBase {
 			Validate::checkHasAdminRole(); // 管理者権限が必要
 
 			$tokens_filter = ( new TokensFilter() )->byChainID( $chain->id() );
-			$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
+			$tokens        = $tokens_filter->apply( ( new TokenRepositoryImpl() )->all() );
 
 			return array_map(
 				function ( Token $token ) use ( $root_value ) {

@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Factory;
 
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
 
 class TokenRepositoryFactory {
@@ -15,7 +16,7 @@ class TokenRepositoryFactory {
 
 	public function create(): TokenRepository {
 		$table      = new TokenTable( $this->wpdb );
-		$repository = new TokenRepository( $table );
+		$repository = new TokenRepositoryImpl( $table );
 		return $repository;
 	}
 }

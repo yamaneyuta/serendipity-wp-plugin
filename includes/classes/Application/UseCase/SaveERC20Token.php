@@ -27,7 +27,7 @@ class SaveERC20Token {
 			// トークンデータが存在しない場合は新規登録を行うために少数点以下桁数とシンボルを取得する
 
 			// チェーンに接続してERC20コントラクトから少数点以下桁数とシンボルを取得する
-			$chain        = $chain_repository->getChain( $chain_ID );
+			$chain        = $chain_repository->get( $chain_ID );
 			$token_client = new TokenClient( $chain->rpcURL(), $address );
 			$decimals     = $token_client->decimals();
 			$symbol       = $token_client->symbol();

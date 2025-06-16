@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
@@ -46,7 +46,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 
 		// プライベートネット1のETHで支払う
 		$payment_chain = ( new ChainServiceFactory() )->create()->getChain( ChainID::privatenet1() );
-		$payment_token = ( new TokenRepository() )->get(
+		$payment_token = ( new TokenRepositoryImpl() )->get(
 			$payment_chain->id(),
 			Ethers::zeroAddress() // ETH
 		);

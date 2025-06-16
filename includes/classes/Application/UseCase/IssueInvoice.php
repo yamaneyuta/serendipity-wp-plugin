@@ -8,11 +8,11 @@ use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 use wpdb;
@@ -51,10 +51,10 @@ class IssueInvoice {
 			$consumer_address,
 			InvoiceNonce::generate() // 新規nonce
 		);
-		assert( $invoice_repository->exists( $invoice->id() ) === false, '[A9E90E49] Duplicate invoice ID detected.' );
+		assert( null === $invoice_repository->get( $invoice->id() ), '[A9E90E49] Duplicate invoice ID detected.' );
 
 		// 請求書情報を保存
-		$invoice_repository->add( $invoice );
+		$invoice_repository->save( $invoice );
 
 		return $invoice;
 	}
