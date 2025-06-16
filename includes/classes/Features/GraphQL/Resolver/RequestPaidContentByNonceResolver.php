@@ -9,8 +9,8 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Application\Factory\InvoiceRepositoryFactory;
+use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
 use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
-use Cornix\Serendipity\Core\Application\Service\PostService;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
@@ -85,7 +85,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new PostService() )->get( $post_ID )->paidContent();
+		$paid_content = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_ID )->paidContent();
 		assert( ! is_null( $paid_content ), '[391C0A77] Paid content should not be null.' );
 
 		return array(

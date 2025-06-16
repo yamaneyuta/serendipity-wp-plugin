@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Application\Service\PostService;
+use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
 
 class VerifiableChainsResolver extends ResolverBase {
 
@@ -23,7 +23,7 @@ class VerifiableChainsResolver extends ResolverBase {
 		// 投稿は公開済み、または編集可能な権限があることをチェック
 		$this->checkIsPublishedOrEditable( $post_ID );
 
-		$selling_network_category_id = ( new PostService() )->get( $post_ID )->sellingNetworkCategoryID();
+		$selling_network_category_id = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_ID )->sellingNetworkCategoryID();
 		if ( is_null( $selling_network_category_id ) ) {
 			Logger::warn( '[B4FC6E2A] Selling network category is null for post ID: ' . $post_ID );
 			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
