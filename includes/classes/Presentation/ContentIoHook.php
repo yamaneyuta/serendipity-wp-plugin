@@ -70,7 +70,7 @@ class ContentIoHook {
 			return $response;   // 投稿の編集権限がない場合は何もしない
 		}
 
-		$paid_content = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post->ID )->paidContent();
+		$paid_content = ( new PostRepositoryFactory() )->create()->get( $post->ID )->paidContent();
 		if ( ! is_null( $paid_content ) ) {
 			// このメソッドが呼び出されたタイミングでは$response->data['content']['raw']に無料部分のみ格納された状態。
 			$free_content = $response->data['content']['raw'] ?? '';
@@ -116,7 +116,7 @@ class ContentIoHook {
 			$revision     = (int) $_GET['revision'];
 			$free_content = $data['post_content'] ?? ''; // リビジョンからの復元の場合、ここは無料部分のみが入っている
 
-			$paid_content = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $revision )->paidContent();   // リビジョンの有料部分を取得
+			$paid_content = ( new PostRepositoryFactory() )->create()->get( $revision )->paidContent();   // リビジョンの有料部分を取得
 			if ( ! is_null( $paid_content ) ) {
 				// 有料部分が存在する場合は、ウィジェットと有料部分を結合して保持
 				self::$unsaved_original_content =
@@ -149,9 +149,8 @@ class ContentIoHook {
 			// 投稿内容が未保存の場合は何もしない(ゴミ箱に移動された時などが該当)
 			return;
 		}
-		/** @var \wpdb $wpdb */
-		$wpdb = $GLOBALS['wpdb'];
-		$post_repository = ( new PostRepositoryFactory( $wpdb ) )->create();
+
+		$post_repository = ( new PostRepositoryFactory() )->create();
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
 		$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
@@ -162,7 +161,7 @@ class ContentIoHook {
 			$paid_content_text = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
 			assert( ! is_null( $paid_content_text ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
 			// ウィジェットが含まれている場合は有料記事の情報を保存
-			( new SavePaidContent( $wpdb ) )->handle(
+			( new SavePaidContent( $GLOBALS['wpdb'] ) )->handle(
 				$post_id,
 				PaidContent::from( $paid_content_text ),
 				$attributes->sellingNetworkCategoryID(),
@@ -203,7 +202,7 @@ class ContentIoHook {
 		assert( is_int( $post_id ), '[97CAA15C] Post ID is not an integer. - ' . json_encode( $post_id ) );
 
 		// 有料記事の情報がある場合はウィジェットを結合して返す
-		$paid_content = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_id )->paidContent();
+		$paid_content = ( new PostRepositoryFactory() )->create()->get( $post_id )->paidContent();
 		if ( ! is_null( $paid_content ) ) {
 			// HTMLコメントを除去したウィジェットを追加
 			$content .= "\n\n" . HtmlFormat::removeHtmlComments( $this->createWidgetContent( $post_id ) );
@@ -218,7 +217,7 @@ class ContentIoHook {
 	 */
 	public function wpPostRevisionFieldPostContentFilter( string $revision_field_content, string $field, \WP_Post $revision_post, string $context ) {
 		$post_id      = $revision_post->ID;
-		$paid_content = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_id )->paidContent();
+		$paid_content = ( new PostRepositoryFactory() )->create()->get( $post_id )->paidContent();
 
 		if ( ! is_null( $paid_content ) ) {
 			// 記事の有料部分の情報がある場合はウィジェットと有料部分を結合して返す
@@ -231,7 +230,7 @@ class ContentIoHook {
 
 class WidgetContentBuilder {
 	public function build( int $post_id ): string {
-		$post_data  = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_id );
+		$post_data  = ( new PostRepositoryFactory() )->create()->get( $post_id );
 		$block_name = ( new BlockName() )->get();
 		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryID(), $post_data->sellingPrice() )->toArray();
 		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );

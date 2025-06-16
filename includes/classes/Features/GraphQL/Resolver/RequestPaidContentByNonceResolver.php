@@ -85,7 +85,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_ID )->paidContent();
+		$paid_content = ( new PostRepositoryFactory() )->create()->get( $post_ID )->paidContent();
 		assert( ! is_null( $paid_content ), '[391C0A77] Paid content should not be null.' );
 
 		return array(

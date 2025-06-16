@@ -21,7 +21,7 @@ class SellingContentResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new PostRepositoryFactory( $GLOBALS['wpdb'] ) )->create()->get( $post_ID )->paidContent();
+		$paid_content = ( new PostRepositoryFactory() )->create()->get( $post_ID )->paidContent();
 
 		// 有料部分のコンテンツが取得できなかった場合はnullを返す
 		if ( null === $paid_content ) {
