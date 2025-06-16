@@ -62,7 +62,7 @@ class ChainResolver extends ResolverBase {
 			return $root_value['networkCategory'](
 				$root_value,
 				array(
-					'networkCategoryID' => $chain->networkCategoryID()->id(),
+					'networkCategoryID' => $chain->networkCategoryID()->value(),
 				)
 			);
 		};

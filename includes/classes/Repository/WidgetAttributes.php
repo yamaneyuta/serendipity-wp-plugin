@@ -21,7 +21,7 @@ class WidgetAttributes {
 	public static function from( ?NetworkCategoryID $network_category_id, ?Price $selling_price ): WidgetAttributes {
 		return new self(
 			array(
-				self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID => $network_category_id ? $network_category_id->id() : null,
+				self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID => $network_category_id ? $network_category_id->value() : null,
 				self::ATTRS_KEY_SELLING_AMOUNT_HEX => $selling_price ? $selling_price->amountHex() : null,
 				self::ATTRS_KEY_SELLING_DECIMALS   => $selling_price ? $selling_price->decimals() : null,
 				self::ATTRS_KEY_SELLING_SYMBOL     => $selling_price ? $selling_price->symbol() : null,

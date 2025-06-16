@@ -39,7 +39,7 @@ class NetworkCategoryResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'              => $network_category_id->id(),
+			'id'              => $network_category_id->value(),
 			'chains'          => $chains_callback,
 			'sellableSymbols' => $sellable_symbols_callback,
 		);

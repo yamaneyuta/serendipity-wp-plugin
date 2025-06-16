@@ -17,7 +17,7 @@ class ChainsFilter {
 	}
 
 	public function byNetworkCategoryID( NetworkCategoryID $network_category_id ): self {
-		$this->filters[] = fn ( Chain $chain ) => $chain->networkCategoryID()->id() === $network_category_id->id();
+		$this->filters[] = fn ( Chain $chain ) => $chain->networkCategoryID()->value() === $network_category_id->value();
 		return $this;
 	}
 

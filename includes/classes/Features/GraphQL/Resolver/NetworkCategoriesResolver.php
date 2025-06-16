@@ -28,7 +28,7 @@ class NetworkCategoriesResolver extends ResolverBase {
 			: array( $filter_network_category );
 
 		return array_map(
-			fn ( $network_category_id ) => $root_value['networkCategory']( $root_value, array( 'networkCategoryID' => $network_category_id->id() ) ),
+			fn ( $network_category_id ) => $root_value['networkCategory']( $root_value, array( 'networkCategoryID' => $network_category_id->value() ) ),
 			$network_category_ids
 		);
 	}
@@ -48,7 +48,7 @@ class GetAllNetworkCategoryIDs {
 
 		$network_categories = array();
 		foreach ( $all_chains as $chain ) {
-			$network_categories[ $chain->networkCategoryID()->id() ] = $chain->networkCategoryID();
+			$network_categories[ $chain->networkCategoryID()->value() ] = $chain->networkCategoryID();
 		}
 
 		return array_values( $network_categories );
