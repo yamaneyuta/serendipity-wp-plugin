@@ -10,4 +10,7 @@ final class NetworkCategoryIdValue {
 	public const TESTNET = 2;
 	/** プライベートネット(Ganache、Hardhat等) */
 	public const PRIVATENET = 3;
+
+	public const MIN = self::MAINNET;
+	public const MAX = self::PRIVATENET;
 }

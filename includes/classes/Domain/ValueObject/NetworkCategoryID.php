@@ -11,8 +11,8 @@ use Cornix\Serendipity\Core\Constant\NetworkCategoryIdValue;
 final class NetworkCategoryID {
 
 	public function __construct( int $network_category_id_value ) {
-		if ( $network_category_id_value < 1 || $network_category_id_value > 3 ) {
-			throw new \InvalidArgumentException( 'Invalid network category ID: ' . $network_category_id_value );
+		if ( $network_category_id_value < NetworkCategoryIdValue::MIN || $network_category_id_value > NetworkCategoryIdValue::MAX ) {
+			throw new \InvalidArgumentException( '[6AD1DCA2] Invalid network category ID: ' . $network_category_id_value );
 		}
 		$this->value = $network_category_id_value;
 	}
