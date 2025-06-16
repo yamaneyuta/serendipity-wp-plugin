@@ -5,21 +5,23 @@ namespace Cornix\Serendipity\Core\Lib\Calc;
 
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
-use Cornix\Serendipity\Core\Application\Service\OracleService;
+use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
+use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Infrastructure\Factory\OracleRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use phpseclib\Math\BigInteger;
 
 class PriceExchange {
-	public function __construct( RateData $rate_data = null, OracleService $oracle = null ) {
-		$this->rate_data = $rate_data ?? new RateData();
-		$this->oracle    = $oracle ?? new OracleService();
+	public function __construct( RateData $rate_data = null, OracleRepository $oracle_repository = null ) {
+		$this->rate_data         = $rate_data ?? new RateData();
+		$this->oracle_repository = $oracle_repository ?? ( new OracleRepositoryFactory() )->create();
 	}
 	private RateData $rate_data;
-	private OracleService $oracle;
+	private OracleRepository $oracle_repository;
 
 	public function convert( Price $price, string $to_symbol ): Price {
 		// 元の価格が0の場合は変換後の値も0
@@ -113,7 +115,25 @@ class PriceExchange {
 	 */
 	private function isConvertible( string $from_symbol, string $to_symbol ): bool {
 		// [FROM]/[TO]のレートまたは[TO]/[FROM]のOracleが存在する場合は変換可能
-		return ! empty( $this->oracle->connectableChainIDs( new SymbolPair( $from_symbol, $to_symbol ) ) ) ||
-			! empty( $this->oracle->connectableChainIDs( new SymbolPair( $to_symbol, $from_symbol ) ) );
+
+		$oracles = $this->oracle_repository->all();
+
+		$from_to_oracle = ( new OraclesFilter() )
+			->bySymbolPair( new SymbolPair( $from_symbol, $to_symbol ) )
+			->byConnectable()
+			->apply( $oracles );
+		if ( ! empty( $from_to_oracle ) ) {
+			return true; // [FROM]/[TO]のレートが存在する場合は変換可能
+		}
+
+		$to_from_oracle = ( new OraclesFilter() )
+			->bySymbolPair( new SymbolPair( $to_symbol, $from_symbol ) )
+			->byConnectable()
+			->apply( $oracles );
+		if ( ! empty( $to_from_oracle ) ) {
+			return true; // [TO]/[FROM]のレートが存在する場合は変換可能
+		}
+		// Oracleが存在しない場合は変換不可
+		return false;
 	}
 }
