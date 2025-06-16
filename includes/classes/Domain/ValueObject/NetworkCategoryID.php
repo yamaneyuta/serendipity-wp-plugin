@@ -6,9 +6,9 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 use Cornix\Serendipity\Core\Constant\NetworkCategoryIdValue;
 
 /**
- * ネットワークカテゴリを表すクラス
+ * ネットワークカテゴリIDを表すクラス
  */
-final class NetworkCategory {
+final class NetworkCategoryID {
 
 	public function __construct( int $network_category_id_value ) {
 		if ( $network_category_id_value < 1 || $network_category_id_value > 3 ) {
@@ -29,11 +29,11 @@ final class NetworkCategory {
 	 * ネットワークカテゴリID(数値)からインスタンスを取得します。
 	 * 引数がnullの場合はnullを返します。
 	 */
-	public static function from( ?int $network_category_id_value ): ?NetworkCategory {
+	public static function from( ?int $network_category_id_value ): ?NetworkCategoryID {
 		return is_null( $network_category_id_value ) ? null : new self( $network_category_id_value );
 	}
 
-	public function equals( NetworkCategory $other ): bool {
+	public function equals( NetworkCategoryID $other ): bool {
 		return $this->id === $other->id;
 	}
 

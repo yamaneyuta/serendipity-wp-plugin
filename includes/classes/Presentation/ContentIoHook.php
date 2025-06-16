@@ -163,7 +163,7 @@ class ContentIoHook {
 			( new SavePaidContent( $wpdb ) )->handle(
 				$post_id,
 				PaidContent::from( $paid_content_text ),
-				$attributes->sellingNetworkCategory(),
+				$attributes->sellingNetworkCategoryID(),
 				$attributes->sellingPrice()
 			);
 		}
@@ -231,7 +231,7 @@ class WidgetContentBuilder {
 	public function build( int $post_id ): string {
 		$post_data  = ( new PostService() )->get( $post_id );
 		$block_name = ( new BlockName() )->get();
-		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategory(), $post_data->sellingPrice() )->toArray();
+		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryID(), $post_data->sellingPrice() )->toArray();
 		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		$class_name = ( new ClassName() )->getBlock();
 		return "<!-- wp:{$block_name} {$attrs_str} -->\n"

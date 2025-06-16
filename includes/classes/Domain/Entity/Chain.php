@@ -5,30 +5,30 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 
 class Chain {
 	/**
 	 *
-	 * @param ChainID         $chain_id
-	 * @param string          $name
-	 * @param NetworkCategory $network_category
-	 * @param null|string     $rpc_url
-	 * @param int|string      $confirmations
-	 * @param null|string     $block_explorer_url
+	 * @param ChainID           $chain_id
+	 * @param string            $name
+	 * @param NetworkCategoryID $network_category_id
+	 * @param null|string       $rpc_url
+	 * @param int|string        $confirmations
+	 * @param null|string       $block_explorer_url
 	 */
-	protected function __construct( ChainID $chain_id, string $name, NetworkCategory $network_category, ?string $rpc_url, $confirmations, ?string $block_explorer_url ) {
-		$this->id                 = $chain_id;
-		$this->name               = $name;
-		$this->network_category   = $network_category;
-		$this->rpc_url            = $rpc_url;
-		$this->confirmations      = $confirmations;
-		$this->block_explorer_url = $block_explorer_url;
+	protected function __construct( ChainID $chain_id, string $name, NetworkCategoryID $network_category_id, ?string $rpc_url, $confirmations, ?string $block_explorer_url ) {
+		$this->id                  = $chain_id;
+		$this->name                = $name;
+		$this->network_category_id = $network_category_id;
+		$this->rpc_url             = $rpc_url;
+		$this->confirmations       = $confirmations;
+		$this->block_explorer_url  = $block_explorer_url;
 	}
 
 	private ChainID $id;
 	private string $name;
-	private NetworkCategory $network_category;
+	private NetworkCategoryID $network_category_id;
 	private ?string $rpc_url;
 	/** @var int|string */
 	private $confirmations;
@@ -75,7 +75,7 @@ class Chain {
 		return ! is_null( $this->rpc_url ) && Validate::isUrl( $this->rpc_url );
 	}
 
-	public function networkCategory(): NetworkCategory {
-		return $this->network_category;
+	public function networkCategoryID(): NetworkCategoryID {
+		return $this->network_category_id;
 	}
 }
