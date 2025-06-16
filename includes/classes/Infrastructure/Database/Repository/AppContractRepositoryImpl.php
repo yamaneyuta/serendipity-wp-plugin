@@ -27,7 +27,7 @@ class AppContractRepositoryImpl implements AppContractRepository {
 		assert( count( $records ) <= 1, '[68E05B97] should return at most one record.' );
 
 		return empty( $records ) ? null : AppContractImpl::fromTableRecord(
-			$this->chain_repository->getChain( $chain_id ),
+			$this->chain_repository->get( $chain_id ),
 			array_values( $records )[0]
 		);
 	}

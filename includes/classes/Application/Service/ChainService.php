@@ -18,7 +18,7 @@ class ChainService {
 	private ChainRepository $repository;
 
 	public function getChain( ChainID $chain_id ): ?Chain {
-		return $this->repository->getChain( $chain_id );
+		return $this->repository->get( $chain_id );
 	}
 
 	/**

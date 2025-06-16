@@ -20,7 +20,7 @@ class ChainRepository {
 	/**
 	 * 指定したチェーンIDに合致するチェーンを取得します。
 	 */
-	public function getChain( ChainID $chain_id ): ?Chain {
+	public function get( ChainID $chain_id ): ?Chain {
 		$chains          = $this->getAllChains();
 		$chains_filter   = ( new ChainsFilter() )->byChainID( $chain_id );
 		$filtered_chains = $chains_filter->apply( $chains );

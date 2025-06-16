@@ -51,7 +51,7 @@ class GetSafetyCrawledBlockNumber {
 	private wpdb $wpdb;
 
 	public function handle( ChainID $chain_id ): BlockNumber {
-		$chain  = ( new ChainRepositoryFactory( $this->wpdb ) )->create()->getChain( $chain_id );
+		$chain  = ( new ChainRepositoryFactory( $this->wpdb ) )->create()->get( $chain_id );
 		$client = ( new BlockchainClient( $chain->rpcURL() ) );
 
 		// 最新のブロック情報を取得
