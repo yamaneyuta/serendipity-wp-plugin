@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\AppContractTableRecord;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
 
 class AppContractImpl extends AppContract {
 
@@ -15,8 +16,8 @@ class AppContractImpl extends AppContract {
 		parent::__construct(
 			$chain,
 			Address::from( $record->addressValue() ),
-			BlockNumber::from( $record->activationBlockNumberValue() ),
-			BlockNumber::from( $record->crawledBlockNumberValue() )
+			BlockNumber::from( $record->crawledBlockNumberValue() ),
+			UnixTimestampFormat::fromMySQL( $record->crawledBlockNumberUpdatedAtValue() )
 		);
 	}
 

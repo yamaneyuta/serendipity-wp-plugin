@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\AppContractTableRecord;
+use Cornix\Serendipity\Core\Infrastructure\Format\UnixTimestampFormat;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 
 /**
@@ -22,7 +23,7 @@ class AppContractTable extends TableBase {
 	 */
 	public function all(): array {
 		$sql     = <<<SQL
-			SELECT `chain_id`, `address`, `activation_block_number`, `crawled_block_number`
+			SELECT `chain_id`, `address`, `crawled_block_number`, `crawled_block_number_updated_at`
 			FROM `{$this->tableName()}`
 		SQL;
 		$results = $this->wpdb()->get_results( $sql );
@@ -34,9 +35,8 @@ class AppContractTable extends TableBase {
 		return array_map(
 			function ( $record ) {
 				// 型をテーブル定義に一致させる
-				$record->chain_id                = (int) $record->chain_id;
-				$record->activation_block_number = null === $record->activation_block_number ? null : (int) $record->activation_block_number;
-				$record->crawled_block_number    = null === $record->crawled_block_number ? null : (int) $record->crawled_block_number;
+				$record->chain_id             = (int) $record->chain_id;
+				$record->crawled_block_number = null === $record->crawled_block_number ? null : (int) $record->crawled_block_number;
 
 				// AppContractTableRecordのインスタンスを返す
 				return new AppContractTableRecord( $record );
@@ -46,29 +46,30 @@ class AppContractTable extends TableBase {
 	}
 
 	public function save( AppContract $app_contract ): void {
-		$activation_block_number = $app_contract->activationBlockNumber() ?
-			$app_contract->activationBlockNumber()->int() :
-			null;
-		$crawled_block_number    = $app_contract->crawledBlockNumber() ?
+		$crawled_block_number_value      = $app_contract->crawledBlockNumber() ?
 			$app_contract->crawledBlockNumber()->int() :
 			null;
-		$sql                     = <<<SQL
+		$crawled_block_number_updated_at = $app_contract->crawledBlockNumberUpdatedAt() ?
+			UnixTimestampFormat::toMySQL( $app_contract->crawledBlockNumberUpdatedAt() ) :
+			null;
+
+		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}`
-				(`chain_id`, `address`, `activation_block_number`, `crawled_block_number`)
+				(`chain_id`, `address`, `crawled_block_number`, `crawled_block_number_updated_at`)
 			VALUES
-				(:chain_id, :address, :activation_block_number, :crawled_block_number)
+				(:chain_id, :address, :crawled_block_number, :crawled_block_number_updated_at)
 			ON DUPLICATE KEY UPDATE
 				`address` = VALUES(`address`),
-				`activation_block_number` = VALUES(`activation_block_number`),
-				`crawled_block_number` = VALUES(`crawled_block_number`)
+				`crawled_block_number` = VALUES(`crawled_block_number`),
+				`crawled_block_number_updated_at` = VALUES(`crawled_block_number_updated_at`)
 		SQL;
-		$sql                     = $this->namedPrepare(
+		$sql = $this->namedPrepare(
 			$sql,
 			array(
-				':chain_id'                => $app_contract->chain()->id()->value(),
-				':address'                 => $app_contract->address()->value(),
-				':activation_block_number' => $activation_block_number,
-				':crawled_block_number'    => $crawled_block_number,
+				':chain_id'                        => $app_contract->chain()->id()->value(),
+				':address'                         => $app_contract->address()->value(),
+				':crawled_block_number'            => $crawled_block_number_value,
+				':crawled_block_number_updated_at' => $crawled_block_number_updated_at,
 			)
 		);
 

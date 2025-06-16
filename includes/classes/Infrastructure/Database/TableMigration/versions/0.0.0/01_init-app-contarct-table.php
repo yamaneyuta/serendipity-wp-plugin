@@ -39,12 +39,12 @@ return new class() extends DatabaseMigrationBase {
 		// - 複数回呼び出された時に検知できるように`IF NOT EXISTS`は使用しない
 		$sql = <<<SQL
 			CREATE TABLE `{$this->table_name}` (
-				`created_at`               timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
-				`updated_at`               timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-				`chain_id`                 bigint        unsigned  NOT NULL,
-				`address`                  varchar(191)            NOT NULL,
-				`activation_block_number`  bigint        unsigned,
-				`crawled_block_number`     bigint        unsigned,
+				`created_at`                       timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				`updated_at`                       timestamp               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+				`chain_id`                         bigint        unsigned  NOT NULL,
+				`address`                          varchar(191)            NOT NULL,
+				`crawled_block_number`             bigint        unsigned,
+				`crawled_block_number_updated_at`  timestamp,
 				PRIMARY KEY (`chain_id`)
 			) {$charset};
 		SQL;
@@ -73,10 +73,10 @@ return new class() extends DatabaseMigrationBase {
 			$result = $this->wpdb()->insert(
 				$this->table_name,
 				array(
-					'chain_id'                => $chain_id,
-					'address'                 => $address,
-					'activation_block_number' => null,
-					'crawled_block_number'    => null,
+					'chain_id'                        => $chain_id,
+					'address'                         => $address,
+					'crawled_block_number'            => null,
+					'crawled_block_number_updated_at' => null,
 				)
 			);
 			if ( 1 !== $result ) {
