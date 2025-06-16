@@ -30,7 +30,7 @@ class GetPayableTokens {
 
 		// 投稿の販売ネットワークを取得
 		$post                     = $post_repository->get( $post_id );
-		$selling_network_category = $post->sellingNetworkCategory();
+		$selling_network_category = $post->sellingNetworkCategoryID();
 		if ( is_null( $selling_network_category ) ) {
 			Logger::warn( '[666BFD5D] Selling network category is null for post ID: ' . $post_id );
 			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
@@ -38,7 +38,7 @@ class GetPayableTokens {
 
 		// 投稿に設定されている販売ネットワークカテゴリかつ接続可能なチェーン一覧を取得
 		$payable_chains = ( new ChainsFilter() )
-			->byNetworkCategory( $selling_network_category )
+			->byNetworkCategoryID( $selling_network_category )
 			->byConnectable()
 			->apply( $chain_repository->getAllChains() );
 

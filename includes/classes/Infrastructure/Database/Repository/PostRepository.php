@@ -40,7 +40,7 @@ class PostRepository {
 			$this->paid_content_table->set(
 				$post->id(),
 				$post->paidContent(),
-				$post->sellingNetworkCategory(),
+				$post->sellingNetworkCategoryID(),
 				$post->sellingPrice()
 			);
 		}

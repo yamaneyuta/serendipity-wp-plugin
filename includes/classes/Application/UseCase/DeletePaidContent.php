@@ -20,7 +20,7 @@ class DeletePaidContent {
 
 		// 有料記事の内容を削除
 		$post->setPaidContent( null );
-		$post->setSellingNetworkCategory( null );
+		$post->setSellingNetworkCategoryID( null );
 		$post->setSellingPrice( null );
 
 		$post_repository->save( $post );

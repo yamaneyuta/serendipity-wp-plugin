@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 
 class NetworkCategoryResolver extends ResolverBase {
 
@@ -17,21 +17,16 @@ class NetworkCategoryResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$network_category = NetworkCategory::from( $args['networkCategoryID'] ?? null );
+		$network_category_id = new NetworkCategoryID( $args['networkCategoryID'] );
 
-		if ( is_null( $network_category ) ) {
-			// ネットワークカテゴリIDの指定は必須
-			throw new \InvalidArgumentException( '[FE3B9036] Invalid network category ID.' );
-		}
-
-		$sellable_symbols_callback = function () use ( $network_category ) {
+		$sellable_symbols_callback = function () use ( $network_category_id ) {
 			Validate::checkHasEditableRole();  // 投稿編集者権限以上が必要
-			return ( new SellableSymbols() )->get( $network_category );
+			return ( new SellableSymbols() )->get( $network_category_id );
 		};
 
 		// ネットワークカテゴリで絞り込んだチェーン一覧を取得
 		$chain_service = ( new ChainServiceFactory() )->create();
-		$chains_filter = ( new ChainsFilter() )->byNetworkCategory( $network_category );
+		$chains_filter = ( new ChainsFilter() )->byNetworkCategoryID( $network_category_id );
 		$chains        = $chains_filter->apply( $chain_service->getAllChains() );
 
 		$chains_callback = function () use ( $root_value, $chains ) {
@@ -44,7 +39,7 @@ class NetworkCategoryResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'              => $network_category->id(),
+			'id'              => $network_category_id->value(),
 			'chains'          => $chains_callback,
 			'sellableSymbols' => $sellable_symbols_callback,
 		);
