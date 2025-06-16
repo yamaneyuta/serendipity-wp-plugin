@@ -8,7 +8,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 
 class AppContract {
-	protected function __construct( Chain $chain, Address $address, ?BlockNumber $activation_block_number = null, ?BlockNumber $crawled_block_number = null ) {
+	protected function __construct( Chain $chain, Address $address, ?BlockNumber $activation_block_number, ?BlockNumber $crawled_block_number ) {
 		$this->chain                   = $chain;
 		$this->address                 = $address;
 		$this->activation_block_number = $activation_block_number;
@@ -31,5 +31,8 @@ class AppContract {
 	}
 	public function crawledBlockNumber(): ?BlockNumber {
 		return $this->crawled_block_number;
+	}
+	public function setCrawledBlockNumber( BlockNumber $crawled_block_number ): void {
+		$this->crawled_block_number = $crawled_block_number;
 	}
 }

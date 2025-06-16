@@ -10,6 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
+use stdClass;
 use Web3\Eth;
 use Web3\Formatters\BigNumberFormatter;
 use Web3\Methods\EthMethod;
@@ -77,6 +78,36 @@ class BlockchainClient {
 	}
 
 	/**
+	 * @param string|BlockNumber $block_number_or_tag
+	 */
+	public function getBlockByNumber( $block_number_or_tag ): GetBlockByNumberResult {
+		/** @var null|GetBlockByNumberResult */
+		$get_block_by_number_result = null;
+		$this->retryer->execute(
+			function () use ( $block_number_or_tag, &$get_block_by_number_result ) {
+				// $block_number_or_tagがBlockNumberインスタンスの場合は16進数に変換
+				if ( $block_number_or_tag instanceof BlockNumber ) {
+					$block_number_or_tag = $block_number_or_tag->hex();
+				} elseif ( ! is_string( $block_number_or_tag ) ) {
+					throw new \InvalidArgumentException( '[D696B5F0] $block_number_or_tag must be a string or BlockNumber instance.' );
+				}
+
+				$this->eth()->getBlockByNumber(
+					$block_number_or_tag,
+					false, // false: トランザクションの詳細を取得しない
+					function ( $err, $res ) use ( &$get_block_by_number_result ) {
+						if ( $err ) {
+							throw $err;
+						}
+						$get_block_by_number_result = new GetBlockByNumberResult( $res );
+					}
+				);
+			}
+		);
+		return $get_block_by_number_result;
+	}
+
+	/**
 	 * ブロック番号を取得します。
 	 */
 	public function getBlockNumber( string $tag = 'latest' ): BlockNumber {
@@ -115,6 +146,7 @@ class BlockchainClient {
 	 * eth_getBlockByNumberの呼び出しを行い、そのブロック番号を返します
 	 *
 	 * @param BlockNumber|string $quantity_or_tag
+	 * @deprecated
 	 */
 	private function getBlockNumberByTag( $quantity_or_tag ): BlockNumber {
 		// @see https://docs.chainstack.com/reference/ethereum-getblockbynumber#parameters
@@ -177,6 +209,21 @@ class BlockchainClient {
 				$this->eth()->getLogs( ...$args );
 			}
 		);
+	}
+}
+
+class GetBlockByNumberResult {
+	public function __construct( stdClass $get_block_by_number_response ) {
+		$this->response = $get_block_by_number_response;
+	}
+	private stdClass $response;
+
+	public function blockNumber(): BlockNumber {
+		return BlockNumber::from( $this->response->number );
+	}
+
+	public function timestamp(): int {
+		return hexdec( $this->response->timestamp ); // タイムスタンプはUNIX時間
 	}
 }
 

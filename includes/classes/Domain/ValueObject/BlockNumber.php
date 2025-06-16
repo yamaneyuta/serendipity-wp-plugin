@@ -19,10 +19,12 @@ class BlockNumber {
 	private BigInteger $block_number;
 
 	/**
-	 * @param int|string|BigInteger $block_number
+	 * @param null|int|string|BigInteger $block_number
 	 */
-	public static function from( $block_number ): BlockNumber {
-		if ( is_int( $block_number ) ) {
+	public static function from( $block_number ): ?BlockNumber {
+		if ( null === $block_number ) {
+			return null;
+		} elseif ( is_int( $block_number ) ) {
 			return new BlockNumber( new BigInteger( $block_number, 10 ) );
 		} elseif ( is_string( $block_number ) && Validate::isHex( $block_number ) ) {
 			return new BlockNumber( new BigInteger( $block_number, 16 ) );

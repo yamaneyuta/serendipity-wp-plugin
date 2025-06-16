@@ -12,8 +12,8 @@ class AppContractTableRecord extends TableRecordBase {
 
 	protected int $chain_id;
 	protected string $address;
-	protected int $activation_block_number;
-	protected int $crawled_block_number;
+	protected ?int $activation_block_number;
+	protected ?int $crawled_block_number;
 
 	public function chainIdValue(): int {
 		return $this->chain_id;
@@ -23,11 +23,11 @@ class AppContractTableRecord extends TableRecordBase {
 		return $this->address;
 	}
 
-	public function activationBlockNumberValue(): int {
+	public function activationBlockNumberValue(): ?int {
 		return $this->activation_block_number;
 	}
 
-	public function crawledBlockNumberValue(): int {
+	public function crawledBlockNumberValue(): ?int {
 		return $this->crawled_block_number;
 	}
 }

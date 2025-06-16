@@ -29,4 +29,8 @@ class AppContractRepository {
 			array_values( $records )[0]
 		);
 	}
+
+	public function save( AppContract $app_contract ): void {
+		$this->app_contract_table->save( $app_contract );
+	}
 }

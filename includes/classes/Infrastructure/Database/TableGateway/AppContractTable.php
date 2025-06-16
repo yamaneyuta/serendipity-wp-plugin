@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Repository\Name\TableName;
 
 /**
  * Appコントラクトの情報を記録するテーブル
+ * ※ `crawled_block_number`の初期化は invoice の発行時に行われます。
  */
 class AppContractTable extends TableBase {
 
@@ -34,8 +35,8 @@ class AppContractTable extends TableBase {
 			function ( $record ) {
 				// 型をテーブル定義に一致させる
 				$record->chain_id                = (int) $record->chain_id;
-				$record->activation_block_number = (int) $record->activation_block_number;
-				$record->crawled_block_number    = (int) $record->crawled_block_number;
+				$record->activation_block_number = null === $record->activation_block_number ? null : (int) $record->activation_block_number;
+				$record->crawled_block_number    = null === $record->crawled_block_number ? null : (int) $record->crawled_block_number;
 
 				// AppContractTableRecordのインスタンスを返す
 				return new AppContractTableRecord( $record );
@@ -45,7 +46,13 @@ class AppContractTable extends TableBase {
 	}
 
 	public function save( AppContract $app_contract ): void {
-		$sql = <<<SQL
+		$activation_block_number = $app_contract->activationBlockNumber() ?
+			$app_contract->activationBlockNumber()->int() :
+			null;
+		$crawled_block_number    = $app_contract->crawledBlockNumber() ?
+			$app_contract->crawledBlockNumber()->int() :
+			null;
+		$sql                     = <<<SQL
 			INSERT INTO `{$this->tableName()}`
 				(`chain_id`, `address`, `activation_block_number`, `crawled_block_number`)
 			VALUES
@@ -55,13 +62,13 @@ class AppContractTable extends TableBase {
 				`activation_block_number` = VALUES(`activation_block_number`),
 				`crawled_block_number` = VALUES(`crawled_block_number`)
 		SQL;
-		$sql = $this->namedPrepare(
+		$sql                     = $this->namedPrepare(
 			$sql,
 			array(
-				':chain_id'                => $app_contract->chain()->id(),
+				':chain_id'                => $app_contract->chain()->id()->value(),
 				':address'                 => $app_contract->address()->value(),
-				':activation_block_number' => $app_contract->activationBlockNumber(),
-				':crawled_block_number'    => $app_contract->crawledBlockNumber(),
+				':activation_block_number' => $activation_block_number,
+				':crawled_block_number'    => $crawled_block_number,
 			)
 		);
 

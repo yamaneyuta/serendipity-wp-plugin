@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
-use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
+use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\SingInvoice;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
@@ -35,17 +34,12 @@ class IssueInvoiceResolver extends ResolverBase {
 			$invoice = ( new IssueInvoice( $wpdb ) )->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
 			// 発行したinvoiceに署名を行う
 			$signed_data = ( new SingInvoice( $wpdb ) )->handle( $invoice );
+			// クロール済みブロック番号を初期化
+			( new InitCrawledBlockNumber( $wpdb ) )->handle( $chain_ID );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );
 			throw $e;
-		}
-
-		// 最後に、有効になったブロック番号が設定されていない場合は設定
-		if ( is_null( ( new BlockNumberActiveSince() )->get( $chain_ID ) ) ) {
-			$blockchain_client = ( new BlockchainClientFactory() )->create( $chain_ID );
-			$block_number      = $blockchain_client->getBlockNumber(); // 現在の最新ブロック番号
-			( new BlockNumberActiveSince() )->set( $chain_ID, $block_number );
 		}
 
 		return array(
