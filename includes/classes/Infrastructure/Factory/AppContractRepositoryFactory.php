@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Factory;
 
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTable;
 
 class AppContractRepositoryFactory {
@@ -16,6 +17,6 @@ class AppContractRepositoryFactory {
 	public function create(): AppContractRepository {
 		$chain_repository   = ( new ChainRepositoryFactory( $this->wpdb ) )->create();
 		$app_contract_table = new AppContractTable( $this->wpdb );
-		return new AppContractRepository( $app_contract_table, $chain_repository );
+		return new AppContractRepositoryImpl( $app_contract_table, $chain_repository );
 	}
 }

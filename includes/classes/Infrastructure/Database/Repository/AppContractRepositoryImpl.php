@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
+use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\AppContractImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
-class AppContractRepository {
+class AppContractRepositoryImpl implements AppContractRepository {
 	public function __construct( AppContractTable $app_contract_table, ChainRepository $chain_repository ) {
 		$this->app_contract_table = $app_contract_table;
 		$this->chain_repository   = $chain_repository;
@@ -16,6 +17,7 @@ class AppContractRepository {
 	private AppContractTable $app_contract_table;
 	private ChainRepository $chain_repository;
 
+	/** @inheritdoc */
 	public function get( ChainID $chain_id ): ?AppContract {
 		$records = $this->app_contract_table->all();
 		$records = array_filter(
@@ -30,6 +32,7 @@ class AppContractRepository {
 		);
 	}
 
+	/** @inheritdoc */
 	public function save( AppContract $app_contract ): void {
 		$this->app_contract_table->save( $app_contract );
 	}
