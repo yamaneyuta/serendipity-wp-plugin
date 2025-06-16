@@ -149,13 +149,15 @@ class ContentIoHook {
 			// 投稿内容が未保存の場合は何もしない(ゴミ箱に移動された時などが該当)
 			return;
 		}
-		global $wpdb;
+		/** @var \wpdb $wpdb */
+		$wpdb = $GLOBALS['wpdb'];
+		$post_repository = ( new PostRepositoryFactory( $wpdb ) )->create();
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
 		$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
 		if ( is_null( $attributes ) ) {
 			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
-			( new DeletePaidContent( $wpdb ) )->handle( $post_id );
+			( new DeletePaidContent( $post_repository ) )->handle( $post_id );
 		} else {
 			$paid_content_text = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
 			assert( ! is_null( $paid_content_text ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );

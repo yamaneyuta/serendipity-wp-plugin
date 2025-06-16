@@ -3,26 +3,23 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
-use wpdb;
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 
 class DeletePaidContent {
-	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
+	public function __construct( PostRepository $post_repository ) {
+		$this->post_repository = $post_repository;
 	}
 
-	private wpdb $wpdb;
+	private PostRepository $post_repository;
 
 	public function handle( int $post_id ): void {
-		$post_repository = ( new PostRepositoryFactory( $this->wpdb ) )->create();
-
-		$post = $post_repository->get( $post_id );
+		$post = $this->post_repository->get( $post_id );
 
 		// 有料記事の内容を削除
 		$post->setPaidContent( null );
 		$post->setSellingNetworkCategoryID( null );
 		$post->setSellingPrice( null );
 
-		$post_repository->save( $post );
+		$this->post_repository->save( $post );
 	}
 }
