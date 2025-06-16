@@ -9,7 +9,7 @@ use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
 use Cornix\Serendipity\Core\Lib\Transient\TransientFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\OracleClient;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 

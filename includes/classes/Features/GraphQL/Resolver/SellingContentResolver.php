@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 
 class SellingContentResolver extends ResolverBase {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Domain\Entity\Signer;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;

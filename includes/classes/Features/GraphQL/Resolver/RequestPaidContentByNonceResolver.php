@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Application\Factory\InvoiceRepositoryFactory;
-use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
-use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\InvoiceRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;

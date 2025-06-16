@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Application\Factory;
+namespace Cornix\Serendipity\Core\Infrastructure\Factory;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\InvoiceTable;

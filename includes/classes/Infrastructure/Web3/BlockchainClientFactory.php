@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class BlockchainClientFactory {

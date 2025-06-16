@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Infrastructure\Database\Service\DatabaseMigrationService;
-use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 
 // ■ 方針:
 // 署名用ウォレットを再作成し、署名用ウォレットに紐づく情報をすべて削除する

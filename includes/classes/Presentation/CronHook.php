@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
-use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Lib\Crawler\AppContractCrawler;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;

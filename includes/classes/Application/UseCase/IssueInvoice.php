@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Factory\InvoiceRepositoryFactory;
-use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
-use Cornix\Serendipity\Core\Application\Factory\TokenRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\InvoiceRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;

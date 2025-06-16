@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\version
 
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
-use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 
 return new class() extends DatabaseMigrationBase {
 

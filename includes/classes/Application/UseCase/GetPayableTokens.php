@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Factory\ChainRepositoryFactory;
-use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
-use Cornix\Serendipity\Core\Application\Factory\TokenRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;

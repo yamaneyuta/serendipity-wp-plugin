@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation;
 
-use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;

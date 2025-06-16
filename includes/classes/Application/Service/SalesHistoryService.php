@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
-use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use wpdb;
 
 /**

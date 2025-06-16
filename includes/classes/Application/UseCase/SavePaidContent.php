@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;

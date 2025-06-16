@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Factory\ServerSignerServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;

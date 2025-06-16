@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use wpdb;

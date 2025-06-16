@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Application\Factory\PostRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
 
 class VerifiableChainsResolver extends ResolverBase {
 
