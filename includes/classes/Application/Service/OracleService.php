@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\OracleRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\OracleRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
@@ -12,7 +13,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 class OracleService {
 
 	public function __construct() {
-		$this->oracle_repository = new OracleRepository();
+		$this->oracle_repository = new OracleRepositoryImpl();
 	}
 	private OracleRepository $oracle_repository;
 
