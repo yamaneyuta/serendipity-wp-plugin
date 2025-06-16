@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\AppContractImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\AppContractTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;

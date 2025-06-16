@@ -6,7 +6,7 @@ use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Domain\Entity\Signer;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
@@ -19,7 +19,7 @@ class HardhatAppContractClient extends AppContractClient {
 	}
 
 	public static function fromChainID( ChainID $chain_ID ): self {
-		assert( ( new ChainRepository( new ChainTable( $GLOBALS['wpdb'] ) ) )->get( $chain_ID )->networkCategoryID()->equals( NetworkCategoryID::privatenet() ) );
+		assert( ( new ChainRepositoryImpl( new ChainTable( $GLOBALS['wpdb'] ) ) )->get( $chain_ID )->networkCategoryID()->equals( NetworkCategoryID::privatenet() ) );
 		$app_contract = ( new AppContractRepositoryFactory() )->create()->get( $chain_ID );
 		$app_abi      = new HardhatAppContractABI();
 		return new self( $app_contract, $app_abi );
