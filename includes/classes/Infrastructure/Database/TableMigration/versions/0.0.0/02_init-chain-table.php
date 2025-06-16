@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\versions\_0_0_1;
 
 use Cornix\Serendipity\Core\Constant\ChainIdValue;
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
+use Cornix\Serendipity\Core\Constant\NetworkCategoryIdValue;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\Config\InitialBlockExplorerURL;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableMigration\DatabaseMigrationBase;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
@@ -87,14 +87,14 @@ return new class() extends DatabaseMigrationBase {
 		};
 
 		$records = array(
-			new $Record( ChainIdValue::ETH_MAINNET, 'Ethereum Mainnet', NetworkCategoryID::MAINNET, null, '1', InitialBlockExplorerURL::ETH_MAINNET ),
-			new $Record( ChainIdValue::SEPOLIA, 'Sepolia', NetworkCategoryID::TESTNET, null, '1', InitialBlockExplorerURL::SEPOLIA ),
-			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', NetworkCategoryID::TESTNET, null, '1', InitialBlockExplorerURL::SONEIUM_MINATO ),
+			new $Record( ChainIdValue::ETH_MAINNET, 'Ethereum Mainnet', NetworkCategoryIdValue::MAINNET, null, '1', InitialBlockExplorerURL::ETH_MAINNET ),
+			new $Record( ChainIdValue::SEPOLIA, 'Sepolia', NetworkCategoryIdValue::TESTNET, null, '1', InitialBlockExplorerURL::SEPOLIA ),
+			new $Record( ChainIdValue::SONEIUM_MINATO, 'Soneium Testnet Minato', NetworkCategoryIdValue::TESTNET, null, '1', InitialBlockExplorerURL::SONEIUM_MINATO ),
 		);
 		// 開発モード時はプライベートネットのチェーン情報も登録
 		if ( $this->environment()->isDevelopmentMode() ) {
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', NetworkCategoryID::PRIVATENET, $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ), '1', InitialBlockExplorerURL::PRIVATENET_L1 );
-			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', NetworkCategoryID::PRIVATENET, $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ), '1', InitialBlockExplorerURL::PRIVATENET_L2 );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L1, 'Privatenet1', NetworkCategoryIdValue::PRIVATENET, $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L1 ), '1', InitialBlockExplorerURL::PRIVATENET_L1 );
+			$records[] = new $Record( ChainIdValue::PRIVATENET_L2, 'Privatenet2', NetworkCategoryIdValue::PRIVATENET, $this->getPrivatenetRpcURL( ChainIdValue::PRIVATENET_L2 ), '1', InitialBlockExplorerURL::PRIVATENET_L2 );
 		}
 
 		foreach ( $records as $record ) {

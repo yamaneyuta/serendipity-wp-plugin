@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Constant;
 
-final class NetworkCategoryID {
+final class NetworkCategoryIdValue {
 	/** メインネット(Ethereumメインネット、Polygonメインネット等) */
 	public const MAINNET = 1;
 	/** テストネット(Ethereum Sepolia等) */

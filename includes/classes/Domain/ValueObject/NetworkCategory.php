@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
+use Cornix\Serendipity\Core\Constant\NetworkCategoryIdValue;
 
 /**
  * ネットワークカテゴリを表すクラス
@@ -39,12 +39,12 @@ final class NetworkCategory {
 
 
 	public static function mainnet(): self {
-		return new self( NetworkCategoryID::MAINNET );
+		return new self( NetworkCategoryIdValue::MAINNET );
 	}
 	public static function testnet(): self {
-		return new self( NetworkCategoryID::TESTNET );
+		return new self( NetworkCategoryIdValue::TESTNET );
 	}
 	public static function privatenet(): self {
-		return new self( NetworkCategoryID::PRIVATENET );
+		return new self( NetworkCategoryIdValue::PRIVATENET );
 	}
 }
