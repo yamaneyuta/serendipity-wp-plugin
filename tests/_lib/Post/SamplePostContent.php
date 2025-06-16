@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 use Cornix\Serendipity\Core\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
@@ -25,7 +24,8 @@ class SamplePostContent {
 	 * DBに格納される投稿内容のサンプルを取得します。
 	 */
 	public function get( ?NetworkCategory $selling_network_category = null, ?Price $selling_price = null ): string {
-		$selling_network_category_id = $selling_network_category ? $selling_network_category->id() : NetworkCategoryID::PRIVATENET;
+		$selling_network_category    = $selling_network_category ?? NetworkCategory::privatenet(); // 指定されなかった場合はプライベートネット
+		$selling_network_category_id = $selling_network_category->id();
 		$selling_amount_hex          = $selling_price ? $selling_price->amountHex() : '0x3e8'; // 指定されなかった場合は3e8(=1000)
 		$selling_decimals            = $selling_price ? $selling_price->decimals() : 0; // 指定されなかった場合は0(整数)
 		$selling_symbol              = $selling_price ? $selling_price->symbol() : 'JPY'; // 指定されなかった場合はJPY

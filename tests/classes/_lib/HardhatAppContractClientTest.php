@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
@@ -37,7 +36,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $terms_service->getSignedSellerTerms()->terms()->message() ), 256 );
 
 		// 販売価格1,000円で投稿を作成
-		$selling_network_category = NetworkCategory::from( NetworkCategoryID::PRIVATENET );
+		$selling_network_category = NetworkCategory::privatenet();
 		$selling_price            = new Price( HexFormat::toHex( 1000 ), 0, 'JPY' );
 		$post_ID                  = $this->getUser( UserType::CONTRIBUTOR )->createPost(
 			array(

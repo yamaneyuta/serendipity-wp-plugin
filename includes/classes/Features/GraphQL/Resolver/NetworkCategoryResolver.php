@@ -17,12 +17,7 @@ class NetworkCategoryResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$network_category = NetworkCategory::from( $args['networkCategoryID'] ?? null );
-
-		if ( is_null( $network_category ) ) {
-			// ネットワークカテゴリIDの指定は必須
-			throw new \InvalidArgumentException( '[FE3B9036] Invalid network category ID.' );
-		}
+		$network_category = new NetworkCategory( $args['networkCategoryID'] );
 
 		$sellable_symbols_callback = function () use ( $network_category ) {
 			Validate::checkHasEditableRole();  // 投稿編集者権限以上が必要
