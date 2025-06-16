@@ -54,7 +54,7 @@ class IssueInvoice {
 		assert( null === $invoice_repository->get( $invoice->id() ), '[A9E90E49] Duplicate invoice ID detected.' );
 
 		// 請求書情報を保存
-		$invoice_repository->add( $invoice );
+		$invoice_repository->save( $invoice );
 
 		return $invoice;
 	}

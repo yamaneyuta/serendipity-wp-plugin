@@ -16,7 +16,7 @@ class InvoiceRepository {
 
 	private InvoiceTable $invoice_table;
 
-	public function add( Invoice $invoice ): void {
+	public function save( Invoice $invoice ): void {
 		// 請求書情報を保存
 		$this->invoice_table->insert( $invoice );
 	}
