@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\Factory;
 
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\PostRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
 
 class PostRepositoryFactory {
@@ -15,7 +16,7 @@ class PostRepositoryFactory {
 
 	public function create(): PostRepository {
 		$table      = new PaidContentTable( $this->wpdb );
-		$repository = new PostRepository( $table );
+		$repository = new PostRepositoryImpl( $table );
 		return $repository;
 	}
 }
