@@ -20,6 +20,7 @@ use Web3\Methods\EthMethod;
 // Ethを継承してリトライを行うクラスを作成する方法は、名前空間やクラス名がEthクラス内部で使用されておりややこしくなるため不採用
 // ここでは各メソッドでリトライオブジェクトを使用するように実装している
 
+/** @deprecated Use BlockchainClientService */
 class BlockchainClient {
 	public function __construct( string $rpc_url ) {
 		$this->rpc_url = $rpc_url;
