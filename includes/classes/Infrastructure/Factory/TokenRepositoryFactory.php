@@ -8,8 +8,8 @@ use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryIm
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
 
 class TokenRepositoryFactory {
-	public function __construct( \wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
+	public function __construct( \wpdb $wpdb = null ) {
+		$this->wpdb = $wpdb ?? $GLOBALS['wpdb'];
 	}
 
 	private \wpdb $wpdb;
