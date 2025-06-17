@@ -3,33 +3,32 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use wpdb;
 
 class GetPayableTokens {
-	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
+	public function __construct( PostRepository $post_repository, ChainRepository $chain_repository, TokenRepository $token_repository ) {
+		$this->post_repository  = $post_repository;
+		$this->chain_repository = $chain_repository;
+		$this->token_repository = $token_repository;
 	}
 
-	private wpdb $wpdb;
+	private PostRepository $post_repository;
+	private ChainRepository $chain_repository;
+	private TokenRepository $token_repository;
 
 	/**
 	 *
 	 * @return Token[]
 	 */
 	public function handle( int $post_id ): array {
-		$post_repository  = ( new PostRepositoryFactory( $this->wpdb ) )->create();
-		$chain_repository = ( new ChainRepositoryFactory( $this->wpdb ) )->create();
-		$token_repository = ( new TokenRepositoryFactory( $this->wpdb ) )->create();
-
 		// 投稿の販売ネットワークを取得
-		$post                     = $post_repository->get( $post_id );
+		$post                     = $this->post_repository->get( $post_id );
 		$selling_network_category = $post->sellingNetworkCategoryID();
 		if ( is_null( $selling_network_category ) ) {
 			Logger::warn( '[666BFD5D] Selling network category is null for post ID: ' . $post_id );
@@ -40,13 +39,13 @@ class GetPayableTokens {
 		$payable_chains = ( new ChainsFilter() )
 			->byNetworkCategoryID( $selling_network_category )
 			->byConnectable()
-			->apply( $chain_repository->all() );
+			->apply( $this->chain_repository->all() );
 
 		/** @var Token[] */
 		$result = array();
 
 		// 各チェーンに対して支払い可能なトークンを取得
-		$all_tokens = $token_repository->all();
+		$all_tokens = $this->token_repository->all();
 		foreach ( $payable_chains as $chain ) {
 			$payable_tokens = ( new TokensFilter() )
 				->byChainID( $chain->id() )

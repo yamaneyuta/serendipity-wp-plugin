@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\UseCase\GetPayableTokens;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
 
 class PostResolver extends ResolverBase {
 
@@ -20,6 +23,10 @@ class PostResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		$payable_tokens_callback = function () use ( $root_value, $post_ID ) {
+			$post_repository  = ( new PostRepositoryFactory() )->create();
+			$chain_repository = ( new ChainRepositoryFactory() )->create();
+			$token_repository = ( new TokenRepositoryFactory() )->create();
+
 			return array_map(
 				fn( $token ) => $root_value['token'](
 					$root_value,
@@ -28,7 +35,7 @@ class PostResolver extends ResolverBase {
 						'address' => $token->address()->value(),
 					)
 				),
-				( new GetPayableTokens( $GLOBALS['wpdb'] ) )->handle( $post_ID )
+				( new GetPayableTokens( $post_repository, $chain_repository, $token_repository ) )->handle( $post_ID )
 			);
 		};
 
