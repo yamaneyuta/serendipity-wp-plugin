@@ -3,13 +3,19 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
 
 class SetRpcUrlResolver extends ResolverBase {
+
+	public function __construct( ChainRepository $chain_repository ) {
+		$this->chain_repository = $chain_repository;
+	}
+
+	private ChainRepository $chain_repository;
 
 	/**
 	 * #[\Override]
@@ -39,10 +45,9 @@ class SetRpcUrlResolver extends ResolverBase {
 			$wpdb->query( 'START TRANSACTION' );
 
 			// リポジトリからチェーン情報を取得、RPC URLを設定して保存
-			$chain_repository = ( new ChainRepositoryFactory() )->create();
-			$chain            = $chain_repository->get( $chain_ID );
+			$chain = $this->chain_repository->get( $chain_ID );
 			$chain->setRpcURL( $rpc_url );
-			$chain_repository->save( $chain );
+			$this->chain_repository->save( $chain );
 
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {

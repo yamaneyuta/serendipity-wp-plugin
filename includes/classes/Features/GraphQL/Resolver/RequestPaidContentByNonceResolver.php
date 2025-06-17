@@ -3,20 +3,40 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Application\Service\ChainService;
+use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
+use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\InvoiceRepositoryFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\Presentation\Factory\BlockchainClientServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockchainClientServiceImpl;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
+
+	public function __construct(
+		AppContractRepository $app_contract_repository,
+		ChainService $chain_service,
+		InvoiceRepository $invoice_repository,
+		PostRepository $post_repository,
+		ServerSignerService $server_signer_service
+	) {
+		$this->app_contract_repository = $app_contract_repository;
+		$this->chain_service           = $chain_service;
+		$this->invoice_repository      = $invoice_repository;
+		$this->post_repository         = $post_repository;
+		$this->server_signer_service   = $server_signer_service;
+	}
+
+	private AppContractRepository $app_contract_repository;
+	private ChainService $chain_service;
+	private InvoiceRepository $invoice_repository;
+	private PostRepository $post_repository;
+	private ServerSignerService $server_signer_service;
 
 	// ここの定数は、GraphQLのエラーコードと一致させること
 	private const ERROR_CODE_INVALID_NONCE           = 'INVALID_NONCE';
@@ -45,7 +65,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 			'errorCode' => $error_code,
 		);
 
-		$invoice = ( new InvoiceRepositoryFactory() )->create()->get( $invoice_ID );
+		$invoice = $this->invoice_repository->get( $invoice_ID );
 		if ( is_null( $invoice ) ) {
 			// 通常、ここは通らない
 			throw new \Exception( '[D2AAA3B6] Invoice data not found. invoiceID: ' . $invoice_ID_hex );
@@ -58,7 +78,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		$post_ID          = $invoice->postID();
-		$chain            = ( new ChainServiceFactory() )->create()->getChain( $invoice->chainID() );
+		$chain            = $this->chain_service->getChain( $invoice->chainID() );
 		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
@@ -71,9 +91,9 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// ブロックチェーンに問い合わせる
-		$app_contract   = ( new AppContractRepositoryFactory() )->create()->get( $chain->id() );
+		$app_contract   = $this->app_contract_repository->get( $chain->id() );
 		$app            = new AppContractClient( $app_contract );
-		$server_signer  = ( new ServerSignerServiceFactory() )->create()->getServerSigner();
+		$server_signer  = $this->server_signer_service->getServerSigner();
 		$payment_status = $app->getPaywallStatus( $server_signer->address(), $post_ID, $consumer_address );
 
 		if ( ! $payment_status->isUnlocked() ) {
@@ -86,7 +106,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		}
 
 		// 有料部分のコンテンツを取得
-		$paid_content = ( new PostRepositoryFactory() )->create()->get( $post_ID )->paidContent();
+		$paid_content = $this->post_repository->get( $post_ID )->paidContent();
 		assert( ! is_null( $paid_content ), '[391C0A77] Paid content should not be null.' );
 
 		return array(
@@ -100,12 +120,12 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( ChainID $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$chain         = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
+		$chain         = $this->chain_service->getChain( $chain_ID );
 		$confirmations = $chain->confirmations();
 
 		if ( is_int( $confirmations ) ) {
 			// 最新のブロック番号を取得
-			$latest_block        = ( new BlockchainClientServiceFactory() )->create( $chain_ID )->getBlockByNumber( BlockTag::latest() );
+			$latest_block        = ( new BlockchainClientServiceImpl( $chain ) )->getBlockByNumber( BlockTag::latest() );
 			$latest_block_number = $latest_block->blockNumber();
 			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
 			$reference_block = $latest_block_number->sub( max( $confirmations - 1, 0 ) );

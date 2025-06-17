@@ -3,13 +3,18 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Repository\SellableSymbols;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 
 class NetworkCategoryResolver extends ResolverBase {
+
+	public function __construct( ChainService $chain_service ) {
+		$this->chain_service = $chain_service;
+	}
+	private ChainService $chain_service;
 
 	/**
 	 * #[\Override]
@@ -25,9 +30,8 @@ class NetworkCategoryResolver extends ResolverBase {
 		};
 
 		// ネットワークカテゴリで絞り込んだチェーン一覧を取得
-		$chain_service = ( new ChainServiceFactory() )->create();
 		$chains_filter = ( new ChainsFilter() )->byNetworkCategoryID( $network_category_id );
-		$chains        = $chains_filter->apply( $chain_service->getAllChains() );
+		$chains        = $chains_filter->apply( $this->chain_service->getAllChains() );
 
 		$chains_callback = function () use ( $root_value, $chains ) {
 			return array_map(

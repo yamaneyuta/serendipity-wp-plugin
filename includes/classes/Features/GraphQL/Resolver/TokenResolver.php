@@ -3,11 +3,17 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class TokenResolver extends ResolverBase {
+
+	public function __construct( TokenRepository $token_repository ) {
+		$this->token_repository = $token_repository;
+	}
+
+	private TokenRepository $token_repository;
 
 	/**
 	 * #[\Override]
@@ -22,7 +28,7 @@ class TokenResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[C0B26B53] Invalid address provided.' );
 		}
 
-		$token = ( new TokenRepositoryImpl() )->get( $chain_id, $address );
+		$token = $this->token_repository->get( $chain_id, $address );
 
 		return array(
 			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainID' => $chain_id->value() ) ),

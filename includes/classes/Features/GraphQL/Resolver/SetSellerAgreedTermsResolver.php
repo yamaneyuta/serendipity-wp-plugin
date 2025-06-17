@@ -3,10 +3,16 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\TermsService;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 
 class SetSellerAgreedTermsResolver extends ResolverBase {
+
+	public function __construct( TermsService $terms_service ) {
+		$this->terms_service = $terms_service;
+	}
+
+	private TermsService $terms_service;
 
 	/**
 	 * #[\Override]
@@ -27,7 +33,7 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 		//
 
 		// 販売者の署名を保存
-		( new TermsServiceFactory() )->create()->saveSellerSignature( $signature );
+		$this->terms_service->saveSellerSignature( $signature );
 
 		return true;
 	}

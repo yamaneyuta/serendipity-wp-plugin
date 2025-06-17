@@ -3,9 +3,15 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
+use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
 
 class ServerSignerResolver extends ResolverBase {
+
+	public function __construct( ServerSignerService $server_signer_service ) {
+		$this->server_signer_service = $server_signer_service;
+	}
+
+	private ServerSignerService $server_signer_service;
 
 	/**
 	 * #[\Override]
@@ -13,9 +19,8 @@ class ServerSignerResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		$server_signer = ( new ServerSignerServiceFactory() )->create()->getServerSigner();
 		return array(
-			'address' => fn() => $server_signer->address()->value(),
+			'address' => fn() => $this->server_signer_service->getServerSigner()->address()->value(),
 		);
 	}
 }
