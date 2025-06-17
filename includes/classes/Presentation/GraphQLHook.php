@@ -6,6 +6,7 @@ use Cornix\Serendipity\Core\Features\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
+use DI\Container;
 use GraphQL\GraphQL;
 
 /**
@@ -13,12 +14,15 @@ use GraphQL\GraphQL;
  */
 class GraphQLHook {
 
-	public function __construct( RestProperty $rest_property ) {
+	public function __construct( RestProperty $rest_property, Container $container ) {
 		$this->rest_property = $rest_property;
+		$this->container     = $container;
 	}
 
 	/** @var RestProperty */
 	private $rest_property;
+	/** @var Container */
+	private $container;
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );
@@ -48,7 +52,7 @@ class GraphQLHook {
 		$variable_values = isset( $input['variables'] ) ? $input['variables'] : null;
 
 		$schema     = ( new PluginSchema() )->get();
-		$root_value = ( new RootValue() )->get();
+		$root_value = ( new RootValue() )->get( $this->container );
 
 		$result = GraphQL::executeQuery( $schema, $query, $root_value, null, $variable_values )
 			// https://webonyx.github.io/graphql-php/error-handling/#custom-error-handling-and-formatting

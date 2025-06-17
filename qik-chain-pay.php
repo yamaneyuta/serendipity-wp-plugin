@@ -16,6 +16,7 @@
 
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Infrastructure\DI\ContainerDefinitions;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Presentation\AdminPageHook;
 use Cornix\Serendipity\Core\Presentation\ContentIoHook;
@@ -24,6 +25,7 @@ use Cornix\Serendipity\Core\Presentation\GraphQLHook;
 use Cornix\Serendipity\Core\Presentation\PluginUpdateHook;
 use Cornix\Serendipity\Core\Presentation\PostEditHook;
 use Cornix\Serendipity\Core\Presentation\ViewPageHook;
+use DI\ContainerBuilder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -33,23 +35,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once __DIR__ . '/includes/vendor/autoload.php';
 
 $main = function () {
-	( new PluginUpdateHook() )->register();
+	$containerBuilder = new ContainerBuilder();
+	$containerBuilder->addDefinitions( ContainerDefinitions::getDefinitions() );
+	$container = $containerBuilder->build();
+
+	// プラグインの初期化
+	$container->get( PluginUpdateHook::class )->register();
 
 	// Cronの登録
-	( new CronHook() )->register();
+	$container->get( CronHook::class )->register();
 
 	// GraphQLのAPI登録
-	( new GraphQLHook( new RestProperty() ) )->register();
+	( new GraphQLHook( $container->get( RestProperty::class ), $container ) )->register();
 
 	// 管理画面
-	( new AdminPageHook() )->register();
+	$container->get( AdminPageHook::class )->register();
 	// 投稿(新規/編集)画面
-	( new PostEditHook() )->register();
+	$container->get( PostEditHook::class )->register();
 	// 投稿表示画面
-	( new ViewPageHook() )->register();
+	$container->get( ViewPageHook::class )->register();
 
 	// 投稿を保存または取得する時のフィルタ処理
-	( new ContentIoHook() )->register();
+	$container->get( ContentIoHook::class )->register();
 };
 
 $main();
