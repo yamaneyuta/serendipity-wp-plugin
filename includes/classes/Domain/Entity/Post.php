@@ -26,19 +26,22 @@ class Post {
 	public function paidContent(): ?PaidContent {
 		return $this->paid_content;
 	}
-	public function setPaidContent( ?PaidContent $paid_content ): void {
-		$this->paid_content = $paid_content;
-	}
 	public function sellingNetworkCategoryID(): ?NetworkCategoryID {
 		return $this->selling_network_category_id;
-	}
-	public function setSellingNetworkCategoryID( ?NetworkCategoryID $selling_network_category_id ): void {
-		$this->selling_network_category_id = $selling_network_category_id;
 	}
 	public function sellingPrice(): ?Price {
 		return $this->selling_price;
 	}
-	public function setSellingPrice( ?Price $selling_price ): void {
-		$this->selling_price = $selling_price;
+
+	public function setPaidContent( PaidContent $paid_content, ?NetworkCategoryID $selling_network_category_id, ?Price $selling_price ): void {
+		$this->paid_content                = $paid_content;
+		$this->selling_network_category_id = $selling_network_category_id;
+		$this->selling_price               = $selling_price;
+	}
+
+	public function deletePaidContent(): void {
+		$this->paid_content                = null;
+		$this->selling_network_category_id = null;
+		$this->selling_price               = null;
 	}
 }

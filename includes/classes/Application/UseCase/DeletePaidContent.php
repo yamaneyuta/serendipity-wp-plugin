@@ -16,9 +16,7 @@ class DeletePaidContent {
 		$post = $this->post_repository->get( $post_id );
 
 		// 有料記事の内容を削除
-		$post->setPaidContent( null );
-		$post->setSellingNetworkCategoryID( null );
-		$post->setSellingPrice( null );
+		$post->deletePaidContent();
 
 		$this->post_repository->save( $post );
 	}

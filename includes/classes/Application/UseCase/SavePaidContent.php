@@ -22,9 +22,7 @@ class SavePaidContent {
 		$post = $post_repository->get( $post_id );
 
 		// 有料記事の内容を更新
-		$post->setPaidContent( $paid_content );
-		$post->setSellingNetworkCategoryID( $selling_network_category_id );
-		$post->setSellingPrice( $selling_price );
+		$post->setPaidContent( $paid_content, $selling_network_category_id, $selling_price );
 
 		$post_repository->save( $post );
 	}
