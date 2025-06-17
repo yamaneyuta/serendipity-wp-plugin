@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\Service\OracleService;
+use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Infrastructure\Factory\OracleRepositoryFactory;
 
 /**
  * ERC20トークンの情報をブロックチェーンから取得して返します。
@@ -33,7 +34,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
 
-		$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
+		$chain = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
 		if ( is_null( $chain ) ) {
 			throw new \InvalidArgumentException( '[DC8E36E6] chain data is not found. chain id: ' . $chain_ID );
 		} elseif ( ! $chain->connectable() ) {
@@ -53,11 +54,16 @@ class GetERC20InfoResolver extends ResolverBase {
 		// レート変換可能かどうかを返すコールバック関数
 		$rate_exchangeable_callback = function () use ( $symbol ) {
 			Validate::checkHasAdminRole();  // 管理者権限が必要
-			$oracle = new OracleService();
-			// XXX/USD や XXX/ETH のOracleが存在する場合はレート変換可能と判定
+
+			$oracles = ( new OracleRepositoryFactory() )->create()->all();
+			// XXX/USD や XXX/ETH の接続可能なOracleが存在する場合はレート変換可能と判定
 			$quote_symbols = array( 'USD', 'ETH' );
 			foreach ( $quote_symbols as $quote_symbol ) {
-				if ( count( $oracle->connectableChainIDs( new SymbolPair( $symbol, $quote_symbol ) ) ) > 0 ) {
+				$filtered_oracles = ( new OraclesFilter() )
+					->bySymbolPair( new SymbolPair( $symbol, $quote_symbol ) )
+					->byConnectable()
+					->apply( $oracles );
+				if ( count( $filtered_oracles ) > 0 ) {
 					return true;
 				}
 			}

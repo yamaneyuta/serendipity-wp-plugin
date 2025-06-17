@@ -24,7 +24,14 @@ class NamedPlaceholder {
 		$searches = array(); // str_replace の検索用配列
 		$replaces = array(); // str_replace の置換用配列
 
-		foreach ( $args as $placeholder => $value ) {
+		// 前方一致のプレースホルダーが含まれている場合、変換がうまく動作しないことがあるため
+		// $args のキーをすべて取得し、文字列の長い順にソート
+		$keys = array_keys( $args );
+		usort( $keys, fn( $a, $b ) => strlen( $b ) - strlen( $a ) );
+
+		foreach ( $keys as $key ) {
+			$placeholder = $key;
+			$value       = $args[ $key ];
 			// プレースホルダのフォーマットとクエリに含まれているかをチェック
 			$this->checkPlaceholderFormat( $placeholder );
 			$this->checkPlaceholderContained( $query, $placeholder );

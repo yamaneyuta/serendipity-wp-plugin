@@ -1,14 +1,13 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Application\Factory\TermsServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use kornrunner\Keccak;
@@ -37,17 +36,17 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $terms_service->getSignedSellerTerms()->terms()->message() ), 256 );
 
 		// 販売価格1,000円で投稿を作成
-		$selling_network_category = NetworkCategory::from( NetworkCategoryID::PRIVATENET );
-		$selling_price            = new Price( HexFormat::toHex( 1000 ), 0, 'JPY' );
-		$post_ID                  = $this->getUser( UserType::CONTRIBUTOR )->createPost(
+		$selling_network_category_id = NetworkCategoryID::privatenet();
+		$selling_price               = new Price( HexFormat::toHex( 1000 ), 0, 'JPY' );
+		$post_ID                     = $this->getUser( UserType::CONTRIBUTOR )->createPost(
 			array(
-				'post_content' => ( new SamplePostContent() )->get( $selling_network_category, $selling_price ),
+				'post_content' => ( new SamplePostContent() )->get( $selling_network_category_id, $selling_price ),
 			)
 		);
 
 		// プライベートネット1のETHで支払う
-		$payment_chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( ChainID::privatenet1() );
-		$payment_token = ( new TokenRepository() )->get(
+		$payment_chain = ( new ChainServiceFactory() )->create()->getChain( ChainID::privatenet1() );
+		$payment_token = ( new TokenRepositoryImpl() )->get(
 			$payment_chain->id(),
 			Ethers::zeroAddress() // ETH
 		);

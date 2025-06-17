@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Application\Service;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use InvalidArgumentException;
 
@@ -18,7 +18,7 @@ class ChainService {
 	private ChainRepository $repository;
 
 	public function getChain( ChainID $chain_id ): ?Chain {
-		return $this->repository->getChain( $chain_id );
+		return $this->repository->get( $chain_id );
 	}
 
 	/**
@@ -27,7 +27,7 @@ class ChainService {
 	 * @return Chain[]
 	 */
 	public function getAllChains(): array {
-		return $this->repository->getAllChains();
+		return $this->repository->all();
 	}
 
 	/**
@@ -52,10 +52,6 @@ class ChainService {
 		}
 		$updater( $chain );
 		$this->saveChain( $chain );
-	}
-
-	public function saveRpcURL( ChainID $chain_id, ?string $rpc_url ): void {
-		$this->updatePropertyAndSave( $chain_id, fn( Chain $chain ) => $chain->setRpcURL( $rpc_url ) );
 	}
 
 	/**

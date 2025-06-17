@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
-class TokenRepository {
+class TokenRepositoryImpl implements TokenRepository {
 
 	public function __construct( ?TokenTable $token_table = null ) {
 		$this->token_table = $token_table ?? new TokenTable( $GLOBALS['wpdb'] );
@@ -17,18 +18,12 @@ class TokenRepository {
 	private TokenTable $token_table;
 
 
-	/**
-	 * トークンデータを保存します。
-	 */
+	/** @inheritdoc */
 	public function save( Token $token ): void {
 		$this->token_table->save( $token );
 	}
 
-	/**
-	 * トークンデータ一覧を取得します。
-	 *
-	 * @return Token[]
-	 */
+	/** @inheritdoc */
 	public function all(): array {
 		$token_records = $this->token_table->all();
 		return array_map(
@@ -37,9 +32,7 @@ class TokenRepository {
 		);
 	}
 
-	/**
-	 * 指定したチェーンID、アドレスに一致するトークン情報を取得します。
-	 */
+	/** @inheritdoc */
 	public function get( ChainID $chain_ID, Address $address ): ?Token {
 		$tokens = array_filter(
 			$this->all(),

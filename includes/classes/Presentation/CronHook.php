@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Lib\Crawler\AppContractCrawler;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
@@ -11,10 +13,8 @@ use Cornix\Serendipity\Core\Repository\PluginInfo;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Repository\Settings\DefaultValue;
-use Cornix\Serendipity\Core\Lib\Web3\BlockchainClientFactory;
-use Cornix\Serendipity\Core\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Service\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
 
 /**
  * wp_cronを利用した処理を登録するクラス。
@@ -177,13 +177,13 @@ class AppContractCrawlableChainIDs {
 	 */
 	public function get(): array {
 		// 接続可能なチェーン一覧を取得
-		$chains = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getAllChains();
+		$chains = ( new ChainServiceFactory() )->create()->getAllChains();
 		$chains = ( new ChainsFilter() )->byConnectable()->apply( $chains );
 
 		// アプリケーション用コントラクトアドレスが取得可能なチェーンに絞り込み
 		$chains = array_filter(
 			$chains,
-			fn( $chain ) => ! is_null( ( ( new AppContractRepository() )->get( $chain->id() ) ) )
+			fn( $chain ) => ! is_null( ( ( new AppContractRepositoryFactory() )->create()->get( $chain->id() ) ) )
 		);
 
 		// 取引が開始された(=請求書を発行した)ブロックが存在するチェーンに絞り込み

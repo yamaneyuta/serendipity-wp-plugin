@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class ChainsResolver extends ResolverBase {
@@ -37,8 +37,7 @@ class ChainsResolver extends ResolverBase {
 		}
 
 		// フィルタを適用したチェーン一覧を取得
-		global $wpdb;
-		$chain_service = ( new ChainServiceFactory() )->create( $wpdb );
+		$chain_service = ( new ChainServiceFactory() )->create();
 		$chains        = $chains_filter->apply( $chain_service->getAllChains() );
 
 		return array_map(

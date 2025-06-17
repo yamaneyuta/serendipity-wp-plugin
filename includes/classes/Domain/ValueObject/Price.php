@@ -6,7 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use phpseclib\Math\BigInteger;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
@@ -46,7 +46,7 @@ class Price {
 	public function toTokenAmount( ChainID $chain_ID ): string {
 		// そのトークン1単位における小数点以下桁数。ETHであれば18。
 		$tokens_filter = ( new TokensFilter() )->byChainID( $chain_ID )->bySymbol( $this->symbol );
-		$tokens        = $tokens_filter->apply( ( new TokenRepository() )->all() );
+		$tokens        = $tokens_filter->apply( ( new TokenRepositoryImpl() )->all() );
 
 		if ( 1 !== count( $tokens ) ) {
 			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID->value() . ', symbol: ' . $this->symbol . ', count: ' . count( $tokens ) );

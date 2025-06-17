@@ -7,10 +7,10 @@ use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Repository\RateTransient;
 use Cornix\Serendipity\Core\Repository\OracleRate;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
 
 class RateDataTest extends IntegrationTestBase {
 	private $rate_data;
@@ -144,11 +144,14 @@ class RateDataTest extends IntegrationTestBase {
 		}
 
 		// ARRANGE
-		$rate_data     = new RateData();
-		$symbol_pair   = new SymbolPair( 'ETH', 'USD' );
-		$chain_service = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] );
+		$rate_data   = new RateData();
+		$symbol_pair = new SymbolPair( 'ETH', 'USD' );
 
-		$chain_service->saveRpcURL( ChainID::ethMainnet(), TestRpcUrl::ETH_MAINNET );  // テスト用のRPC URLを設定
+		// メインネットに接続するテスト用のRPC URLを設定
+		$chain_repository = ( new ChainRepositoryFactory() )->create();
+		$chain            = $chain_repository->get( ChainID::ethMainnet() );
+		$chain->setRpcURL( TestRpcUrl::ETH_MAINNET );
+		$chain_repository->save( $chain );
 
 		// ACT
 		$result = $rate_data->get( $symbol_pair );  // Oracleから取得される

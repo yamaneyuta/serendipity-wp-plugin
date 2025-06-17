@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Entity\SalesHistory;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use wpdb;
 
 /**
@@ -113,9 +113,9 @@ class AppContractTmpTable {
 		);
 
 		// テーブルにデータを挿入
-		$chains = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getAllChains();
+		$chains = ( new ChainServiceFactory() )->create()->getAllChains();
 		foreach ( $chains as $chain ) {
-			$app_contract = ( new AppContractRepository() )->get( $chain->id() );
+			$app_contract = ( new AppContractRepositoryFactory() )->create()->get( $chain->id() );
 			if ( is_null( $app_contract ) ) {
 				continue;   // アプリケーションコントラクトが取得できないチェーンはスキップ
 			}

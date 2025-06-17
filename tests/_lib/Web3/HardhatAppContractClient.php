@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Constant\NetworkCategoryID;
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Domain\Entity\Signer;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategory;
+use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 
 class HardhatAppContractClient extends AppContractClient {
 	private function __construct( AppContract $app_contract, AppContractAbi $app_abi ) {
@@ -19,8 +19,8 @@ class HardhatAppContractClient extends AppContractClient {
 	}
 
 	public static function fromChainID( ChainID $chain_ID ): self {
-		assert( ( new ChainRepository() )->getChain( $chain_ID )->networkCategory()->equals( NetworkCategory::from( NetworkCategoryID::PRIVATENET ) ) );
-		$app_contract = ( new AppContractRepository() )->get( $chain_ID );
+		assert( ( new ChainRepositoryImpl( new ChainTable( $GLOBALS['wpdb'] ) ) )->get( $chain_ID )->networkCategoryID()->equals( NetworkCategoryID::privatenet() ) );
+		$app_contract = ( new AppContractRepositoryFactory() )->create()->get( $chain_ID );
 		$app_abi      = new HardhatAppContractABI();
 		return new self( $app_contract, $app_abi );
 	}

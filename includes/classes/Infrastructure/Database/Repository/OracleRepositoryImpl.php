@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\Oracle;
+use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\OracleImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\OracleTable;
 
-class OracleRepository {
+class OracleRepositoryImpl implements OracleRepository {
 
 	public function __construct( ?OracleTable $oracle_table = null ) {
 		$this->oracle_table = $oracle_table ?? new OracleTable( $GLOBALS['wpdb'] );

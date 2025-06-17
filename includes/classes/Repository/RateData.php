@@ -4,14 +4,13 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
-use Cornix\Serendipity\Core\Application\Service\OracleService;
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Domain\Entity\Oracle;
+use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Lib\Transient\TransientFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\OracleClient;
-use Cornix\Serendipity\Core\Application\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Infrastructure\Factory\OracleRepositoryFactory;
 
 class RateData {
 	public function __construct( RateTransient $rate_transient = null, OracleRate $oracle_rate = null ) {
@@ -45,28 +44,23 @@ class RateData {
  */
 class OracleRate {
 	public function get( SymbolPair $symbol_pair ): ?Rate {
-		// 指定した通貨ペアのOracleがデプロイされているチェーンID一覧を取得
-		// TODO: 本番環境とテスト環境で同じ順でOracleへの問い合わせでよいか確認
-		$chain_IDs = ( new OracleService() )->connectableChainIDs( $symbol_pair );
+		$connectable_oracles = ( new OraclesFilter() )
+			->bySymbolPair( $symbol_pair )
+			->byConnectable()
+			->apply( ( new OracleRepositoryFactory() )->create()->all() );
+		$connectable_oracle  = array_values( $connectable_oracles )[0] ?? null;
 
-		foreach ( $chain_IDs as $chain_ID ) {
-			// コントラクトアドレスを取得
-			$contract_address = ( new OracleService() )->address( $chain_ID, $symbol_pair );
-			assert( ! is_null( $contract_address ), "[460973B3] chain id: {$chain_ID}, symbol pair: {$symbol_pair}" );    // 最初に通貨ペアで絞り込んだチェーンIDを元にアドレスを取得しているため、必ず取得できる
-
-			$chain = ( new ChainServiceFactory() )->create( $GLOBALS['wpdb'] )->getChain( $chain_ID );
-			if ( $chain->connectable() ) {
-				// Oracleに問い合わせ
-				$oracle        = new Oracle( $chain, $contract_address, $symbol_pair->base(), $symbol_pair->quote() );
-				$oracle_client = new OracleClient( $chain->rpcURL(), $oracle );
-				$decimals      = $oracle_client->decimals();
-				$answer_hex    = HexFormat::toHex( $oracle_client->latestAnswer() );
-
-				return new Rate( $symbol_pair, $answer_hex, $decimals );
-			}
+		if ( null === $connectable_oracle ) {
+			// 指定した通貨ペアのOracleが存在しない場合はnullを返す
+			return null;
 		}
 
-		return null;
+		// Oracleコントラクトから値を取得
+		$oracle_client = new OracleClient( $connectable_oracle->chain()->rpcURL(), $connectable_oracle );
+		$decimals      = $oracle_client->decimals();
+		$answer_hex    = HexFormat::toHex( $oracle_client->latestAnswer() );
+
+		return new Rate( $symbol_pair, $answer_hex, $decimals );
 	}
 }
 
