@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Repository\ConsumerTerms;
 use wpdb;
 
 /** Invoiceから署名用のメッセージを作成し、署名用ウォレットで署名を行います */
-class SingInvoice {
+class SignInvoice {
 	public function __construct( wpdb $wpdb ) {
 		$this->wpdb = $wpdb;
 	}
