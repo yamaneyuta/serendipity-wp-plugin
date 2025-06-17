@@ -13,8 +13,6 @@ use Cornix\Serendipity\Core\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
-use Cornix\Serendipity\Core\Application\UseCase\DeletePaidContent;
-use Cornix\Serendipity\Core\Application\UseCase\SavePaidContent;
 
 /**
  * 投稿内容を保存、または取得時のhooksを登録するクラス
@@ -144,30 +142,33 @@ class ContentIoHook {
 	/**
 	 * 投稿の保存後のフック。静的変数に保持した投稿内容から有料記事の情報を取得して保存します。
 	 */
-	public function savePostFilter( int $post_id, \WP_Post $post ): void {
+	public function savePostFilter( int $post_id, \WP_Post $_ ): void {
 		if ( is_null( self::$unsaved_original_content ) ) {
 			// 投稿内容が未保存の場合は何もしない(ゴミ箱に移動された時などが該当)
 			return;
 		}
 
 		$post_repository = ( new PostRepositoryFactory() )->create();
+		$post            = $post_repository->get( $post_id );
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
 		$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
 		if ( is_null( $attributes ) ) {
 			// ウィジェットが含まれていない場合はウィジェットを削除して保存した可能性があるため、有料記事の情報を削除
-			( new DeletePaidContent( $post_repository ) )->handle( $post_id );
+			$post->deletePaidContent();
 		} else {
 			$paid_content_text = ( new RawContentDivider() )->getPaidContent( wp_unslash( self::$unsaved_original_content ) );
 			assert( ! is_null( $paid_content_text ), '[2B9ADC9A] Paid content is null. - post_id: ' . $post_id );
-			// ウィジェットが含まれている場合は有料記事の情報を保存
-			( new SavePaidContent( $GLOBALS['wpdb'] ) )->handle(
-				$post_id,
+			// ウィジェットが含まれている場合は有料記事の情報を設定
+			$post->setPaidContent(
 				PaidContent::from( $paid_content_text ),
 				$attributes->sellingNetworkCategoryID(),
 				$attributes->sellingPrice()
 			);
 		}
+
+		// 変更を保存
+		$post_repository->save( $post );
 	}
 
 	/**
@@ -183,7 +184,10 @@ class ContentIoHook {
 		}
 
 		// 投稿が削除された時に有料記事の情報も削除
-		( new DeletePaidContent( $wpdb ) )->handle( $post_id );
+		$post_repository = ( new PostRepositoryFactory() )->create();
+		$post            = $post_repository->get( $post_id );
+		$post->deletePaidContent();
+		$post_repository->save( $post );
 	}
 
 	/**
