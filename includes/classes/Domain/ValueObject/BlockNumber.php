@@ -73,4 +73,8 @@ class BlockNumber {
 	public function int(): int {
 		return HexFormat::toInt( $this->hex() );
 	}
+
+	public function __toString(): string {
+		return (string) $this->int();
+	}
 }
