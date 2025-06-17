@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
 use stdClass;
@@ -80,8 +81,8 @@ class BlockchainClient {
 	/**
 	 * @param string|BlockNumber $block_number_or_tag
 	 */
-	public function getBlockByNumber( $block_number_or_tag ): GetBlockByNumberResult {
-		/** @var null|GetBlockByNumberResult */
+	public function getBlockByNumber( $block_number_or_tag ): GetBlockResult {
+		/** @var null|GetBlockResult */
 		$get_block_by_number_result = null;
 		$this->retryer->execute(
 			function () use ( $block_number_or_tag, &$get_block_by_number_result ) {
@@ -99,7 +100,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$get_block_by_number_result = new GetBlockByNumberResult( $res );
+						$get_block_by_number_result = new GetBlockResult( $res );
 					}
 				);
 			}
@@ -212,20 +213,6 @@ class BlockchainClient {
 	}
 }
 
-class GetBlockByNumberResult {
-	public function __construct( stdClass $get_block_by_number_response ) {
-		$this->response = $get_block_by_number_response;
-	}
-	private stdClass $response;
-
-	public function blockNumber(): BlockNumber {
-		return BlockNumber::from( $this->response->number );
-	}
-
-	public function timestamp(): int {
-		return hexdec( $this->response->timestamp ); // タイムスタンプはUNIX時間
-	}
-}
 
 /**
  * @internal
