@@ -8,6 +8,8 @@ use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\SingInvoice;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
 
 class IssueInvoiceResolver extends ResolverBase {
 
@@ -29,13 +31,16 @@ class IssueInvoiceResolver extends ResolverBase {
 		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
 		try {
+			$app_contract_repository = ( new AppContractRepositoryFactory( $wpdb ) )->create();
+			$chain_repository        = ( new ChainRepositoryFactory( $wpdb ) )->create();
+
 			$wpdb->query( 'START TRANSACTION' );
 			// invoiceを発行
 			$invoice = ( new IssueInvoice( $wpdb ) )->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
 			// 発行したinvoiceに署名を行う
 			$signed_data = ( new SingInvoice( $wpdb ) )->handle( $invoice );
 			// クロール済みブロック番号を初期化
-			( new InitCrawledBlockNumber( $wpdb ) )->handle( $chain_ID );
+			( new InitCrawledBlockNumber( $app_contract_repository, $chain_repository ) )->handle( $chain_ID );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );

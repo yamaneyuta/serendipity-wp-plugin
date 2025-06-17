@@ -3,26 +3,26 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
+use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
-use wpdb;
 
 /**
  * クロール済みブロック番号を初期化します
  */
 class InitCrawledBlockNumber {
-	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
+	public function __construct( AppContractRepository $app_contract_repository, ChainRepository $chain_repository ) {
+		$this->app_contract_repository = $app_contract_repository;
+		$this->chain_repository        = $chain_repository;
 	}
 
-	private wpdb $wpdb;
+	private AppContractRepository $app_contract_repository;
+	private ChainRepository $chain_repository;
 
 	public function handle( ChainID $chain_id ): void {
-		$app_contract_repository = ( new AppContractRepositoryFactory( $this->wpdb ) )->create();
-		$app_contract            = $app_contract_repository->get( $chain_id );
+		$app_contract = $this->app_contract_repository->get( $chain_id );
 		if ( null !== $app_contract->crawledBlockNumber() ) {
 			return; // 初期化済みの場合は何もしない
 		}
@@ -31,11 +31,11 @@ class InitCrawledBlockNumber {
 		// RPC URLのプロバイダによって誤差が生じる可能性があるため
 		// ある程度のマージンを持たせてクロール済みのブロック番号を設定する
 
-		$safe_crawled_block_number = ( new GetSafetyCrawledBlockNumber( $this->wpdb ) )->handle( $chain_id );
+		$safe_crawled_block_number = ( new GetSafetyCrawledBlockNumber( $this->chain_repository ) )->handle( $chain_id );
 		$app_contract->setCrawledBlockNumber( $safe_crawled_block_number );
 
 		// 保存
-		$app_contract_repository->save( $app_contract );
+		$this->app_contract_repository->save( $app_contract );
 	}
 }
 
@@ -44,14 +44,14 @@ class GetSafetyCrawledBlockNumber {
 
 	private const SAFETY_MARGIN_SECONDS = 60 * 5; // 5分
 
-	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
+	public function __construct( ChainRepository $chain_repository ) {
+		$this->chain_repository = $chain_repository;
 	}
 
-	private wpdb $wpdb;
+	private ChainRepository $chain_repository;
 
 	public function handle( ChainID $chain_id ): BlockNumber {
-		$chain  = ( new ChainRepositoryFactory( $this->wpdb ) )->create()->get( $chain_id );
+		$chain  = $this->chain_repository->get( $chain_id );
 		$client = ( new BlockchainClient( $chain->rpcURL() ) );
 
 		// 最新のブロック情報を取得
