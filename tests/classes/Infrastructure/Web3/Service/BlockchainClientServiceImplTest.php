@@ -15,6 +15,27 @@ use IntegrationTestBase;
 class BlockchainClientServiceImplTest extends IntegrationTestBase {
 
 	/**
+	 * チェーンIDを取得するテスト
+	 *
+	 * @test
+	 * @testdox [1C90A214] BlockchainClientServiceImpl::getChainID
+	 */
+	public function testGetChainID(): void {
+		// ARRANGE
+		$chain_repository = ( new ChainRepositoryFactory() )->create();
+		$chain            = $chain_repository->get( ChainID::privatenet1() );
+		$sut              = new BlockchainClientServiceImpl( $chain );
+
+		// ACT
+		$result = $sut->getChainID();
+
+		// ASSERT
+		$this->assertInstanceOf( ChainID::class, $result );
+		$this->assertEquals( ChainID::privatenet1(), $result );
+	}
+
+
+	/**
 	 * ブロック番号を指定して`getBlockByNumber`を呼び出すテスト
 	 *
 	 * @test

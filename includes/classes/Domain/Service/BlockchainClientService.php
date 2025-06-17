@@ -5,9 +5,13 @@ namespace Cornix\Serendipity\Core\Domain\Service;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
 
 interface BlockchainClientService {
+	/** チェーンIDを取得します。 */
+	public function getChainID(): ChainID;
+
 	/**
 	 * 対象のチェーンでブロック番号またはタグを指定してブロック情報を取得します。
 	 *
