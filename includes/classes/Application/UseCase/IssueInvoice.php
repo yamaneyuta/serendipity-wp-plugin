@@ -3,34 +3,33 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\InvoiceRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
-use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
-use wpdb;
 
 class IssueInvoice {
-	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
+	public function __construct( TokenRepository $token_repository, InvoiceRepository $invoice_repository, PostRepository $post_repository ) {
+		$this->token_repository   = $token_repository;
+		$this->invoice_repository = $invoice_repository;
+		$this->post_repository    = $post_repository;
 	}
-	private wpdb $wpdb;
+	private TokenRepository $token_repository;
+	private InvoiceRepository $invoice_repository;
+	private PostRepository $post_repository;
 
 	public function handle( int $post_ID, ChainID $chain_ID, Address $payment_token_address, Address $consumer_address ): Invoice {
-		$token_repository   = ( new TokenRepositoryFactory( $this->wpdb ) )->create();
-		$invoice_repository = ( new InvoiceRepositoryFactory( $this->wpdb ) )->create();
-
-		$payment_token  = ( new GetPaymentToken( $token_repository ) )->handle( $chain_ID, $payment_token_address ); // 支払トークン
+		$payment_token  = ( new GetPaymentToken( $this->token_repository ) )->handle( $chain_ID, $payment_token_address ); // 支払トークン
 		$seller_address = ( new GetSellerAddress() )->handle();  // 販売者アドレス
-		$selling_price  = ( new PostRepositoryFactory() )->create()->get( $post_ID )->sellingPrice();
+		$selling_price  = $this->post_repository->get( $post_ID )->sellingPrice();
 		if ( is_null( $selling_price ) ) {
 			throw new \InvalidArgumentException( '[8AF88CAF] Selling price is null for post ID: ' . $post_ID );
 		}
@@ -52,10 +51,10 @@ class IssueInvoice {
 			$consumer_address,
 			InvoiceNonce::generate() // 新規nonce
 		);
-		assert( null === $invoice_repository->get( $invoice->id() ), '[A9E90E49] Duplicate invoice ID detected.' );
+		assert( null === $this->invoice_repository->get( $invoice->id() ), '[A9E90E49] Duplicate invoice ID detected.' );
 
 		// 請求書情報を保存
-		$invoice_repository->save( $invoice );
+		$this->invoice_repository->save( $invoice );
 
 		return $invoice;
 	}

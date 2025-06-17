@@ -10,6 +10,9 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\InvoiceRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
+use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
 
 class IssueInvoiceResolver extends ResolverBase {
 
@@ -33,10 +36,13 @@ class IssueInvoiceResolver extends ResolverBase {
 		try {
 			$app_contract_repository = ( new AppContractRepositoryFactory( $wpdb ) )->create();
 			$chain_repository        = ( new ChainRepositoryFactory( $wpdb ) )->create();
+			$token_repository        = ( new TokenRepositoryFactory( $wpdb ) )->create();
+			$invoice_repository      = ( new InvoiceRepositoryFactory( $wpdb ) )->create();
+			$post_repository         = ( new PostRepositoryFactory( $wpdb ) )->create();
 
 			$wpdb->query( 'START TRANSACTION' );
 			// invoiceを発行
-			$invoice = ( new IssueInvoice( $wpdb ) )->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
+			$invoice = ( new IssueInvoice( $token_repository, $invoice_repository, $post_repository ) )->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
 			// 発行したinvoiceに署名を行う
 			$signed_data = ( new SingInvoice( $wpdb ) )->handle( $invoice );
 			// クロール済みブロック番号を初期化
