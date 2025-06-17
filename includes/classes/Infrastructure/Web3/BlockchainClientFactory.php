@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
+/** @deprecated Use BlockchainClientServiceFactory */
 class BlockchainClientFactory {
 	/**
 	 * 指定したチェーンに接続するオブジェクトを生成します。

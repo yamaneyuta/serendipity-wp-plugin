@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
 use phpseclib\Math\BigInteger;
 use ReflectionClass;
 use stdClass;
@@ -19,6 +20,7 @@ use Web3\Methods\EthMethod;
 // Ethを継承してリトライを行うクラスを作成する方法は、名前空間やクラス名がEthクラス内部で使用されておりややこしくなるため不採用
 // ここでは各メソッドでリトライオブジェクトを使用するように実装している
 
+/** @deprecated Use BlockchainClientService */
 class BlockchainClient {
 	public function __construct( string $rpc_url ) {
 		$this->rpc_url = $rpc_url;
@@ -80,8 +82,8 @@ class BlockchainClient {
 	/**
 	 * @param string|BlockNumber $block_number_or_tag
 	 */
-	public function getBlockByNumber( $block_number_or_tag ): GetBlockByNumberResult {
-		/** @var null|GetBlockByNumberResult */
+	public function getBlockByNumber( $block_number_or_tag ): GetBlockResult {
+		/** @var null|GetBlockResult */
 		$get_block_by_number_result = null;
 		$this->retryer->execute(
 			function () use ( $block_number_or_tag, &$get_block_by_number_result ) {
@@ -99,7 +101,7 @@ class BlockchainClient {
 						if ( $err ) {
 							throw $err;
 						}
-						$get_block_by_number_result = new GetBlockByNumberResult( $res );
+						$get_block_by_number_result = new GetBlockResult( $res );
 					}
 				);
 			}
@@ -212,20 +214,6 @@ class BlockchainClient {
 	}
 }
 
-class GetBlockByNumberResult {
-	public function __construct( stdClass $get_block_by_number_response ) {
-		$this->response = $get_block_by_number_response;
-	}
-	private stdClass $response;
-
-	public function blockNumber(): BlockNumber {
-		return BlockNumber::from( $this->response->number );
-	}
-
-	public function timestamp(): int {
-		return hexdec( $this->response->timestamp ); // タイムスタンプはUNIX時間
-	}
-}
 
 /**
  * @internal

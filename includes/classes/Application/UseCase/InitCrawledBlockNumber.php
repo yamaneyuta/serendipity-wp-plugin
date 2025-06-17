@@ -66,7 +66,7 @@ class GetSafetyCrawledBlockNumber {
 		$prev_timestamp      = $prev_res->timestamp();
 
 		// ブロックの平均生成時間を計算(ゼロ除算は発生し得ないためチェック不要)
-		$average_block_time = ( $latest_timestamp - $prev_timestamp ) / ( $latest_block_number->int() - $prev_block_number->int() );
+		$average_block_time = ( $latest_timestamp->value() - $prev_timestamp->value() ) / ( $latest_block_number->int() - $prev_block_number->int() );
 
 		// マージンを取ったブロック番号を計算
 		$safety_block_number = BlockNumber::from(

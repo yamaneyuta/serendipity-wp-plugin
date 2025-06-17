@@ -6,14 +6,15 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\InvoiceRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Presentation\Factory\BlockchainClientServiceFactory;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
 
@@ -104,7 +105,8 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 
 		if ( is_int( $confirmations ) ) {
 			// 最新のブロック番号を取得
-			$latest_block_number = ( new BlockchainClientFactory() )->create( $chain_ID )->getBlockNumber();
+			$latest_block        = ( new BlockchainClientServiceFactory() )->create( $chain_ID )->getBlockByNumber( BlockTag::latest() );
+			$latest_block_number = $latest_block->blockNumber();
 			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
 			$reference_block = $latest_block_number->sub( max( $confirmations - 1, 0 ) );
 			return $unlocked_block_number->compare( $reference_block ) <= 0;
