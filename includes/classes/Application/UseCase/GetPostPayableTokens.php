@@ -11,7 +11,7 @@ use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 
-class GetPayableTokens {
+class GetPostPayableTokens {
 	public function __construct( PostRepository $post_repository, ChainRepository $chain_repository, TokenRepository $token_repository ) {
 		$this->post_repository  = $post_repository;
 		$this->chain_repository = $chain_repository;

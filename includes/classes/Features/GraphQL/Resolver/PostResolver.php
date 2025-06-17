@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Application\UseCase\GetPayableTokens;
+use Cornix\Serendipity\Core\Application\UseCase\GetPostPayableTokens;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
@@ -35,7 +35,7 @@ class PostResolver extends ResolverBase {
 						'address' => $token->address()->value(),
 					)
 				),
-				( new GetPayableTokens( $post_repository, $chain_repository, $token_repository ) )->handle( $post_ID )
+				( new GetPostPayableTokens( $post_repository, $chain_repository, $token_repository ) )->handle( $post_ID )
 			);
 		};
 
