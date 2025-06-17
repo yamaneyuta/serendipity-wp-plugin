@@ -5,14 +5,13 @@ use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Features\Uninstall\TableUninstaller;
 use Cornix\Serendipity\Core\Lib\Logger\ILogger;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Repository\Name\BlockName;
-use Cornix\Serendipity\Core\Repository\Name\ClassName;
-use Cornix\Serendipity\Core\Repository\WidgetAttributes;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Infrastructure\DI\ContainerDefinitions;
 use Cornix\Serendipity\Core\Presentation\GraphQLHook;
 use Cornix\Serendipity\Core\Presentation\PluginUpdateHook;
+use DI\ContainerBuilder;
 
 /**
  * 結合テストの基底クラス
@@ -26,6 +25,11 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		$this->setUpSilentLogger();     // 何もログを出力しないように設定
 
+		// DIコンテナのセットアップ
+		$containerBuilder = new ContainerBuilder();
+		$containerBuilder->addDefinitions( ContainerDefinitions::getDefinitions() );
+		$container = $containerBuilder->build();
+
 		global $wpdb;
 		( new TableHandler( $wpdb ) )->setUp(); // データベースのテーブルのセットアップ(全削除)
 		( new OptionsHandler() )->setUp();      // optionsテーブルのセットアップ(全削除)
@@ -33,7 +37,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new WP_REST_Server();
 
-		( new GraphQLHook( $this->crateRestPropertyStub() ) )->register();
+		( new GraphQLHook( $this->crateRestPropertyStub(), $container ) )->register();
 		do_action( 'rest_api_init' );
 
 		// admin_initの代わりにPluginUpdateHookを呼び出す
