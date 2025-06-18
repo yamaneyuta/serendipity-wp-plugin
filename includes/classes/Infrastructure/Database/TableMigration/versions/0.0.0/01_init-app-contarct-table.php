@@ -20,7 +20,7 @@ return new class() extends DatabaseMigrationBase {
 		$this->createTable();
 
 		// 初期データを挿入
-		$this->insertInitialData();
+		$this->withTransaction( fn() => $this->insertInitialData() );
 	}
 
 	/** @inheritdoc */
