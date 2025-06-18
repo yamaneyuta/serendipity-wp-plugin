@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\SignedTerms;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
@@ -33,7 +34,7 @@ class SellerTermsRepository {
 		if ( is_null( $version_value ) ) {
 			return null;  // 利用規約に同意していない
 		}
-		$signature = $option_factory->sellerAgreedTermsSignature()->get();
+		$signature = new Signature( $option_factory->sellerAgreedTermsSignature()->get() );
 		$message   = $this->message( new TermsVersion( $version_value ) );
 		return new SignedTerms( new Terms( new TermsVersion( $version_value ), $message ), $signature );
 	}

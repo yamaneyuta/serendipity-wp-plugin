@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 
@@ -64,7 +65,7 @@ class SellerResolverTest extends IntegrationTestBase {
 		$alice         = HardhatSignerFactory::alice();
 		$terms_service = ( new TermsServiceFactory() )->create();
 		$seller_terms  = $terms_service->getCurrentSellerTerms();
-		$signature     = $alice->signMessage( $seller_terms->message()->value() );
+		$signature     = new Signature( $alice->signMessage( $seller_terms->message()->value() ) );
 		$terms_service->saveSellerSignature( $signature );
 
 		// ACT

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\TermsService;
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class SetSellerAgreedTermsResolver extends ResolverBase {
@@ -21,9 +22,8 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 	 */
 	public function resolve( array $root_value, array $args ) {
 		/** @var int */
-		$version = $args['version'];
-		/** @var string */
-		$signature = $args['signature'];
+		$version   = $args['version'];
+		$signature = new Signature( $args['signature'] );
 
 		// 管理者権限を持っているかどうかをチェック
 		Validate::checkHasAdminRole();

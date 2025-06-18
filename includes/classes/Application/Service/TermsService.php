@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\Service;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Repository\SellerTermsRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\SignedTerms;
 use Cornix\Serendipity\Core\Domain\ValueObject\Terms;
@@ -26,7 +27,7 @@ class TermsService {
 	}
 
 	/** 販売者が同意した利用規約情報を保存します */
-	public function saveSellerSignature( string $signature ): void {
+	public function saveSellerSignature( Signature $signature ): void {
 		$terms = $this->seller_terms_repository->currentTerms();    // 登録時は最新の利用規約情報に署名している必要がある
 		$this->seller_terms_repository->save( new SignedTerms( $terms, $signature ) );
 	}

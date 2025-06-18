@@ -5,10 +5,9 @@ namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 /** 署名済み利用規約情報 */
 class SignedTerms {
-	// TODO: string $signature => Signature $signature
-	public function __construct( Terms $terms, string $signature ) {
+	public function __construct( Terms $terms, Signature $signature ) {
 		$this->terms     = $terms;
-		$this->signature = new Signature( $signature );
+		$this->signature = $signature;
 	}
 
 	private Terms $terms;
