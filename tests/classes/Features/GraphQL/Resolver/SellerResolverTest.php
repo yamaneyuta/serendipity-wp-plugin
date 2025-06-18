@@ -64,7 +64,7 @@ class SellerResolverTest extends IntegrationTestBase {
 		$alice         = HardhatSignerFactory::alice();
 		$terms_service = ( new TermsServiceFactory() )->create();
 		$seller_terms  = $terms_service->getCurrentSellerTerms();
-		$signature     = $alice->signMessage( $seller_terms->message() );
+		$signature     = $alice->signMessage( $seller_terms->message()->value() );
 		$terms_service->saveSellerSignature( $signature );
 
 		// ACT
@@ -74,7 +74,7 @@ class SellerResolverTest extends IntegrationTestBase {
 		// 保存した値が取得できること
 		$agreed_terms = $data['data']['seller']['agreedTerms'];
 		$this->assertEquals( $seller_terms->version()->value(), $agreed_terms['version'] );
-		$this->assertEquals( $seller_terms->message(), $agreed_terms['message'] );
+		$this->assertEquals( $seller_terms->message()->value(), $agreed_terms['message'] );
 		$this->assertEquals( $signature, $agreed_terms['signature'] );
 		// 保存されたメッセージと署名からアドレスを取得できること
 		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $agreed_terms['message'], $agreed_terms['signature'] ) );

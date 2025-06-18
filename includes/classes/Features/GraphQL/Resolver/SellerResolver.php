@@ -28,7 +28,7 @@ class SellerResolver extends ResolverBase {
 		if ( null !== $signed_seller_terms ) {
 			$agreed_terms = array(
 				'version'   => $signed_seller_terms->terms()->version()->value(),
-				'message'   => $signed_seller_terms->terms()->message(),
+				'message'   => $signed_seller_terms->terms()->message()->value(),
 				'signature' => $signed_seller_terms->signature()->value(),
 			);
 		}

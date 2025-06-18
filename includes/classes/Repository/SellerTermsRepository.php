@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Repository;
 
 use Cornix\Serendipity\Core\Lib\Option\OptionFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\SignedTerms;
+use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\Terms;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 
@@ -51,7 +52,7 @@ class SellerTermsRepository {
 	 * 販売者向け利用規約に署名する時のメッセージを取得します。
 	 * ※※※ 過去のバージョンが引数として渡される可能性があるため、過去バージョンでのメッセージが壊れないように注意してください。
 	 */
-	private function message( TermsVersion $version ): string {
-		return 'I agree to the seller\'s terms of service v' . $version->value();
+	private function message( TermsVersion $version ): SigningMessage {
+		return new SigningMessage( 'I agree to the seller\'s terms of service v' . $version->value() );
 	}
 }

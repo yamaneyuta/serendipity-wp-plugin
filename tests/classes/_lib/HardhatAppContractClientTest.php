@@ -30,10 +30,10 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 
 		// 販売者の署名情報を保存
 		$terms_service    = $this->container()->get( TermsService::class );
-		$seller_signature = $seller->signMessage( $terms_service->getCurrentSellerTerms()->message() );
+		$seller_signature = $seller->signMessage( $terms_service->getCurrentSellerTerms()->message()->value() );
 		$terms_service->saveSellerSignature( $seller_signature );
 		// 署名時のメッセージハッシュを取得
-		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $terms_service->getSignedSellerTerms()->terms()->message() ), 256 );
+		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $terms_service->getSignedSellerTerms()->terms()->message()->value() ), 256 );
 
 		// 販売価格1,000円で投稿を作成
 		$selling_network_category_id = NetworkCategoryID::privatenet();

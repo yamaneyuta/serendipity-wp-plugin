@@ -39,7 +39,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		$current_seller_terms = $terms_service->getCurrentSellerTerms();
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice     = HardhatSignerFactory::alice();
-		$signature = $alice->signMessage( $current_seller_terms->message() );
+		$signature = $alice->signMessage( $current_seller_terms->message()->value() );
 		// 事前チェック
 		$this->assertNull( $terms_service->getSignedSellerTerms() );  // データは保存されていないこと
 
@@ -53,9 +53,9 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		$singed_seller_terms = $terms_service->getSignedSellerTerms();
 		// 設定が保存されていること
 		$this->assertTrue( $singed_seller_terms->terms()->version()->equals( $current_seller_terms->version() ) );
-		$this->assertTrue( $singed_seller_terms->terms()->message() === $current_seller_terms->message() );
+		$this->assertTrue( $singed_seller_terms->terms()->message()->value() === $current_seller_terms->message()->value() );
 		// 保存済みのメッセージと署名からアドレスを取得できること
-		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $singed_seller_terms->terms()->message(), $singed_seller_terms->signature()->value() ) );
+		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $singed_seller_terms->terms()->message()->value(), $singed_seller_terms->signature()->value() ) );
 	}
 
 
@@ -72,7 +72,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		$current_seller_terms = $terms_service->getCurrentSellerTerms();
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice     = HardhatSignerFactory::alice();
-		$signature = $alice->signMessage( $current_seller_terms->message() );
+		$signature = $alice->signMessage( $current_seller_terms->message()->value() );
 		// 事前チェック
 		$this->assertNull( $terms_service->getSignedSellerTerms() );  // データは保存されていないこと
 
