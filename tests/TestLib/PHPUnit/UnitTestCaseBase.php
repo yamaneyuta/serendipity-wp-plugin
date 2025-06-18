@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Test\PHPUnit;
 
 use Cornix\Serendipity\Core\Infrastructure\DI\ContainerDefinitions;
+use Cornix\Serendipity\Test\Entity\WpUser;
+use Cornix\Serendipity\Test\Service\ClientRequestService;
 use DI\Container;
 use DI\ContainerBuilder;
 use WP_UnitTestCase;
@@ -14,23 +16,30 @@ class UnitTestCaseBase extends WP_UnitTestCase {
 	/** @inheritdoc */
 	public function setUp(): void {
 		parent::setUp();
-		// ここに必要なセットアップ処理を追加
 
 		// DIコンテナの初期化
 		$this->container = ( new InitializeContainer() )->handle();
+
+		// クライアントリクエストサービスの初期化
+		$this->client_request_service = new ClientRequestService( $this->container );
+		$this->client_request_service->setUp();
 	}
 
 	/** @inheritdoc */
 	public function tearDown(): void {
 		parent::tearDown();
-		// ここに必要なクリーンアップ処理を追加
 
-		$this->container = null;
+		$this->client_request_service->tearDown();
 	}
 
 	private ?Container $container;
 	protected function container(): Container {
 		return $this->container;
+	}
+
+	private ClientRequestService $client_request_service;
+	protected function graphQl( WpUser $user = null ) {
+		return $this->client_request_service->createGraphQlRequester( $user );
 	}
 
 
