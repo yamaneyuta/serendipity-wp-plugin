@@ -1,18 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Test\Infrastructure\Web3\Service;
+namespace Cornix\Serendipity\TestCase\Infrastructure\Web3\Service;
 
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockchainClientServiceImpl;
-use IntegrationTestBase;
+use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
 
-class BlockchainClientServiceImplTest extends IntegrationTestBase {
+class BlockchainClientServiceImplTest extends UnitTestCaseBase {
+
+	public function setUp(): void {
+		parent::setUp();
+		$this->chain_repository = $this->container()->get( ChainRepository::class );
+	}
+	private ChainRepository $chain_repository;
 
 	/**
 	 * チェーンIDを取得するテスト
@@ -22,9 +28,8 @@ class BlockchainClientServiceImplTest extends IntegrationTestBase {
 	 */
 	public function testGetChainID(): void {
 		// ARRANGE
-		$chain_repository = ( new ChainRepositoryFactory() )->create();
-		$chain            = $chain_repository->get( ChainID::privatenet1() );
-		$sut              = new BlockchainClientServiceImpl( $chain );
+		$chain = $this->chain_repository->get( ChainID::privatenet1() );
+		$sut   = new BlockchainClientServiceImpl( $chain );
 
 		// ACT
 		$result = $sut->getChainID();
@@ -45,9 +50,8 @@ class BlockchainClientServiceImplTest extends IntegrationTestBase {
 	 */
 	public function testGetBlockByNumber( $block_number_or_tag ): void {
 		// ARRANGE
-		$chain_repository = ( new ChainRepositoryFactory() )->create();
-		$chain            = $chain_repository->get( ChainID::privatenet1() );
-		$sut              = new BlockchainClientServiceImpl( $chain );
+		$chain = $this->chain_repository->get( ChainID::privatenet1() );
+		$sut   = new BlockchainClientServiceImpl( $chain );
 
 		// ACT
 		$result = $sut->getBlockByNumber( $block_number_or_tag );
