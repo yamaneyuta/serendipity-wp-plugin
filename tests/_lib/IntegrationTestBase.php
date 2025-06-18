@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Infrastructure\DI\ContainerDefinitions;
 use Cornix\Serendipity\Core\Presentation\GraphQLHook;
 use Cornix\Serendipity\Core\Presentation\PluginUpdateHook;
+use DI\Container;
 use DI\ContainerBuilder;
 
 /**
@@ -28,7 +29,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		// DIコンテナのセットアップ
 		$containerBuilder = new ContainerBuilder();
 		$containerBuilder->addDefinitions( ContainerDefinitions::getDefinitions() );
-		$container = $containerBuilder->build();
+		$this->container = $containerBuilder->build();
 
 		global $wpdb;
 		( new TableHandler( $wpdb ) )->setUp(); // データベースのテーブルのセットアップ(全削除)
@@ -37,7 +38,7 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 		global $wp_rest_server;
 		$this->server = $wp_rest_server = new WP_REST_Server();
 
-		( new GraphQLHook( $this->crateRestPropertyStub(), $container ) )->register();
+		( new GraphQLHook( $this->crateRestPropertyStub(), $this->container ) )->register();
 		do_action( 'rest_api_init' );
 
 		// admin_initの代わりにPluginUpdateHookを呼び出す
@@ -65,6 +66,11 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 		// Your own additional tear down.
 		parent::tearDown();
+	}
+
+	private Container $container;
+	protected function container(): Container {
+		return $this->container;
 	}
 
 	private function setUpSilentLogger(): void {

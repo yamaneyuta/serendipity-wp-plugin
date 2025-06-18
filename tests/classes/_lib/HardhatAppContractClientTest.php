@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Application\Service\TermsService;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
@@ -29,7 +29,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		$consumer = HardhatSignerFactory::bob();
 
 		// 販売者の署名情報を保存
-		$terms_service    = ( new TermsServiceFactory() )->create();
+		$terms_service    = $this->container()->get( TermsService::class );
 		$seller_signature = $seller->signMessage( $terms_service->getCurrentSellerTerms()->message() );
 		$terms_service->saveSellerSignature( $seller_signature );
 		// 署名時のメッセージハッシュを取得
