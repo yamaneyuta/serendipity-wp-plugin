@@ -3,20 +3,28 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\ChainService;
+use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
-use Cornix\Serendipity\Core\Infrastructure\Factory\OracleRepositoryFactory;
 
 /**
  * ERC20トークンの情報をブロックチェーンから取得して返します。
  */
 class GetERC20InfoResolver extends ResolverBase {
+
+	public function __construct( ChainService $chain_service, OracleRepository $oracle_repository ) {
+		$this->chain_service     = $chain_service;
+		$this->oracle_repository = $oracle_repository;
+	}
+
+	private ChainService $chain_service;
+	private OracleRepository $oracle_repository;
 
 	/**
 	 * #[\Override]
@@ -34,7 +42,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			throw new \InvalidArgumentException( '[6D00DB41] address is zero address.' );
 		}
 
-		$chain = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
+		$chain = $this->chain_service->getChain( $chain_ID );
 		if ( is_null( $chain ) ) {
 			throw new \InvalidArgumentException( '[DC8E36E6] chain data is not found. chain id: ' . $chain_ID );
 		} elseif ( ! $chain->connectable() ) {
@@ -55,7 +63,7 @@ class GetERC20InfoResolver extends ResolverBase {
 		$rate_exchangeable_callback = function () use ( $symbol ) {
 			Validate::checkHasAdminRole();  // 管理者権限が必要
 
-			$oracles = ( new OracleRepositoryFactory() )->create()->all();
+			$oracles = $this->oracle_repository->all();
 			// XXX/USD や XXX/ETH の接続可能なOracleが存在する場合はレート変換可能と判定
 			$quote_symbols = array( 'USD', 'ETH' );
 			foreach ( $quote_symbols as $quote_symbol ) {

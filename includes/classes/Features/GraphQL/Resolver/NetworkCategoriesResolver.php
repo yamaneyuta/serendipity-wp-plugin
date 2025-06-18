@@ -3,12 +3,17 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
-use wpdb;
 
 class NetworkCategoriesResolver extends ResolverBase {
+
+	public function __construct( ChainRepository $chain_repository ) {
+		$this->chain_repository = $chain_repository;
+	}
+
+	private ChainRepository $chain_repository;
 
 	/**
 	 * #[\Override]
@@ -24,7 +29,7 @@ class NetworkCategoriesResolver extends ResolverBase {
 
 		// ネットワークカテゴリIDが指定されていない場合は全てのネットワークカテゴリを取得
 		$network_category_ids = is_null( $filter_network_category )
-			? ( new GetAllNetworkCategoryIDs( $GLOBALS['wpdb'] ) )->handle()
+			? ( new GetAllNetworkCategoryIDs( $this->chain_repository ) )->handle()
 			: array( $filter_network_category );
 
 		return array_map(
@@ -36,15 +41,14 @@ class NetworkCategoriesResolver extends ResolverBase {
 
 /** すべてのネットワークカテゴリIDを取得します */
 class GetAllNetworkCategoryIDs {
-	public function __construct( wpdb $wpdb ) {
-		$this->wpdb = $wpdb;
+	public function __construct( ChainRepository $chain_repository ) {
+		$this->chain_repository = $chain_repository;
 	}
-	private wpdb $wpdb;
+	private ChainRepository $chain_repository;
 
 	/** @return NetworkCategoryID[] */
 	public function handle(): array {
-		$chain_repository = ( new ChainRepositoryFactory( $this->wpdb ) )->create();
-		$all_chains       = $chain_repository->all();
+		$all_chains = $this->chain_repository->all();
 
 		$network_categories = array();
 		foreach ( $all_chains as $chain ) {

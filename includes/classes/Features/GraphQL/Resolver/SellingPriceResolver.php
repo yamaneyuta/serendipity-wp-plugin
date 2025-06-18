@@ -3,10 +3,16 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
-use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
 
 class SellingPriceResolver extends ResolverBase {
+
+	public function __construct( PostRepository $post_repository ) {
+		$this->post_repository = $post_repository;
+	}
+
+	private PostRepository $post_repository;
 
 	/**
 	 * #[\Override]
@@ -21,7 +27,7 @@ class SellingPriceResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		// 販売価格をテーブルから取得して返す
-		$selling_price = ( new PostRepositoryFactory() )->create()->get( $post_ID )->sellingPrice();
+		$selling_price = $this->post_repository->get( $post_ID )->sellingPrice();
 
 		if ( is_null( $selling_price ) ) {
 			Logger::warn( '[57B6E802] Selling price is null for post ID: ' . $post_ID );

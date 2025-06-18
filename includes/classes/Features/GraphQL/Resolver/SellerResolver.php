@@ -3,9 +3,15 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
-use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
+use Cornix\Serendipity\Core\Application\Service\TermsService;
 
 class SellerResolver extends ResolverBase {
+
+
+	public function __construct( TermsService $terms_service ) {
+		$this->terms_service = $terms_service;
+	}
+	private TermsService $terms_service;
 
 	/**
 	 * #[\Override]
@@ -17,7 +23,7 @@ class SellerResolver extends ResolverBase {
 
 		$agreed_terms = null;
 
-		$signed_seller_terms = ( new TermsServiceFactory() )->create()->getSignedSellerTerms();
+		$signed_seller_terms = $this->terms_service->getSignedSellerTerms();
 
 		if ( null !== $signed_seller_terms ) {
 			$agreed_terms = array(

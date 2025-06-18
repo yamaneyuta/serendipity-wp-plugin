@@ -3,12 +3,17 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class ChainsResolver extends ResolverBase {
+
+	public function __construct( ChainService $chain_service ) {
+		$this->chain_service = $chain_service;
+	}
+	private ChainService $chain_service;
 
 	/**
 	 * チェーン一覧を取得します。
@@ -37,8 +42,7 @@ class ChainsResolver extends ResolverBase {
 		}
 
 		// フィルタを適用したチェーン一覧を取得
-		$chain_service = ( new ChainServiceFactory() )->create();
-		$chains        = $chains_filter->apply( $chain_service->getAllChains() );
+		$chains = $chains_filter->apply( $this->chain_service->getAllChains() );
 
 		return array_map(
 			fn( $chain ) => $root_value['chain'](

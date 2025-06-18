@@ -3,12 +3,18 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class SetConfirmationsResolver extends ResolverBase {
+
+	public function __construct( ChainService $chain_service ) {
+		$this->chain_service = $chain_service;
+	}
+
+	private ChainService $chain_service;
 
 	/**
 	 * #[\Override]
@@ -35,8 +41,7 @@ class SetConfirmationsResolver extends ResolverBase {
 		try {
 			global $wpdb;
 			$wpdb->query( 'START TRANSACTION' );
-			$chain_service = ( new ChainServiceFactory( $wpdb ) )->create();
-			$chain_service->saveConfirmations( $chain_ID, $confirmations );
+			$this->chain_service->saveConfirmations( $chain_ID, $confirmations );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );

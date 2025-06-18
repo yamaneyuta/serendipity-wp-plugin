@@ -4,13 +4,19 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
-use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class TokensResolver extends ResolverBase {
+
+	public function __construct( TokenRepository $token_repository ) {
+		$this->token_repository = $token_repository;
+	}
+
+	private TokenRepository $token_repository;
 
 	/**
 	 * サイトに登録されているトークン一覧を取得します。
@@ -35,7 +41,7 @@ class TokensResolver extends ResolverBase {
 			$tokens_filter = $tokens_filter->byAddress( $filter_address );
 		}
 
-		$tokens = $tokens_filter->apply( ( new TokenRepositoryImpl() )->all() );
+		$tokens = $tokens_filter->apply( $this->token_repository->all() );
 		return array_map(
 			fn( Token $token ) => $root_value['token'](
 				$root_value,

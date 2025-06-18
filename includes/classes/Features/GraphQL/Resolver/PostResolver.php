@@ -4,11 +4,25 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\UseCase\GetPostPayableTokens;
-use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\PostRepositoryFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\TokenRepositoryFactory;
+use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
+use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 
 class PostResolver extends ResolverBase {
+
+	public function __construct(
+		ChainRepository $chain_repository,
+		PostRepository $post_repository,
+		TokenRepository $token_repository
+	) {
+		$this->chain_repository = $chain_repository;
+		$this->post_repository  = $post_repository;
+		$this->token_repository = $token_repository;
+	}
+
+	private ChainRepository $chain_repository;
+	private PostRepository $post_repository;
+	private TokenRepository $token_repository;
 
 	/**
 	 * #[\Override]
@@ -23,9 +37,11 @@ class PostResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post_ID );
 
 		$payable_tokens_callback = function () use ( $root_value, $post_ID ) {
-			$post_repository  = ( new PostRepositoryFactory() )->create();
-			$chain_repository = ( new ChainRepositoryFactory() )->create();
-			$token_repository = ( new TokenRepositoryFactory() )->create();
+			$payable_tokens = ( new GetPostPayableTokens(
+				$this->post_repository,
+				$this->chain_repository,
+				$this->token_repository
+			) )->handle( $post_ID );
 
 			return array_map(
 				fn( $token ) => $root_value['token'](
@@ -35,7 +51,7 @@ class PostResolver extends ResolverBase {
 						'address' => $token->address()->value(),
 					)
 				),
-				( new GetPostPayableTokens( $post_repository, $chain_repository, $token_repository ) )->handle( $post_ID )
+				$payable_tokens
 			);
 		};
 
