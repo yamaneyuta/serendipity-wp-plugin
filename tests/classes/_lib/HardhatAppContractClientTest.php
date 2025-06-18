@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Application\Service\TermsService;
+use Cornix\Serendipity\Core\Domain\Service\SellerService;
+use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
@@ -31,11 +33,13 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		$consumer = HardhatSignerFactory::bob();
 
 		// 販売者の署名情報を保存
+		$seller_service   = $this->container()->get( SellerService::class );
+		$wallet_service   = $this->container()->get( WalletService::class );
 		$terms_service    = $this->container()->get( TermsService::class );
-		$seller_signature = $seller->signMessage( $terms_service->getCurrentSellerTerms()->message() );
+		$seller_signature = $wallet_service->signMessage( $seller, $terms_service->getCurrentSellerTerms()->message() );
 		$terms_service->saveSellerSignature( $seller_signature );
 		// 署名時のメッセージハッシュを取得
-		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $terms_service->getSignedSellerTerms()->terms()->message()->value() ), 256 );
+		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $seller_service->getSellerSignedTerms()->terms()->message()->value() ), 256 );
 
 		// 販売価格1,000円で投稿を作成
 		$selling_network_category_id = NetworkCategoryID::privatenet();
