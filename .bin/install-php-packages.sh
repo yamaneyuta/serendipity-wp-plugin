@@ -8,6 +8,9 @@ if [ ! -f ./package.json ]; then
 fi
 
 function main() {
+	# テスト用のcomposer.json及びcomposer.lockを削除
+	delete_test_composer_files
+
 	# phpunit実行に必要なパッケージをインストール
 	install_phpunit
 
@@ -18,11 +21,19 @@ function main() {
 	delete_unnecessary_files
 }
 
+function delete_test_composer_files() {
+	# テスト用のcomposer.json及びcomposer.lockを削除
+	# ※ 開発環境のPHPバージョンが変更されている可能性があるため
+	if [ -f tests/composer.json ]; then
+		rm tests/composer.json
+	fi
+	if [ -f tests/composer.lock ]; then
+		rm tests/composer.lock
+	fi
+}
+
 function install_phpunit() {
 	cd tests
-
-	# PHPのバージョンが変更されている可能性があるため、ファイルをすべて削除
-	rm -rf vendor/* composer.json composer.lock
 
 	# `$PHP_VERSION`や`$WP_VERSION`によってPHPUnitのバージョンを変更
 	# PHP7.4 + WP5.4～5.8 => ^7
