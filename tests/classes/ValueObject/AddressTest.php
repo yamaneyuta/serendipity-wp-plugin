@@ -1,9 +1,12 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+namespace Cornix\Serendipity\TestCase\ValueObject;
 
-class AddressTest extends WP_UnitTestCase {
+use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
+
+class AddressTest extends UnitTestCaseBase {
 
 	/**
 	 * 有効なアドレスをAddressインスタンスに変換できることを確認
