@@ -70,6 +70,17 @@ abstract class DatabaseMigrationBase {
 		return 1 === count( $results );
 	}
 
+	protected function withTransaction( callable $callback ): void {
+		$this->wpdb()->query( 'START TRANSACTION' );
+		try {
+			$callback();
+			$this->wpdb()->query( 'COMMIT' );
+		} catch ( \Throwable $e ) {
+			$this->wpdb()->query( 'ROLLBACK' );
+			throw $e;
+		}
+	}
+
 	/** マイグレーションを適用します */
 	abstract public function up(): void;
 
