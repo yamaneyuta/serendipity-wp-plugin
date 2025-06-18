@@ -14,6 +14,9 @@ function main() {
 	# phpunit実行に必要なパッケージをインストール
 	install_phpunit
 
+	# autoloadの設定を追加
+	add_composer_autoload
+
 	# includeディレクトリで扱うパッケージをインストール
 	cd includes && composer install --ignore-platform-req=ext-gmp && cd -
 
@@ -57,6 +60,26 @@ function install_phpunit() {
 	fi
 
 	composer require --dev "phpunit/phpunit:${PHP_UNIT_VERSION}" "yoast/wp-test-utils:*" "yoast/phpunit-polyfills:*"
+
+	cd -
+}
+
+function add_composer_autoload() {
+	cd tests
+
+	# `composer.json`にautoloadの設定を追加
+	if [ -f ./composer.json ]; then
+		# `autoload`セクションが存在しない場合は追加
+		if ! grep -q '"autoload":' composer.json; then
+			jq --tab '(.autoload //= {}) | (.autoload["psr-4"] //= {}) | .autoload["psr-4"]["Cornix\\Serendipity\\Test\\"] = "TestLib/" | .autoload["psr-4"]["Cornix\\Serendipity\\TestCase\\"] = "classes/"' composer.json > composer_tmp.json && mv composer_tmp.json composer.json
+		fi
+
+		# `composer.json`の内容を更新
+		composer dump-autoload --optimize
+	else
+		echo "[3CA074DC] composer.json not found" 1>&2
+		exit 1
+	fi
 
 	cd -
 }
