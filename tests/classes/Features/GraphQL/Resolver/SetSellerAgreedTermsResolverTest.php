@@ -55,7 +55,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		$this->assertTrue( $singed_seller_terms->terms()->version()->equals( $current_seller_terms->version() ) );
 		$this->assertTrue( $singed_seller_terms->terms()->message() === $current_seller_terms->message() );
 		// 保存済みのメッセージと署名からアドレスを取得できること
-		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $singed_seller_terms->terms()->message(), $singed_seller_terms->signature() ) );
+		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $singed_seller_terms->terms()->message(), $singed_seller_terms->signature()->value() ) );
 	}
 
 
