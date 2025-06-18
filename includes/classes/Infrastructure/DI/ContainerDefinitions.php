@@ -9,12 +9,14 @@ use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
+use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\AppContractRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\InvoiceRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\OracleRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\PostRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
+use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use wpdb;
 
 use function DI\autowire;
@@ -34,6 +36,9 @@ final class ContainerDefinitions {
 			OracleRepository::class      => autowire( OracleRepositoryImpl::class ),
 			PostRepository::class        => autowire( PostRepositoryImpl::class ),
 			TokenRepository::class       => autowire( TokenRepositoryImpl::class ),
+
+			// Service
+			WalletService::class         => autowire( WalletServiceImpl::class ),
 		);
 	}
 }

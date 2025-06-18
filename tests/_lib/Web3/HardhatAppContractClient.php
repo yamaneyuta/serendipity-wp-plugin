@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
 
 class HardhatAppContractClient extends AppContractClient {
@@ -27,9 +28,9 @@ class HardhatAppContractClient extends AppContractClient {
 
 	public function unlockPaywall(
 		Signer $from,
-		string $server_signature,
+		Signature $server_signature,
 		string $seller_terms_message_hash,
-		string $seller_terms_signature,
+		Signature $seller_terms_signature,
 		int $consumer_terms_version,
 		string $affiliate_terms_message_hash,
 		string $affiliate_terms_signature,
@@ -43,9 +44,9 @@ class HardhatAppContractClient extends AppContractClient {
 		$result = null;
 		$this->contract()->send(
 			'unlockPaywall',
-			$server_signature,
+			$server_signature->value(),
 			$seller_terms_message_hash,
-			$seller_terms_signature,
+			$seller_terms_signature->value(),
 			$consumer_terms_version,
 			$affiliate_terms_message_hash,
 			$affiliate_terms_signature,

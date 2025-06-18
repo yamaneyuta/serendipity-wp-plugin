@@ -5,6 +5,8 @@ namespace Cornix\Serendipity\Core\Infrastructure\Web3;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
+use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Elliptic\EC;
 use kornrunner\Keccak;
 
@@ -32,14 +34,14 @@ class Ethers {
 	 *
 	 * @see https://github.com/simplito/elliptic-php?tab=readme-ov-file#verifying-ethereum-signature
 	 */
-	public static function verifyMessage( string $message, string $signature ): ?Address {
+	public static function verifyMessage( SigningMessage $message, Signature $signature ): ?Address {
 
-		$message_hash = Keccak::hash( self::eip191( $message ), 256 );
+		$message_hash = Keccak::hash( self::eip191( $message->value() ), 256 );
 		$sign         = array(
-			'r' => substr( $signature, 2, 64 ),
-			's' => substr( $signature, 66, 64 ),
+			'r' => substr( $signature->value(), 2, 64 ),
+			's' => substr( $signature->value(), 66, 64 ),
 		);
-		$recid        = ord( hex2bin( substr( $signature, 130, 2 ) ) ) - 27;
+		$recid        = ord( hex2bin( substr( $signature->value(), 130, 2 ) ) ) - 27;
 		if ( $recid != ( $recid & 1 ) ) {
 			return null;
 		}
@@ -103,9 +105,9 @@ class Ethers {
 	public static function signMessage(
 		#[\SensitiveParameter]
 		PrivateKey $private_key,
-		string $message
-	): string {
-		$message_hash = Keccak::hash( self::eip191( $message ), 256 );
+		SigningMessage $message
+	): Signature {
+		$message_hash = Keccak::hash( self::eip191( $message->value() ), 256 );
 
 		$key_pair  = self::signerPrivateKeyToEcKeyPair( $private_key );
 		$signature = $key_pair->sign( $message_hash, array( 'canonical' => true ) );
@@ -114,7 +116,7 @@ class Ethers {
 		$s = str_pad( $signature->s->toString( 16 ), 64, '0', STR_PAD_LEFT );
 		$v = dechex( $signature->recoveryParam + 27 );
 
-		$signature = "0x$r$s$v";
+		$signature = new Signature( "0x$r$s$v" );
 
 		return $signature;
 	}

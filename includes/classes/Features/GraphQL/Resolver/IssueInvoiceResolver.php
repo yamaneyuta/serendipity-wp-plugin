@@ -6,35 +6,21 @@ namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\SignInvoice;
-use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class IssueInvoiceResolver extends ResolverBase {
 
 	public function __construct(
-		AppContractRepository $app_contract_repository,
-		ChainRepository $chain_repository,
-		TokenRepository $token_repository,
-		InvoiceRepository $invoice_repository,
-		PostRepository $post_repository
+		IssueInvoice $issue_invoice,
+		InitCrawledBlockNumber $init_crawled_block_number
 	) {
-		$this->app_contract_repository = $app_contract_repository;
-		$this->chain_repository        = $chain_repository;
-		$this->token_repository        = $token_repository;
-		$this->invoice_repository      = $invoice_repository;
-		$this->post_repository         = $post_repository;
+		$this->issue_invoice             = $issue_invoice;
+		$this->init_crawled_block_number = $init_crawled_block_number;
 	}
 
-	private AppContractRepository $app_contract_repository;
-	private ChainRepository $chain_repository;
-	private TokenRepository $token_repository;
-	private InvoiceRepository $invoice_repository;
-	private PostRepository $post_repository;
+	private IssueInvoice $issue_invoice;
+	private InitCrawledBlockNumber $init_crawled_block_number;
 
 	/**
 	 * #[\Override]
@@ -56,11 +42,11 @@ class IssueInvoiceResolver extends ResolverBase {
 		try {
 			$wpdb->query( 'START TRANSACTION' );
 			// invoiceを発行
-			$invoice = ( new IssueInvoice( $this->token_repository, $this->invoice_repository, $this->post_repository ) )->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
+			$invoice = $this->issue_invoice->handle( $post_ID, $chain_ID, $token_address, $consumer_address );
 			// 発行したinvoiceに署名を行う
 			$signed_data = ( new SignInvoice( $wpdb ) )->handle( $invoice );
 			// クロール済みブロック番号を初期化
-			( new InitCrawledBlockNumber( $this->app_contract_repository, $this->chain_repository ) )->handle( $chain_ID );
+			$this->init_crawled_block_number->handle( $chain_ID );
 			$wpdb->query( 'COMMIT' );
 		} catch ( \Throwable $e ) {
 			$wpdb->query( 'ROLLBACK' );
@@ -70,8 +56,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		return array(
 			'invoiceIdHex'     => $invoice->id()->hex(),
 			'nonce'            => $invoice->nonce()->value(),
-			'serverMessage'    => $signed_data->message(),
-			'serverSignature'  => $signed_data->signature(),
+			'serverMessage'    => $signed_data->message()->value(),
+			'serverSignature'  => $signed_data->signature()->value(),
 			'paymentAmountHex' => $invoice->paymentAmountHex(),
 		);
 	}

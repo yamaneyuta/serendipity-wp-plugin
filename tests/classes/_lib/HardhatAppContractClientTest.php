@@ -1,15 +1,19 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Application\Service\TermsService;
+use Cornix\Serendipity\Core\Domain\Service\SellerService;
+use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
-use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
+use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use kornrunner\Keccak;
 
 class HardhatAppContractClientTest extends IntegrationTestBase {
@@ -29,11 +33,13 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		$consumer = HardhatSignerFactory::bob();
 
 		// 販売者の署名情報を保存
-		$terms_service    = ( new TermsServiceFactory() )->create();
-		$seller_signature = $seller->signMessage( $terms_service->getCurrentSellerTerms()->message() );
+		$seller_service   = $this->container()->get( SellerService::class );
+		$wallet_service   = $this->container()->get( WalletService::class );
+		$terms_service    = $this->container()->get( TermsService::class );
+		$seller_signature = $wallet_service->signMessage( $seller, $terms_service->getCurrentSellerTerms()->message() );
 		$terms_service->saveSellerSignature( $seller_signature );
 		// 署名時のメッセージハッシュを取得
-		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $terms_service->getSignedSellerTerms()->terms()->message() ), 256 );
+		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $seller_service->getSellerSignedTerms()->terms()->message()->value() ), 256 );
 
 		// 販売価格1,000円で投稿を作成
 		$selling_network_category_id = NetworkCategoryID::privatenet();
@@ -74,8 +80,8 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		assert( ! isset( $data['errors'] ) );
 		$invoice_id_hex     = $data['issueInvoice']['invoiceIdHex'];
 		$nonce              = $data['issueInvoice']['nonce'];
-		$server_message     = $data['issueInvoice']['serverMessage'];
-		$server_signature   = $data['issueInvoice']['serverSignature'];
+		$server_message     = new SigningMessage( $data['issueInvoice']['serverMessage'] );
+		$server_signature   = new Signature( $data['issueInvoice']['serverSignature'] );
 		$payment_amount_hex = $data['issueInvoice']['paymentAmountHex'];
 		$server_address     = Ethers::verifyMessage( $server_message, $server_signature );
 

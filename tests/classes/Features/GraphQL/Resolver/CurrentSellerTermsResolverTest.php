@@ -44,7 +44,7 @@ class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 
 		// Repositoryから取得した値と一致していることを確認
 		$this->assertEquals( $current_seller_terms->version()->value(), $data['data']['currentSellerTerms']['version'] );
-		$this->assertEquals( $current_seller_terms->message(), $data['data']['currentSellerTerms']['message'] );
+		$this->assertEquals( $current_seller_terms->message()->value(), $data['data']['currentSellerTerms']['message'] );
 	}
 
 	/**

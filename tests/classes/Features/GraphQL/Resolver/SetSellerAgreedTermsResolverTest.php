@@ -1,12 +1,15 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Domain\Service\SellerService;
+use Cornix\Serendipity\Core\Domain\Service\WalletService;
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 
 class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 
-	private function requestSetSellerAgreedTerms( string $user_type, int $version, string $signature ) {
+	private function requestSetSellerAgreedTerms( string $user_type, int $version, Signature $signature ) {
 		// リクエストを送信するユーザーを設定
 		$this->getUser( $user_type )->setCurrentUser();
 
@@ -17,7 +20,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		GRAPHQL;
 		$variables = array(
 			'version'   => $version,
-			'signature' => $signature,
+			'signature' => $signature->value(),
 		);
 
 		// GraphQLリクエストを送信
@@ -35,13 +38,15 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 	 */
 	public function requestSetSellerSuccess( string $user_type ) {
 		// ARRANGE
+		$seller_service       = $this->container()->get( SellerService::class );
+		$wallet_service       = $this->container()->get( WalletService::class );
 		$terms_service        = ( new TermsServiceFactory() )->create();
 		$current_seller_terms = $terms_service->getCurrentSellerTerms();
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice     = HardhatSignerFactory::alice();
-		$signature = $alice->signMessage( $current_seller_terms->message() );
+		$signature = $wallet_service->signMessage( $alice, $current_seller_terms->message() );
 		// 事前チェック
-		$this->assertNull( $terms_service->getSignedSellerTerms() );  // データは保存されていないこと
+		$this->assertNull( $seller_service->getSellerSignedTerms() );  // 署名済みのデータは保存されていないこと
 
 		// ACT
 		$data = $this->requestSetSellerAgreedTerms( $user_type, $current_seller_terms->version()->value(), $signature );
@@ -50,12 +55,12 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		// responseの確認
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
 		// データの確認
-		$singed_seller_terms = $terms_service->getSignedSellerTerms();
+		$signed_seller_terms = $seller_service->getSellerSignedTerms();
 		// 設定が保存されていること
-		$this->assertTrue( $singed_seller_terms->terms()->version()->equals( $current_seller_terms->version() ) );
-		$this->assertTrue( $singed_seller_terms->terms()->message() === $current_seller_terms->message() );
+		$this->assertTrue( $signed_seller_terms->terms()->version()->equals( $current_seller_terms->version() ) );
+		$this->assertTrue( $signed_seller_terms->terms()->message()->value() === $current_seller_terms->message()->value() );
 		// 保存済みのメッセージと署名からアドレスを取得できること
-		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $singed_seller_terms->terms()->message(), $singed_seller_terms->signature() ) );
+		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $signed_seller_terms->terms()->message(), $signed_seller_terms->signature() ) );
 	}
 
 
@@ -68,13 +73,15 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 	 */
 	public function requestSetSellerFail( string $user_type ) {
 		// ARRANGE
+		$seller_service       = $this->container()->get( SellerService::class );
+		$wallet_service       = $this->container()->get( WalletService::class );
 		$terms_service        = ( new TermsServiceFactory() )->create();
 		$current_seller_terms = $terms_service->getCurrentSellerTerms();
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice     = HardhatSignerFactory::alice();
-		$signature = $alice->signMessage( $current_seller_terms->message() );
+		$signature = $wallet_service->signMessage( $alice, $current_seller_terms->message() );
 		// 事前チェック
-		$this->assertNull( $terms_service->getSignedSellerTerms() );  // データは保存されていないこと
+		$this->assertNull( $seller_service->getSellerSignedTerms() );  // データは保存されていないこと
 
 		// ACT
 		$data = $this->requestSetSellerAgreedTerms( $user_type, $current_seller_terms->version()->value(), $signature );
@@ -82,7 +89,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		// ASSERT
 		// responseの確認
 		$this->assertTrue( isset( $data['errors'] ) ); // エラーフィールドが存在
-		$this->assertNull( $terms_service->getSignedSellerTerms() );  // データは保存されていないこと
+		$this->assertNull( $seller_service->getSellerSignedTerms() );  // データは保存されていないこと
 	}
 
 

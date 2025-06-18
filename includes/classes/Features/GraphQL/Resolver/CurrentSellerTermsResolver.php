@@ -27,7 +27,7 @@ class CurrentSellerTermsResolver extends ResolverBase {
 		$current_seller_terms = $this->terms_service->getCurrentSellerTerms();
 		return array(
 			'version' => $current_seller_terms->version()->value(),
-			'message' => $current_seller_terms->message(),
+			'message' => $current_seller_terms->message()->value(),
 		);
 	}
 }
