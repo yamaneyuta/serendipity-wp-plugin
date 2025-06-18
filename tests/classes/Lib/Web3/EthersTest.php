@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Domain\Entity\Signer;
+use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 
 class EthersTest extends IntegrationTestBase {
@@ -33,8 +34,8 @@ class EthersTest extends IntegrationTestBase {
 	public function testVerifyMessage( string $expected_address, string $private_key ) {
 		// ARRANGE
 		$signer    = new Signer( $private_key );
-		$message   = 'Hello, world!';
-		$signature = $signer->signMessage( $message );
+		$message   = new SigningMessage( 'Hello, world!' );
+		$signature = Ethers::signMessage( $signer->privateKey(), $message );
 		$this->assertEquals( $signer->address()->value(), $expected_address );
 
 		// ACT

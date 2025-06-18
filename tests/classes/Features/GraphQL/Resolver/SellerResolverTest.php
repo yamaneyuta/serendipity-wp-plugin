@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
+use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 
@@ -65,7 +66,7 @@ class SellerResolverTest extends IntegrationTestBase {
 		$alice         = HardhatSignerFactory::alice();
 		$terms_service = ( new TermsServiceFactory() )->create();
 		$seller_terms  = $terms_service->getCurrentSellerTerms();
-		$signature     = new Signature( $alice->signMessage( $seller_terms->message()->value() ) );
+		$signature     = $alice->signMessage( $seller_terms->message() );
 		$terms_service->saveSellerSignature( $signature );
 
 		// ACT
@@ -78,7 +79,7 @@ class SellerResolverTest extends IntegrationTestBase {
 		$this->assertEquals( $seller_terms->message()->value(), $agreed_terms['message'] );
 		$this->assertEquals( $signature, $agreed_terms['signature'] );
 		// 保存されたメッセージと署名からアドレスを取得できること
-		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $agreed_terms['message'], $agreed_terms['signature'] ) );
+		$this->assertEquals( $alice->address(), Ethers::verifyMessage( new SigningMessage( $agreed_terms['message'] ), new Signature( $agreed_terms['signature'] ) ) );
 
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
 	}

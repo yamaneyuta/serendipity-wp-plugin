@@ -90,6 +90,6 @@ class GetSellerAddress {
 	public function handle(): Address {
 		$seller_singed_terms = ( new TermsServiceFactory() )->create()->getSignedSellerTerms();
 		assert( $seller_singed_terms, '[88C95394] SellerAgreedTerms not found' );
-		return Ethers::verifyMessage( $seller_singed_terms->terms()->message()->value(), $seller_singed_terms->signature()->value() );
+		return Ethers::verifyMessage( $seller_singed_terms->terms()->message(), $seller_singed_terms->signature() );
 	}
 }

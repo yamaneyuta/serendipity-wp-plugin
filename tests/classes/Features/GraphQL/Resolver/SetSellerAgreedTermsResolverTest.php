@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 
 class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 
-	private function requestSetSellerAgreedTerms( string $user_type, int $version, string $signature ) {
+	private function requestSetSellerAgreedTerms( string $user_type, int $version, Signature $signature ) {
 		// リクエストを送信するユーザーを設定
 		$this->getUser( $user_type )->setCurrentUser();
 
@@ -17,7 +18,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		GRAPHQL;
 		$variables = array(
 			'version'   => $version,
-			'signature' => $signature,
+			'signature' => $signature->value(),
 		);
 
 		// GraphQLリクエストを送信
@@ -39,7 +40,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		$current_seller_terms = $terms_service->getCurrentSellerTerms();
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice     = HardhatSignerFactory::alice();
-		$signature = $alice->signMessage( $current_seller_terms->message()->value() );
+		$signature = $alice->signMessage( $current_seller_terms->message() );
 		// 事前チェック
 		$this->assertNull( $terms_service->getSignedSellerTerms() );  // データは保存されていないこと
 
@@ -55,7 +56,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		$this->assertTrue( $singed_seller_terms->terms()->version()->equals( $current_seller_terms->version() ) );
 		$this->assertTrue( $singed_seller_terms->terms()->message()->value() === $current_seller_terms->message()->value() );
 		// 保存済みのメッセージと署名からアドレスを取得できること
-		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $singed_seller_terms->terms()->message()->value(), $singed_seller_terms->signature()->value() ) );
+		$this->assertEquals( $alice->address(), Ethers::verifyMessage( $singed_seller_terms->terms()->message(), $singed_seller_terms->signature() ) );
 	}
 
 
@@ -72,7 +73,7 @@ class SetSellerAgreedTermsResolverTest extends IntegrationTestBase {
 		$current_seller_terms = $terms_service->getCurrentSellerTerms();
 		// Aliceが署名(本来はフロントエンド側の処理)
 		$alice     = HardhatSignerFactory::alice();
-		$signature = $alice->signMessage( $current_seller_terms->message()->value() );
+		$signature = $alice->signMessage( $current_seller_terms->message() );
 		// 事前チェック
 		$this->assertNull( $terms_service->getSignedSellerTerms() );  // データは保存されていないこと
 

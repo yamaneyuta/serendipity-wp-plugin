@@ -70,8 +70,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		return array(
 			'invoiceIdHex'     => $invoice->id()->hex(),
 			'nonce'            => $invoice->nonce()->value(),
-			'serverMessage'    => $signed_data->message(),
-			'serverSignature'  => $signed_data->signature(),
+			'serverMessage'    => $signed_data->message()->value(),
+			'serverSignature'  => $signed_data->signature()->value(),
 			'paymentAmountHex' => $invoice->paymentAmountHex(),
 		);
 	}

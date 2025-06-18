@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
+use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use kornrunner\Keccak;
 
 class HardhatAppContractClientTest extends IntegrationTestBase {
@@ -31,7 +32,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 
 		// 販売者の署名情報を保存
 		$terms_service    = $this->container()->get( TermsService::class );
-		$seller_signature = new Signature( $seller->signMessage( $terms_service->getCurrentSellerTerms()->message()->value() ) );
+		$seller_signature = $seller->signMessage( $terms_service->getCurrentSellerTerms()->message() );
 		$terms_service->saveSellerSignature( $seller_signature );
 		// 署名時のメッセージハッシュを取得
 		$seller_terms_message_hash = '0x' . Keccak::hash( Ethers::eip191( $terms_service->getSignedSellerTerms()->terms()->message()->value() ), 256 );
@@ -75,8 +76,8 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		assert( ! isset( $data['errors'] ) );
 		$invoice_id_hex     = $data['issueInvoice']['invoiceIdHex'];
 		$nonce              = $data['issueInvoice']['nonce'];
-		$server_message     = $data['issueInvoice']['serverMessage'];
-		$server_signature   = $data['issueInvoice']['serverSignature'];
+		$server_message     = new SigningMessage( $data['issueInvoice']['serverMessage'] );
+		$server_signature   = new Signature( $data['issueInvoice']['serverSignature'] );
 		$payment_amount_hex = $data['issueInvoice']['paymentAmountHex'];
 		$server_address     = Ethers::verifyMessage( $server_message, $server_signature );
 

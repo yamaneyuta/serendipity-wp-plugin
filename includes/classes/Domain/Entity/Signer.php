@@ -6,6 +6,8 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\PrivateKey;
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
+use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 
 class Signer {
 	/**
@@ -34,8 +36,10 @@ class Signer {
 
 	/**
 	 * メッセージに署名を行います。
+	 *
+	 * @deprecated Use WalletService::signMessage instead
 	 */
-	public function signMessage( string $message ): string {
+	public function signMessage( SigningMessage $message ): Signature {
 		return Ethers::signMessage( $this->private_key, $message );
 	}
 }

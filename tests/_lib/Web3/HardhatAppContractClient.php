@@ -28,7 +28,7 @@ class HardhatAppContractClient extends AppContractClient {
 
 	public function unlockPaywall(
 		Signer $from,
-		string $server_signature,
+		Signature $server_signature,
 		string $seller_terms_message_hash,
 		Signature $seller_terms_signature,
 		int $consumer_terms_version,
@@ -44,7 +44,7 @@ class HardhatAppContractClient extends AppContractClient {
 		$result = null;
 		$this->contract()->send(
 			'unlockPaywall',
-			$server_signature,
+			$server_signature->value(),
 			$seller_terms_message_hash,
 			$seller_terms_signature->value(),
 			$consumer_terms_version,

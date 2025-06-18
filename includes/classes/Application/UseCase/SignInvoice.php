@@ -5,6 +5,8 @@ namespace Cornix\Serendipity\Core\Application\UseCase;
 
 use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
+use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
+use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
@@ -20,7 +22,8 @@ class SignInvoice {
 	public function handle( Invoice $invoice ): SingInvoiceResult {
 
 		// 署名用ウォレットで署名を行うためのメッセージを作成
-		$server_message = SolidityStrings::valueToHexString( $invoice->chainID()->value() )
+		$server_message = new SigningMessage(
+			SolidityStrings::valueToHexString( $invoice->chainID()->value() )
 			. SolidityStrings::addressToHexString( $invoice->sellerAddress() )
 			. SolidityStrings::addressToHexString( $invoice->consumerAddress() )
 			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
@@ -29,7 +32,8 @@ class SignInvoice {
 			. SolidityStrings::valueToHexString( $invoice->paymentAmountHex() )
 			. SolidityStrings::valueToHexString( ( new ConsumerTerms() )->currentVersion() )
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
-			. SolidityStrings::valueToHexString( 0 );  // TODO: アフィリエイト報酬率
+			. SolidityStrings::valueToHexString( 0 )    // TODO: アフィリエイト報酬率
+		);
 
 		// サーバーの署名用ウォレットで署名
 		$server_signer    = ( new ServerSignerServiceFactory( $this->wpdb ) )->create()->getServerSigner();
@@ -40,18 +44,18 @@ class SignInvoice {
 }
 
 class SingInvoiceResult {
-	public function __construct( string $message, string $signature ) {
+	public function __construct( SigningMessage $message, Signature $signature ) {
 		$this->message   = $message;
 		$this->signature = $signature;
 	}
 
-	private string $message;
-	private string $signature;
+	private SigningMessage $message;
+	private Signature $signature;
 
-	public function message(): string {
+	public function message(): SigningMessage {
 		return $this->message;
 	}
-	public function signature(): string {
+	public function signature(): Signature {
 		return $this->signature;
 	}
 }
