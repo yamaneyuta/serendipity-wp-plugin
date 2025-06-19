@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Core\Features\GraphQL\Resolver;
+namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\UseCase\GetPostPayableTokens;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
