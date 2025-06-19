@@ -3,26 +3,21 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\UseCase\GetPost;
 use Cornix\Serendipity\Core\Application\UseCase\GetPostPayableTokens;
-use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
-use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 
 class PostResolver extends ResolverBase {
 
 	public function __construct(
-		ChainRepository $chain_repository,
-		PostRepository $post_repository,
-		TokenRepository $token_repository
+		GetPost $get_post,
+		GetPostPayableTokens $get_post_payable_tokens
 	) {
-		$this->chain_repository = $chain_repository;
-		$this->post_repository  = $post_repository;
-		$this->token_repository = $token_repository;
+		$this->get_post                = $get_post;
+		$this->get_post_payable_tokens = $get_post_payable_tokens;
 	}
 
-	private ChainRepository $chain_repository;
-	private PostRepository $post_repository;
-	private TokenRepository $token_repository;
+	private GetPost $get_post;
+	private GetPostPayableTokens $get_post_payable_tokens;
 
 	/**
 	 * #[\Override]
@@ -30,25 +25,20 @@ class PostResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		/** @var int */
-		$post_ID = $args['postID'];
+		$post = $this->get_post->handle( $args['postID'] );
 
 		// 投稿は公開済み、または編集可能な権限があることをチェック
-		$this->checkIsPublishedOrEditable( $post_ID );
+		$this->checkIsPublishedOrEditable( $post->id() );
 
-		$payable_tokens_callback = function () use ( $root_value, $post_ID ) {
-			$payable_tokens = ( new GetPostPayableTokens(
-				$this->post_repository,
-				$this->chain_repository,
-				$this->token_repository
-			) )->handle( $post_ID );
+		$payable_tokens_callback = function () use ( $root_value, $post ) {
+			$payable_tokens = $this->get_post_payable_tokens->handle( $post->id() );
 
 			return array_map(
 				fn( $token ) => $root_value['token'](
 					$root_value,
 					array(
-						'chainID' => $token->chainID()->value(),
-						'address' => $token->address()->value(),
+						'chainID' => $token->chainId(),
+						'address' => $token->address(),
 					)
 				),
 				$payable_tokens
@@ -56,10 +46,10 @@ class PostResolver extends ResolverBase {
 		};
 
 		return array(
-			'id'             => $post_ID,
-			'title'          => fn() => get_the_title( $post_ID ),
-			'sellingPrice'   => fn() => $root_value['sellingPrice']( $root_value, array( 'postID' => $post_ID ) ),
-			'sellingContent' => fn() => $root_value['sellingContent']( $root_value, array( 'postID' => $post_ID ) ),
+			'id'             => $post->id(),
+			'title'          => $post->title(),
+			'sellingPrice'   => fn() => $root_value['sellingPrice']( $root_value, array( 'postID' => $post->id() ) ),
+			'sellingContent' => fn() => $root_value['sellingContent']( $root_value, array( 'postID' => $post->id() ) ),
 			'payableTokens'  => $payable_tokens_callback,
 		);
 	}

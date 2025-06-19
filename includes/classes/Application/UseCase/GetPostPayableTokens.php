@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Application\UseCase;
 
-use Cornix\Serendipity\Core\Domain\Entity\Token;
+use Cornix\Serendipity\Core\Application\Dto\TokenDto;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 
+/** 指定された投稿で支払い可能なトークン一覧を取得します */
 class GetPostPayableTokens {
 	public function __construct( PostRepository $post_repository, ChainRepository $chain_repository, TokenRepository $token_repository ) {
 		$this->post_repository  = $post_repository;
@@ -22,10 +23,7 @@ class GetPostPayableTokens {
 	private ChainRepository $chain_repository;
 	private TokenRepository $token_repository;
 
-	/**
-	 *
-	 * @return Token[]
-	 */
+	/** @return TokenDto[] */
 	public function handle( int $post_id ): array {
 		// 投稿の販売ネットワークを取得
 		$post                     = $this->post_repository->get( $post_id );
@@ -41,7 +39,7 @@ class GetPostPayableTokens {
 			->byConnectable()
 			->apply( $this->chain_repository->all() );
 
-		/** @var Token[] */
+		/** @var TokenDto[] */
 		$result = array();
 
 		// 各チェーンに対して支払い可能なトークンを取得
@@ -53,7 +51,7 @@ class GetPostPayableTokens {
 				->apply( $all_tokens );
 
 			foreach ( $payable_tokens as $token ) {
-				$result[] = $token;
+				$result[] = TokenDto::fromEntity( $token );
 			}
 		}
 

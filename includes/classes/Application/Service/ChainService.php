@@ -17,6 +17,7 @@ class ChainService {
 	}
 	private ChainRepository $repository;
 
+	/** @deprecated Use ChainRepository::get */
 	public function getChain( ChainID $chain_id ): ?Chain {
 		return $this->repository->get( $chain_id );
 	}
@@ -25,6 +26,7 @@ class ChainService {
 	 * リポジトリに登録されているチェーン一覧を取得します。
 	 *
 	 * @return Chain[]
+	 * @deprecated Use ChainRepository::all
 	 */
 	public function getAllChains(): array {
 		return $this->repository->all();
@@ -34,6 +36,7 @@ class ChainService {
 	 * チェーン情報を更新します。
 	 *
 	 * @param Chain $chain
+	 * @deprecated Use ChainRepository::save
 	 */
 	private function saveChain( Chain $chain ): void {
 		$this->repository->save( $chain );
@@ -58,6 +61,7 @@ class ChainService {
 	 *
 	 * @param ChainID    $chain_id
 	 * @param int|string $confirmations
+	 * @deprecated Use ChainRepository::save
 	 */
 	public function saveConfirmations( ChainID $chain_id, $confirmations ): void {
 		if ( ! is_int( $confirmations ) && ! is_string( $confirmations ) ) {
