@@ -19,7 +19,7 @@ class AppLogger {
 	private function log( LogLevel $level, $message_or_exception ): void {
 		try {
 			$current_log_level = $this->log_level_provider->getLogLevel( LogCategory::app() );
-			if($current_log_level->allows( $level )) {
+			if ( $current_log_level->allows( $level ) ) {
 				// 現在設定されているログレベルで出力する場合に限り、ログを出力する
 				$this->logger->log( $level, $message_or_exception );
 			}
