@@ -54,7 +54,7 @@ class GraphQlRequester {
 	}
 	private ?WpUser $execute_user = null;
 
-	private function request( string $query, array $variables = null ): WP_REST_Response {
+	public function request( string $query, array $variables = null ): WP_REST_Response {
 		$with_user = null !== $this->execute_user ? new WithUser( $this->execute_user ) : null;
 
 		$request_data = array(
