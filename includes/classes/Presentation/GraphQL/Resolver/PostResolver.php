@@ -4,20 +4,20 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\UseCase\GetPost;
-use Cornix\Serendipity\Core\Application\UseCase\GetPostPayableTokens;
+use Cornix\Serendipity\Core\Application\UseCase\GetPayableTokens;
 
 class PostResolver extends ResolverBase {
 
 	public function __construct(
 		GetPost $get_post,
-		GetPostPayableTokens $get_post_payable_tokens
+		GetPayableTokens $get_payable_tokens
 	) {
-		$this->get_post                = $get_post;
-		$this->get_post_payable_tokens = $get_post_payable_tokens;
+		$this->get_post           = $get_post;
+		$this->get_payable_tokens = $get_payable_tokens;
 	}
 
 	private GetPost $get_post;
-	private GetPostPayableTokens $get_post_payable_tokens;
+	private GetPayableTokens $get_payable_tokens;
 
 	/**
 	 * #[\Override]
@@ -31,7 +31,7 @@ class PostResolver extends ResolverBase {
 		$this->checkIsPublishedOrEditable( $post->id() );
 
 		$payable_tokens_callback = function () use ( $root_value, $post ) {
-			$payable_tokens = $this->get_post_payable_tokens->handle( $post->id() );
+			$payable_tokens = $this->get_payable_tokens->handle( $post->id() );
 
 			return array_map(
 				fn( $token ) => $root_value['token'](

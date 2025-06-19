@@ -12,7 +12,7 @@ use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
 use Cornix\Serendipity\Core\Lib\Logger\Logger;
 
 /** 指定された投稿で支払い可能なトークン一覧を取得します */
-class GetPostPayableTokens {
+class GetPayableTokens {
 	public function __construct( PostRepository $post_repository, ChainRepository $chain_repository, TokenRepository $token_repository ) {
 		$this->post_repository  = $post_repository;
 		$this->chain_repository = $chain_repository;
