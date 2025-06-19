@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Logger;
 
-class Logger {
+/** @deprecated */
+class DeprecatedLogger {
 
-	private static ILogger $instance;
+	private static IDeprecatedLogger $instance;
 
-	private static function logger(): ILogger {
+	private static function logger(): IDeprecatedLogger {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new DefaultLogger();
 		}
@@ -17,7 +18,7 @@ class Logger {
 	/**
 	 * ロガーインスタンスを設定します。
 	 */
-	public static function setLogger( ILogger $logger ) {
+	public static function setLogger( IDeprecatedLogger $logger ) {
 		self::$instance = $logger;
 	}
 
@@ -59,7 +60,7 @@ class Logger {
 }
 
 
-class DefaultLogger implements ILogger {
+class DefaultLogger implements IDeprecatedLogger {
 
 	public function debug( $message_or_exception ) {
 		error_log( '[DEBUG] ' . $message_or_exception );

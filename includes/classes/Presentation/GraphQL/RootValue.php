@@ -25,7 +25,7 @@ use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsRe
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokensResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\VerifiableChainsResolver;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
+use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 use DI\Container;
 
 class RootValue {
@@ -74,7 +74,7 @@ class RootValue {
 				try {
 					return $resolver->resolve( $root_value, $args );
 				} catch ( \Throwable $e ) {
-					Logger::error( $e );
+					DeprecatedLogger::error( $e );
 					throw $e;
 				}
 			};

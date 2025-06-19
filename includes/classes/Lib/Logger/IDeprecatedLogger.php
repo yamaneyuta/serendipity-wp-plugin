@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Lib\Logger;
 
-interface ILogger {
+/** @deprecated */
+interface IDeprecatedLogger {
 	/**
 	 * デバッグログを出力します。
 	 *

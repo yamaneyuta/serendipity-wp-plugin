@@ -7,7 +7,7 @@ use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
+use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 
 class VerifiableChainsResolver extends ResolverBase {
 
@@ -39,7 +39,7 @@ class VerifiableChainsResolver extends ResolverBase {
 
 		$selling_network_category_id = $this->post_repository->get( $post_ID )->sellingNetworkCategoryID();
 		if ( is_null( $selling_network_category_id ) ) {
-			Logger::warn( '[B4FC6E2A] Selling network category is null for post ID: ' . $post_ID );
+			DeprecatedLogger::warn( '[B4FC6E2A] Selling network category is null for post ID: ' . $post_ID );
 			return array();  // 販売ネットワークカテゴリが設定されていない場合は空の配列を返す
 		}
 

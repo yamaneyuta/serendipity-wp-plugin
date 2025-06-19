@@ -4,7 +4,7 @@ namespace Cornix\Serendipity\Core\Presentation;
 
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
+use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use DI\Container;
 use GraphQL\GraphQL;
@@ -60,7 +60,7 @@ class GraphQLHook {
 				function ( array $errors, callable $formatter ): array {
 					foreach ( $errors as $error ) {
 						// エラーログを出力
-						Logger::error( $error );
+						DeprecatedLogger::error( $error );
 					}
 					return array_map( $formatter, $errors );
 				}
