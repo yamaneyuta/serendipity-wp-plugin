@@ -15,7 +15,7 @@ class HappyPathTest extends UnitTestCaseBase {
 	public function setUp(): void {
 		parent::setUp();
 		self::resetDatabase(); // データベースをリセット
-		$this->register_seller = $this->container()->get( RegisterSeller::class );
+		$this->register_seller = self::container()->get( RegisterSeller::class );
 	}
 
 	private RegisterSeller $register_seller;

@@ -21,7 +21,7 @@ class BlockchainClientServiceImplTest extends UnitTestCaseBase {
 
 	public function setUp(): void {
 		parent::setUp();
-		$this->chain_repository = $this->container()->get( ChainRepository::class );
+		$this->chain_repository = self::container()->get( ChainRepository::class );
 	}
 	private ChainRepository $chain_repository;
 

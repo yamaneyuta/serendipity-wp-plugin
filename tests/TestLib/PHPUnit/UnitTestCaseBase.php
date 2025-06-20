@@ -20,20 +20,18 @@ use wpdb;
 /** 基本的なユニットテストケース */
 class UnitTestCaseBase extends WP_UnitTestCase {
 
+
 	/** @inheritdoc */
 	public function setUp(): void {
 		parent::setUp();
 
-		// DIコンテナの初期化
-		$this->container = ( new InitializeContainer() )->handle();
-
 		// ログレベルの設定(テストのため最小限のログ出力とする)
-		$this->log_level_provider = $this->container->get( LogLevelProvider::class );
+		$this->log_level_provider = self::container()->get( LogLevelProvider::class );
 		$this->log_level_provider->setLogLevel( LogCategory::app(), LogLevel::error() );
 		$this->log_level_provider->setLogLevel( LogCategory::audit(), LogLevel::none() );
 
 		// クライアントリクエストサービスの初期化
-		$this->client_request_service = new ClientRequestService( $this->container );
+		$this->client_request_service = new ClientRequestService( self::container() );
 		$this->client_request_service->setUp();
 	}
 
@@ -52,9 +50,12 @@ class UnitTestCaseBase extends WP_UnitTestCase {
 		( new ResetDatabase() )->handle( $GLOBALS['wpdb'] );
 	}
 
-	private ?Container $container;
-	protected function container(): Container {
-		return $this->container;
+	private static ?Container $container = null;
+	protected static function container(): Container {
+		if ( null === self::$container ) {
+			self::$container = ( new InitializeContainer() )->handle();
+		}
+		return self::$container;
 	}
 
 	private LogLevelProvider $log_level_provider;
