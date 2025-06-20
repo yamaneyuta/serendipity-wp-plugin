@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Infrastructure\DI;
 
+use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
@@ -23,6 +24,7 @@ use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\WalletServiceImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Logging\LogLevelProviderImpl;
 use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\PostTitleProviderImpl;
+use Cornix\Serendipity\Core\Infrastructure\WordPress\Service\UserAccessProviderImpl;
 use wpdb;
 
 use function DI\autowire;
@@ -46,6 +48,7 @@ final class ContainerDefinitions {
 			// Service
 			WalletService::class         => autowire( WalletServiceImpl::class ),
 			PostTitleProvider::class     => autowire( PostTitleProviderImpl::class ),
+			UserAccessProvider::class    => autowire( UserAccessProviderImpl::class ),
 
 			// Logging
 			Logger::class                => autowire( SimpleLogger::class ),
