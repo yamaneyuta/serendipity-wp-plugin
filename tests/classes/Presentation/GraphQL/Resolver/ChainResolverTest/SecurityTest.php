@@ -5,10 +5,16 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\ChainResolverTest;
 
 use Cornix\Serendipity\Core\Constant\ChainIdValue;
+use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
 use Cornix\Serendipity\Test\Entity\WpUser;
 use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
 
 class SecurityTest extends UnitTestCaseBase {
+
+	public function setUp(): void {
+		parent::setUp();
+		$this->setAppLogLevel( LogLevel::none() );  // ログを抑制
+	}
 
 	/**
 	 * chain はQueryに定義されていないためアクセス不可
