@@ -14,6 +14,21 @@ use HardhatAccount;
 
 /** ブロックチェーンへのアクセスが発生するテストケース */
 class BlockchainTestCaseBase extends UnitTestCaseBase {
+
+	/** @inheritdoc */
+	public static function setUpBeforeClass(): void {
+		parent::setUpBeforeClass();
+
+		// プライベートネットを待機。全テストで1回行えばよいため、グローバル変数を使って状態を管理
+		global $is_privatenet_ready;
+		if ( ! $is_privatenet_ready ) {
+			$hardhat_handler = new HardhatHandler( self::container() );
+			$hardhat_handler->waitForNetwork();
+			$hardhat_handler->waitForContractReady();
+			$is_privatenet_ready = true;
+		}
+	}
+
 	/** @inheritdoc */
 	public function setUp(): void {
 		parent::setUp();
@@ -29,7 +44,6 @@ class BlockchainTestCaseBase extends UnitTestCaseBase {
 		// ここに必要なクリーンアップ処理を追加
 
 		$this->hardhat_handler->tearDown();
-		$this->hardhat_handler = null;
 	}
 
 	private ?HardhatHandler $hardhat_handler;
@@ -56,11 +70,7 @@ class HardhatHandler {
 	public function setUp(): void {
 		assert( empty( $this->restore_snapshot_callbacks ), '[5A506A5A] restore_snapshot_callbacks is not empty.' );
 		foreach ( $this->chains as $chain ) {
-			$rpc_url = $chain->rpcURL();
-			$this->waitForNetwork( $rpc_url );
-			$this->waitForContractReady( $rpc_url );
-
-			$hardhat                            = new Hardhat( $rpc_url );
+			$hardhat                            = new Hardhat( $chain->rpcURL() );
 			$snapshot_id                        = $hardhat->snapshot();
 			$this->restore_snapshot_callbacks[] = fn() => $hardhat->revert( $snapshot_id );
 		}
@@ -73,32 +83,40 @@ class HardhatHandler {
 		}
 	}
 
-	private function waitForNetwork( string $rpc_url ): void {
-		// cURLでステータス200が取得できるまで最大60秒待機
-		for ( $i = 0; $i < 60; $i++ ) {
-			$response = wp_remote_get( $rpc_url );
-			$code     = wp_remote_retrieve_response_code( $response );
-			if ( 200 === $code ) {
-				return;
+	public function waitForNetwork(): void {
+		foreach ( $this->chains as $chain ) {
+			$rpc_url = $chain->rpcURL();
+
+			// cURLでステータス200が取得できるまで最大60秒待機
+			for ( $i = 0; $i < 60; $i++ ) {
+				$response = wp_remote_get( $rpc_url );
+				$code     = wp_remote_retrieve_response_code( $response );
+				if ( 200 === $code ) {
+					return;
+				}
+				error_log( "[C215F287] Wait for network. rpc url: $rpc_url, code: $code" );
+				sleep( 1 );
 			}
-			error_log( "[C215F287] Wait for network. rpc url: $rpc_url, code: $code" );
-			sleep( 1 );
+			throw new \RuntimeException( "[BE27EE91] Failed to wait for network ready. rpc url: $rpc_url" );
 		}
-		throw new \RuntimeException( "[BE27EE91] Failed to wait for network ready. rpc url: $rpc_url" );
 	}
 
-	private function waitForContractReady( string $rpc_url ): void {
-		// コントラクトデプロイ後、特定のアドレスの残高が増えるので、それを確認するまで待機
-		$blockchain = new BlockchainClient( $rpc_url );
-		for ( $i = 0; $i < 60; $i++ ) {
-			$balance_hex = $blockchain->getBalanceHex( ( new HardhatAccount() )->marker() );
-			if ( hexdec( $balance_hex ) > 0 ) {
-				return;
-			}
-			error_log( "[8C4C0262] Wait for contract ready. rpc url: $rpc_url, balance: $balance_hex" );
-			sleep( 1 );
-		}
+	public function waitForContractReady(): void {
+		foreach ( $this->chains as $chain ) {
+			$rpc_url = $chain->rpcURL();
 
-		throw new \RuntimeException( "[764D018F] Failed to wait for contract ready. rpc url: $rpc_url" );
+			// コントラクトデプロイ後、特定のアドレスの残高が増えるので、それを確認するまで待機
+			$blockchain = new BlockchainClient( $rpc_url );
+			for ( $i = 0; $i < 60; $i++ ) {
+				$balance_hex = $blockchain->getBalanceHex( ( new HardhatAccount() )->marker() );
+				if ( hexdec( $balance_hex ) > 0 ) {
+					return;
+				}
+				error_log( "[8C4C0262] Wait for contract ready. rpc url: $rpc_url, balance: $balance_hex" );
+				sleep( 1 );
+			}
+
+			throw new \RuntimeException( "[764D018F] Failed to wait for contract ready. rpc url: $rpc_url" );
+		}
 	}
 }
