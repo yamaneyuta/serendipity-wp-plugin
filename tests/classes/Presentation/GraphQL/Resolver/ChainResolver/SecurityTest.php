@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\ChainResolverTest;
+namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\ChainResolver;
 
 use Cornix\Serendipity\Core\Constant\ChainIdValue;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
