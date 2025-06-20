@@ -7,15 +7,16 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
 use Cornix\Serendipity\Test\Entity\WpUser;
-use Cornix\Serendipity\Test\PHPUnit\DatabaseTestCaseBase;
+use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
 use Cornix\Serendipity\Test\UseCase\RegisterSeller;
 use HardhatSignerFactory;
 
-class SecurityTest extends DatabaseTestCaseBase {
+class SecurityTest extends UnitTestCaseBase {
 
 	public function setUp(): void {
 		parent::setUp();
-		$this->register_seller = $this->container()->get( RegisterSeller::class );
+		self::resetDatabase(); // データベースをリセット
+		$this->register_seller = self::container()->get( RegisterSeller::class );
 	}
 
 	private RegisterSeller $register_seller;

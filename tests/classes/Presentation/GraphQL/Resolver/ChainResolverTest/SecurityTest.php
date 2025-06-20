@@ -11,6 +11,11 @@ use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
 
 class SecurityTest extends UnitTestCaseBase {
 
+	public static function setUpBeforeClass(): void {
+		parent::setUpBeforeClass();
+		self::resetDatabase(); // データベースをリセット
+	}
+
 	public function setUp(): void {
 		parent::setUp();
 		$this->setAppLogLevel( LogLevel::none() );  // ログを抑制
