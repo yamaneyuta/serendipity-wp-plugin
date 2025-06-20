@@ -6,14 +6,15 @@ namespace Cornix\Serendipity\TestCase\Features\GraphQL\Resolver\SellerResolverTe
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
-use Cornix\Serendipity\Test\PHPUnit\DatabaseTestCaseBase;
+use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
 use Cornix\Serendipity\Test\UseCase\RegisterSeller;
 use HardhatSignerFactory;
 
-class HappyPathTest extends DatabaseTestCaseBase {
+class HappyPathTest extends UnitTestCaseBase {
 
 	public function setUp(): void {
 		parent::setUp();
+		self::resetDatabase(); // データベースをリセット
 		$this->register_seller = $this->container()->get( RegisterSeller::class );
 	}
 

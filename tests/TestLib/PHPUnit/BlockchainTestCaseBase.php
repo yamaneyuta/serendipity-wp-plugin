@@ -12,8 +12,8 @@ use DI\Container;
 use Hardhat;
 use HardhatAccount;
 
-/** データベース及びブロックチェーンへのアクセスが発生するテストケース */
-class BlockchainTestCaseBase extends DatabaseTestCaseBase {
+/** ブロックチェーンへのアクセスが発生するテストケース */
+class BlockchainTestCaseBase extends UnitTestCaseBase {
 	/** @inheritdoc */
 	public function setUp(): void {
 		parent::setUp();
