@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation;
 
+use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Presentation\GraphQL\RootValue;
 use Cornix\Serendipity\Core\Lib\GraphQL\PluginSchema;
-use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use DI\Container;
 use GraphQL\GraphQL;
@@ -17,12 +17,15 @@ class GraphQLHook {
 	public function __construct( RestProperty $rest_property, Container $container ) {
 		$this->rest_property = $rest_property;
 		$this->container     = $container;
+		$this->app_logger    = $container->get( AppLogger::class );
 	}
 
 	/** @var RestProperty */
 	private $rest_property;
 	/** @var Container */
 	private $container;
+	/** @var AppLogger */
+	private $app_logger;
 
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'addActionRestApiInit' ) );
@@ -59,8 +62,7 @@ class GraphQLHook {
 			->setErrorsHandler(
 				function ( array $errors, callable $formatter ): array {
 					foreach ( $errors as $error ) {
-						// エラーログを出力
-						DeprecatedLogger::error( $error );
+						$this->app_logger->error( $error ); // エラーログを出力
 					}
 					return array_map( $formatter, $errors );
 				}
