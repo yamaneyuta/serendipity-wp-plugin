@@ -55,4 +55,40 @@ class SecurityTest extends UnitTestCaseBase {
 			array( WpUser::visitor() ),
 		);
 	}
+
+
+	/**
+	 * chain はMutationにも定義されていないためアクセス不可
+	 *
+	 * @test
+	 * @testdox [E99054B1] Cannot query field "chain" on type "Mutation". - $user
+	 * @dataProvider inaccessibleMutationDataProvider
+	 */
+	public function inaccessibleMutation( WpUser $user ): void {
+		// ARRANGE
+		$chain_id = ChainIdValue::PRIVATENET_L1;
+
+		// ACT
+		$result = $this->graphQl( $user )->request(
+			<<<GRAPHQL
+				mutation Chain(\$chainId: Int!) {
+					chain(chainId: \$chainId) {
+						id
+					}
+				}
+			GRAPHQL,
+			array( 'chainId' => $chain_id )
+		)->get_data();
+
+		// ASSERT
+		$this->assertEquals( 1, count( $result['errors'] ) );
+		$this->assertContains( 'Cannot query field "chain" on type "Mutation".', $result['errors'][0]['message'] );
+	}
+	public function inaccessibleMutationDataProvider(): array {
+		return array(
+			array( WpUser::admin() ),
+			array( WpUser::contributor() ),
+			array( WpUser::visitor() ),
+		);
+	}
 }
