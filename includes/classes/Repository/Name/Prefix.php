@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Repository\Name;
 
 use Cornix\Serendipity\Core\Repository\PluginInfo;
-
+/** @deprecated use Infrastructure/WordPress/Service/PrefixProvider */
 class Prefix {
 
 	/**

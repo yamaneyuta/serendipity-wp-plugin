@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Test\PHPUnit;
 
 use Cornix\Serendipity\Core\Infrastructure\DI\ContainerDefinitions;
+use Cornix\Serendipity\Core\Infrastructure\Logging\LogLevelProvider;
+use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
+use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
 use Cornix\Serendipity\Test\Entity\WpUser;
 use Cornix\Serendipity\Test\Service\ClientRequestService;
 use DI\Container;
@@ -20,6 +23,11 @@ class UnitTestCaseBase extends WP_UnitTestCase {
 		// DIコンテナの初期化
 		$this->container = ( new InitializeContainer() )->handle();
 
+		// ログレベルの設定(テストのため最小限のログ出力とする)
+		$this->log_level_provider = $this->container->get( LogLevelProvider::class );
+		$this->log_level_provider->setLogLevel( LogCategory::app(), LogLevel::error() );
+		$this->log_level_provider->setLogLevel( LogCategory::audit(), LogLevel::none() );
+
 		// クライアントリクエストサービスの初期化
 		$this->client_request_service = new ClientRequestService( $this->container );
 		$this->client_request_service->setUp();
@@ -35,6 +43,11 @@ class UnitTestCaseBase extends WP_UnitTestCase {
 	private ?Container $container;
 	protected function container(): Container {
 		return $this->container;
+	}
+
+	private LogLevelProvider $log_level_provider;
+	protected function setAppLogLevel( LogLevel $level ): void {
+		$this->log_level_provider->setLogLevel( LogCategory::app(), $level );
 	}
 
 	private ClientRequestService $client_request_service;

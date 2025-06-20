@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
+use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 
 class SellingContentResolver extends ResolverBase {
 
@@ -31,7 +31,7 @@ class SellingContentResolver extends ResolverBase {
 
 		// 有料部分のコンテンツが取得できなかった場合はnullを返す
 		if ( null === $paid_content ) {
-			Logger::warn( '[248F67EA] Paid content is null for post ID: ' . $post_ID );
+			DeprecatedLogger::warn( '[248F67EA] Paid content is null for post ID: ' . $post_ID );
 			return null;
 		}
 

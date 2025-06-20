@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
+use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 
 class SellingPriceResolver extends ResolverBase {
 
@@ -30,7 +30,7 @@ class SellingPriceResolver extends ResolverBase {
 		$selling_price = $this->post_repository->get( $post_ID )->sellingPrice();
 
 		if ( is_null( $selling_price ) ) {
-			Logger::warn( '[57B6E802] Selling price is null for post ID: ' . $post_ID );
+			DeprecatedLogger::warn( '[57B6E802] Selling price is null for post ID: ' . $post_ID );
 		}
 
 		return is_null( $selling_price ) ? null : array(
