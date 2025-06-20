@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Features\GraphQL\Resolver\SellerResolverTest;
+namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\SellerResolver;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
