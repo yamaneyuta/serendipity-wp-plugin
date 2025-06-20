@@ -35,10 +35,7 @@ class ChainResolver extends ResolverBase {
 		$chain_id = $args['chainID'];
 
 		$chain = $this->get_chain->handle( $chain_id );
-
-		if ( is_null( $chain ) ) {
-			throw new \InvalidArgumentException( '[CA31D9B5] chain data is not found. chain id: ' . $chain_id );
-		}
+		assert( null !== $chain, '[CA31D9B5] chain data is not found. chain id: ' . $chain_id );
 
 		// `AppContractResolver`の作成を省略してコールバックを定義
 		// `AppContractResolver`を作成した場合はここの処理を書き換えること。
