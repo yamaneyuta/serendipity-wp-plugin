@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL;
 
+use Cornix\Serendipity\Core\Application\Logging\AppLogger;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ChainsResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\ConsumerTermsVersionResolver;
@@ -25,13 +26,12 @@ use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\SetSellerAgreedTermsRe
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokenResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\TokensResolver;
 use Cornix\Serendipity\Core\Presentation\GraphQL\Resolver\VerifiableChainsResolver;
-use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 use DI\Container;
 
 class RootValue {
 
 	/**
-	 * @param \DI\Container|null $container
+	 * @param \DI\Container $container
 	 * @return array<string, mixed>
 	 */
 	public function get( Container $container ) {
@@ -70,11 +70,11 @@ class RootValue {
 
 		$result = array();
 		foreach ( $resolvers as $field => $resolver ) {
-			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver ) {
+			$result[ $field ] = function ( array $root_value, array $args ) use ( $resolver, $container ) {
 				try {
 					return $resolver->resolve( $root_value, $args );
 				} catch ( \Throwable $e ) {
-					DeprecatedLogger::error( $e );
+					$container->get( AppLogger::class )->error( $e );
 					throw $e;
 				}
 			};
