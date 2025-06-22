@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\ServerSignerService;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\InvoiceRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
@@ -23,13 +24,15 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		ChainService $chain_service,
 		InvoiceRepository $invoice_repository,
 		PostRepository $post_repository,
-		ServerSignerService $server_signer_service
+		ServerSignerService $server_signer_service,
+		UserAccessChecker $user_access_checker
 	) {
 		$this->app_contract_repository = $app_contract_repository;
 		$this->chain_service           = $chain_service;
 		$this->invoice_repository      = $invoice_repository;
 		$this->post_repository         = $post_repository;
 		$this->server_signer_service   = $server_signer_service;
+		$this->user_access_checker     = $user_access_checker;
 	}
 
 	private AppContractRepository $app_contract_repository;
@@ -37,6 +40,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	private InvoiceRepository $invoice_repository;
 	private PostRepository $post_repository;
 	private ServerSignerService $server_signer_service;
+	private UserAccessChecker $user_access_checker;
 
 	// ここの定数は、GraphQLのエラーコードと一致させること
 	private const ERROR_CODE_INVALID_NONCE           = 'INVALID_NONCE';
@@ -81,8 +85,8 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		$chain            = $this->chain_service->getChain( $invoice->chainID() );
 		$consumer_address = $invoice->consumerAddress();
 
-		// 投稿は公開済み、または編集可能な権限があることをチェック
-		$this->checkIsPublishedOrEditable( $post_ID );
+		// 投稿を閲覧できる権限があることをチェック
+		$this->user_access_checker->checkCanViewPost( $post_ID );
 
 		if ( ! $chain->connectable() ) {
 			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す

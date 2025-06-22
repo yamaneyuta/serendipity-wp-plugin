@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\ChainService;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\AppContractRepository;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
@@ -14,16 +15,19 @@ class VerifiableChainsResolver extends ResolverBase {
 	public function __construct(
 		AppContractRepository $app_contract_repository,
 		ChainService $chain_service,
-		PostRepository $post_repository
+		PostRepository $post_repository,
+		UserAccessChecker $user_access_checker
 	) {
 		$this->app_contract_repository = $app_contract_repository;
 		$this->chain_service           = $chain_service;
 		$this->post_repository         = $post_repository;
+		$this->user_access_checker     = $user_access_checker;
 	}
 
 	private AppContractRepository $app_contract_repository;
 	private ChainService $chain_service;
 	private PostRepository $post_repository;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -34,8 +38,8 @@ class VerifiableChainsResolver extends ResolverBase {
 		/** @var int */
 		$post_ID = $args['postID'];
 
-		// 投稿は公開済み、または編集可能な権限があることをチェック
-		$this->checkIsPublishedOrEditable( $post_ID );
+		// 投稿を閲覧できる権限があることをチェック
+		$this->user_access_checker->checkCanViewPost( $post_ID );
 
 		$selling_network_category_id = $this->post_repository->get( $post_ID )->sellingNetworkCategoryID();
 		if ( is_null( $selling_network_category_id ) ) {

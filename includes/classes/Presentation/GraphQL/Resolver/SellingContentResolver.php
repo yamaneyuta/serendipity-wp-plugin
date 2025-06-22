@@ -3,16 +3,22 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 
 class SellingContentResolver extends ResolverBase {
 
-	public function __construct( PostRepository $post_repository ) {
-		$this->post_repository = $post_repository;
+	public function __construct(
+		PostRepository $post_repository,
+		UserAccessChecker $user_access_checker
+	) {
+		$this->post_repository     = $post_repository;
+		$this->user_access_checker = $user_access_checker;
 	}
 
 	private PostRepository $post_repository;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -23,8 +29,8 @@ class SellingContentResolver extends ResolverBase {
 		/** @var int */
 		$post_ID = $args['postID'];
 
-		// 投稿は公開済み、または編集可能な権限があることをチェック
-		$this->checkIsPublishedOrEditable( $post_ID );
+		// 投稿を閲覧できる権限があることをチェック
+		$this->user_access_checker->checkCanViewPost( $post_ID );
 
 		// 有料部分のコンテンツを取得
 		$paid_content = $this->post_repository->get( $post_ID )->paidContent();

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\InitCrawledBlockNumber;
 use Cornix\Serendipity\Core\Application\UseCase\IssueInvoice;
 use Cornix\Serendipity\Core\Application\UseCase\SignInvoice;
@@ -13,14 +14,17 @@ class IssueInvoiceResolver extends ResolverBase {
 
 	public function __construct(
 		IssueInvoice $issue_invoice,
-		InitCrawledBlockNumber $init_crawled_block_number
+		InitCrawledBlockNumber $init_crawled_block_number,
+		UserAccessChecker $user_access_checker
 	) {
 		$this->issue_invoice             = $issue_invoice;
 		$this->init_crawled_block_number = $init_crawled_block_number;
+		$this->user_access_checker       = $user_access_checker;
 	}
 
 	private IssueInvoice $issue_invoice;
 	private InitCrawledBlockNumber $init_crawled_block_number;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -34,8 +38,8 @@ class IssueInvoiceResolver extends ResolverBase {
 		$token_address    = new Address( $args['tokenAddress'] );
 		$consumer_address = new Address( $args['consumerAddress'] ); // 購入者のアドレス
 
-		// 投稿は公開済み、または編集可能な権限があることをチェック
-		$this->checkIsPublishedOrEditable( $post_ID );
+		// 投稿を閲覧できる権限があることをチェック
+		$this->user_access_checker->checkCanViewPost( $post_ID );
 
 		// 請求書番号を発行(+現在の販売価格を記録)
 		global $wpdb;
