@@ -3,17 +3,23 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 
 class NetworkCategoriesResolver extends ResolverBase {
 
-	public function __construct( ChainRepository $chain_repository ) {
-		$this->chain_repository = $chain_repository;
+	public function __construct(
+		ChainRepository $chain_repository,
+		UserAccessChecker $user_access_checker
+	) {
+		$this->chain_repository    = $chain_repository;
+		$this->user_access_checker = $user_access_checker;
 	}
 
 	private ChainRepository $chain_repository;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -21,11 +27,11 @@ class NetworkCategoriesResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
+		$this->user_access_checker->checkCanCreatePost();   // 投稿を新規作成できる権限が必要
+
 		/** @var array */
 		$filter                  = $args['filter'] ?? null;
 		$filter_network_category = NetworkCategoryID::from( $filter['networkCategoryID'] ?? null );
-
-		Validate::checkHasEditableRole();  // 投稿編集者権限以上が必要
 
 		// ネットワークカテゴリIDが指定されていない場合は全てのネットワークカテゴリを取得
 		$network_category_ids = is_null( $filter_network_category )

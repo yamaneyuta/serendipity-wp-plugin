@@ -15,15 +15,6 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
  */
 class Validate {
 
-	/**
-	 * 現在アクセスしているユーザーが編集者以上の権限を持っていない場合は例外をスローします。
-	 */
-	public static function checkHasEditableRole(): void {
-		if ( ! ( new Access() )->canCurrentUserCreatePost() ) {
-			throw new \LogicException( '[9FB8121B] You do not have permission to access this feature. user ID: ' . get_current_user_id() );
-		}
-	}
-
 	/** 指定された値が投稿IDであるかどうかを取得します。 */
 	private static function isPostID( int $post_ID ): bool {
 		// 投稿の状態を取得できれば有効なIDとみなす。
