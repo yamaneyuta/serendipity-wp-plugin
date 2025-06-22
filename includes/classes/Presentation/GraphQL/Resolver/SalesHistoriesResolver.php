@@ -4,9 +4,16 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 
 class SalesHistoriesResolver extends ResolverBase {
+
+	public function __construct(
+		UserAccessChecker $user_access_checker
+	) {
+		$this->user_access_checker = $user_access_checker;
+	}
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -19,7 +26,7 @@ class SalesHistoriesResolver extends ResolverBase {
 		/** @var string */
 		$invoice_id = $args['invoiceID'] ?? null;
 
-		Validate::checkHasAdminRole(); // 管理者権限が必要
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$sales_data_records = ( new SalesHistoryService() )->select( $invoice_id );
 

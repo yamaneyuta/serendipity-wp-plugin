@@ -4,16 +4,21 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\TermsService;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class SetSellerAgreedTermsResolver extends ResolverBase {
 
-	public function __construct( TermsService $terms_service ) {
-		$this->terms_service = $terms_service;
+	public function __construct(
+		TermsService $terms_service,
+		UserAccessChecker $user_access_checker
+	) {
+		$this->terms_service       = $terms_service;
+		$this->user_access_checker = $user_access_checker;
 	}
 
 	private TermsService $terms_service;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -25,8 +30,7 @@ class SetSellerAgreedTermsResolver extends ResolverBase {
 		$version   = $args['version'];
 		$signature = new Signature( $args['signature'] );
 
-		// 管理者権限を持っているかどうかをチェック
-		Validate::checkHasAdminRole();
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		//
 		// TODO: 引数にアドレスを追加し、署名を検証するロジックを追加

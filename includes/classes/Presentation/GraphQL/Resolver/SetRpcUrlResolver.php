@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
@@ -11,11 +12,16 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class SetRpcUrlResolver extends ResolverBase {
 
-	public function __construct( ChainRepository $chain_repository ) {
-		$this->chain_repository = $chain_repository;
+	public function __construct(
+		ChainRepository $chain_repository,
+		UserAccessChecker $user_access_checker
+	) {
+		$this->chain_repository    = $chain_repository;
+		$this->user_access_checker = $user_access_checker;
 	}
 
 	private ChainRepository $chain_repository;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -27,7 +33,7 @@ class SetRpcUrlResolver extends ResolverBase {
 		/** @var string|null */
 		$rpc_url = $args['rpcURL'] ?? null;
 
-		Validate::checkHasAdminRole(); // 管理者権限を持っているかどうかをチェック
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 		( ! is_null( $rpc_url ) ) && Validate::checkURL( $rpc_url );
 
 		// RPC URLを登録する場合は実際にアクセスしてチェーンIDを取得し、

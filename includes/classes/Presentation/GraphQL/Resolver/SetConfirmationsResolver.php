@@ -4,17 +4,23 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\ChainService;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Constant\Config;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class SetConfirmationsResolver extends ResolverBase {
 
-	public function __construct( ChainService $chain_service ) {
-		$this->chain_service = $chain_service;
+	public function __construct(
+		ChainService $chain_service,
+		UserAccessChecker $user_access_checker
+	) {
+		$this->chain_service       = $chain_service;
+		$this->user_access_checker = $user_access_checker;
 	}
 
 	private ChainService $chain_service;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -22,8 +28,7 @@ class SetConfirmationsResolver extends ResolverBase {
 	 * @return bool
 	 */
 	public function resolve( array $root_value, array $args ) {
-		// 管理者権限を持っているかどうかをチェック
-		Validate::checkHasAdminRole();
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$chain_ID = new ChainID( $args['chainID'] );
 		/** @var string|null */

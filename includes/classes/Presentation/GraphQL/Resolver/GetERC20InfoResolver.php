@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\ChainService;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\OracleRepository;
 use Cornix\Serendipity\Core\Domain\Specification\OraclesFilter;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
@@ -18,13 +18,19 @@ use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
  */
 class GetERC20InfoResolver extends ResolverBase {
 
-	public function __construct( ChainService $chain_service, OracleRepository $oracle_repository ) {
-		$this->chain_service     = $chain_service;
-		$this->oracle_repository = $oracle_repository;
+	public function __construct(
+		ChainService $chain_service,
+		OracleRepository $oracle_repository,
+		UserAccessChecker $user_access_checker
+	) {
+		$this->chain_service       = $chain_service;
+		$this->oracle_repository   = $oracle_repository;
+		$this->user_access_checker = $user_access_checker;
 	}
 
 	private ChainService $chain_service;
 	private OracleRepository $oracle_repository;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -32,7 +38,7 @@ class GetERC20InfoResolver extends ResolverBase {
 	 * @return string|null
 	 */
 	public function resolve( array $root_value, array $args ) {
-		Validate::checkHasAdminRole();  // 管理者権限が必要
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$chain_ID = new ChainID( $args['chainID'] );
 		$address  = new Address( $args['address'] );
@@ -55,13 +61,13 @@ class GetERC20InfoResolver extends ResolverBase {
 		$symbol = $token_client->symbol();
 
 		$symbol_callback = function () use ( $symbol ) {
-			Validate::checkHasAdminRole();  // 管理者権限が必要
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 			return $symbol;
 		};
 
 		// レート変換可能かどうかを返すコールバック関数
 		$rate_exchangeable_callback = function () use ( $symbol ) {
-			Validate::checkHasAdminRole();  // 管理者権限が必要
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 			$oracles = $this->oracle_repository->all();
 			// XXX/USD や XXX/ETH の接続可能なOracleが存在する場合はレート変換可能と判定

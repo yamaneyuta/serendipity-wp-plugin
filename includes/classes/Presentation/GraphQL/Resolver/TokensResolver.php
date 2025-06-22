@@ -3,20 +3,25 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 
 class TokensResolver extends ResolverBase {
 
-	public function __construct( TokenRepository $token_repository ) {
-		$this->token_repository = $token_repository;
+	public function __construct(
+		TokenRepository $token_repository,
+		UserAccessChecker $user_access_checker
+	) {
+		$this->token_repository    = $token_repository;
+		$this->user_access_checker = $user_access_checker;
 	}
 
 	private TokenRepository $token_repository;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * サイトに登録されているトークン一覧を取得します。
@@ -27,7 +32,7 @@ class TokensResolver extends ResolverBase {
 	 * @return array
 	 */
 	public function resolve( array $root_value, array $args ) {
-		Validate::checkHasAdminRole();  // 管理者権限が必要
+		$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 		$filter          = $args['filter'] ?? null;
 		$filter_chain_id = ChainID::fromNullableValue( $filter['chainID'] ?? null );

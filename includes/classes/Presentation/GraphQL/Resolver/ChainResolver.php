@@ -4,26 +4,29 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Dto\TokenDto;
+use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Application\UseCase\GetAppContract;
 use Cornix\Serendipity\Core\Application\UseCase\GetChain;
 use Cornix\Serendipity\Core\Application\UseCase\GetTokensByChainId;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 
 class ChainResolver extends ResolverBase {
 
 	public function __construct(
 		GetChain $get_chain,
 		GetAppContract $get_app_contract,
-		GetTokensByChainId $get_tokens_by_chain_id
+		GetTokensByChainId $get_tokens_by_chain_id,
+		UserAccessChecker $user_access_checker
 	) {
 		$this->get_chain              = $get_chain;
 		$this->get_app_contract       = $get_app_contract;
 		$this->get_tokens_by_chain_id = $get_tokens_by_chain_id;
+		$this->user_access_checker    = $user_access_checker;
 	}
 
 	private GetChain $get_chain;
 	private GetAppContract $get_app_contract;
 	private GetTokensByChainId $get_tokens_by_chain_id;
+	private UserAccessChecker $user_access_checker;
 
 	/**
 	 * #[\Override]
@@ -47,7 +50,7 @@ class ChainResolver extends ResolverBase {
 		};
 
 		$tokens_callback = function () use ( $root_value, $chain_id ) {
-			Validate::checkHasAdminRole(); // 管理者権限が必要
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 			$tokens = $this->get_tokens_by_chain_id->handle( $chain_id );
 
@@ -66,7 +69,7 @@ class ChainResolver extends ResolverBase {
 		};
 
 		$network_category_callback = function () use ( $root_value, $chain ) {
-			Validate::checkHasAdminRole(); // 管理者権限が必要
+			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
 
 			return $root_value['networkCategory'](
 				$root_value,
