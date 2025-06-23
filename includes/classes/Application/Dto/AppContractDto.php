@@ -10,7 +10,7 @@ class AppContractDto {
 		$this->address = $address;
 	}
 
-	private int $address;
+	private string $address;
 
 	public function address(): string {
 		return $this->address;
