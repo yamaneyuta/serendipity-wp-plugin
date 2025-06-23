@@ -29,7 +29,7 @@ class HappyPathTest extends ChainsResolverTestBase {
 		)->get_data();
 
 		// Assert
-		$this->assertNull( $result['errors'] ); // エラーがないこと
+		$this->assertFalse( isset( $result['errors'] ) ); // エラーがないこと
 		$this->assertCount( 1, $result['data']['chains'] ); // 1件のチェーンが返されること
 		$this->assertEquals( self::CONNECTABLE_CHAIN_ID, $result['data']['chains'][0]['id'] ); // 指定したチェーンIDが返されること
 	}
@@ -56,7 +56,7 @@ class HappyPathTest extends ChainsResolverTestBase {
 		)->get_data();
 
 		// Assert
-		$this->assertNull( $result['errors'] ); // エラーがないこと
+		$this->assertFalse( isset( $result['errors'] ) ); // エラーがないこと
 		$this->assertNotEmpty( $result['data']['chains'] ); // チェーンが返されること
 		$this->assertContains( self::CONNECTABLE_CHAIN_ID, array_column( $result['data']['chains'], 'id' ) ); // 接続可能なチェーンIDが含まれること
 		$this->assertNotContains( self::NOT_CONNECTABLE_CHAIN_ID, array_column( $result['data']['chains'], 'id' ) ); // 接続できないチェーンIDが含まれないこと
@@ -84,7 +84,7 @@ class HappyPathTest extends ChainsResolverTestBase {
 		)->get_data();
 
 		// Assert
-		$this->assertNull( $result['errors'] ); // エラーがないこと
+		$this->assertFalse( isset( $result['errors'] ) ); // エラーがないこと
 		$this->assertNotEmpty( $result['data']['chains'] ); // チェーンが返されること
 		$this->assertContains( self::NOT_CONNECTABLE_CHAIN_ID, array_column( $result['data']['chains'], 'id' ) ); // 接続できないチェーンIDが含まれること
 		$this->assertNotContains( self::CONNECTABLE_CHAIN_ID, array_column( $result['data']['chains'], 'id' ) ); // 接続可能なチェーンIDが含まれないこと
@@ -114,7 +114,7 @@ class HappyPathTest extends ChainsResolverTestBase {
 		)->get_data();
 
 		// Assert
-		$this->assertNull( $result['errors'] ); // エラーがないこと
+		$this->assertFalse( isset( $result['errors'] ) ); // エラーがないこと
 		$this->assertCount( 0, $result['data']['chains'] ); // チェーンが返されないこと
 	}
 	public function getChainsWithNoResultsDataProvider(): array {
@@ -149,6 +149,6 @@ class HappyPathTest extends ChainsResolverTestBase {
 		)->get_data();
 
 		// Assert
-		$this->assertNull( $result['errors'] ); // エラーがないこと
+		$this->assertFalse( isset( $result['errors'] ) ); // エラーがないこと
 	}
 }
