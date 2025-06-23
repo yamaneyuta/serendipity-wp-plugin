@@ -5,7 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation;
 use Cornix\Serendipity\Core\Infrastructure\Factory\AppContractRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Lib\Crawler\AppContractCrawler;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
+use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 use Cornix\Serendipity\Core\Repository\BlockNumberActiveSince;
 use Cornix\Serendipity\Core\Repository\CrawledBlockNumber;
 use Cornix\Serendipity\Core\Repository\Name\CronActionName;
@@ -152,7 +152,7 @@ class AppContractCrawlCronProcedure {
 				} catch ( \Throwable $e ) {
 					// クロールに失敗したチェーンIDを記録
 					$crawl_failed_chain_ids[] = $chain_ID;
-					Logger::error( $e );
+					DeprecatedLogger::error( $e );
 					// 他チェーンのクロールを実施するため、ここでは再スローしない
 				}
 			}

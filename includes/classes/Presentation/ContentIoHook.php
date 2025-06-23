@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Presentation;
 
+use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
@@ -11,7 +12,6 @@ use Cornix\Serendipity\Core\Repository\Environment;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Repository\Name\ClassName;
 use Cornix\Serendipity\Core\Repository\WidgetAttributes;
-use Cornix\Serendipity\Core\Lib\Security\Access;
 use Cornix\Serendipity\Core\Lib\Strings\Strings;
 
 /**
@@ -24,11 +24,16 @@ use Cornix\Serendipity\Core\Lib\Strings\Strings;
  */
 class ContentIoHook {
 
-	public function __construct( PostRepository $post_repository ) {
-		$this->post_repository = $post_repository;
+	public function __construct(
+		PostRepository $post_repository,
+		UserAccessProvider $user_access_provider
+	) {
+		$this->post_repository      = $post_repository;
+		$this->user_access_provider = $user_access_provider;
 	}
 
 	private PostRepository $post_repository;
+	private UserAccessProvider $user_access_provider;
 
 	/**
 	 * フックを登録します。
@@ -71,7 +76,7 @@ class ContentIoHook {
 	 *   - wp/v2/posts等のAPIにアクセスした時
 	 */
 	public function restPreparePostFilter( \WP_REST_Response $response, \WP_Post $post, \WP_REST_Request $request ): \WP_REST_Response {
-		if ( ! ( new Access() )->canCurrentUserEditPost( $post->ID ) ) {
+		if ( ! $this->user_access_provider->canEditPost( $post->ID ) ) {
 			return $response;   // 投稿の編集権限がない場合は何もしない
 		}
 

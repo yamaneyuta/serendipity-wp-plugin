@@ -21,8 +21,8 @@ class ChainsFilter {
 		return $this;
 	}
 
-	public function byConnectable(): self {
-		$this->filters[] = fn ( Chain $chain ) => $chain->connectable();
+	public function byConnectable( ?bool $is_connectable = true ): self {
+		$this->filters[] = fn ( Chain $chain ) => $chain->connectable() === $is_connectable;
 		return $this;
 	}
 

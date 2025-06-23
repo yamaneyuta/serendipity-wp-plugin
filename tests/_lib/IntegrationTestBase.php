@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Features\Uninstall\OptionUninstaller;
 use Cornix\Serendipity\Core\Features\Uninstall\TableUninstaller;
-use Cornix\Serendipity\Core\Lib\Logger\ILogger;
-use Cornix\Serendipity\Core\Lib\Logger\Logger;
+use Cornix\Serendipity\Core\Lib\Logger\IDeprecatedLogger;
+use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
@@ -75,8 +75,8 @@ abstract class IntegrationTestBase extends WP_UnitTestCase {
 
 	private function setUpSilentLogger(): void {
 		// 何もしないロガーを設定
-		Logger::setLogger(
-			new class() implements ILogger {
+		DeprecatedLogger::setLogger(
+			new class() implements IDeprecatedLogger {
 				public function debug( $_ ) {}
 				public function info( $_ ) {}
 				public function warn( $_ ) {}
