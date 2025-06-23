@@ -9,7 +9,15 @@ class UserAccessProviderImpl implements UserAccessProvider {
 
 	/** @inheritdoc */
 	public function canViewPost( int $post_id ): bool {
-		return current_user_can( 'read_post', $post_id );
+		// current_user_can( 'read_post', $post_id ); だけで判定しようとしていたが、
+		// get_post_status( $post_id ) === 'publish' && wp_get_current_user()->ID === 0 の場合
+		// (ゲストユーザーのアクセス)の場合にfalseとなったため以下の判定処理で実装
+		if ( is_user_logged_in() ) {
+			return current_user_can( 'read_post', $post_id );
+		} else {
+			// ログインしていない場合は、公開されている投稿のみ閲覧可能
+			return 'publish' === get_post_status( $post_id );
+		}
 	}
 
 	/** @inheritdoc */
