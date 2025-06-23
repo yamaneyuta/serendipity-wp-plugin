@@ -25,7 +25,7 @@ class SecurityTest extends UnitTestCaseBase {
 	 * chain はQueryに定義されていないためアクセス不可
 	 *
 	 * @test
-	 * @testdox [E99054B1] Cannot query field "chain" on type "Query". - $user
+	 * @testdox [B3EBB418] Cannot query field "chain" on type "Query". - $user
 	 * @dataProvider inaccessibleDataProvider
 	 */
 	public function inaccessible( WpUser $user ): void {
@@ -82,7 +82,7 @@ class SecurityTest extends UnitTestCaseBase {
 
 		// ASSERT
 		$this->assertEquals( 1, count( $result['errors'] ) );
-		$this->assertContains( 'Cannot query field "chain" on type "Mutation".', $result['errors'][0]['message'] );
+		$this->assertStringContainsString( 'Cannot query field "chain" on type "Mutation".', $result['errors'][0]['message'] );
 	}
 	public function inaccessibleMutationDataProvider(): array {
 		return array(
