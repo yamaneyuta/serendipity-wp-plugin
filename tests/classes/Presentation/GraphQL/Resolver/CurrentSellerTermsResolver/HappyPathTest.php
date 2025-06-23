@@ -1,11 +1,13 @@
 <?php
 declare(strict_types=1);
 
+namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\CurrentSellerTermsResolver;
+
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Test\Entity\WpUser;
 use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
 
-class CurrentSellerTermsResolverTest extends UnitTestCaseBase {
+class HappyPathTest extends UnitTestCaseBase {
 
 	public static function setUpBeforeClass(): void {
 		self::resetDatabase(); // データベースをリセット
