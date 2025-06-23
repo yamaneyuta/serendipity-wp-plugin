@@ -2,42 +2,40 @@
 declare(strict_types=1);
 
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
+use Cornix\Serendipity\Test\Entity\WpUser;
+use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
 
-class CurrentSellerTermsResolverTest extends IntegrationTestBase {
+class CurrentSellerTermsResolverTest extends UnitTestCaseBase {
 
-	private function requestCurrentSellerTerms( string $user_type ) {
-		// リクエストを送信するユーザーを設定
-		$this->getUser( $user_type )->setCurrentUser();
-
-		$query     = <<<GRAPHQL
-			query CurrentSellerTerms {
-				currentSellerTerms {
-					version
-					message
-				}
-			}
-		GRAPHQL;
-		$variables = array();
-
-		// GraphQLリクエストを送信
-		$data = $this->requestGraphQL( $query, $variables )->get_data();
-
-		return $data;
+	public static function setUpBeforeClass(): void {
+		self::resetDatabase(); // データベースをリセット
 	}
+
+	private const CURRENT_SELLER_TERMS_QUERY = <<<GRAPHQL
+		query CurrentSellerTerms {
+			currentSellerTerms {
+				version
+				message
+			}
+		}
+	GRAPHQL;
 
 	/**
 	 * 管理者は最新の販売者向け利用規約の情報を取得できることを確認
 	 *
 	 * @test
-	 * @testdox [832BAB37][GraphQL] Request current seller terms success - user: $user_type
+	 * @testdox [832BAB37][GraphQL] Request current seller terms success - user: $user
 	 * @dataProvider requestValidUsersProvider
 	 */
-	public function requestCurrentSellerTermsSuccess( string $user_type ) {
+	public function requestCurrentSellerTermsSuccess( WpUser $user ) {
 		// ARRANGE
 		$current_seller_terms = ( new TermsServiceFactory() )->create()->getCurrentSellerTerms();
 
 		// ACT
-		$data = $this->requestCurrentSellerTerms( $user_type );
+		$data = $this->graphQl( $user )->request(
+			self::CURRENT_SELLER_TERMS_QUERY,
+			array()
+		)->get_data();
 
 		// ASSERT
 		$this->assertFalse( isset( $data['errors'] ) ); // エラーフィールドは存在しない
@@ -51,15 +49,18 @@ class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 	 * 管理者以外は最新の販売者向け利用規約の情報を取得できないことを確認
 	 *
 	 * @test
-	 * @testdox [969C0FAA][GraphQL] Request current seller terms fail - user: $user_type
+	 * @testdox [969C0FAA][GraphQL] Request current seller terms fail - user: $user
 	 * @dataProvider requestInvalidUsersProvider
 	 */
-	public function requestCurrentSellerTermsFail( string $user_type ) {
+	public function requestCurrentSellerTermsFail( WpUser $user ) {
 		// ARRANGE
 		// Do nothing
 
 		// ACT
-		$data = $this->requestCurrentSellerTerms( $user_type );
+		$data = $this->graphQl( $user )->request(
+			self::CURRENT_SELLER_TERMS_QUERY,
+			array()
+		)->get_data();
 
 		// ASSERT
 		$this->assertTrue( isset( $data['errors'] ) ); // エラーフィールドが存在する
@@ -69,19 +70,14 @@ class CurrentSellerTermsResolverTest extends IntegrationTestBase {
 	public function requestValidUsersProvider(): array {
 		// 管理者のみ`currentSellerTerms`の呼び出しが可能
 		return array(
-			array( UserType::ADMINISTRATOR ),
-			// array( UserType::CONTRIBUTOR ),
-			// array( UserType::ANOTHER_CONTRIBUTOR ),
-			// array( UserType::VISITOR ),
+			array( WpUser::admin() ),
 		);
 	}
 	public function requestInvalidUsersProvider(): array {
 		// 管理者以外は`currentSellerTerms`の呼び出しに失敗
 		return array(
-			// array( UserType::ADMINISTRATOR ),
-			array( UserType::CONTRIBUTOR ),
-			array( UserType::ANOTHER_CONTRIBUTOR ),
-			array( UserType::VISITOR ),
+			array( WpUser::contributor() ),
+			array( WpUser::visitor() ),
 		);
 	}
 }
