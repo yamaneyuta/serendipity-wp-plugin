@@ -29,8 +29,8 @@ class ChainsResolver extends ResolverBase {
 		$this->user_access_checker->checkHasAdminRole();  // 管理者権限が必要
 
 		$chains = $this->get_chains_by_filter->handle(
-			$args['filter']['chainID'],
-			$args['filter']['isConnectable']
+			$args['filter']['chainID'] ?? null,
+			$args['filter']['isConnectable'] ?? null
 		);
 
 		return array_map(
