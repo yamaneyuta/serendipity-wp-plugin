@@ -26,6 +26,7 @@ class UnitTestCaseBase extends WP_UnitTestCase {
 		parent::setUp();
 
 		// ログレベルの設定(テストのため最小限のログ出力とする)
+		// ※ optionsテーブルの値のためsetUpBeforeClassではなく、setUpで設定
 		$this->log_level_provider = self::container()->get( LogLevelProvider::class );
 		$this->log_level_provider->setLogLevel( LogCategory::app(), LogLevel::error() );
 		$this->log_level_provider->setLogLevel( LogCategory::audit(), LogLevel::none() );
