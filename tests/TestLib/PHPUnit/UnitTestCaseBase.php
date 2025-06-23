@@ -76,6 +76,7 @@ class UnitTestCaseBase extends WP_UnitTestCase {
 	 * Add assertMatchesRegularExpression() method for phpunit >= 8.0 < 9.0 for compatibility with PHP 7.2.
 	 *
 	 * @see https://github.com/sebastianbergmann/phpunit/issues/4174
+	 * @disregard P1038 Method is not compatible with method
 	 */
 	public static function assertMatchesRegularExpression( string $pattern, string $string, string $message = '' ): void {
 		if ( method_exists( parent::class, 'assertMatchesRegularExpression' ) ) {
