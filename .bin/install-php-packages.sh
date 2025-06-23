@@ -33,6 +33,10 @@ function delete_test_composer_files() {
 	if [ -f tests/composer.lock ]; then
 		rm tests/composer.lock
 	fi
+	# tests/vendorディレクトリ以下を削除
+	if [ -d tests/vendor ]; then
+		rm -rf tests/vendor/*
+	fi
 }
 
 function install_phpunit() {
