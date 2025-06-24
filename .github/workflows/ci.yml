@@ -16,7 +16,7 @@ env:
 
 jobs:
   ci:
-    name: CI (PHP ${{ matrix.env.php-version }} / WP ${{ matrix.env.wordpress-version }})
+    name: CI (PHP ${{ matrix.env.php-version }} / WP ${{ matrix.env.wordpress-version }} / ${{ matrix.env.database || 'mariadb:lts' }})
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -24,7 +24,8 @@ jobs:
       fail-fast: false # 他のジョブが失敗しても中断しない設定
       matrix:
         env: [
-          # WordPressとPHPの組み合わせについては、以下のリンク先を参照
+          # WordPress,PHP,Databaseの組み合わせについては、以下のリンク先を参照
+          # https://make.wordpress.org/hosting/handbook/compatibility/
           # https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/
 
           { php-version: "7.4", wordpress-version: "5.4" },   # 本プラグインが使用可能な最低WPバージョン
@@ -46,7 +47,14 @@ jobs:
           { php-version: "8.3", wordpress-version: "6.8.1" }, # PHP8.3 + 最新WP
 
           { php-version: "8.4", wordpress-version: "6.7" },   # PHP8.4 => WP6.7以降をbetaサポート
-          { php-version: "8.4", wordpress-version: "6.8.1" }  # PHP8.4 + 最新WP
+          { php-version: "8.4", wordpress-version: "6.8.1" },  # PHP8.4 + 最新WP
+
+          # 以下、データベースバージョンとの組み合わせ
+          { php-version: "7.4", wordpress-version: "5.4", database: "mysql:5.6" },
+          { php-version: "7.4", wordpress-version: "5.4", database: "mariadb:10.2" },
+          { php-version: "8.4", wordpress-version: "6.8.1", database: "mysql:9.1" },
+          { php-version: "8.4", wordpress-version: "6.8.1", database: "mariadb:11.5" },
+          { php-version: "8.4", wordpress-version: "6.8.1", database: "mysql:lts" },
         ]
         # ※1 WP5.9,6.0では`set_current_screen`に空文字を渡すと`Undefined array key "hook_suffix"`のエラーが発生するためマトリクスから除外
 
@@ -98,6 +106,9 @@ jobs:
 
     - run: echo "PHP_VERSION=${{ matrix.env.php-version }}" >> $GITHUB_ENV
     - run: echo "WP_VERSION=${{ matrix.env.wordpress-version }}" >> $GITHUB_ENV
+
+    # matrix.env.databaseの値が定義されていない場合は、デフォルトでMariaDBを使用する
+    - run: echo "DATABASE_IMAGE=${{ matrix.env.database || 'mariadb:lts' }}" >> $GITHUB_ENV
 
     # includesディレクトリのComposerパッケージキャッシュ
     - name: Cache includes composer packages
