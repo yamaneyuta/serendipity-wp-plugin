@@ -80,15 +80,42 @@ jobs:
       with:
         php-version: ${{ matrix.env.php-version }}
 
+    # PHPグローバルパッケージのキャッシュ
+    - name: Cache PHP global packages
+      id: php-global-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.composer
+        key: ${{ runner.os }}-php-global-${{ matrix.env.php-version }}-phpcs3.9.2-wpcs3.1.0
     - name: Install phpcs
+      if: steps.php-global-cache.outputs.cache-hit != 'true'
       run: composer global require squizlabs/php_codesniffer="3.9.2"
     - name: Install wpcs
+      if: steps.php-global-cache.outputs.cache-hit != 'true'
       run: |
         composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true &&
         composer global require --dev wp-coding-standards/wpcs:"3.1.0"
 
     - run: echo "PHP_VERSION=${{ matrix.env.php-version }}" >> $GITHUB_ENV
     - run: echo "WP_VERSION=${{ matrix.env.wordpress-version }}" >> $GITHUB_ENV
+
+    # includesディレクトリのComposerパッケージキャッシュ
+    - name: Cache includes composer packages
+      id: includes-composer-cache
+      uses: actions/cache@v4
+      with:
+        path: includes/vendor
+        key: ${{ runner.os }}-includes-composer-${{ matrix.env.php-version }}-${{ hashFiles('includes/composer.lock') }}
+    # testsディレクトリのComposerパッケージキャッシュ(動的に生成されるcomposer.json, composer.lockもキャッシュする)
+    - name: Cache tests composer packages
+      id: tests-composer-cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          tests/vendor
+          tests/composer.json
+          tests/composer.lock
+        key: ${{ runner.os }}-tests-composer-${{ matrix.env.php-version }}-${{ matrix.env.wordpress-version }}-${{ hashFiles('tests/composer.lock') }}
 
     - name: Install PHP packages
       run: source .bin/install-php-packages.sh
@@ -123,9 +150,10 @@ jobs:
       id: playwright-cache
       uses: actions/cache@v4
       with:
-        path: /home/runner/.cache
-        key: ${{ runner.os }}-playwright-cache-${{ hashFiles('**/package-lock.json') }}
-        # restore-keys: ${{ runner.os }}-playwright-cache-
+        path: |
+          ~/.cache/ms-playwright
+          ~/.cache/playwright
+        key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
     - name: Install Playwright
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps
