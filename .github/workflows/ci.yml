@@ -127,14 +127,8 @@ jobs:
       with:
         path: node_modules
         key: ${{ runner.os }}-node_modules-${{ env.node-version }}-${{ hashFiles('**/package-lock.json') }}
-    - name: Clean install if node_modules cache is not hit
-      run: |
-        if [ "${{ steps.node_modules-cache.outputs.cache-hit }}" = "true" ]; then
-          echo "Skip npm ci"
-          npm run prepare
-        else
-          npm ci
-        fi
+    - name: Install Node.js dependencies (always run npm ci)
+      run: npm ci
 
 
     # プロセス名に`docker`が含まれるプロセスがすべて終了するまで待機する
