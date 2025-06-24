@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
 use Cornix\Serendipity\Core\Domain\Repository\TokenRepository;
 use Cornix\Serendipity\Core\Domain\Specification\ChainsFilter;
 use Cornix\Serendipity\Core\Domain\Specification\TokensFilter;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 
 /** 指定された投稿で支払い可能なトークン一覧を取得します */
@@ -26,7 +27,7 @@ class GetPayableTokens {
 	/** @return TokenDto[] */
 	public function handle( int $post_id ): array {
 		// 投稿の販売ネットワークを取得
-		$post                     = $this->post_repository->get( $post_id );
+		$post                     = $this->post_repository->get( new PostId( $post_id ) );
 		$selling_network_category = $post->sellingNetworkCategoryID();
 		if ( is_null( $selling_network_category ) ) {
 			DeprecatedLogger::warn( '[666BFD5D] Selling network category is null for post ID: ' . $post_id );

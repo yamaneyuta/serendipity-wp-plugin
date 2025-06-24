@@ -15,6 +15,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockchainClientServiceImpl;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
@@ -86,7 +87,7 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 		$consumer_address = $invoice->consumerAddress();
 
 		// 投稿を閲覧できる権限があることをチェック
-		$this->user_access_checker->checkCanViewPost( $post_ID );
+		$this->user_access_checker->checkCanViewPost( $post_ID->value() );
 
 		if ( ! $chain->connectable() ) {
 			// 指定されたチェーンIDが接続可能でない場合はドメインエラーとして返す

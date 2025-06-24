@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\ContractFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnlockPaywallTransferType;
 use phpseclib\Math\BigInteger;
@@ -43,14 +44,14 @@ class AppContractClient {
 		return $this->contract;
 	}
 
-	public function getPaywallStatus( Address $signer_address, int $post_ID, Address $consumer_address ): GetPaywallStatusResult {
+	public function getPaywallStatus( Address $signer_address, PostId $post_ID, Address $consumer_address ): GetPaywallStatusResult {
 
 		/** @var GetPaywallStatusResult|null */
 		$result = null;
 		$this->contract->call(
 			'getPaywallStatus',
 			$signer_address->value(),
-			$post_ID,
+			$post_ID->value(),
 			$consumer_address->value(),
 			function ( $err, $res ) use ( &$result ) {
 				if ( $err ) {

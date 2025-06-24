@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\TableGateway;
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Repository\Name\TableName;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTableRecord;
 
@@ -21,14 +22,14 @@ class PaidContentTable extends TableBase {
 	/**
 	 * @return null|PaidContentTableRecord
 	 */
-	public function select( int $post_id ) {
+	public function select( PostId $post_id ) {
 		$sql = <<<SQL
 			SELECT `post_id`, `paid_content`, `selling_network_category_id`, `selling_amount_hex`, `selling_decimals`, `selling_symbol`
 			FROM `{$this->tableName()}`
 			WHERE `post_id` = %d
 		SQL;
 
-		$sql = $this->wpdb()->prepare( $sql, $post_id );
+		$sql = $this->wpdb()->prepare( $sql, $post_id->value() );
 		$row = $this->wpdb()->get_row( $sql );
 
 		if ( ! is_null( $row ) ) {
@@ -40,7 +41,7 @@ class PaidContentTable extends TableBase {
 		return is_null( $row ) ? null : new PaidContentTableRecord( $row );
 	}
 
-	public function set( int $post_id, ?PaidContent $paid_content, ?NetworkCategoryID $selling_network_category_id, ?Price $selling_price ): void {
+	public function set( PostId $post_id, ?PaidContent $paid_content, ?NetworkCategoryID $selling_network_category_id, ?Price $selling_price ): void {
 		$sql = <<<SQL
 			INSERT INTO `{$this->tableName()}` (
 				`post_id`,
@@ -62,7 +63,7 @@ class PaidContentTable extends TableBase {
 		$sql = $this->namedPrepare(
 			$sql,
 			array(
-				':post_id'                     => $post_id,
+				':post_id'                     => $post_id->value(),
 				':paid_content'                => is_null( $paid_content ) ? null : $paid_content->value(),
 				':selling_network_category_id' => is_null( $selling_network_category_id ) ? null : $selling_network_category_id->value(),
 				':selling_amount_hex'          => is_null( $selling_price ) ? null : $selling_price->amountHex(),
@@ -79,12 +80,12 @@ class PaidContentTable extends TableBase {
 		assert( $result <= 2, "[DBB26475] Failed to set paid content data. - post_id: {$post_id}, result: {$result}" );
 	}
 
-	public function delete( int $post_id ): void {
+	public function delete( PostId $post_id ): void {
 		$sql = <<<SQL
 			DELETE FROM `{$this->tableName()}` WHERE `post_id` = %d
 		SQL;
 
-		$sql    = $this->wpdb()->prepare( $sql, $post_id );
+		$sql    = $this->wpdb()->prepare( $sql, $post_id->value() );
 		$result = $this->wpdb()->query( $sql );
 
 		if ( false === $result ) {

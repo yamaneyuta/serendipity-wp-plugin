@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Repository;
 
 use Cornix\Serendipity\Core\Domain\Entity\Post;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\Database\Entity\PostImpl;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
 
@@ -17,8 +18,8 @@ class PostRepositoryImpl implements PostRepository {
 	private PaidContentTable $paid_content_table;
 
 	/** @inheritdoc */
-	public function get( int $post_id ): Post {
-		if ( false === get_post_status( $post_id ) ) {
+	public function get( PostId $post_id ): Post {
+		if ( false === get_post_status( $post_id->value() ) ) {
 			// 投稿が存在しない場合は例外を投げる
 			throw new \InvalidArgumentException( "[7D8F3E0D] Post with ID {$post_id} does not exist." );
 		}

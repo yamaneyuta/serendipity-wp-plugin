@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Lib\Calc\PriceExchange;
 
 class IssueInvoice {
@@ -30,7 +31,7 @@ class IssueInvoice {
 	public function handle( int $post_ID, ChainID $chain_ID, Address $payment_token_address, Address $consumer_address ): Invoice {
 		$payment_token  = ( new GetPaymentToken( $this->token_repository ) )->handle( $chain_ID, $payment_token_address ); // 支払トークン
 		$seller_address = $this->seller_service->getSellerAddress();  // 販売者アドレス
-		$selling_price  = $this->post_repository->get( $post_ID )->sellingPrice();
+		$selling_price  = $this->post_repository->get( new PostId( $post_ID ) )->sellingPrice();
 		if ( is_null( $selling_price ) ) {
 			throw new \InvalidArgumentException( '[8AF88CAF] Selling price is null for post ID: ' . $post_ID );
 		}
@@ -43,7 +44,7 @@ class IssueInvoice {
 
 		$invoice = new Invoice(
 			InvoiceID::generate(), // 新規請求書ID
-			$post_ID,
+			new PostId( $post_ID ),
 			$chain_ID,
 			$selling_price,
 			$seller_address,

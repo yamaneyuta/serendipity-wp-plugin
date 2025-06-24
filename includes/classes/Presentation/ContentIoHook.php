@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Presentation;
 use Cornix\Serendipity\Core\Application\Service\UserAccessProvider;
 use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\Format\HtmlFormat;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\PaidContentTable;
 use Cornix\Serendipity\Core\Repository\Environment;
@@ -80,7 +81,7 @@ class ContentIoHook {
 			return $response;   // 投稿の編集権限がない場合は何もしない
 		}
 
-		$paid_content = $this->post_repository->get( $post->ID )->paidContent();
+		$paid_content = $this->post_repository->get( new PostId( $post->ID ) )->paidContent();
 		if ( ! is_null( $paid_content ) ) {
 			// このメソッドが呼び出されたタイミングでは$response->data['content']['raw']に無料部分のみ格納された状態。
 			$free_content = $response->data['content']['raw'] ?? '';
@@ -126,7 +127,7 @@ class ContentIoHook {
 			$revision     = (int) $_GET['revision'];
 			$free_content = $data['post_content'] ?? ''; // リビジョンからの復元の場合、ここは無料部分のみが入っている
 
-			$paid_content = $this->post_repository->get( $revision )->paidContent();   // リビジョンの有料部分を取得
+			$paid_content = $this->post_repository->get( new PostId( $revision ) )->paidContent();   // リビジョンの有料部分を取得
 			if ( ! is_null( $paid_content ) ) {
 				// 有料部分が存在する場合は、ウィジェットと有料部分を結合して保持
 				self::$unsaved_original_content =
@@ -161,7 +162,7 @@ class ContentIoHook {
 		}
 
 		$post_repository = $this->post_repository;
-		$post            = $post_repository->get( $post_id );
+		$post            = $post_repository->get( new PostId( $post_id ) );
 
 		// 最初に送信された投稿内容からウィジェットの属性を取得(nullの場合はウィジェットが含まれていない)
 		$attributes = WidgetAttributes::fromContent( wp_unslash( self::$unsaved_original_content ) );
@@ -197,7 +198,7 @@ class ContentIoHook {
 
 		// 投稿が削除された時に有料記事の情報も削除
 		$post_repository = $this->post_repository;
-		$post            = $post_repository->get( $post_id );
+		$post            = $post_repository->get( new PostId( $post_id ) );
 		$post->deletePaidContent();
 		$post_repository->save( $post );
 	}
@@ -218,7 +219,7 @@ class ContentIoHook {
 		assert( is_int( $post_id ), '[97CAA15C] Post ID is not an integer. - ' . json_encode( $post_id ) );
 
 		// 有料記事の情報がある場合はウィジェットを結合して返す
-		$paid_content = $this->post_repository->get( $post_id )->paidContent();
+		$paid_content = $this->post_repository->get( new PostId( $post_id ) )->paidContent();
 		if ( ! is_null( $paid_content ) ) {
 			// HTMLコメントを除去したウィジェットを追加
 			$content .= "\n\n" . HtmlFormat::removeHtmlComments( $this->createWidgetContent( $post_id ) );
@@ -233,7 +234,7 @@ class ContentIoHook {
 	 */
 	public function wpPostRevisionFieldPostContentFilter( string $revision_field_content, string $field, \WP_Post $revision_post, string $context ) {
 		$post_id      = $revision_post->ID;
-		$paid_content = $this->post_repository->get( $post_id )->paidContent();
+		$paid_content = $this->post_repository->get( new PostId( $post_id ) )->paidContent();
 
 		if ( ! is_null( $paid_content ) ) {
 			// 記事の有料部分の情報がある場合はウィジェットと有料部分を結合して返す
@@ -251,7 +252,7 @@ class WidgetContentBuilder {
 	private PostRepository $post_repository;
 
 	public function build( int $post_id ): string {
-		$post_data  = $this->post_repository->get( $post_id );
+		$post_data  = $this->post_repository->get( new PostId( $post_id ) );
 		$block_name = ( new BlockName() )->get();
 		$attrs      = WidgetAttributes::from( $post_data->sellingNetworkCategoryID(), $post_data->sellingPrice() )->toArray();
 		$attrs_str  = wp_json_encode( $attrs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );

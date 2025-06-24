@@ -7,13 +7,14 @@ use Cornix\Serendipity\Core\Domain\Entity\PaidContent;
 use Cornix\Serendipity\Core\Domain\Entity\Post;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTableRecord;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class PostImpl extends Post {
 
 	private function __construct( PaidContentTableRecord $record ) {
 		parent::__construct(
-			$record->postIdValue(),
+			new PostId( $record->postIdValue() ),
 			PaidContent::from( $record->paidContentValue() ),
 			NetworkCategoryID::from( $record->sellingNetworkCategoryIdValue() ),
 			$this->getPriceFromRecord( $record ),
