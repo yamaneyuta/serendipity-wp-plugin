@@ -12,6 +12,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use kornrunner\Keccak;
@@ -91,7 +92,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		$affiliate_terms_signature    = '0x00';
 		$affiliate_ratio              = 0;
 
-		$prev_status = $sut->getPaywallStatus( $server_address, $post_ID, $consumer->address() );
+		$prev_status = $sut->getPaywallStatus( $server_address, new PostId( $post_ID ), $consumer->address() );
 		$this->assertFalse( $prev_status->isUnlocked() );
 
 		// ACT
@@ -111,7 +112,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 		);
 
 		// ASSERT
-		$paywall_status = $sut->getPaywallStatus( $server_address, $post_ID, $consumer->address() );
+		$paywall_status = $sut->getPaywallStatus( $server_address, new PostId( $post_ID ), $consumer->address() );
 		$this->assertTrue( $paywall_status->isUnlocked() );
 	}
 }

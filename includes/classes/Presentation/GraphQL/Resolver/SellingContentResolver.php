@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Domain\Repository\PostRepository;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Lib\Logger\DeprecatedLogger;
 
 class SellingContentResolver extends ResolverBase {
@@ -33,7 +34,7 @@ class SellingContentResolver extends ResolverBase {
 		$this->user_access_checker->checkCanViewPost( $post_ID );
 
 		// 有料部分のコンテンツを取得
-		$paid_content = $this->post_repository->get( $post_ID )->paidContent();
+		$paid_content = $this->post_repository->get( new PostId( $post_ID ) )->paidContent();
 
 		// 有料部分のコンテンツが取得できなかった場合はnullを返す
 		if ( null === $paid_content ) {

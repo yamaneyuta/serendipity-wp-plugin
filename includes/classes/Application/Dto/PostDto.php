@@ -23,7 +23,7 @@ class PostDto {
 
 	public static function fromEntity( Post $post, string $title ): self {
 		return new self(
-			$post->id(),
+			$post->id()->value(),
 			$title
 		);
 	}

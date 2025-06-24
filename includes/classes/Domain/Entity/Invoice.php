@@ -7,11 +7,12 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
+use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 
 class Invoice {
 
-	public function __construct( InvoiceID $id, int $post_ID, ChainID $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, string $payment_amount_hex, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
+	public function __construct( InvoiceID $id, PostId $post_ID, ChainID $chain_ID, Price $selling_price, Address $seller_address, Address $payment_token_address, string $payment_amount_hex, Address $consumer_address, ?InvoiceNonce $nonce = null ) {
 		$this->id                    = $id;
 		$this->post_ID               = $post_ID;
 		$this->chain_ID              = $chain_ID;
@@ -24,7 +25,7 @@ class Invoice {
 	}
 
 	private InvoiceID $id;
-	private int $post_ID;
+	private PostId $post_ID;
 	private ChainID $chain_ID;
 	private Price $selling_price;
 	private Address $seller_address;
@@ -36,7 +37,7 @@ class Invoice {
 	public function id(): InvoiceID {
 		return $this->id;
 	}
-	public function postID(): int {
+	public function postID(): PostId {
 		return $this->post_ID;
 	}
 	public function chainID(): ChainID {
