@@ -25,7 +25,7 @@ class SecurityTest extends UnitTestCaseBase {
 	 * 誰でも`seller`の呼び出しが可能であることを確認
 	 *
 	 * @test
-	 * @testdox [][GraphQL] Request seller success - user: $user
+	 * @testdox [9A23EEF8][GraphQL] Request seller success - user: $user
 	 * @dataProvider requestValidUsersProvider
 	 */
 	public function requestSellerSuccessWithNoSignData( WpUser $user ) {
