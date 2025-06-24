@@ -82,7 +82,7 @@ class BlockParser {
 	/**
 	 * 投稿内容をブロックに分割します。
 	 *
-	 * @param int $post_ID
+	 * @param string $content
 	 * @return WP_Block_Parser_Block[]
 	 */
 	public function parse( string $content ): array {
