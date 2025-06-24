@@ -45,7 +45,7 @@
 		"// `lint:php`はドキュメントのコメント等、時間がかかるものばかりのため一時的にコメントアウト": "",
 		"// lint:php": "phpcs -s .",
 		"packages-update": "wp-scripts packages-update",
-		"prepare": "run-s export build",
+		"prepare": "tsx .bin/change-wp-env-database.ts && run-s export build",
 		"preplugin-zip": "run-s clean i18n build",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"release": "npx release-it",
