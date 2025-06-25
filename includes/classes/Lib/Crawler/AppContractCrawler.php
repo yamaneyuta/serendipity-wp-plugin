@@ -12,6 +12,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClientFactory;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ServerSignerServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
@@ -115,7 +116,7 @@ class AppContractCrawler {
 				$from,
 				$to,
 				$token_address,
-				HexFormat::toHex( $amount ),
+				new Amount( $amount->toString() ),
 				HexFormat::toInt( '0x' . $transfer_type->toHex() ),
 			);
 		}
