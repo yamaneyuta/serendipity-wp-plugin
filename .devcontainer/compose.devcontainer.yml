@@ -12,6 +12,7 @@ services:
       # ※PHPのバージョンは上記Dockerイメージ作成時のバージョンのいずれかを指定すること
       - PHP_VERSION=${PHP_VERSION:-7.4} # PHPのバージョン(マイナーバージョンまで指定)
       - WP_VERSION=${WP_VERSION:-5.4} # WordPressのバージョン(https://ja.wordpress.org/download/releases/ に記載のタグ)
+      - DATABASE_IMAGE=${DATABASE_IMAGE:-mariadb:lts} # データベースのDockerイメージ
     volumes:
       - ..:/workspaces
       - ../../serendipity-resources/public:/workspaces/public
