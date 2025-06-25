@@ -26,8 +26,8 @@ final class Amount {
 	/** 値を10進数の文字列で保持 */
 	private string $amount_text;
 
-	public static function from( string $amount_text ): self {
-		return new self( $amount_text );
+	public static function from( ?string $amount_text ): ?self {
+		return null !== $amount_text ? new self( $amount_text ) : null;
 	}
 
 	public function equals( self $other ): bool {

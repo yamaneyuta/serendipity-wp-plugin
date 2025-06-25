@@ -10,6 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Lib\Calc\SolidityStrings;
 use Cornix\Serendipity\Core\Repository\ConsumerTerms;
+use phpseclib\Math\BigInteger;
 use wpdb;
 
 /** Invoiceから署名用のメッセージを作成し、署名用ウォレットで署名を行います */
@@ -29,7 +30,7 @@ class SignInvoice {
 			. SolidityStrings::valueToHexString( $invoice->id()->hex() )
 			. SolidityStrings::valueToHexString( $invoice->postID()->value() )
 			. SolidityStrings::addressToHexString( $invoice->paymentTokenAddress() )
-			. SolidityStrings::valueToHexString( $invoice->paymentAmountHex() )
+			. SolidityStrings::valueToHexString( new BigInteger( $invoice->paymentAmount()->value() ) )
 			. SolidityStrings::valueToHexString( ( new ConsumerTerms() )->currentVersion() )
 			. SolidityStrings::addressToHexString( Ethers::zeroAddress() )    // TODO: アフィリエイターのアドレス
 			. SolidityStrings::valueToHexString( 0 )    // TODO: アフィリエイト報酬率

@@ -13,8 +13,7 @@ class PaidContentTableRecord extends TableRecordBase {
 	protected int $post_id;
 	protected string $paid_content;
 	protected ?int $selling_network_category_id;
-	protected ?string $selling_amount_hex;
-	protected ?int $selling_decimals;
+	protected ?string $selling_amount;
 	protected ?string $selling_symbol;
 
 	public function postIdValue(): int {
@@ -26,11 +25,8 @@ class PaidContentTableRecord extends TableRecordBase {
 	public function sellingNetworkCategoryIdValue(): ?int {
 		return $this->selling_network_category_id;
 	}
-	public function sellingAmountHexValue(): ?string {
-		return $this->selling_amount_hex;
-	}
-	public function sellingDecimalsValue(): ?int {
-		return $this->selling_decimals;
+	public function sellingAmountValue(): ?string {
+		return $this->selling_amount;
 	}
 	public function sellingSymbolValue(): ?string {
 		return $this->selling_symbol;

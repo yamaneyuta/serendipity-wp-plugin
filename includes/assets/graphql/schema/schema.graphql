@@ -153,8 +153,7 @@ type Token {
 }
 
 type Price {
-	amountHex: String!	# 金額(0xプレフィックス付きの16進数)
-	decimals: Int!  	# 小数点以下の桁数
+	amount: String!	# 金額(10進数の文字列)
 	symbol: String! 	# 通貨記号(`USD`, `ETH`等)。記号(`$`等)不可。
 }
 
@@ -191,7 +190,7 @@ type IssuedInvoice {
 	nonce: String!				# 購入者の署名を省略するための乱数
 	serverMessage: String!      # サーバーで生成した署名対象メッセージ(クライアント側でコントラクトとの整合性を検証するために使用)
 	serverSignature: String!	# 署名用ウォレットで作成した署名
-	paymentAmountHex: String!		# 支払う数量(0xプレフィックス付きの16進数)
+	paymentAmount: String!		# 支払う数量(10進数の文字列)
 }
 
 enum PaidContentByNonceError {

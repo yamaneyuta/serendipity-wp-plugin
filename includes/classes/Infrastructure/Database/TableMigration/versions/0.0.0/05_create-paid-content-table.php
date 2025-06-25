@@ -29,8 +29,7 @@ return new class() extends DatabaseMigrationBase {
 				`post_id`                      bigint     unsigned  NOT NULL,
 				`paid_content`                 longtext             NOT NULL,
 				`selling_network_category_id`  int,
-				`selling_amount_hex`           varchar(191),
-				`selling_decimals`             int,
+				`selling_amount`               varchar(191),
 				`selling_symbol`               varchar(191),
 				PRIMARY KEY (`post_id`)
 			) {$charset};

@@ -6,10 +6,12 @@ namespace Cornix\Serendipity\Core\Infrastructure\Database\Entity;
 use Cornix\Serendipity\Core\Domain\Entity\Invoice;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\InvoiceTableRecord;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceNonce;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class InvoiceImpl extends Invoice {
 
@@ -19,13 +21,12 @@ class InvoiceImpl extends Invoice {
 			$invoice_record->postIdValue(),
 			new ChainID( $invoice_record->chainIdValue() ),
 			new Price(
-				$invoice_record->sellingAmountHexValue(),
-				$invoice_record->sellingDecimalsValue(),
-				$invoice_record->sellingSymbolValue()
+				Amount::from( $invoice_record->sellingAmountValue() ),
+				new Symbol( $invoice_record->sellingSymbolValue() )
 			),
 			Address::from( $invoice_record->sellerAddressValue() ),
 			Address::from( $invoice_record->paymentTokenAddressValue() ),
-			$invoice_record->paymentAmountHexValue(),
+			Amount::from( $invoice_record->paymentAmountValue() ),
 			Address::from( $invoice_record->consumerAddressValue() ),
 			$invoice_record->nonceValue() ? new InvoiceNonce( $invoice_record->nonceValue() ) : null
 		);

@@ -27,12 +27,11 @@ class InvoiceTable extends TableBase {
 				`id`,
 				`post_id`,
 				`chain_id`,
-				`selling_amount_hex`,
-				`selling_decimals`,
+				`selling_amount`,
 				`selling_symbol`,
 				`seller_address`,
 				`payment_token_address`,
-				`payment_amount_hex`,
+				`payment_amount`,
 				`consumer_address`,
 				`nonce`
 			FROM `{$this->tableName()}`
@@ -43,9 +42,8 @@ class InvoiceTable extends TableBase {
 
 		$record = $this->wpdb()->get_row( $sql );
 		if ( null !== $record ) {
-			$record->post_id          = (int) $record->post_id;
-			$record->chain_id         = (int) $record->chain_id;
-			$record->selling_decimals = (int) $record->selling_decimals;
+			$record->post_id  = (int) $record->post_id;
+			$record->chain_id = (int) $record->chain_id;
 		}
 
 		return is_null( $record ) ? null : new InvoiceTableRecord( $record );
@@ -58,12 +56,11 @@ class InvoiceTable extends TableBase {
 				'id'                    => $invoice->id()->ulid(),
 				'post_id'               => $invoice->postID()->value(),
 				'chain_id'              => $invoice->chainID()->value(),
-				'selling_amount_hex'    => $invoice->sellingPrice()->amountHex(),
-				'selling_decimals'      => $invoice->sellingPrice()->decimals(),
+				'selling_amount'        => $invoice->sellingPrice()->amount()->value(),
 				'selling_symbol'        => $invoice->sellingPrice()->symbol()->value(),
 				'seller_address'        => $invoice->sellerAddress()->value(),
 				'payment_token_address' => $invoice->paymentTokenAddress()->value(),
-				'payment_amount_hex'    => $invoice->paymentAmountHex(),
+				'payment_amount'        => $invoice->paymentAmount()->value(),
 				'consumer_address'      => $invoice->consumerAddress()->value(),
 				'nonce'                 => $invoice->nonce() ? $invoice->nonce()->value() : null,
 			),

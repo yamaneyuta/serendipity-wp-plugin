@@ -12,9 +12,7 @@ use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryIm
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Infrastructure\Factory\OracleRepositoryFactory;
-use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
-use phpseclib\Math\BigInteger;
 
 class PriceExchange {
 	public function __construct( RateData $rate_data = null, OracleRepository $oracle_repository = null ) {
@@ -26,8 +24,8 @@ class PriceExchange {
 
 	public function convert( Price $price, string $to_symbol ): Price {
 		// 元の価格が0の場合は変換後の値も0
-		if ( HexFormat::isZero( $price->amountHex() ) ) {
-			return new Price( $price->amountHex(), $price->decimals(), new Symbol( $to_symbol ) );
+		if ( '0' === $price->amount()->value() ) {
+			return new Price( $price->amount(), new Symbol( $to_symbol ) );
 		}
 
 		$from_symbol = $price->symbol()->value();
@@ -67,10 +65,8 @@ class PriceExchange {
 
 		if ( null !== $rate ) {
 			// `1BAT`を`BAT/ETH`で`ETH`に変換するような場合
-			$amount          = new BigInteger( $price->amountHex(), 16 );
-			$result_amount   = $amount->multiply( new BigInteger( $rate->amountHex(), 16 ) );
-			$result_decimals = $price->decimals() + $rate->decimals();
-			return new Price( HexFormat::toHex( $result_amount ), $result_decimals, new Symbol( $to_symbol ) );
+			$result_amount = $price->amount()->mul( $rate->amount() );
+			return new Price( $result_amount, new Symbol( $to_symbol ) );
 		} else {
 			// `1USD`を`ETH/USD`で`ETH`に変換するような場合
 			$rate = $this->rate_data->get( new SymbolPair( new Symbol( $to_symbol ), $from_symbol ) );
@@ -78,19 +74,7 @@ class PriceExchange {
 			// 除算を行った結果、変換後の最小単位が求められるように、まずは変換後の必要な桁数を取得
 			$to_decimals_max = $this->getMaxDecimals( $to_symbol );
 
-			$price_amount_hex = $price->amountHex();
-			$price_decimals   = $price->decimals();
-			// 変換後の通貨シンボルで最小単位が求められるように、変換前の価格の桁数を調整
-			$diff_decimals = ( $to_decimals_max + $rate->decimals() ) - $price->decimals();
-			if ( $diff_decimals > 0 ) {
-				$price_amount_hex = HexFormat::toHex( ( new BigInteger( $price_amount_hex, 16 ) )->multiply( new BigInteger( '1' . str_repeat( '0', $diff_decimals ), 10 ) ) );
-				$price_decimals  += $diff_decimals;
-			}
-
-			$result_amount   = ( new BigInteger( $price_amount_hex, 16 ) )->divide( new BigInteger( $rate->amountHex(), 16 ) )[0]; // 商のみ取得
-			$result_decimals = $price_decimals - $rate->decimals();
-
-			return new Price( HexFormat::toHex( $result_amount ), $result_decimals, new Symbol( $to_symbol ) );
+			return new Price( $price->amount()->div( $rate->amount(), $to_decimals_max ), new Symbol( $to_symbol ) );
 		}
 	}
 

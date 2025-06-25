@@ -8,11 +8,14 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractClient;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\ChainRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\ChainTable;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
+use phpseclib\Math\BigInteger;
 
 class HardhatAppContractClient extends AppContractClient {
 	private function __construct( AppContract $app_contract, AppContractAbi $app_abi ) {
@@ -37,7 +40,7 @@ class HardhatAppContractClient extends AppContractClient {
 		InvoiceID $invoice_id,
 		int $post_id,
 		Address $payment_token_address,
-		string $payment_amount,
+		Amount $payment_amount,
 		int $affiliate_ratio
 	): ?string {
 		/** @var null|string */
@@ -57,7 +60,7 @@ class HardhatAppContractClient extends AppContractClient {
 			$affiliate_ratio,
 			array(
 				'from'  => $from->address()->value(),
-				'value' => $payment_amount, // 支払い金額を指定
+				'value' => HexFormat::toHex( new BigInteger( $payment_amount->value() ) ), // 支払い金額を指定
 			),
 			function ( $err, $res ) use ( &$result ) {
 				if ( $err ) {

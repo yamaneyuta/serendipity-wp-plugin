@@ -7,10 +7,10 @@ use Cornix\Serendipity\Core\Domain\Entity\AppContract;
 use Cornix\Serendipity\Core\Infrastructure\Web3\AppContractAbi;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\GetPaywallStatusResult;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject\UnlockPaywallTransferEvent;
-use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Infrastructure\Web3\ContractFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
@@ -112,7 +112,7 @@ class AppContractClient {
 						Address::from( $decoded_event_parameters['from'] ), // from_address
 						Address::from( $decoded_event_parameters['to'] ), // to_address
 						Address::from( $decoded_event_parameters['token'] ), // token_address
-						HexFormat::toHex( $decoded_event_parameters['amount'] ), // amount_hex
+						Amount::from( $decoded_event_parameters['amount']->toString() ), // amount
 						UnlockPaywallTransferType::from( (int) ( $decoded_event_parameters['transferType'] )->toString() ) // transfer_type
 					);
 				}

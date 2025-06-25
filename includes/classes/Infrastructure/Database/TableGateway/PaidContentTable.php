@@ -24,7 +24,7 @@ class PaidContentTable extends TableBase {
 	 */
 	public function select( PostId $post_id ) {
 		$sql = <<<SQL
-			SELECT `post_id`, `paid_content`, `selling_network_category_id`, `selling_amount_hex`, `selling_decimals`, `selling_symbol`
+			SELECT `post_id`, `paid_content`, `selling_network_category_id`, `selling_amount`, `selling_symbol`
 			FROM `{$this->tableName()}`
 			WHERE `post_id` = %d
 		SQL;
@@ -35,7 +35,6 @@ class PaidContentTable extends TableBase {
 		if ( ! is_null( $row ) ) {
 			$row->post_id                     = (int) $row->post_id;
 			$row->selling_network_category_id = is_null( $row->selling_network_category_id ) ? null : (int) $row->selling_network_category_id;
-			$row->selling_decimals            = is_null( $row->selling_decimals ) ? null : (int) $row->selling_decimals;
 		}
 
 		return is_null( $row ) ? null : new PaidContentTableRecord( $row );
@@ -47,16 +46,14 @@ class PaidContentTable extends TableBase {
 				`post_id`,
 				`paid_content`,
 				`selling_network_category_id`,
-				`selling_amount_hex`,
-				`selling_decimals`,
+				`selling_amount`,
 				`selling_symbol`
 			) VALUES (
-				:post_id, :paid_content, :selling_network_category_id, :selling_amount_hex, :selling_decimals, :selling_symbol
+				:post_id, :paid_content, :selling_network_category_id, :selling_amount, :selling_symbol
 			) ON DUPLICATE KEY UPDATE
 				`paid_content` = :paid_content,
 				`selling_network_category_id` = :selling_network_category_id,
-				`selling_amount_hex` = :selling_amount_hex,
-				`selling_decimals` = :selling_decimals,
+				`selling_amount` = :selling_amount,
 				`selling_symbol` = :selling_symbol
 		SQL;
 
@@ -66,8 +63,7 @@ class PaidContentTable extends TableBase {
 				':post_id'                     => $post_id->value(),
 				':paid_content'                => is_null( $paid_content ) ? null : $paid_content->value(),
 				':selling_network_category_id' => is_null( $selling_network_category_id ) ? null : $selling_network_category_id->value(),
-				':selling_amount_hex'          => is_null( $selling_price ) ? null : $selling_price->amountHex(),
-				':selling_decimals'            => is_null( $selling_price ) ? null : $selling_price->decimals(),
+				':selling_amount'              => is_null( $selling_price ) ? null : $selling_price->amount()->value(),
 				':selling_symbol'              => is_null( $selling_price ) ? null : $selling_price->symbol()->value(),
 			)
 		);
