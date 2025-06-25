@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\CurrentSellerTermsResolver;
+namespace Cornix\Serendipity\Test\Presentation\GraphQL\Resolver\CurrentSellerTermsResolver;
 
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
-use Cornix\Serendipity\Test\Entity\WpUser;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
 
 class HappyPathTest extends CurrentSellerTermsResolverBase {
 

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
+namespace Cornix\Serendipity\Test\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 
 use Cornix\Serendipity\Core\Domain\Service\SellerService;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
 use Cornix\Serendipity\Core\Infrastructure\Factory\TermsServiceFactory;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
-use Cornix\Serendipity\Test\Entity\WpUser;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
 use HardhatSignerFactory;
 
 class HappyPathTest extends SetSellerAgreedTermsResolverBase {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Test\UseCase;
+namespace Cornix\Serendipity\TestLib\UseCase;
 
 use Cornix\Serendipity\Core\Application\Service\TermsService;
 use Cornix\Serendipity\Core\Domain\Entity\Signer;

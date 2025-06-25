@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\ChainResolver;
+namespace Cornix\Serendipity\Test\Presentation\GraphQL\Resolver\ChainResolver;
 
 use Cornix\Serendipity\Core\Constant\ChainIdValue;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
-use Cornix\Serendipity\Test\Entity\WpUser;
-use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
+use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
 
 class SecurityTest extends UnitTestCaseBase {
 

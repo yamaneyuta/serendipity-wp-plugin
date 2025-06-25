@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Cornix\Serendipity\Test\Entity\WpUser;
-use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
+use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
 
 class HappyPathTest extends UnitTestCaseBase {
 

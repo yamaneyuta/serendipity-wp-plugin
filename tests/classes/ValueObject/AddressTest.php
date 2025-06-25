@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\ValueObject;
+namespace Cornix\Serendipity\Test\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
-use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
+use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
 
 class AddressTest extends UnitTestCaseBase {
 

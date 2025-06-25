@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\ChainsResolver;
+namespace Cornix\Serendipity\Test\Presentation\GraphQL\Resolver\ChainsResolver;
 
-use Cornix\Serendipity\Test\Entity\WpUser;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
 
 class HappyPathTest extends ChainsResolverTestBase {
 

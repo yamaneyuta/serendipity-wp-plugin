@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Infrastructure\Web3\Service;
+namespace Cornix\Serendipity\Test\Infrastructure\Web3\Service;
 
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
@@ -10,7 +10,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\GetBlockResult;
 use Cornix\Serendipity\Core\Domain\ValueObject\UnixTimestamp;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockchainClientServiceImpl;
-use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
+use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
 
 class BlockchainClientServiceImplTest extends UnitTestCaseBase {
 

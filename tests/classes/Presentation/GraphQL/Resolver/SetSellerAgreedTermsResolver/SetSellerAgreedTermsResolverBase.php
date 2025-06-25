@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
+namespace Cornix\Serendipity\Test\Presentation\GraphQL\Resolver\SetSellerAgreedTermsResolver;
 
-use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
+use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
 
 class SetSellerAgreedTermsResolverBase extends UnitTestCaseBase {
 	/**

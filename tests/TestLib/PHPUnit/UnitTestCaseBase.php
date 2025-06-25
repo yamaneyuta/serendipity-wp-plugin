@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Test\PHPUnit;
+namespace Cornix\Serendipity\TestLib\PHPUnit;
 
 use Cornix\Serendipity\Core\Infrastructure\Database\MySQLiFactory;
 use Cornix\Serendipity\Core\Infrastructure\DI\ContainerDefinitions;
@@ -10,8 +10,8 @@ use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogCategory;
 use Cornix\Serendipity\Core\Infrastructure\Logging\ValueObject\LogLevel;
 use Cornix\Serendipity\Core\Presentation\PluginUpdateHook;
 use Cornix\Serendipity\Core\Repository\Name\Prefix;
-use Cornix\Serendipity\Test\Entity\WpUser;
-use Cornix\Serendipity\Test\Service\ClientRequestService;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
+use Cornix\Serendipity\TestLib\Service\ClientRequestService;
 use DI\Container;
 use DI\ContainerBuilder;
 use WP_UnitTestCase;

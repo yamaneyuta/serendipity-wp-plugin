@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Test\Util;
+namespace Cornix\Serendipity\TestLib\Util;
 
-use Cornix\Serendipity\Test\Entity\WpUser;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
 
 /**
  * 指定したユーザーに切り替えるためのユーティリティクラス

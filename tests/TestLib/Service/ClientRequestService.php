@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Test\Service;
+namespace Cornix\Serendipity\TestLib\Service;
 
 use Cornix\Serendipity\Core\Lib\Rest\RestProperty;
 use Cornix\Serendipity\Core\Presentation\GraphQLHook;
-use Cornix\Serendipity\Test\Entity\WpUser;
-use Cornix\Serendipity\Test\Util\WithUser;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
+use Cornix\Serendipity\TestLib\Util\WithUser;
 use DI\Container;
 use WP_REST_Request;
 use WP_REST_Response;

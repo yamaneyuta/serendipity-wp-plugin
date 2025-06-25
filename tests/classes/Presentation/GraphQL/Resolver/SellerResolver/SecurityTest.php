@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\SellerResolver;
+namespace Cornix\Serendipity\Test\Presentation\GraphQL\Resolver\SellerResolver;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
 use Cornix\Serendipity\Core\Domain\ValueObject\SigningMessage;
 use Cornix\Serendipity\Core\Domain\ValueObject\TermsVersion;
-use Cornix\Serendipity\Test\Entity\WpUser;
-use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
-use Cornix\Serendipity\Test\UseCase\RegisterSeller;
+use Cornix\Serendipity\TestLib\Entity\WpUser;
+use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
+use Cornix\Serendipity\TestLib\UseCase\RegisterSeller;
 use HardhatSignerFactory;
 
 class SecurityTest extends UnitTestCaseBase {

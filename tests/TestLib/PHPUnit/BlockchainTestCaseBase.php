@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Test\PHPUnit;
+namespace Cornix\Serendipity\TestLib\PHPUnit;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;

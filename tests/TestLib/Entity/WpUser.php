@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\Test\Entity;
+namespace Cornix\Serendipity\TestLib\Entity;
 
 /**
  * WordPressユーザーを表現するクラス

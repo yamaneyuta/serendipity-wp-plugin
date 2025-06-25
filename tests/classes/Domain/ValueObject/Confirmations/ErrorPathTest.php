@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Domain\ValueObject\Confirmations;
+namespace Cornix\Serendipity\Test\Domain\ValueObject\Confirmations;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
-use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
+use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
 
 class ErrorPathTest extends UnitTestCaseBase {
 

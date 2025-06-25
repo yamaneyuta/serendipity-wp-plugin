@@ -75,7 +75,7 @@ function add_composer_autoload() {
 	if [ -f ./composer.json ]; then
 		# `autoload`セクションが存在しない場合は追加
 		if ! grep -q '"autoload":' composer.json; then
-			jq --tab '(.autoload //= {}) | (.autoload["psr-4"] //= {}) | .autoload["psr-4"]["Cornix\\Serendipity\\Test\\"] = "TestLib/" | .autoload["psr-4"]["Cornix\\Serendipity\\TestCase\\"] = "classes/"' composer.json > composer_tmp.json && mv composer_tmp.json composer.json
+			jq --tab '(.autoload //= {}) | (.autoload["psr-4"] //= {}) | .autoload["psr-4"]["Cornix\\Serendipity\\TestLib\\"] = "TestLib/" | .autoload["psr-4"]["Cornix\\Serendipity\\Test\\"] = "classes/"' composer.json > composer_tmp.json && mv composer_tmp.json composer.json
 		fi
 
 		# `composer.json`の内容を更新

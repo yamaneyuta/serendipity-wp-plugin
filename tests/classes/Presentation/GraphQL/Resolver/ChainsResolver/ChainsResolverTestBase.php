@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Cornix\Serendipity\TestCase\Presentation\GraphQL\Resolver\ChainsResolver;
+namespace Cornix\Serendipity\Test\Presentation\GraphQL\Resolver\ChainsResolver;
 
 use Cornix\Serendipity\Core\Constant\ChainIdValue;
-use Cornix\Serendipity\Test\PHPUnit\UnitTestCaseBase;
+use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
 
 class ChainsResolverTestBase extends UnitTestCaseBase {
 
