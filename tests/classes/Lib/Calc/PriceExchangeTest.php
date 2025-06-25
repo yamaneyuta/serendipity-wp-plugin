@@ -1,7 +1,5 @@
 <?php
 declare(strict_types=1);
-
-use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Repository\RateData;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
@@ -10,7 +8,9 @@ use Cornix\Serendipity\Core\Infrastructure\Database\TableGateway\TokenTable;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use phpseclib\Math\BigInteger;
 
 class PriceExchangeTest extends IntegrationTestBase {
@@ -27,15 +27,15 @@ class PriceExchangeTest extends IntegrationTestBase {
 
 		// ERC20トークンの情報をテーブルに保存
 		$token_table = new TokenTable( $GLOBALS['wpdb'] );
-		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0x0D8775F648430679A709E98d2b0Cb6250d2887EF' ), 'BAT', 18, true ) );
-		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0x514910771AF9Ca656af840dff83E8264EcF986CA' ), 'LINK', 18, true ) );
-		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' ), 'USDC', 6, true ) );
+		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0x0D8775F648430679A709E98d2b0Cb6250d2887EF' ), new Symbol( 'BAT' ), 18, true ) );
+		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0x514910771AF9Ca656af840dff83E8264EcF986CA' ), new Symbol( 'LINK' ), 18, true ) );
+		$token_table->save( new Token( ChainID::ethMainnet(), new Address( '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' ), new Symbol( 'USDC' ), 6, true ) );
 
 		// $this->rate_data_mockのgetメソッドを任意の引数に対して任意の戻り値を返すように設定
 		$this->rate_data_stub->method( 'get' )->willReturnCallback(
 			function ( SymbolPair $symbol_pair ) {
-				$base  = $symbol_pair->base();
-				$quote = $symbol_pair->quote();
+				$base  = $symbol_pair->base()->value();
+				$quote = $symbol_pair->quote()->value();
 
 				if ( $base === 'ETH' && $quote === 'USD' ) {
 					// 1ETH=2000USDとする。decimalsは本番環境と同じ8桁
@@ -67,7 +67,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 	 */
 	public function convertZeroPrice(): void {
 		// ARRANGE
-		$price = new Price( '0x0', 18, 'ETH' );
+		$price = new Price( '0x0', 18, new Symbol( 'ETH' ) );
 
 		// ACT
 		$ret = $this->sut->convert( $price, 'USD' );
@@ -76,8 +76,8 @@ class PriceExchangeTest extends IntegrationTestBase {
 		$this->assertTrue( HexFormat::isZero( $ret->amountHex() ) );
 		$this->assertEquals( $ret->amountHex(), $price->amountHex() );
 		$this->assertEquals( $ret->decimals(), $price->decimals() );
-		$this->assertNotEquals( $ret->symbol(), $price->symbol() );
-		$this->assertEquals( $ret->symbol(), 'USD' );
+		$this->assertNotEquals( $ret->symbol()->value(), $price->symbol()->value() );
+		$this->assertEquals( $ret->symbol()->value(), 'USD' );
 	}
 
 	/**
@@ -88,7 +88,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 	 */
 	public function convertToSameSymbol(): void {
 		// ARRANGE
-		$price = new Price( '0x1', 1, 'ETH' );  // 0.1ETH
+		$price = new Price( '0x1', 1, new Symbol( 'ETH' ) );  // 0.1ETH
 
 		// ACT
 		$ret = $this->sut->convert( $price, 'ETH' );
@@ -96,7 +96,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 		// ASSERT
 		$this->assertEquals( $ret->amountHex(), $price->amountHex() );
 		$this->assertEquals( $ret->decimals(), $price->decimals() );
-		$this->assertEquals( $ret->symbol(), $price->symbol() );
+		$this->assertTrue( $ret->symbol()->equals( $price->symbol() ) );
 		$this->assertEquals( $ret->amountHex(), $price->amountHex() );
 		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), HexFormat::toHex( new BigInteger( '100000000000000000', 10 ) ) );
 	}
@@ -110,7 +110,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 	public function convertBATtoETH(): void {
 		$this->markTestSkipped( 'Implemented after refactoring' );
 		// ARRANGE
-		$price = new Price( HexFormat::toHex( new BigInteger( '2000', 10 ) ), 0, 'BAT' );  // 0.1ETHに相当する2000BAT
+		$price = new Price( HexFormat::toHex( new BigInteger( '2000', 10 ) ), 0, new Symbol( 'BAT' ) );  // 0.1ETHに相当する2000BAT
 
 		// ACT
 		$ret = $this->sut->convert( $price, 'ETH' );
@@ -128,13 +128,13 @@ class PriceExchangeTest extends IntegrationTestBase {
 	 */
 	public function convertUSDtoETH(): void {
 		// ARRANGE
-		$price = new Price( HexFormat::toHex( new BigInteger( '20000', 10 ) ), 2, 'USD' );  // 200.00USD(=0.1ETH)
+		$price = new Price( HexFormat::toHex( new BigInteger( '20000', 10 ) ), 2, new Symbol( 'USD' ) );  // 200.00USD(=0.1ETH)
 
 		// ACT
 		$ret = $this->sut->convert( $price, 'ETH' );
 
 		// ASSERT
-		$this->assertEquals( $ret->symbol(), 'ETH' );
+		$this->assertEquals( $ret->symbol()->value(), 'ETH' );
 		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), HexFormat::toHex( new BigInteger( '100000000000000000', 10 ) ) );
 	}
 
@@ -146,13 +146,13 @@ class PriceExchangeTest extends IntegrationTestBase {
 	 */
 	public function convertJPYtoETH(): void {
 		// ARRANGE
-		$price = new Price( HexFormat::toHex( new BigInteger( '100000', 10 ) ), 0, 'JPY' );  // 100000JPY=1000USD=0.5ETH
+		$price = new Price( HexFormat::toHex( new BigInteger( '100000', 10 ) ), 0, new Symbol( 'JPY' ) );  // 100000JPY=1000USD=0.5ETH
 
 		// ACT
 		$ret = $this->sut->convert( $price, 'ETH' );
 
 		// ASSERT
-		$this->assertEquals( $ret->symbol(), 'ETH' );
+		$this->assertEquals( $ret->symbol()->value(), 'ETH' );
 		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), HexFormat::toHex( new BigInteger( '500000000000000000', 10 ) ) );
 	}
 
@@ -165,13 +165,13 @@ class PriceExchangeTest extends IntegrationTestBase {
 	public function convertLINKtoBAT(): void {
 		$this->markTestSkipped( 'Implemented after refactoring' );
 		// ARRANGE
-		$price = new Price( HexFormat::toHex( new BigInteger( '1', 10 ) ), 0, 'LINK' );  // 1LINK=100BAT
+		$price = new Price( HexFormat::toHex( new BigInteger( '1', 10 ) ), 0, new Symbol( 'LINK' ) );  // 1LINK=100BAT
 
 		// ACT
 		$ret = $this->sut->convert( $price, 'BAT' );
 
 		// ASSERT
-		$this->assertEquals( $ret->symbol(), 'BAT' );
+		$this->assertEquals( $ret->symbol()->value(), 'BAT' );
 		$this->assertEquals( $ret->toTokenAmount( ChainID::ethMainnet() ), HexFormat::toHex( new BigInteger( '100000000000000000000', 10 ) ) );
 	}
 
@@ -184,7 +184,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 	public function convertLINKtoUSDC(): void {
 		$this->markTestSkipped( 'Implemented after refactoring' );
 		// ARRANGE
-		$price = new Price( HexFormat::toHex( new BigInteger( '1', 10 ) ), 0, 'LINK' );  // 1LINK=10USDC
+		$price = new Price( HexFormat::toHex( new BigInteger( '1', 10 ) ), 0, new Symbol( 'LINK' ) );  // 1LINK=10USDC
 
 		// ACT
 		$ret = $this->sut->convert( $price, 'USDC' );
@@ -203,7 +203,7 @@ class PriceExchangeTest extends IntegrationTestBase {
 	public function convertUSDCtoLINK(): void {
 		$this->markTestSkipped( 'Implemented after refactoring' );
 		// ARRANGE
-		$price = new Price( HexFormat::toHex( new BigInteger( '1', 10 ) ), 0, 'USDC' );  // 1USDC=0.1LINK
+		$price = new Price( HexFormat::toHex( new BigInteger( '1', 10 ) ), 0, new Symbol( 'USDC' ) );  // 1USDC=0.1LINK
 
 		// ACT
 		$ret = $this->sut->convert( $price, 'LINK' );

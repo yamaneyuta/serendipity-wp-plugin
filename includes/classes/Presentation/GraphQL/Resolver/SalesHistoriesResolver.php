@@ -56,7 +56,7 @@ class SalesHistoriesResolver extends ResolverBase {
 					'sellingPrice' => array(
 						'amountHex' => $sales_data->sellingPrice()->amountHex(),
 						'decimals'  => $sales_data->sellingPrice()->decimals(),
-						'symbol'    => $sales_data->sellingPrice()->symbol(),
+						'symbol'    => $sales_data->sellingPrice()->symbol()->value(),
 					),
 				),
 
@@ -81,12 +81,12 @@ class SalesHistoriesResolver extends ResolverBase {
 					'sellerProfitPrice' => array(
 						'amountHex' => $sales_data->sellerProfitPrice()->amountHex(),
 						'decimals'  => $sales_data->sellerProfitPrice()->decimals(),
-						'symbol'    => $sales_data->sellerProfitPrice()->symbol(),
+						'symbol'    => $sales_data->sellerProfitPrice()->symbol()->value(),
 					),
 					'handlingFeePrice'  => array(
 						'amountHex' => $sales_data->handlingFeePrice()->amountHex(),
 						'decimals'  => $sales_data->handlingFeePrice()->decimals(),
-						'symbol'    => $sales_data->handlingFeePrice()->symbol(),
+						'symbol'    => $sales_data->handlingFeePrice()->symbol()->value(),
 					),
 				),
 			),

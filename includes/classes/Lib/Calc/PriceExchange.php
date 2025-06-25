@@ -13,6 +13,7 @@ use Cornix\Serendipity\Core\Domain\ValueObject\Price;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 use Cornix\Serendipity\Core\Infrastructure\Factory\OracleRepositoryFactory;
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use phpseclib\Math\BigInteger;
 
 class PriceExchange {
@@ -26,10 +27,10 @@ class PriceExchange {
 	public function convert( Price $price, string $to_symbol ): Price {
 		// 元の価格が0の場合は変換後の値も0
 		if ( HexFormat::isZero( $price->amountHex() ) ) {
-			return new Price( $price->amountHex(), $price->decimals(), $to_symbol );
+			return new Price( $price->amountHex(), $price->decimals(), new Symbol( $to_symbol ) );
 		}
 
-		$from_symbol = $price->symbol();
+		$from_symbol = $price->symbol()->value();
 		if ( $from_symbol === $to_symbol ) {
 			// 同じ通貨の場合は変換不要
 			return $price;
@@ -62,17 +63,17 @@ class PriceExchange {
 
 	private function convertDirect( Price $price, string $to_symbol ): Price {
 		$from_symbol = $price->symbol();
-		$rate        = $this->rate_data->get( new SymbolPair( $from_symbol, $to_symbol ) );
+		$rate        = $this->rate_data->get( new SymbolPair( $from_symbol, new Symbol( $to_symbol ) ) );
 
 		if ( null !== $rate ) {
 			// `1BAT`を`BAT/ETH`で`ETH`に変換するような場合
 			$amount          = new BigInteger( $price->amountHex(), 16 );
 			$result_amount   = $amount->multiply( new BigInteger( $rate->amountHex(), 16 ) );
 			$result_decimals = $price->decimals() + $rate->decimals();
-			return new Price( HexFormat::toHex( $result_amount ), $result_decimals, $to_symbol );
+			return new Price( HexFormat::toHex( $result_amount ), $result_decimals, new Symbol( $to_symbol ) );
 		} else {
 			// `1USD`を`ETH/USD`で`ETH`に変換するような場合
-			$rate = $this->rate_data->get( new SymbolPair( $to_symbol, $from_symbol ) );
+			$rate = $this->rate_data->get( new SymbolPair( new Symbol( $to_symbol ), $from_symbol ) );
 			assert( null !== $rate );
 			// 除算を行った結果、変換後の最小単位が求められるように、まずは変換後の必要な桁数を取得
 			$to_decimals_max = $this->getMaxDecimals( $to_symbol );
@@ -89,7 +90,7 @@ class PriceExchange {
 			$result_amount   = ( new BigInteger( $price_amount_hex, 16 ) )->divide( new BigInteger( $rate->amountHex(), 16 ) )[0]; // 商のみ取得
 			$result_decimals = $price_decimals - $rate->decimals();
 
-			return new Price( HexFormat::toHex( $result_amount ), $result_decimals, $to_symbol );
+			return new Price( HexFormat::toHex( $result_amount ), $result_decimals, new Symbol( $to_symbol ) );
 		}
 	}
 
@@ -98,7 +99,7 @@ class PriceExchange {
 	 * ※ ネットワークを跨いだ比較を行い、最大値を取得します。
 	 */
 	private function getMaxDecimals( string $symbol ): int {
-		$tokens_filter = ( new TokensFilter() )->bySymbol( $symbol );
+		$tokens_filter = ( new TokensFilter() )->bySymbol( new Symbol( $symbol ) );
 		$tokens        = $tokens_filter->apply( ( new TokenRepositoryImpl() )->all() );
 		$decimals      = array_map( fn( Token $token ) => $token->decimals(), $tokens );
 		return max( $decimals );
@@ -119,7 +120,7 @@ class PriceExchange {
 		$oracles = $this->oracle_repository->all();
 
 		$from_to_oracle = ( new OraclesFilter() )
-			->bySymbolPair( new SymbolPair( $from_symbol, $to_symbol ) )
+			->bySymbolPair( new SymbolPair( new Symbol( $from_symbol ), new Symbol( $to_symbol ) ) )
 			->byConnectable()
 			->apply( $oracles );
 		if ( ! empty( $from_to_oracle ) ) {
@@ -127,7 +128,7 @@ class PriceExchange {
 		}
 
 		$to_from_oracle = ( new OraclesFilter() )
-			->bySymbolPair( new SymbolPair( $to_symbol, $from_symbol ) )
+			->bySymbolPair( new SymbolPair( new Symbol( $to_symbol ), new Symbol( $from_symbol ) ) )
 			->byConnectable()
 			->apply( $oracles );
 		if ( ! empty( $to_from_oracle ) ) {

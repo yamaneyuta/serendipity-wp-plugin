@@ -12,6 +12,7 @@ use Cornix\Serendipity\Core\Infrastructure\Web3\TokenClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 /**
  * ERC20トークンの情報をブロックチェーンから取得して返します。
@@ -58,11 +59,11 @@ class GetERC20InfoResolver extends ResolverBase {
 
 		$token_client = new TokenClient( $chain->rpcURL(), $address );
 
-		$symbol = $token_client->symbol();
+		$symbol = new Symbol( $token_client->symbol() );
 
 		$symbol_callback = function () use ( $symbol ) {
 			$this->user_access_checker->checkHasAdminRole(); // 管理者権限が必要
-			return $symbol;
+			return $symbol->value();
 		};
 
 		// レート変換可能かどうかを返すコールバック関数
@@ -74,7 +75,7 @@ class GetERC20InfoResolver extends ResolverBase {
 			$quote_symbols = array( 'USD', 'ETH' );
 			foreach ( $quote_symbols as $quote_symbol ) {
 				$filtered_oracles = ( new OraclesFilter() )
-					->bySymbolPair( new SymbolPair( $symbol, $quote_symbol ) )
+					->bySymbolPair( new SymbolPair( $symbol, new Symbol( $quote_symbol ) ) )
 					->byConnectable()
 					->apply( $oracles );
 				if ( count( $filtered_oracles ) > 0 ) {

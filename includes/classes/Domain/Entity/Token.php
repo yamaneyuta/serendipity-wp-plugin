@@ -7,11 +7,12 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\TokenTableRecord;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class Token {
 
-	public function __construct( ChainID $chain_ID, Address $address, string $symbol, int $decimals, bool $is_payable ) {
-		Validate::checkSymbol( $symbol );
+	public function __construct( ChainID $chain_ID, Address $address, Symbol $symbol, int $decimals, bool $is_payable ) {
+		Validate::checkSymbolObject( $symbol );
 		Validate::checkDecimals( $decimals );
 
 		$this->chain_ID   = $chain_ID;
@@ -23,7 +24,7 @@ class Token {
 
 	private ChainID $chain_ID;
 	private Address $address;
-	private string $symbol;
+	private Symbol $symbol;
 	private int $decimals;
 	private bool $is_payable;
 
@@ -35,7 +36,7 @@ class Token {
 		return $this->address;
 	}
 
-	public function symbol(): string {
+	public function symbol(): Symbol {
 		return $this->symbol;
 	}
 
@@ -55,7 +56,7 @@ class Token {
 			array(
 				'chain_ID'   => $this->chain_ID->value(),
 				'address'    => (string) $this->address,
-				'symbol'     => $this->symbol,
+				'symbol'     => $this->symbol->value(),
 				'decimals'   => $this->decimals,
 				'is_payable' => $this->is_payable,
 			)
@@ -66,7 +67,7 @@ class Token {
 		return new self(
 			new ChainID( $record->chainIdValue() ),
 			Address::from( $record->addressValue() ),
-			$record->symbolValue(),
+			new Symbol( $record->symbolValue() ),
 			$record->decimalsValue(),
 			$record->isPayableValue()
 		);

@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\PaidContentTable
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class PostImpl extends Post {
 
@@ -28,7 +29,7 @@ class PostImpl extends Post {
 		if ( null === $selling_amount_hex || null === $selling_decimals || null === $selling_symbol ) {
 			return null;
 		} else {
-			return new Price( $selling_amount_hex, $selling_decimals, $selling_symbol );
+			return new Price( $selling_amount_hex, $selling_decimals, new Symbol( $selling_symbol ) );
 		}
 	}
 

@@ -68,7 +68,7 @@ class PaidContentTable extends TableBase {
 				':selling_network_category_id' => is_null( $selling_network_category_id ) ? null : $selling_network_category_id->value(),
 				':selling_amount_hex'          => is_null( $selling_price ) ? null : $selling_price->amountHex(),
 				':selling_decimals'            => is_null( $selling_price ) ? null : $selling_price->decimals(),
-				':selling_symbol'              => is_null( $selling_price ) ? null : $selling_price->symbol(),
+				':selling_symbol'              => is_null( $selling_price ) ? null : $selling_price->symbol()->value(),
 			)
 		);
 

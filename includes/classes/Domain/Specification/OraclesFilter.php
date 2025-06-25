@@ -21,8 +21,8 @@ class OraclesFilter {
 		return $this;
 	}
 	public function bySymbolPair( SymbolPair $symbol_pair ): self {
-		$this->filters[] = fn ( Oracle $oracle ) => $oracle->baseSymbol() === $symbol_pair->base()
-			&& $oracle->quoteSymbol() === $symbol_pair->quote();
+		$this->filters[] = fn ( Oracle $oracle ) => $oracle->baseSymbol()->equals( $symbol_pair->base() )
+			&& $oracle->quoteSymbol()->equals( $symbol_pair->quote() );
 		return $this;
 	}
 	public function byConnectable(): self {

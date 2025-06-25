@@ -4,32 +4,33 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Domain\ValueObject;
 
 use Cornix\Serendipity\Core\Lib\Security\Validate;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class SymbolPair {
-	public function __construct( string $base_symbol, string $quote_symbol ) {
-		Validate::checkSymbol( $base_symbol );
-		Validate::checkSymbol( $quote_symbol );
+	public function __construct( Symbol $base_symbol, Symbol $quote_symbol ) {
+		Validate::checkSymbolObject( $base_symbol );
+		Validate::checkSymbolObject( $quote_symbol );
 
 		$this->base_symbol  = $base_symbol;
 		$this->quote_symbol = $quote_symbol;
 	}
 
-	private string $base_symbol;
-	private string $quote_symbol;
+	private Symbol $base_symbol;
+	private Symbol $quote_symbol;
 
-	public function base(): string {
+	public function base(): Symbol {
 		return $this->base_symbol;
 	}
 
-	public function quote(): string {
+	public function quote(): Symbol {
 		return $this->quote_symbol;
 	}
 
 	public function equals( SymbolPair $other ): bool {
-		return $this->base_symbol === $other->base_symbol && $this->quote_symbol === $other->quote_symbol;
+		return $this->base_symbol->equals( $other->base_symbol ) && $this->quote_symbol->equals( $other->quote_symbol );
 	}
 
 	public function __toString(): string {
-		return "{$this->base_symbol}/{$this->quote_symbol}";
+		return "{$this->base_symbol->value()}/{$this->quote_symbol->value()}";
 	}
 }

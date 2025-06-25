@@ -38,7 +38,7 @@ class IssueInvoice {
 
 		// 支払うトークンにおける価格を計算
 		// ※ これは`1ETH`等の価格を表現するオブジェクトであり、実際に支払う数量(wei等)ではないことに注意
-		$payment_price = ( new PriceExchange() )->convert( $selling_price, $payment_token->symbol() );
+		$payment_price = ( new PriceExchange() )->convert( $selling_price, $payment_token->symbol()->value() );
 		// 支払うトークン量を取得
 		$payment_amount_hex = $payment_price->toTokenAmount( $chain_ID );
 
