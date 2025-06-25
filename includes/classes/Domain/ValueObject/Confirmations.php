@@ -13,7 +13,7 @@ final class Confirmations {
 		$this->confirmations_value = $confirmations_value;
 	}
 
-	/** @var int|string */
+	/** @var int|BlockTag */
 	private $confirmations_value;
 
 	/**
@@ -26,13 +26,16 @@ final class Confirmations {
 		} elseif ( is_string( $confirmations_value ) && 1 === preg_match( '/^-?\d+$/', $confirmations_value ) ) {
 			// '1'のような数値の文字列が来た場合はint型に変換してインスタンスを生成
 			return new self( (int) $confirmations_value );
+		} elseif ( is_string( $confirmations_value ) ) {
+			// ブロックタグ文字列の場合はBlockTagオブジェクトを作成
+			return new self( BlockTag::from( $confirmations_value ) );
 		} else {
 			return new self( $confirmations_value );
 		}
 	}
 
 	/**
-	 * @return int|string
+	 * @return int|BlockTag
 	 */
 	public function value() {
 		return $this->confirmations_value;
@@ -43,13 +46,25 @@ final class Confirmations {
 	}
 
 	public function equals( self $other ): bool {
-		return $this->confirmations_value === $other->confirmations_value;
+		$this_value  = $this->confirmations_value;
+		$other_value = $other->confirmations_value;
+
+		if ( is_int( $this_value ) && is_int( $other_value ) ) {
+			// 両方ともintの場合
+			return $this_value === $other_value;
+		} elseif ( $this_value instanceof BlockTag && $other_value instanceof BlockTag ) {
+			// 両方ともBlockTagの場合
+			return $this_value->equals( $other_value );
+		} else {
+			// 片方がintで片方がBlockTagの場合は常にfalse
+			return false;
+		}
 	}
 
 	/**
 	 * 確認数の値が正しい形式であることを確認する
 	 *
-	 * @param int|string $confirmations_value
+	 * @param int|BlockTag $confirmations_value
 	 */
 	private static function checkConfirmationsValue( $confirmations_value ): void {
 		if ( is_int( $confirmations_value ) ) {
@@ -57,15 +72,10 @@ final class Confirmations {
 			if ( $confirmations_value <= 0 ) {
 				throw new \InvalidArgumentException( '[5DCC888A] Invalid confirmations value. Must be a positive integer. - ' . $confirmations_value );
 			}
-		} elseif ( is_string( $confirmations_value ) ) {
-			// 許可するタグ一覧。現在は'latest'のみ
-			$valid_confirmations_values = array( 'latest' );
-
-			if ( ! in_array( $confirmations_value, $valid_confirmations_values, true ) ) {
-				throw new \InvalidArgumentException( '[6EED5EF3] Invalid confirmations value. - ' . $confirmations_value );
-			}
+		} elseif ( $confirmations_value instanceof BlockTag ) {
+			// BlockTagオブジェクトの場合は、既にコンストラクタでバリデーション済みのため何もしない
 		} else {
-			throw new \InvalidArgumentException( '[A998D08F] Invalid confirmations value type. Must be int or string. - ' . gettype( $confirmations_value ) );
+			throw new \InvalidArgumentException( '[A998D08F] Invalid confirmations value type. Must be int or BlockTag. - ' . gettype( $confirmations_value ) );
 		}
 	}
 }

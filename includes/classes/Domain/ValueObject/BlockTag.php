@@ -40,4 +40,8 @@ final class BlockTag {
 	public static function latest(): self {
 		return new self( self::LATEST );
 	}
+
+	public static function from( string $tag ): self {
+		return new self( $tag );
+	}
 }

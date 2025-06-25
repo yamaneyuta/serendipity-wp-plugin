@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Test\Domain\ValueObject\Confirmations;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
+use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\TestLib\PHPUnit\UnitTestCaseBase;
 
 class HappyPathTest extends UnitTestCaseBase {
@@ -57,8 +58,9 @@ class HappyPathTest extends UnitTestCaseBase {
 		$confirmations = Confirmations::from( $confirmations_value );
 		// ASSERT
 		$this->assertInstanceOf( Confirmations::class, $confirmations );
-		$this->assertIsString( $confirmations->value() );
-		$this->assertEquals( 'latest', $confirmations->value() ); // valueはタグが返ってくる
+		$this->assertInstanceOf( BlockTag::class, $confirmations->value() );
+		$this->assertEquals( BlockTag::latest(), $confirmations->value() );
+		$this->assertEquals( 'latest', (string) $confirmations->value() ); // valueはBlockTagオブジェクトが返ってくる
 		$this->assertEquals( 'latest', (string) $confirmations );
 	}
 

@@ -81,11 +81,9 @@ class GetSafetyCrawledBlockNumber {
 			$safety_block_number = BlockNumber::from(
 				max( $safety_block_number->int() - $confirmations_value, 1 ) // マイナスにならないように調整
 			);
-		} elseif ( is_string( $confirmations_value ) ) {
-			// 現在、`safe`, `finalized`などといったタグはサポートしていない
-			throw new \Exception( '[D8DACAB1] Not supported confirmations type: ' . $confirmations_value );
 		} else {
-			throw new \Exception( '[FEA50B2C] Invalid confirmations type: ' . var_export( $confirmations_value, true ) );
+			// BlockTagの場合は現在サポートしていない
+			throw new \Exception( '[D8DACAB1] Not supported confirmations type: ' . (string) $confirmations_value );
 		}
 
 		return $safety_block_number;
