@@ -24,7 +24,7 @@ return new class() extends DatabaseMigrationBase {
 				`from_address`   varchar(191)  NOT NULL,
 				`to_address`     varchar(191)  NOT NULL,
 				`token_address`  varchar(191)  NOT NULL,
-				`amount_hex`     varchar(191)  NOT NULL,
+				`amount`         varchar(191)  NOT NULL,
 				`transfer_type`  int           NOT NULL,
 				PRIMARY KEY (`invoice_id`, `log_index`),
 				KEY `idx_{$this->table_name}_E1160E22` (`created_at`)
