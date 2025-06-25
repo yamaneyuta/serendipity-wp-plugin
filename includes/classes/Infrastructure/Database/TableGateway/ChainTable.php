@@ -61,7 +61,7 @@ class ChainTable extends TableBase {
 				':name'                => $chain->name(),
 				':network_category_id' => $chain->networkCategoryID()->value(),
 				':rpc_url'             => $chain->rpcURL(),
-				':confirmations'       => (string) $chain->confirmations(),
+				':confirmations'       => (string) $chain->confirmations()->value(),
 				':block_explorer_url'  => $chain->blockExplorerURL(),
 			)
 		);

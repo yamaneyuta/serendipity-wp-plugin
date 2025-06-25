@@ -9,15 +9,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
  * ユーザーが設定を行っていない場合のデフォルト値を取得するためのクラス
  */
 class DefaultValue {
-	/**
-	 * 指定したチェーンの待機ブロック数の既定値
-	 *
-	 * @param ChainID $chain_ID
-	 * @return int|string
-	 */
-	public function confirmations( ChainID $chain_ID ) {
-		return 1;
-	}
 
 	/**
 	 * `eth_getLogs`呼び出しで取得するブロック数の最大値

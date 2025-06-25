@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Application\Service;
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\Repository\ChainRepository;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 use InvalidArgumentException;
 
 /**
@@ -59,14 +60,11 @@ class ChainService {
 
 	/**
 	 *
-	 * @param ChainID    $chain_id
-	 * @param int|string $confirmations
+	 * @param ChainID       $chain_id
+	 * @param Confirmations $confirmations
 	 * @deprecated Use ChainRepository::save
 	 */
-	public function saveConfirmations( ChainID $chain_id, $confirmations ): void {
-		if ( ! is_int( $confirmations ) && ! is_string( $confirmations ) ) {
-			throw new InvalidArgumentException( '[5ED6D745] Confirmations must be an integer or a string.' );
-		}
+	public function saveConfirmations( ChainID $chain_id, Confirmations $confirmations ): void {
 		$this->updatePropertyAndSave( $chain_id, fn( Chain $chain ) => $chain->setConfirmations( $confirmations ) );
 	}
 }

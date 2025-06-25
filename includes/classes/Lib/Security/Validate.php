@@ -115,37 +115,6 @@ class Validate {
 		return ! empty( $symbol ) && trim( $symbol ) === $symbol;
 	}
 
-	/**
-	 * 指定された値が確認ブロック数として有効でない場合は例外をスローします。
-	 *
-	 * @param int|string $confirmations 確認ブロック数
-	 */
-	public static function checkConfirmations( $confirmations ): void {
-		if ( ! self::isConfirmations( $confirmations ) ) {
-			throw new \InvalidArgumentException( '[12E0674F] Invalid confirmations. - confirmations: ' . var_export( $confirmations, true ) );
-		}
-	}
-
-	/**
-	 * 指定された値が確認ブロック数として有効かどうかを返します。
-	 *
-	 * @param int|string $confirmations 確認ブロック数
-	 */
-	private static function isConfirmations( $confirmations ): bool {
-		if ( is_int( $confirmations ) ) {
-			// 確認ブロック数は0以上の整数である必要がある
-			return Config::MIN_CONFIRMATIONS <= $confirmations;
-		}
-		if ( is_string( $confirmations ) && self::isBlockTagName( $confirmations ) ) {
-			// ブロックのタグ名である場合は有効としたいが、
-			// プロバイダによってはタグが使用できない可能性があるため
-			// 現時点(2025/5/28)では無効としておく
-			return false;
-		}
-
-		throw new \InvalidArgumentException( '[745B8DC7] Invalid confirmations. - confirmations: ' . var_export( $confirmations, true ) );
-	}
-
 	/** 指定した文字列がブロックのタグ名であるかどうかを判定します。 */
 	public static function isBlockTagName( string $block_tag ): bool {
 		// 参考: https://www.alchemy.com/overviews/ethereum-commitment-levels
