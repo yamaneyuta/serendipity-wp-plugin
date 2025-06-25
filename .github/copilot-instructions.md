@@ -18,7 +18,7 @@
   - `UnitTestCaseBase`
 	- `BlockchainTestCaseBase`
 - テストファイルのnamespaceは他のテストファイルを参考にしてください。
-- テストは基本的に結合テストで行います。極力mockを使用せず、テストコードを記述してください。
+- テストは基本的に結合テストで行います。極力mockを使用しないテストコードを記述してください。
 - Resolverのテストは`tests/classes/Presentation/GraphQL/Resolver`以下のファイルを参考に作成してください。
-- PHPのテスト実行コマンドは`npm run test:php [PHPファイルの相対パス]`です。
+- PHPのテスト実行コマンドは`npm run test:php`です。個別に実行したい場合は`npm run test:php [PHPファイルの相対パス]`を実行してください。
 
