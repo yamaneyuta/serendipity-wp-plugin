@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\OracleTableRecord;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
+use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
 
 class OracleImpl extends Oracle {
 
@@ -15,8 +16,10 @@ class OracleImpl extends Oracle {
 		parent::__construct(
 			ChainImpl::fromTableRecord( $chain_record ),
 			new Address( $oracle_record->addressValue() ),
-			new Symbol( $oracle_record->baseSymbolValue() ),
-			new Symbol( $oracle_record->quoteSymbolValue() )
+			new SymbolPair(
+				new Symbol( $oracle_record->baseSymbolValue() ),
+				new Symbol( $oracle_record->quoteSymbolValue() )
+			)
 		);
 	}
 

@@ -31,8 +31,8 @@ class SellableSymbols {
 		// baseとquoteの通貨シンボルを取得
 		$symbols = array();
 		foreach ( $oracles as $oracle ) {
-			$symbols[] = $oracle->baseSymbol();
-			$symbols[] = $oracle->quoteSymbol();
+			$symbols[] = $oracle->symbolPair()->base();
+			$symbols[] = $oracle->symbolPair()->quote();
 		}
 
 		// 重複を削除
