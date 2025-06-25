@@ -4,6 +4,7 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use phpseclib\Math\BigInteger;
 
 class PriceTest extends IntegrationTestBase {
@@ -14,7 +15,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount1wei18(): void {
 		// ARRANGE
-		$sut = new Price( '0x01', 18, 'ETH' );    // 1wei
+		$sut = new Price( '0x01', 18, new Symbol( 'ETH' ) );    // 1wei
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
@@ -30,7 +31,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount1ETH18(): void {
 		// ARRANGE
-		$sut = new Price( HexFormat::toHex( new BigInteger( 10 ** 18 ) ), 18, 'ETH' );   // 1ETH
+		$sut = new Price( HexFormat::toHex( new BigInteger( 10 ** 18 ) ), 18, new Symbol( 'ETH' ) );   // 1ETH
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
@@ -46,7 +47,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount001ETH2(): void {
 		// ARRANGE
-		$sut = new Price( '0x01', 2, 'ETH' ); // 0.01ETH
+		$sut = new Price( '0x01', 2, new Symbol( 'ETH' ) ); // 0.01ETH
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
@@ -62,7 +63,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount001ETH18(): void {
 		// ARRANGE
-		$sut = new Price( HexFormat::toHex( new BigInteger( 10 ** 16 ) ), 18, 'ETH' );   // 0.01ETH
+		$sut = new Price( HexFormat::toHex( new BigInteger( 10 ** 16 ) ), 18, new Symbol( 'ETH' ) );   // 0.01ETH
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
@@ -78,7 +79,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount1wei20(): void {
 		// ARRANGE
-		$sut = new Price( '0x64', 20, 'ETH' );    // 1wei
+		$sut = new Price( '0x64', 20, new Symbol( 'ETH' ) );    // 1wei
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );
@@ -94,7 +95,7 @@ class PriceTest extends IntegrationTestBase {
 	 */
 	public function toTokenAmount1ETH20(): void {
 		// ARRANGE
-		$sut = new Price( HexFormat::toHex( new BigInteger( '100000000000000000000' ) ), 20, 'ETH' );    // 1ETH
+		$sut = new Price( HexFormat::toHex( new BigInteger( '100000000000000000000' ) ), 20, new Symbol( 'ETH' ) );    // 1ETH
 
 		// ACT
 		$amount_hex = $sut->toTokenAmount( ChainID::ethMainnet() );

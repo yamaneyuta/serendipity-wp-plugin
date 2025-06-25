@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\Specification;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class TokensFilter {
 
@@ -21,8 +22,8 @@ class TokensFilter {
 		return $this;
 	}
 
-	public function bySymbol( string $symbol ): self {
-		$this->filters[] = fn ( Token $token ) => $token->symbol() === $symbol;
+	public function bySymbol( Symbol $symbol ): self {
+		$this->filters[] = fn ( Token $token ) => $token->symbol()->equals( $symbol );
 		return $this;
 	}
 

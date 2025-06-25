@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Repository\OracleRate;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\Rate;
 use Cornix\Serendipity\Core\Domain\ValueObject\SymbolPair;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainRepositoryFactory;
 
@@ -33,7 +34,7 @@ class RateDataTest extends IntegrationTestBase {
 	 */
 	public function getRateFromTransient(): void {
 		// ARRANGE
-		$symbol_pair = new SymbolPair( 'ETH', 'USD' );
+		$symbol_pair = new SymbolPair( new Symbol( 'ETH' ), new Symbol( 'USD' ) );
 		$rate        = new Rate( $symbol_pair, '0x1', 8 );
 
 		$this->rate_transient_mock->expects( $this->once() )->method( 'get' )->with( $symbol_pair )->willReturn( $rate );
@@ -54,7 +55,7 @@ class RateDataTest extends IntegrationTestBase {
 	 */
 	public function getRateFromOracle(): void {
 		// ARRANGE
-		$symbol_pair = new SymbolPair( 'ETH', 'USD' );
+		$symbol_pair = new SymbolPair( new Symbol( 'ETH' ), new Symbol( 'USD' ) );
 		$rate        = new Rate( $symbol_pair, '0x1', 8 );
 
 		$this->rate_transient_mock->expects( $this->once() )->method( 'get' )->with( $symbol_pair )->willReturn( null );
@@ -76,7 +77,7 @@ class RateDataTest extends IntegrationTestBase {
 	 */
 	public function getRateReturnsNull(): void {
 		// ARRANGE
-		$symbol_pair = new SymbolPair( 'ETH', 'USD' );
+		$symbol_pair = new SymbolPair( new Symbol( 'ETH' ), new Symbol( 'USD' ) );
 
 		$this->rate_transient_mock->expects( $this->once() )->method( 'get' )->with( $symbol_pair )->willReturn( null );
 		$this->oracle_rate_mock->expects( $this->once() )->method( 'get' )->with( $symbol_pair )->willReturn( null );
@@ -97,7 +98,7 @@ class RateDataTest extends IntegrationTestBase {
 	 */
 	public function getRateNotExistsSymbolPair(): void {
 		// ARRANGE
-		$symbol_pair = new SymbolPair( 'ETH', 'ETH' );
+		$symbol_pair = new SymbolPair( new Symbol( 'ETH' ), new Symbol( 'ETH' ) );
 
 		// ACT
 		$rate = ( new RateData() )->get( $symbol_pair );
@@ -115,7 +116,7 @@ class RateDataTest extends IntegrationTestBase {
 	public function getRateTwice(): void {
 		// ARRANGE
 		$rate_data   = new RateData( null, $this->oracle_rate_mock );   // OracleRateのみMockを使用
-		$symbol_pair = new SymbolPair( 'ETH', 'USD' );
+		$symbol_pair = new SymbolPair( new Symbol( 'ETH' ), new Symbol( 'USD' ) );
 		$rate        = new Rate( $symbol_pair, '0x1', 8 );
 		$this->oracle_rate_mock->expects( $this->once() )->method( 'get' )->with( $symbol_pair )->willReturn( $rate );
 
@@ -145,7 +146,7 @@ class RateDataTest extends IntegrationTestBase {
 
 		// ARRANGE
 		$rate_data   = new RateData();
-		$symbol_pair = new SymbolPair( 'ETH', 'USD' );
+		$symbol_pair = new SymbolPair( new Symbol( 'ETH' ), new Symbol( 'USD' ) );
 
 		// メインネットに接続するテスト用のRPC URLを設定
 		$chain_repository = ( new ChainRepositoryFactory() )->create();

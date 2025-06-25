@@ -60,7 +60,7 @@ class InvoiceTable extends TableBase {
 				'chain_id'              => $invoice->chainID()->value(),
 				'selling_amount_hex'    => $invoice->sellingPrice()->amountHex(),
 				'selling_decimals'      => $invoice->sellingPrice()->decimals(),
-				'selling_symbol'        => $invoice->sellingPrice()->symbol(),
+				'selling_symbol'        => $invoice->sellingPrice()->symbol()->value(),
 				'seller_address'        => $invoice->sellerAddress()->value(),
 				'payment_token_address' => $invoice->paymentTokenAddress()->value(),
 				'payment_amount_hex'    => $invoice->paymentAmountHex(),

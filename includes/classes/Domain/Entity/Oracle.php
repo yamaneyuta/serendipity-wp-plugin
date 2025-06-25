@@ -5,10 +5,11 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 
 use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class Oracle {
 
-	public function __construct( Chain $chain, Address $address, string $base_symbol, string $quote_symbol ) {
+	public function __construct( Chain $chain, Address $address, Symbol $base_symbol, Symbol $quote_symbol ) {
 		$this->chain        = $chain;
 		$this->address      = $address;
 		$this->base_symbol  = $base_symbol;
@@ -17,8 +18,8 @@ class Oracle {
 
 	private Chain $chain;
 	private Address $address;
-	private string $base_symbol;
-	private string $quote_symbol;
+	private Symbol $base_symbol;
+	private Symbol $quote_symbol;
 
 	public function chain(): Chain {
 		return $this->chain;
@@ -28,11 +29,11 @@ class Oracle {
 		return $this->address;
 	}
 
-	public function baseSymbol(): string {
+	public function baseSymbol(): Symbol {
 		return $this->base_symbol;
 	}
 
-	public function quoteSymbol(): string {
+	public function quoteSymbol(): Symbol {
 		return $this->quote_symbol;
 	}
 
@@ -41,8 +42,8 @@ class Oracle {
 			array(
 				'chain_ID'     => $this->chain,
 				'address'      => $this->address,
-				'base_symbol'  => $this->base_symbol,
-				'quote_symbol' => $this->quote_symbol,
+				'base_symbol'  => $this->base_symbol->value(),
+				'quote_symbol' => $this->quote_symbol->value(),
 			)
 		);
 	}

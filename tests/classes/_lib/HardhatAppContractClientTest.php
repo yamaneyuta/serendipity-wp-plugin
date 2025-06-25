@@ -11,6 +11,7 @@ use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Domain\ValueObject\Signature;
@@ -44,7 +45,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 
 		// 販売価格1,000円で投稿を作成
 		$selling_network_category_id = NetworkCategoryID::privatenet();
-		$selling_price               = new Price( HexFormat::toHex( 1000 ), 0, 'JPY' );
+		$selling_price               = new Price( HexFormat::toHex( 1000 ), 0, new Symbol( 'JPY' ) );
 		$post_ID                     = $this->getUser( UserType::CONTRIBUTOR )->createPost(
 			array(
 				'post_content' => ( new SamplePostContent() )->get( $selling_network_category_id, $selling_price ),
@@ -76,14 +77,14 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 			'consumerAddress' => $consumer->address()->value(),
 		);
 
-		$result = $this->requestGraphQL( $query, $params );
-		$data   = $result = $result->get_data()['data'];
-		assert( ! isset( $data['errors'] ) );
-		$invoice_id_hex     = $data['issueInvoice']['invoiceIdHex'];
-		$nonce              = $data['issueInvoice']['nonce'];
-		$server_message     = new SigningMessage( $data['issueInvoice']['serverMessage'] );
-		$server_signature   = new Signature( $data['issueInvoice']['serverSignature'] );
-		$payment_amount_hex = $data['issueInvoice']['paymentAmountHex'];
+		$result             = $this->requestGraphQL( $query, $params );
+		$data               = $result->get_data();
+		$invoice_data       = $data['data']['issueInvoice'];
+		$invoice_id_hex     = $invoice_data['invoiceIdHex'];
+		$nonce              = $invoice_data['nonce'];
+		$server_message     = new SigningMessage( $invoice_data['serverMessage'] );
+		$server_signature   = new Signature( $invoice_data['serverSignature'] );
+		$payment_amount_hex = $invoice_data['paymentAmountHex'];
 		$server_address     = Ethers::verifyMessage( $server_message, $server_signature );
 
 		// TODO: Service等から値を取得

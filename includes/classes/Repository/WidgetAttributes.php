@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Repository;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use WP_Block_Parser_Block;
 
 class WidgetAttributes {
@@ -24,7 +25,7 @@ class WidgetAttributes {
 				self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID => $network_category_id ? $network_category_id->value() : null,
 				self::ATTRS_KEY_SELLING_AMOUNT_HEX => $selling_price ? $selling_price->amountHex() : null,
 				self::ATTRS_KEY_SELLING_DECIMALS   => $selling_price ? $selling_price->decimals() : null,
-				self::ATTRS_KEY_SELLING_SYMBOL     => $selling_price ? $selling_price->symbol() : null,
+				self::ATTRS_KEY_SELLING_SYMBOL     => $selling_price ? $selling_price->symbol()->value() : null,
 			)
 		);
 	}
@@ -57,7 +58,7 @@ class WidgetAttributes {
 			return null;
 		}
 
-		return new Price( $amount_hex, $decimals, $symbol );
+		return new Price( $amount_hex, $decimals, new Symbol( $symbol ) );
 	}
 
 	/** 販売価格の値(sellingDecimalsの値と共に使用する)を取得します。 */

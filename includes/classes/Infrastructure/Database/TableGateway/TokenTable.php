@@ -64,7 +64,7 @@ class TokenTable extends TableBase {
 			$sql,
 			$token->chainID()->value(),
 			$token->address()->value(),
-			$token->symbol(),
+			$token->symbol()->value(),
 			$token->decimals(),
 			$token->isPayable(),
 			$token->isPayable(),

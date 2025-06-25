@@ -9,12 +9,13 @@ use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use phpseclib\Math\BigInteger;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 
 class Price {
-	public function __construct( $amount_hex, $decimals, $symbol ) {
+	public function __construct( $amount_hex, $decimals, Symbol $symbol ) {
 		Validate::checkHex( $amount_hex ); // レート変換の途中などで一時的に大きい値になることがあるため、ここでは16進数の形式であることのみチェック
 		Validate::checkDecimals( $decimals );
-		Validate::checkSymbol( $symbol );
+		Validate::checkSymbolObject( $symbol );
 
 		$this->amount_hex = $amount_hex;
 		$this->decimals   = $decimals;
@@ -23,7 +24,7 @@ class Price {
 
 	private string $amount_hex;
 	private int $decimals;
-	private string $symbol;
+	private Symbol $symbol;
 
 	/** 金額の数量(0xプレフィックス付きの16進数)を取得します。 */
 	public function amountHex(): string {
@@ -36,7 +37,7 @@ class Price {
 	}
 
 	/** 通貨記号(`USD`, `ETH`等)を取得します。記号(`$`等)ではない。 */
-	public function symbol(): string {
+	public function symbol(): Symbol {
 		return $this->symbol;
 	}
 
@@ -49,7 +50,7 @@ class Price {
 		$tokens        = $tokens_filter->apply( ( new TokenRepositoryImpl() )->all() );
 
 		if ( 1 !== count( $tokens ) ) {
-			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID->value() . ', symbol: ' . $this->symbol . ', count: ' . count( $tokens ) );
+			throw new \InvalidArgumentException( '[1644531E] Invalid token data. - chainID: ' . $chain_ID->value() . ', symbol: ' . $this->symbol->value() . ', count: ' . count( $tokens ) );
 		}
 		$token = array_values( $tokens )[0]; // 1つだけなので、配列の最初の要素を取得
 

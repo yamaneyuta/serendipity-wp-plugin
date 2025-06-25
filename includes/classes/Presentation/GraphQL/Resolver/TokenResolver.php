@@ -33,7 +33,7 @@ class TokenResolver extends ResolverBase {
 		return array(
 			'chain'     => fn() => $root_value['chain']( $root_value, array( 'chainID' => $chain_id->value() ) ),
 			'address'   => $address->value(),
-			'symbol'    => fn() => $token->symbol(),
+			'symbol'    => fn() => $token->symbol()->value(),
 			'isPayable' => fn() => $token->isPayable(),
 		);
 	}
