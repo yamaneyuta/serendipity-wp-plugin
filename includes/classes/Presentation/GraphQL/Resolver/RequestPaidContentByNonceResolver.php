@@ -15,7 +15,6 @@ use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockTag;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
-use Cornix\Serendipity\Core\Domain\ValueObject\PostId;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Service\BlockchainClientServiceImpl;
 
 class RequestPaidContentByNonceResolver extends ResolverBase {
@@ -125,24 +124,24 @@ class RequestPaidContentByNonceResolver extends ResolverBase {
 	 */
 	private function isConfirmed( ChainID $chain_ID, BlockNumber $unlocked_block_number ): bool {
 		// トランザクションの待機ブロック数を取得
-		$chain         = $this->chain_service->getChain( $chain_ID );
-		$confirmations = $chain->confirmations();
+		$chain               = $this->chain_service->getChain( $chain_ID );
+		$confirmations_value = $chain->confirmations()->value();
 
-		if ( is_int( $confirmations ) ) {
+		if ( is_int( $confirmations_value ) ) {
 			// 最新のブロック番号を取得
 			$latest_block        = ( new BlockchainClientServiceImpl( $chain ) )->getBlockByNumber( BlockTag::latest() );
 			$latest_block_number = $latest_block->blockNumber();
 			// 基準となるブロック番号を計算(「ペイウォール解除時のブロック番号」<=「基準ブロック番号」となる場合、待機済み)
-			$reference_block = $latest_block_number->sub( max( $confirmations - 1, 0 ) );
+			$reference_block = $latest_block_number->sub( max( $confirmations_value - 1, 0 ) );
 			return $unlocked_block_number->compare( $reference_block ) <= 0;
-		} elseif ( $confirmations === 'latest' ) {
+		} elseif ( $confirmations_value === 'latest' ) {
 			// ペイウォールが解除されたブロック番号が取得できているため、当然待機済みと判定
 			return true;
-		} elseif ( $confirmations === 'finalized' ) {
+		} elseif ( $confirmations_value === 'finalized' ) {
 			// TODO: 未実装
 			throw new \Exception( '[8A320100] Finalized block number is not implemented yet.' );
 		} else {
-			throw new \Exception( '[2251BA42] Invalid confirmations value. confirmations: ' . var_export( $confirmations, true ) );
+			throw new \Exception( '[2251BA42] Invalid confirmations value. confirmations: ' . var_export( $confirmations_value, true ) );
 		}
 	}
 }

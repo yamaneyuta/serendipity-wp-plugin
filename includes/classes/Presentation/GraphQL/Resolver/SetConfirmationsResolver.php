@@ -6,8 +6,8 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 use Cornix\Serendipity\Core\Application\Service\ChainService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
 use Cornix\Serendipity\Core\Constant\Config;
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 
 class SetConfirmationsResolver extends ResolverBase {
 
@@ -32,15 +32,10 @@ class SetConfirmationsResolver extends ResolverBase {
 
 		$chain_ID = new ChainID( $args['chainID'] );
 		/** @var string|null */
-		$confirmations = $args['confirmations'] ?? null;
+		$confirmations_input = $args['confirmations'] ?? null;
 
-		// $confirmationsがnullの場合は、最低待機数を指定
-		$confirmations = is_null( $confirmations ) ? Config::MIN_CONFIRMATIONS : $confirmations;
-		// confirmationsが数値の文字列だった場合はint型に変換
-		$confirmations = is_numeric( $confirmations ) ? (int) $confirmations : $confirmations;
-
-		// confirmationsが正しい値かどうかをチェック
-		Validate::checkConfirmations( $confirmations );
+		// Confirmationsオブジェクトを作成
+		$confirmations = Confirmations::from( is_null( $confirmations_input ) ? Config::MIN_CONFIRMATIONS : $confirmations_input );
 
 		// confirmationsを保存
 		try {

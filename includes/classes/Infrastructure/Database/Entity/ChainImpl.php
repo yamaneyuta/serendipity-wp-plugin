@@ -7,17 +7,17 @@ use Cornix\Serendipity\Core\Domain\Entity\Chain;
 use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 
 class ChainImpl extends Chain {
 
 	private function __construct( ChainTableRecord $record ) {
-		$confirmations_value = $record->confirmationsValue();
 		parent::__construct(
 			new ChainID( $record->chainIdValue() ),
 			$record->nameValue(),
 			new NetworkCategoryID( $record->networkCategoryIdValue() ),
 			$record->rpcUrlValue(),
-			is_numeric( $confirmations_value ) ? (int) $confirmations_value : $confirmations_value,
+			Confirmations::from( $record->confirmationsValue() ),
 			$record->blockExplorerUrlValue()
 		);
 	}

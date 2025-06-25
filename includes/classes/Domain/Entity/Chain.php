@@ -6,6 +6,7 @@ namespace Cornix\Serendipity\Core\Domain\Entity;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
+use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
 
 class Chain {
 	/**
@@ -14,10 +15,10 @@ class Chain {
 	 * @param string            $name
 	 * @param NetworkCategoryID $network_category_id
 	 * @param null|string       $rpc_url
-	 * @param int|string        $confirmations
+	 * @param Confirmations     $confirmations
 	 * @param null|string       $block_explorer_url
 	 */
-	protected function __construct( ChainID $chain_id, string $name, NetworkCategoryID $network_category_id, ?string $rpc_url, $confirmations, ?string $block_explorer_url ) {
+	protected function __construct( ChainID $chain_id, string $name, NetworkCategoryID $network_category_id, ?string $rpc_url, Confirmations $confirmations, ?string $block_explorer_url ) {
 		$this->id                  = $chain_id;
 		$this->name                = $name;
 		$this->network_category_id = $network_category_id;
@@ -30,8 +31,7 @@ class Chain {
 	private string $name;
 	private NetworkCategoryID $network_category_id;
 	private ?string $rpc_url;
-	/** @var int|string */
-	private $confirmations;
+	private Confirmations $confirmations;
 	private ?string $block_explorer_url;
 
 	public function id(): ChainID {
@@ -47,9 +47,9 @@ class Chain {
 		$this->rpc_url = $rpc_url;
 	}
 	/**
-	 * @return int|string
+	 * @return Confirmations
 	 */
-	public function confirmations() {
+	public function confirmations(): Confirmations {
 		return $this->confirmations;
 	}
 
@@ -60,12 +60,9 @@ class Chain {
 	/**
 	 * このチェーンの待機ブロック数を設定します
 	 *
-	 * @param int|string $confirmations
+	 * @param Confirmations $confirmations
 	 */
-	public function setConfirmations( $confirmations ): void {
-		if ( ! is_int( $confirmations ) && ! is_string( $confirmations ) ) {
-			throw new \InvalidArgumentException( '[E8113094] Confirmations must be an integer or a string representing an integer.' );
-		}
+	public function setConfirmations( Confirmations $confirmations ): void {
 		$this->confirmations = $confirmations;
 	}
 
