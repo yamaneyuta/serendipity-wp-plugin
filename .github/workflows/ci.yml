@@ -78,6 +78,13 @@ jobs:
           docker-compose build --parallel &
         fi
 
+    # @see https://github.com/pnpm/action-setup?tab=readme-ov-file#use-cache-to-reduce-installation-time
+    - uses: pnpm/action-setup@v4
+      name: Install pnpm
+      with:
+        version: 10
+        run_install: false
+
     - name: Use Node.js ${{ env.node-version }}
       uses: actions/setup-node@v4
       with:
