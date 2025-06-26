@@ -1,6 +1,7 @@
 {
 	"files.exclude": {
 		".nyc_output/": true,
+		".pnpm-store/": true,
 		"coverage/": true,
 		"storybook-static/": true,
 		".phpunit.result.cache": true,
