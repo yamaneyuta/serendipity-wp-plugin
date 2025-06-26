@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals';
 import React from 'react';
 import { render } from '../../../../jest-lib/render';
 import { usePostIDFromDom } from './usePostIDFromDom';
