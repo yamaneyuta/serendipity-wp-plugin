@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import { render as _render, RenderOptions, RenderResult } from "@testing-library/react";
 
 /**

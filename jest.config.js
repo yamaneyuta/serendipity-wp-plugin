@@ -8,4 +8,10 @@ config.testMatch = [
 	"**/src/**/*.test.[jt]s?(x)"
 ];
 
+// .pnpm-store以下のファイルをテスト対象から除外
+config.testPathIgnorePatterns = [
+	...(config.testPathIgnorePatterns || []),
+	"\\.pnpm-store/"
+];
+
 module.exports = config;

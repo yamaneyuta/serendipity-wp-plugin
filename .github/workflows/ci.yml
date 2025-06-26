@@ -78,11 +78,18 @@ jobs:
           docker-compose build --parallel &
         fi
 
+    # @see https://github.com/pnpm/action-setup?tab=readme-ov-file#use-cache-to-reduce-installation-time
+    - uses: pnpm/action-setup@v4
+      name: Install pnpm
+      with:
+        version: 10
+        run_install: false
+
     - name: Use Node.js ${{ env.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.node-version }}
-        cache: 'npm'
+        cache: 'pnpm'
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -133,7 +140,7 @@ jobs:
       run: source .bin/install-php-packages.sh
 
     - name: Install Node.js dependencies (always run npm ci)
-      run: npm ci
+      run: pnpm install --frozen-lockfile
 
 
     # プロセス名に`docker`が含まれるプロセスがすべて終了するまで待機する
@@ -155,12 +162,12 @@ jobs:
         key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
     - name: Install Playwright
       if: steps.playwright-cache.outputs.cache-hit != 'true'
-      run: npx playwright install --with-deps
+      run: pnpm dlx playwright install --with-deps
 
-    - run: npx run-p "check-license:*"
-    - run: npx run-p "lint:*"
-    - run: npx run-p "format:*"
-    - run: npx run-p "coverage:*"
+    - run: pnpm dlx npm-run-all --parallel "check-license:*"
+    - run: pnpm dlx npm-run-all --parallel "lint:*"
+    - run: pnpm dlx npm-run-all --parallel "format:*"
+    - run: pnpm dlx npm-run-all --parallel "coverage:*"
 
     # cleanコマンドでエラーが発生しないことを確認。
     - run: npm run clean
