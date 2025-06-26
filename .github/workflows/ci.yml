@@ -162,7 +162,7 @@ jobs:
         key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
     - name: Install Playwright
       if: steps.playwright-cache.outputs.cache-hit != 'true'
-      run: npx playwright install --with-deps
+      run: pnpm dlx playwright install --with-deps
 
     - run: npx run-p "check-license:*"
     - run: npx run-p "lint:*"
