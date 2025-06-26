@@ -82,7 +82,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.node-version }}
-        cache: 'npm'
+        cache: 'pnpm'
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -133,7 +133,7 @@ jobs:
       run: source .bin/install-php-packages.sh
 
     - name: Install Node.js dependencies (always run npm ci)
-      run: npm ci
+      run: pnpm install --frozen-lockfile
 
 
     # プロセス名に`docker`が含まれるプロセスがすべて終了するまで待機する
