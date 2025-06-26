@@ -164,10 +164,10 @@ jobs:
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: pnpm dlx playwright install --with-deps
 
-    - run: npx run-p "check-license:*"
-    - run: npx run-p "lint:*"
-    - run: npx run-p "format:*"
-    - run: npx run-p "coverage:*"
+    - run: pnpm dlx npm-run-all --parallel "check-license:*"
+    - run: pnpm dlx npm-run-all --parallel "lint:*"
+    - run: pnpm dlx npm-run-all --parallel "format:*"
+    - run: pnpm dlx npm-run-all --parallel "coverage:*"
 
     # cleanコマンドでエラーが発生しないことを確認。
     - run: npm run clean
