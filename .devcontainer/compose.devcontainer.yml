@@ -19,6 +19,7 @@ services:
       - ../../serendipity-resources/i18n:/workspaces/i18n
       - ../../serendipity-resources/graphql/schema:/workspaces/includes/assets/graphql/schema
       - node_modules:/workspaces/node_modules
+      - pnpm_store:/workspaces/.pnpm-store
       - tests_vendor:/workspaces/tests/vendor
       - includes_vendor:/workspaces/includes/vendor
 
@@ -33,5 +34,6 @@ services:
 
 volumes:
   node_modules:
+  pnpm_store:
   tests_vendor:
   includes_vendor:
