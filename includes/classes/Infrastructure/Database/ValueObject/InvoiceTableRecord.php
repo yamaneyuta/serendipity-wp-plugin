@@ -13,12 +13,11 @@ class InvoiceTableRecord extends TableRecordBase {
 	protected string $id;
 	protected int $post_id;
 	protected int $chain_id;
-	protected string $selling_amount_hex;
-	protected int $selling_decimals;
+	protected string $selling_amount;
 	protected string $selling_symbol;
 	protected string $seller_address;
 	protected string $payment_token_address;
-	protected string $payment_amount_hex;
+	protected string $payment_amount;
 	protected string $consumer_address;
 	protected string $nonce;
 
@@ -31,11 +30,8 @@ class InvoiceTableRecord extends TableRecordBase {
 	public function chainIdValue(): int {
 		return $this->chain_id;
 	}
-	public function sellingAmountHexValue(): string {
-		return $this->selling_amount_hex;
-	}
-	public function sellingDecimalsValue(): int {
-		return $this->selling_decimals;
+	public function sellingAmountValue(): string {
+		return $this->selling_amount;
 	}
 	public function sellingSymbolValue(): string {
 		return $this->selling_symbol;
@@ -46,8 +42,8 @@ class InvoiceTableRecord extends TableRecordBase {
 	public function paymentTokenAddressValue(): string {
 		return $this->payment_token_address;
 	}
-	public function paymentAmountHexValue(): string {
-		return $this->payment_amount_hex;
+	public function paymentAmountValue(): string {
+		return $this->payment_amount;
 	}
 	public function consumerAddressValue(): string {
 		return $this->consumer_address;

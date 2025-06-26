@@ -7,11 +7,8 @@ export type WidgetAttributes = {
 	/** 販売対象のネットワークカテゴリID */
 	sellingNetworkCategoryID: number | null;
 
-	/** 販売価格の値(sellingDecimalsの値と共に使用する) */
-	sellingAmountHex: string | null;
-
-	/** 販売価格の小数点以下桁数 */
-	sellingDecimals: number | null;
+	/** 販売価格の値(10進数の文字列) */
+	sellingAmount: string | null;
 
 	/** 販売価格の通貨シンボル */
 	sellingSymbol: string | null;

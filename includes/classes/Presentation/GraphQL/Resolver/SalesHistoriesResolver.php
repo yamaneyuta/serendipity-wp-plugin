@@ -5,6 +5,7 @@ namespace Cornix\Serendipity\Core\Presentation\GraphQL\Resolver;
 
 use Cornix\Serendipity\Core\Application\Service\SalesHistoryService;
 use Cornix\Serendipity\Core\Application\Service\UserAccessChecker;
+use Cornix\Serendipity\Core\Entity\SalesHistory;
 
 class SalesHistoriesResolver extends ResolverBase {
 
@@ -31,11 +32,11 @@ class SalesHistoriesResolver extends ResolverBase {
 		$sales_data_records = ( new SalesHistoryService() )->select( $invoice_id );
 
 		$ret = array_map(
-			fn ( $sales_data ) => array(
+			fn ( SalesHistory $sales_data ) => array(
 				'invoice'                  => array(
-					'id'           => $sales_data->invoiceID(),
-					'createdAt'    => $sales_data->createdAt()->format( 'c' ),
-					'chain'        => function () use ( $root_value, $sales_data ) {
+					'id'        => $sales_data->invoiceID(),
+					'createdAt' => $sales_data->createdAt()->format( 'c' ),
+					'chain'     => function () use ( $root_value, $sales_data ) {
 						return $root_value['chain'](
 							$root_value,
 							array(
@@ -43,7 +44,7 @@ class SalesHistoriesResolver extends ResolverBase {
 							)
 						);
 					},
-					'post'         => function () use ( $root_value, $sales_data ) {
+					'post'      => function () use ( $root_value, $sales_data ) {
 						return $root_value['post'](
 							$root_value,
 							array(
@@ -53,11 +54,12 @@ class SalesHistoriesResolver extends ResolverBase {
 					},
 					// 販売価格は請求書に記載されている価格を返す
 					// ※ Postの販売価格は現在の販売価格であり、取引時の価格とは異なる場合があるため
-					'sellingPrice' => array(
-						'amountHex' => $sales_data->sellingPrice()->amountHex(),
-						'decimals'  => $sales_data->sellingPrice()->decimals(),
-						'symbol'    => $sales_data->sellingPrice()->symbol()->value(),
-					),
+					throw new \Exception( '[5BC17D0F] Not implemented yet' ),
+					// 'sellingPrice' => array(
+					// 'amountHex' => $sales_data->sellingPrice()->amountHex(),
+					// 'decimals'  => $sales_data->sellingPrice()->decimals(),
+					// 'symbol'    => $sales_data->sellingPrice()->symbol()->value(),
+					// ),
 				),
 
 				'unlockPaywallTransaction' => array(

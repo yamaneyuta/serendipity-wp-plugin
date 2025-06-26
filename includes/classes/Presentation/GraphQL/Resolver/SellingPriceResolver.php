@@ -41,9 +41,8 @@ class SellingPriceResolver extends ResolverBase {
 		}
 
 		return is_null( $selling_price ) ? null : array(
-			'amountHex' => $selling_price->amountHex(),
-			'decimals'  => $selling_price->decimals(),
-			'symbol'    => $selling_price->symbol()->value(),
+			'amount' => $selling_price->amount()->value(),
+			'symbol' => $selling_price->symbol()->value(),
 		);
 	}
 }

@@ -42,27 +42,27 @@ class SalesHistoryService {
 				inv.id AS invoice_id,
 				inv.post_id,
 				inv.chain_id,
-				inv.selling_amount_hex,
+				inv.selling_amount,
 				inv.selling_decimals,
 				inv.selling_symbol,
 				inv.seller_address,
-				inv.payment_amount_hex,
+				inv.payment_amount,
 				inv.consumer_address,
 				tx.created_at,
 				tx.block_number,
 				tx.transaction_hash,
 				(
-					SELECT amount_hex FROM `{$this->transfer_event_table_name}`
+					SELECT amount FROM `{$this->transfer_event_table_name}`
 					WHERE invoice_id = inv.id AND to_address = inv.seller_address
-				) as seller_profit_amount_hex,
+				) as seller_profit_amount,
 				(
-					SELECT amount_hex FROM `{$this->transfer_event_table_name}`
+					SELECT amount FROM `{$this->transfer_event_table_name}`
 					WHERE invoice_id = inv.id AND EXISTS (
 						SELECT 1
 						FROM `{$app_contract_table_name}` AS app
 						WHERE chain_id = inv.chain_id AND to_address = app.address
 					)
-				) as handling_fee_amount_hex,
+				) as handling_fee_amount,
 				tk.symbol as token_symbol,
 				tk.address as token_address,
 				tk.decimals as token_decimals

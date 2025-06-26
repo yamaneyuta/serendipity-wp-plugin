@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Cornix\Serendipity\Core\Infrastructure\Web3\ValueObject;
 
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Domain\ValueObject\BlockNumber;
 use Cornix\Serendipity\Core\Domain\ValueObject\InvoiceID;
 use Cornix\Serendipity\Core\Domain\ValueObject\TransactionHash;
@@ -19,7 +20,7 @@ class UnlockPaywallTransferEvent {
 		Address $from_address,
 		Address $to_address,
 		Address $token_address,
-		string $amount_hex,
+		Amount $amount,
 		UnlockPaywallTransferType $transfer_type
 	) {
 		$this->block_number          = $block_number;
@@ -30,7 +31,7 @@ class UnlockPaywallTransferEvent {
 		$this->from_address          = $from_address;
 		$this->to_address            = $to_address;
 		$this->token_address         = $token_address;
-		$this->amount_hex            = $amount_hex;
+		$this->amount                = $amount;
 		$this->transfer_type         = $transfer_type;
 	}
 	private BlockNumber $block_number;
@@ -41,7 +42,7 @@ class UnlockPaywallTransferEvent {
 	private Address $from_address;
 	private Address $to_address;
 	private Address $token_address;
-	private string $amount_hex;
+	private Amount $amount;
 	private UnlockPaywallTransferType $transfer_type;
 
 	public function blockNumber(): BlockNumber {
@@ -68,8 +69,8 @@ class UnlockPaywallTransferEvent {
 	public function tokenAddress(): Address {
 		return $this->token_address;
 	}
-	public function amountHex(): string {
-		return $this->amount_hex;
+	public function amount(): Amount {
+		return $this->amount;
 	}
 	public function transferType(): UnlockPaywallTransferType {
 		return $this->transfer_type;

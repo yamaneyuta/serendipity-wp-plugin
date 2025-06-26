@@ -26,15 +26,14 @@ class SamplePostContent {
 	public function get( ?NetworkCategoryID $selling_network_category_id = null, ?Price $selling_price = null ): string {
 		$selling_network_category_id       = $selling_network_category_id ?? NetworkCategoryID::privatenet(); // 指定されなかった場合はプライベートネット
 		$selling_network_category_id_value = $selling_network_category_id->value();
-		$selling_amount_hex                = $selling_price ? $selling_price->amountHex() : '0x3e8'; // 指定されなかった場合は3e8(=1000)
-		$selling_decimals                  = $selling_price ? $selling_price->decimals() : 0; // 指定されなかった場合は0(整数)
+		$selling_amount_value              = $selling_price ? $selling_price->amount()->value() : '1000'; // 指定されなかった場合は1000(=0x3e8)
 		$selling_symbol                    = $selling_price ? $selling_price->symbol() : 'JPY'; // 指定されなかった場合はJPY
 		return <<<EOD
 			<!-- wp:paragraph -->
 			<p>{$this->free_text}</p>
 			<!-- /wp:paragraph -->
 
-			<!-- wp:create-block/qik-chain-pay {"sellingNetworkCategoryID":{$selling_network_category_id_value},"sellingAmountHex":"{$selling_amount_hex}","sellingDecimals":{$selling_decimals},"sellingSymbol":"{$selling_symbol}"} -->
+			<!-- wp:create-block/qik-chain-pay {"sellingNetworkCategoryID":{$selling_network_category_id_value},"sellingAmount":"{$selling_amount_value}","sellingSymbol":"{$selling_symbol}"} -->
 			<aside class="wp-block-create-block-qik-chain-pay {$this->class_name}"></aside>
 			<!-- /wp:create-block/qik-chain-pay -->
 

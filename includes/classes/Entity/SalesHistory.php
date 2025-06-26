@@ -6,7 +6,10 @@ namespace Cornix\Serendipity\Core\Entity;
 use Cornix\Serendipity\Core\Domain\Entity\Token;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Domain\ValueObject\Address;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
+use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
+use Cornix\Serendipity\Core\Domain\ValueObject\Symbol;
 use DateTime;
 /**
  * @deprecated
@@ -14,23 +17,22 @@ use DateTime;
  */
 class SalesHistory {
 
-	private const COLUMN_INVOICE_ID               = 'invoice_id';
-	private const COLUMN_POST_ID                  = 'post_id';
-	private const COLUMN_CHAIN_ID                 = 'chain_id';
-	private const COLUMN_SELLING_AMOUNT_HEX       = 'selling_amount_hex';
-	private const COLUMN_SELLING_DECIMALS         = 'selling_decimals';
-	private const COLUMN_SELLING_SYMBOL           = 'selling_symbol';
-	private const COLUMN_SELLER_ADDRESS           = 'seller_address';
-	private const COLUMN_PAYMENT_AMOUNT_HEX       = 'payment_amount_hex';
-	private const COLUMN_CONSUMER_ADDRESS         = 'consumer_address';
-	private const COLUMN_CREATED_AT               = 'created_at';
-	private const COLUMN_BLOCK_NUMBER             = 'block_number';
-	private const COLUMN_TRANSACTION_HASH         = 'transaction_hash';
-	private const COLUMN_SELLER_PROFIT_AMOUNT_HEX = 'seller_profit_amount_hex';
-	private const COLUMN_HANDLING_FEE_AMOUNT_HEX  = 'handling_fee_amount_hex';
-	private const COLUMN_TOKEN_SYMBOL             = 'token_symbol';
-	private const COLUMN_TOKEN_ADDRESS            = 'token_address';
-	private const COLUMN_TOKEN_DECIMAL            = 'token_decimals';
+	private const COLUMN_INVOICE_ID           = 'invoice_id';
+	private const COLUMN_POST_ID              = 'post_id';
+	private const COLUMN_CHAIN_ID             = 'chain_id';
+	private const COLUMN_SELLING_AMOUNT       = 'selling_amount';
+	private const COLUMN_SELLING_SYMBOL       = 'selling_symbol';
+	private const COLUMN_SELLER_ADDRESS       = 'seller_address';
+	private const COLUMN_PAYMENT_AMOUNT       = 'payment_amount';
+	private const COLUMN_CONSUMER_ADDRESS     = 'consumer_address';
+	private const COLUMN_CREATED_AT           = 'created_at';
+	private const COLUMN_BLOCK_NUMBER         = 'block_number';
+	private const COLUMN_TRANSACTION_HASH     = 'transaction_hash';
+	private const COLUMN_SELLER_PROFIT_AMOUNT = 'seller_profit_amount';
+	private const COLUMN_HANDLING_FEE_AMOUNT  = 'handling_fee_amount';
+	private const COLUMN_TOKEN_SYMBOL         = 'token_symbol';
+	private const COLUMN_TOKEN_ADDRESS        = 'token_address';
+	private const COLUMN_TOKEN_DECIMAL        = 'token_decimals';
 
 	private function __construct( array $record ) {
 		$this->record = $record;
@@ -48,17 +50,16 @@ class SalesHistory {
 		assert( array_key_exists( self::COLUMN_INVOICE_ID, $record ), '[FEABA7F7]' );
 		assert( array_key_exists( self::COLUMN_POST_ID, $record ), '[EE1B5226]' );
 		assert( array_key_exists( self::COLUMN_CHAIN_ID, $record ), '[62678DC3]' );
-		assert( array_key_exists( self::COLUMN_SELLING_AMOUNT_HEX, $record ), '[D824D279]' );
-		assert( array_key_exists( self::COLUMN_SELLING_DECIMALS, $record ), '[E7222C49]' );
+		assert( array_key_exists( self::COLUMN_SELLING_AMOUNT, $record ), '[D824D279]' );
 		assert( array_key_exists( self::COLUMN_SELLING_SYMBOL, $record ), '[9CAD7547]' );
 		assert( array_key_exists( self::COLUMN_SELLER_ADDRESS, $record ), '[F1806339]' );
-		assert( array_key_exists( self::COLUMN_PAYMENT_AMOUNT_HEX, $record ), '[94AC06B9]' );
+		assert( array_key_exists( self::COLUMN_PAYMENT_AMOUNT, $record ), '[94AC06B9]' );
 		assert( array_key_exists( self::COLUMN_CONSUMER_ADDRESS, $record ), '[2AA73D62]' );
 		assert( array_key_exists( self::COLUMN_CREATED_AT, $record ), '[2553028F]' );
 		assert( array_key_exists( self::COLUMN_BLOCK_NUMBER, $record ), '[B1FE7B87]' );
 		assert( array_key_exists( self::COLUMN_TRANSACTION_HASH, $record ), '[0733883B]' );
-		assert( array_key_exists( self::COLUMN_SELLER_PROFIT_AMOUNT_HEX, $record ), '[2ABB4891]' );
-		assert( array_key_exists( self::COLUMN_HANDLING_FEE_AMOUNT_HEX, $record ), '[460AFAB7]' );
+		assert( array_key_exists( self::COLUMN_SELLER_PROFIT_AMOUNT, $record ), '[2ABB4891]' );
+		assert( array_key_exists( self::COLUMN_HANDLING_FEE_AMOUNT, $record ), '[460AFAB7]' );
 		assert( array_key_exists( self::COLUMN_TOKEN_SYMBOL, $record ), '[1864901C]' );
 		assert( array_key_exists( self::COLUMN_TOKEN_ADDRESS, $record ), '[7BEA82F4]' );
 		assert( array_key_exists( self::COLUMN_TOKEN_DECIMAL, $record ), '[8F287790]' );
@@ -84,9 +85,8 @@ class SalesHistory {
 	/** 販売価格 */
 	public function sellingPrice(): Price {
 		return new Price(
-			(string) $this->record[ self::COLUMN_SELLING_AMOUNT_HEX ],
-			(int) $this->record[ self::COLUMN_SELLING_DECIMALS ],
-			(string) $this->record[ self::COLUMN_SELLING_SYMBOL ]
+			Amount::from( (string) $this->record[ self::COLUMN_SELLING_AMOUNT ] ),
+			new Symbol( (string) $this->record[ self::COLUMN_SELLING_SYMBOL ] )
 		);
 	}
 
@@ -98,9 +98,8 @@ class SalesHistory {
 	/** 支払い金額 */
 	public function paymentPrice(): Price {
 		return new Price(
-			(string) $this->record[ self::COLUMN_PAYMENT_AMOUNT_HEX ],
-			(int) $this->record[ self::COLUMN_TOKEN_DECIMAL ],
-			(string) $this->record[ self::COLUMN_TOKEN_SYMBOL ]
+			Amount::from( (string) $this->record[ self::COLUMN_PAYMENT_AMOUNT ] ),
+			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
@@ -127,23 +126,21 @@ class SalesHistory {
 	/** 販売者の利益 */
 	public function sellerProfitPrice(): Price {
 		return new Price(
-			(string) $this->record[ self::COLUMN_SELLER_PROFIT_AMOUNT_HEX ],
-			(int) $this->record[ self::COLUMN_TOKEN_DECIMAL ],
-			(string) $this->record[ self::COLUMN_TOKEN_SYMBOL ]
+			Amount::from( (string) $this->record[ self::COLUMN_SELLER_PROFIT_AMOUNT ] ),
+			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
 	/** 手数料 */
 	public function handlingFeePrice(): Price {
 		return new Price(
-			(string) $this->record[ self::COLUMN_HANDLING_FEE_AMOUNT_HEX ],
-			(int) $this->record[ self::COLUMN_TOKEN_DECIMAL ],
-			(string) $this->record[ self::COLUMN_TOKEN_SYMBOL ]
+			Amount::from( (string) $this->record[ self::COLUMN_HANDLING_FEE_AMOUNT ] ),
+			new Symbol( (string) $this->record[ self::COLUMN_TOKEN_SYMBOL ] )
 		);
 	}
 
 	/** 支払いトークン */
 	public function paymentToken(): Token {
-		return ( new TokenRepositoryImpl() )->get( (int) $this->record[ self::COLUMN_CHAIN_ID ], Address::from( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
+		return ( new TokenRepositoryImpl() )->get( new ChainID( (int) $this->record[ self::COLUMN_CHAIN_ID ] ), Address::from( (string) $this->record[ self::COLUMN_TOKEN_ADDRESS ] ) );
 	}
 }

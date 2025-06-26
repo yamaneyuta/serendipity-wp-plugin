@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Repository;
 
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Repository\Name\BlockName;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Price;
@@ -11,8 +12,7 @@ use WP_Block_Parser_Block;
 
 class WidgetAttributes {
 	private const ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID = 'sellingNetworkCategoryID';
-	private const ATTRS_KEY_SELLING_AMOUNT_HEX          = 'sellingAmountHex';
-	private const ATTRS_KEY_SELLING_DECIMALS            = 'sellingDecimals';
+	private const ATTRS_KEY_SELLING_AMOUNT              = 'sellingAmount';
 	private const ATTRS_KEY_SELLING_SYMBOL              = 'sellingSymbol';
 
 	private function __construct( array $attrs ) {
@@ -23,9 +23,8 @@ class WidgetAttributes {
 		return new self(
 			array(
 				self::ATTRS_KEY_SELLING_NETWORK_CATEGORY_ID => $network_category_id ? $network_category_id->value() : null,
-				self::ATTRS_KEY_SELLING_AMOUNT_HEX => $selling_price ? $selling_price->amountHex() : null,
-				self::ATTRS_KEY_SELLING_DECIMALS   => $selling_price ? $selling_price->decimals() : null,
-				self::ATTRS_KEY_SELLING_SYMBOL     => $selling_price ? $selling_price->symbol()->value() : null,
+				self::ATTRS_KEY_SELLING_AMOUNT => $selling_price ? $selling_price->amount()->value() : null,
+				self::ATTRS_KEY_SELLING_SYMBOL => $selling_price ? $selling_price->symbol()->value() : null,
 			)
 		);
 	}
@@ -50,26 +49,19 @@ class WidgetAttributes {
 
 	/** 販売価格を取得します。 */
 	public function sellingPrice(): ?Price {
-		$amount_hex = $this->sellingAmountHex();
-		$decimals   = $this->sellingDecimals();
-		$symbol     = $this->sellingSymbol();
+		$amount = Amount::from( $this->sellingAmount() );
+		$symbol = Symbol::from( $this->sellingSymbol() );
 
-		if ( is_null( $amount_hex ) || is_null( $decimals ) || is_null( $symbol ) ) {
+		if ( is_null( $amount ) || is_null( $symbol ) ) {
 			return null;
 		}
 
-		return new Price( $amount_hex, $decimals, new Symbol( $symbol ) );
+		return new Price( $amount, $symbol );
 	}
 
-	/** 販売価格の値(sellingDecimalsの値と共に使用する)を取得します。 */
-	private function sellingAmountHex(): ?string {
-		return $this->attrs[ self::ATTRS_KEY_SELLING_AMOUNT_HEX ] ?? null;
-	}
-
-
-	/** 販売価格の小数点以下桁数を取得します。 */
-	private function sellingDecimals(): ?int {
-		return $this->attrs[ self::ATTRS_KEY_SELLING_DECIMALS ] ?? null;
+	/** 販売価格を取得します */
+	private function sellingAmount(): ?string {
+		return $this->attrs[ self::ATTRS_KEY_SELLING_AMOUNT ] ?? null;
 	}
 
 

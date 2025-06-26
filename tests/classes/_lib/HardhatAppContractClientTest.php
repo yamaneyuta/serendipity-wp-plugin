@@ -4,7 +4,7 @@ declare(strict_types=1);
 use Cornix\Serendipity\Core\Application\Service\TermsService;
 use Cornix\Serendipity\Core\Domain\Service\SellerService;
 use Cornix\Serendipity\Core\Domain\Service\WalletService;
-use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
+use Cornix\Serendipity\Core\Domain\ValueObject\Amount;
 use Cornix\Serendipity\Core\Infrastructure\Web3\Ethers;
 use Cornix\Serendipity\Core\Infrastructure\Database\Repository\TokenRepositoryImpl;
 use Cornix\Serendipity\Core\Infrastructure\Factory\ChainServiceFactory;
@@ -45,10 +45,11 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 
 		// 販売価格1,000円で投稿を作成
 		$selling_network_category_id = NetworkCategoryID::privatenet();
-		$selling_price               = new Price( HexFormat::toHex( 1000 ), 0, new Symbol( 'JPY' ) );
+		$selling_price               = new Price( Amount::from( '1000' ), new Symbol( 'JPY' ) );
+		$post_content                = ( new SamplePostContent() )->get( $selling_network_category_id, $selling_price );
 		$post_ID                     = $this->getUser( UserType::CONTRIBUTOR )->createPost(
 			array(
-				'post_content' => ( new SamplePostContent() )->get( $selling_network_category_id, $selling_price ),
+				'post_content' => $post_content,
 			)
 		);
 
@@ -66,7 +67,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 					nonce
 					serverMessage
 					serverSignature
-					paymentAmountHex
+					paymentAmount
 				}
 			}
 		GRAPHQL;
@@ -77,15 +78,15 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 			'consumerAddress' => $consumer->address()->value(),
 		);
 
-		$result             = $this->requestGraphQL( $query, $params );
-		$data               = $result->get_data();
-		$invoice_data       = $data['data']['issueInvoice'];
-		$invoice_id_hex     = $invoice_data['invoiceIdHex'];
-		$nonce              = $invoice_data['nonce'];
-		$server_message     = new SigningMessage( $invoice_data['serverMessage'] );
-		$server_signature   = new Signature( $invoice_data['serverSignature'] );
-		$payment_amount_hex = $invoice_data['paymentAmountHex'];
-		$server_address     = Ethers::verifyMessage( $server_message, $server_signature );
+		$result           = $this->requestGraphQL( $query, $params );
+		$data             = $result->get_data();
+		$invoice_data     = $data['data']['issueInvoice'];
+		$invoice_id_hex   = $invoice_data['invoiceIdHex'];
+		$nonce            = $invoice_data['nonce'];
+		$server_message   = new SigningMessage( $invoice_data['serverMessage'] );
+		$server_signature = new Signature( $invoice_data['serverSignature'] );
+		$payment_amount   = Amount::from( $invoice_data['paymentAmount'] );
+		$server_address   = Ethers::verifyMessage( $server_message, $server_signature );
 
 		// TODO: Service等から値を取得
 		$consumer_terms_version       = 1;    // 暫定
@@ -108,7 +109,7 @@ class HardhatAppContractClientTest extends IntegrationTestBase {
 			InvoiceID::from( $invoice_id_hex ),
 			$post_ID,
 			$payment_token->address(),
-			$payment_amount_hex,
+			$payment_amount,
 			$affiliate_ratio
 		);
 

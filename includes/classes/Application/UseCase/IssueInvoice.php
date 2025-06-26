@@ -40,7 +40,7 @@ class IssueInvoice {
 		// ※ これは`1ETH`等の価格を表現するオブジェクトであり、実際に支払う数量(wei等)ではないことに注意
 		$payment_price = ( new PriceExchange() )->convert( $selling_price, $payment_token->symbol()->value() );
 		// 支払うトークン量を取得
-		$payment_amount_hex = $payment_price->toTokenAmount( $chain_ID );
+		$payment_amount = $payment_price->toTokenAmount( $chain_ID );
 
 		$invoice = new Invoice(
 			InvoiceID::generate(), // 新規請求書ID
@@ -49,7 +49,7 @@ class IssueInvoice {
 			$selling_price,
 			$seller_address,
 			$payment_token_address,
-			$payment_amount_hex,
+			$payment_amount,
 			$consumer_address,
 			InvoiceNonce::generate() // 新規nonce
 		);
