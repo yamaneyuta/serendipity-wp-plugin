@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { toAmount } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
 import { useWidgetAttributes } from '../../provider/widgetState/widgetAttributes/useWidgetAttributes';
 import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
 import { NetworkCategory } from '../../../types/NetworkCategory';
+import { WidgetAttributes } from '../../types/WidgetAttributes';
 
 /**
  * 画面の状態が変更された際に、HTMLコメントとして登録されるブロックの属性を更新します。
@@ -61,19 +61,9 @@ const useUpdatePriceValueAttribute = () => {
 			return;
 		}
 
-		let amountHex = '0x' + 0n.toString( 16 );
-		let decimals = 0;
-
-		// ユーザーが入力した価格をamountとdecimalsに変換
-		if ( inputPriceValue ) {
-			const tmp = toAmount( inputPriceValue );
-			amountHex = '0x' + tmp.amount.toString( 16 );
-			decimals = tmp.decimals;
-		}
-
 		// 値が変更されている場合は属性を更新
-		if ( widgetAttributes.sellingAmountHex !== amountHex || widgetAttributes.sellingDecimals !== decimals ) {
-			setWidgetAttributes( ( s ) => ( { ...s, sellingAmountHex: amountHex, sellingDecimals: decimals } ) );
+		if ( widgetAttributes.sellingAmount !== inputPriceValue ) {
+			setWidgetAttributes( ( s ): WidgetAttributes => ( { ...s, sellingAmount: inputPriceValue } ) );
 		}
 	}, [ widgetAttributes, setWidgetAttributes, inputPriceValue ] );
 };

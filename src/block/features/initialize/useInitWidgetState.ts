@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { toValueText } from '@yamaneyuta/serendipity-lib-js-price-format';
 import { useSelectedNetworkCategory } from '../../provider/widgetState/selectedNetworkCategory/useSelectedNetworkCategory';
 import { useInputPriceValue } from '../../provider/widgetState/inputPriceValue/useInputPriceValue';
 import { useSelectedPriceSymbol } from '../../provider/widgetState/selectedPriceSymbol/useSelectedPriceSymbol';
@@ -53,13 +52,8 @@ const useInitPriceValue = () => {
 
 	useEffect( () => {
 		if ( inputPriceValue === undefined ) {
-			let { sellingAmountHex, sellingDecimals } = widgetAttributes;
-			// 値がnullの場合は0になるように`0x0`と`0`を設定
-			sellingAmountHex = sellingAmountHex === null ? '0x0' : sellingAmountHex;
-			sellingDecimals = sellingDecimals === null ? 0 : sellingDecimals;
-
-			const inputValue = toValueText( sellingAmountHex, sellingDecimals );
-			setInputPriceValue( inputValue );
+			const { sellingAmount } = widgetAttributes;
+			setInputPriceValue( sellingAmount );
 		}
 	}, [ widgetAttributes, inputPriceValue, setInputPriceValue ] );
 };
