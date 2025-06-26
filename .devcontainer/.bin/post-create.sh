@@ -25,7 +25,7 @@ function main() {
 	source .bin/install-intelephense-includes.sh
 
 	# npmパッケージのインストール
-	npm install
+	pnpm install
 }
 
 
