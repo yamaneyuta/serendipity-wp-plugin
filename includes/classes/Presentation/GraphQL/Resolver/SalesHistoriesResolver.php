@@ -54,7 +54,6 @@ class SalesHistoriesResolver extends ResolverBase {
 					},
 					// 販売価格は請求書に記載されている価格を返す
 					// ※ Postの販売価格は現在の販売価格であり、取引時の価格とは異なる場合があるため
-					throw new \Exception( '[5BC17D0F] Not implemented yet' ),
 					// 'sellingPrice' => array(
 					// 'amountHex' => $sales_data->sellingPrice()->amountHex(),
 					// 'decimals'  => $sales_data->sellingPrice()->decimals(),
