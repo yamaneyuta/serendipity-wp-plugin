@@ -4,5 +4,6 @@ module.exports = {
 	ignoreFiles: [
 		'**/node_modules/**',
 		'public/**/*.css',
+		'coverage/**/*.css',
 	],
 };
