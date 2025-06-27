@@ -15,13 +15,13 @@ services:
       - DATABASE_IMAGE=${DATABASE_IMAGE:-mariadb:lts} # データベースのDockerイメージ
     volumes:
       - ..:/workspaces
-      - ../../serendipity-resources/public:/workspaces/public
-      - ../../serendipity-resources/i18n:/workspaces/i18n
-      - ../../serendipity-resources/graphql/schema:/workspaces/includes/assets/graphql/schema
-      - node_modules:/workspaces/node_modules
-      - pnpm_store:/workspaces/.pnpm-store
-      - tests_vendor:/workspaces/tests/vendor
-      - includes_vendor:/workspaces/includes/vendor
+    #   - ../../serendipity-resources/public:/workspaces/public
+    #   - ../../serendipity-resources/i18n:/workspaces/i18n
+    #   - ../../serendipity-resources/graphql/schema:/workspaces/includes/assets/graphql/schema
+    #   - node_modules:/workspaces/node_modules
+    #   - pnpm_store:/workspaces/.pnpm-store
+    #   - tests_vendor:/workspaces/tests/vendor
+    #   - includes_vendor:/workspaces/includes/vendor
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
     # cap_add:
@@ -32,8 +32,8 @@ services:
     # Overrides default command so things don't shut down after the process ends.
     command: /bin/sh -c "while sleep 1000; do :; done"
 
-volumes:
-  node_modules:
-  pnpm_store:
-  tests_vendor:
-  includes_vendor:
+# volumes:
+#   node_modules:
+#   pnpm_store:
+#   tests_vendor:
+#   includes_vendor:
