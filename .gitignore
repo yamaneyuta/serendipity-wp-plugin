@@ -1,0 +1,8 @@
+*.bak
+.devcontainer/.env
+.pnpm-store/
+node_modules/
+
+
+# apps/wp-plugin
+apps/wp-plugin/.intelephense/
