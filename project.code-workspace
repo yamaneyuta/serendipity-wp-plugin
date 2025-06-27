@@ -1,0 +1,31 @@
+{
+    "folders": [
+        {
+            "name": "/workspaces",
+            "path": "/workspaces"
+        },
+        {
+            "name": "wp-plugin",
+            "path": "/workspaces/apps/wp-plugin"
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            ".pnpm-store/": true,
+            "**/node_modules/": true,
+        },
+        "files.watcherExclude": {
+            "**/.git/objects/**": true,
+            "**/.git/subtree-cache/**": true,
+            "**/node_modules/**": true,
+            "**/.pnpm-store/**": true,
+            "**/vendor/**": true,
+            "**/build/**": true,
+            "**/coverage/**": true,
+        },
+        "git.autorefresh": true,
+        "jest.runMode": "on-demand",
+        // "terminal.integrated.cwd": "${workspaceFolder}"
+        "terminal.integrated.cwd": "/workspaces/apps/wp-plugin"
+    }
+}
