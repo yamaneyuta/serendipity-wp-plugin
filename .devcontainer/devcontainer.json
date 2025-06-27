@@ -11,12 +11,13 @@
 		"compose.devcontainer.yml"
 	],
 
-	// "postCreateCommand": "bash .devcontainer/.bin/post-create.sh",
-	// コンテナ起動のたびに開発用WordPress環境及びphpMyAdminを含むコンテナを立ち上げる
-	// "postStartCommand": "npm run start:docker",
+	// コンテナ作成後に実行するスクリプトを指定
+	"postCreateCommand": "bash -e /workspaces/scripts/post-create-devcontainer.sh",
 
-	// The 'service' property is the name of the service for the container that VS Code should
-	// use. Update this value and .devcontainer/compose.yml to the real service name.
+	// コンテナ起動のたびに実行するスクリプトを指定
+	"postStartCommand": "bash -e /workspaces/scripts/post-start-devcontainer.sh",
+
+	// devcontainerが使用する`compose.yml`内のサービス名
 	"service": "development",
 
 	// The optional 'workspaceFolder' property is the path VS Code should open by default when
