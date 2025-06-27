@@ -16,7 +16,7 @@ function main() {
 # intelephenseで参照エラーにならないよう、WordPressのテスト用ファイルをインストール
 function install_intelephense_includes() {
 
-	INCLUDES_DIR=./.devcontainer/.intelephense-includes/wordpress-develop/tests/phpunit
+	INCLUDES_DIR=./.intelephense/includes/wordpress-develop/tests/phpunit
 	# INCLUDES_DIRを作成
 	mkdir -p $INCLUDES_DIR
 	# INCLUDES_DIR以下のファイルをすべて削除

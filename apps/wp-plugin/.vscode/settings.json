@@ -10,7 +10,7 @@
 	"git.autorefresh": true,
 	"intelephense.environment.phpVersion": "7.4",
 	"intelephense.environment.includePaths": [
-		".devcontainer/.intelephense-includes/wordpress-develop/tests/phpunit/includes",
+		".intelephense/includes/wordpress-develop/tests/phpunit/includes",
 		"tests/vendor"
 	],
 	"jest.runMode": "on-demand",
