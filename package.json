@@ -1,0 +1,12 @@
+{
+	"name": "serendipity",
+	"description": "",
+	"version": "0.0.1",
+	"author": "yamaneyuta",
+	"license": "Split License",
+	"keywords": [],
+	"scripts": {},
+	"devDependencies": {
+		"@wordpress/env": "^10.26.0"
+	}
+}
