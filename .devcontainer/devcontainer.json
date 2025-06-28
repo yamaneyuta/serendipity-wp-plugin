@@ -20,6 +20,11 @@
 	// devcontainerが使用する`compose.yml`内のサービス名
 	"service": "development",
 
+	// Environment variables to set in the container
+	"containerEnv": {
+		"DEVCONTAINER": "true"
+	},
+
 	// The optional 'workspaceFolder' property is the path VS Code should open by default when
 	// connected. This is typically a file mount in .devcontainer/compose.yml
 	// "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
