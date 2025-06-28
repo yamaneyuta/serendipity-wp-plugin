@@ -1,0 +1,203 @@
+name: CI
+on:
+  push:
+    branches:
+      # - "**"  # すべてのブランチに対してpush時に実行
+      - main  # mainブランチのみpush時に実行
+  pull_request:
+    branches:
+      - main  # mainブランチへのPR時に実行
+  workflow_dispatch:  # 手動実行を許可
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  node-version: 20.x
+  pnpm-version: 10
+  default-database: mariadb:lts # デフォルトのデータベースイメージ
+
+jobs:
+  ci:
+    name: CI (PHP ${{ matrix.env.php-version }} / WP ${{ matrix.env.wordpress-version }} / ${{ matrix.env.database || 'mariadb:lts' }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false # 他のジョブが失敗しても中断しない設定
+      matrix:
+        env: [
+          # WordPress,PHP,Databaseの組み合わせについては、以下のリンク先を参照
+          # https://make.wordpress.org/hosting/handbook/compatibility/
+          # https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/
+
+          { php-version: "7.4", wordpress-version: "5.4" },   # 本プラグインが使用可能な最低WPバージョン
+          { php-version: "7.4", wordpress-version: "6.8.1" }, # PHP7.4 + 最新WP
+
+          { php-version: "8.0", wordpress-version: "6.1" },   # PHP8.0はWP5.6以降をbetaサポート(ただし、テストに失敗しない6.1を指定 ※1)
+          # { php-version: "8.0", wordpress-version: "6.3" },   # PHP8.0はWP6.3以降を一部を除きサポート
+          { php-version: "8.0", wordpress-version: "6.8.1" }, # PHP8.0 + 最新WP
+
+          { php-version: "8.1", wordpress-version: "6.1" },   # PHP8.1はWP5.9以降をbetaサポート(ただし、テストに失敗しない6.1を指定 ※1)
+          # { php-version: "8.1", wordpress-version: "6.3" },   # PHP8.1 => WP6.3以降を一部を除きサポート
+          { php-version: "8.1", wordpress-version: "6.8.1" }, # PHP8.1 + 最新WP
+
+          { php-version: "8.2", wordpress-version: "6.1" },   # PHP8.2 => WP6.1以降をbetaサポート
+          # { php-version: "8.2", wordpress-version: "6.6" },   # PHP8.2 => WP6.6以降を一部を除きサポート
+          { php-version: "8.2", wordpress-version: "6.8.1" }, # PHP8.2 + 最新WP
+
+          { php-version: "8.3", wordpress-version: "6.4" },   # PHP8.3 => WP6.4以降をbetaサポート
+          { php-version: "8.3", wordpress-version: "6.8.1" }, # PHP8.3 + 最新WP
+
+          { php-version: "8.4", wordpress-version: "6.7" },   # PHP8.4 => WP6.7以降をbetaサポート
+          { php-version: "8.4", wordpress-version: "6.8.1" },  # PHP8.4 + 最新WP
+
+          # 以下、データベースバージョンとの組み合わせ
+          { php-version: "7.4", wordpress-version: "5.4", database: "mysql:5.6" },
+          { php-version: "7.4", wordpress-version: "5.4", database: "mariadb:10.2" },
+          { php-version: "8.4", wordpress-version: "6.8.1", database: "mysql:9.1" },
+          { php-version: "8.4", wordpress-version: "6.8.1", database: "mariadb:11.5" },
+          { php-version: "8.4", wordpress-version: "6.8.1", database: "mysql:lts" },
+        ]
+        # ※1 WP5.9,6.0では`set_current_screen`に空文字を渡すと`Undefined array key "hook_suffix"`のエラーが発生するためマトリクスから除外
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # 環境変数の設定
+    - run: echo "PHP_VERSION=${{ matrix.env.php-version }}" >> $GITHUB_ENV
+    - run: echo "WP_VERSION=${{ matrix.env.wordpress-version }}" >> $GITHUB_ENV
+    # matrix.env.databaseの値が定義されていない場合は、デフォルトのデータベースを使用する
+    - run: echo "DATABASE_IMAGE=${{ matrix.env.database || env.default-database }}" >> $GITHUB_ENV
+    # DOCKER_NETWORK_NAME の値を設定
+    - run: echo "DOCKER_NETWORK_NAME=dev_network" >> $GITHUB_ENV
+
+
+    - name: Cache wp-env directory
+      id: wp-env-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/wp-env
+        key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
+    - name: Docker build if wp-env cache is not hit
+      # キャッシュからwp-envディレクトリを復元した場合はwp-envが使用するdocker-compose.ymlファイルが存在するため、
+      # バックグラウンドでビルドを行っておく
+      run: |
+        if [ "${{ steps.wp-env-cache.outputs.cache-hit }}" = "true" ]; then
+          cd ~/wp-env/8fac1173ea7f01aaea6fc9a6d834c8d0 && \
+          DOCKER_BUILDKIT=1 COMPOSE_BAKE=true WP_ENV_MYSQL_PORT=3306 WP_ENV_TESTS_MYSQL_PORT=3307 \
+          docker compose build &
+        fi
+    
+    # プライベートネットを含むDockerイメージをビルドしておく
+    - name: Build test container 
+      run: cd infra && DOCKER_BUILDKIT=1 COMPOSE_BAKE=true docker compose -f compose.test.yml build &
+
+    # @see https://github.com/pnpm/action-setup?tab=readme-ov-file#use-cache-to-reduce-installation-time
+    - uses: pnpm/action-setup@v4
+      name: Install pnpm
+      with:
+        version: ${{ env.pnpm-version }}
+        run_install: false
+
+    - name: Use Node.js ${{ env.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.node-version }}
+        cache: 'pnpm'
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.env.php-version }}
+
+    # PHPグローバルパッケージのキャッシュ
+    - name: Cache PHP global packages
+      id: php-global-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.composer
+        key: ${{ runner.os }}-php-global-${{ matrix.env.php-version }}-phpcs3.9.2-wpcs3.1.0
+    - name: Install phpcs
+      if: steps.php-global-cache.outputs.cache-hit != 'true'
+      run: composer global require squizlabs/php_codesniffer="3.9.2"
+    - name: Install wpcs
+      if: steps.php-global-cache.outputs.cache-hit != 'true'
+      run: |
+        composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true &&
+        composer global require --dev wp-coding-standards/wpcs:"3.1.0"
+
+
+    # includesディレクトリのComposerパッケージキャッシュ
+    - name: Cache includes composer packages
+      id: includes-composer-cache
+      uses: actions/cache@v4
+      with:
+        path: apps/wp-plugin/includes/vendor
+        key: ${{ runner.os }}-includes-composer-${{ matrix.env.php-version }}-${{ hashFiles('apps/wp-plugin/includes/composer.lock') }}
+    # testsディレクトリのComposerパッケージキャッシュ(動的に生成されるcomposer.json, composer.lockもキャッシュする)
+    - name: Cache tests composer packages
+      id: tests-composer-cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          apps/wp-plugin/tests/vendor
+          apps/wp-plugin/tests/composer.json
+          apps/wp-plugin/tests/composer.lock
+        key: ${{ runner.os }}-tests-composer-${{ matrix.env.php-version }}-${{ matrix.env.wordpress-version }}-${{ hashFiles('apps/wp-plugin/tests/composer.lock') }}
+
+    # devcontainerのpostCreateCommandに相当するスクリプトを実行
+    - name: run scripts/post-create-devcontainer.sh
+      run: bash -e scripts/post-create-devcontainer.sh
+
+    # プロセス名に`docker`が含まれるプロセスがすべて終了するまで待機する
+    # (dockerイメージのビルドが完了するまで待機する)
+    # => postStartCommand相当の処理はイメージ立ち上げがメインであるため
+    - name: Wait for build docker images
+      run: for i in $(seq 60); do if [ -z "$(ps | grep docker)" ]; then break; fi; sleep 1; echo "waiting($i)..."; done
+      
+    # devcontainerのpostStartCommandに相当するスクリプトを実行
+    - name: run scripts/post-start-devcontainer.sh
+      run: bash -e scripts/post-start-devcontainer.sh
+
+
+  #   # Playwrightをインストールする時間の間、コンテナの初期化処理が行われるようにここでコンテナを起動する
+  #   - run: npm run start:docker
+
+
+  #   # Playwrightのインストールはnpm install後に実施すること。
+  #   - name: Setup Playwright cache
+  #     id: playwright-cache
+  #     uses: actions/cache@v4
+  #     with:
+  #       path: |
+  #         ~/.cache/ms-playwright
+  #         ~/.cache/playwright
+  #       key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
+  #   - name: Install Playwright
+  #     if: steps.playwright-cache.outputs.cache-hit != 'true'
+  #     run: pnpm dlx playwright install --with-deps
+
+  #   - run: pnpm dlx npm-run-all --parallel "check-license:*"
+  #   - run: pnpm dlx npm-run-all --parallel "lint:*"
+  #   - run: pnpm dlx npm-run-all --parallel "format:*"
+  #   - run: pnpm dlx npm-run-all --parallel "coverage:*"
+
+  #   # cleanコマンドでエラーが発生しないことを確認。
+  #   - run: npm run clean
+  #   # zipファイル生成の過程でエラーが発生しないことを確認。
+  #   - run: npm run plugin-zip
+
+  # docker-build:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - name: Build the Docker image
+  #     run: |
+  #       docker build . \
+  #         --file .devcontainer/Dockerfile.wp-plugin \
+  #         --tag my/development:latest \
+  #         --build-arg PHP_OLDEST_VERSION=7.4 \
+  #         --build-arg PHP_LATEST_VERSION=8.3
