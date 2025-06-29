@@ -149,6 +149,14 @@ jobs:
           apps/wp-plugin/tests/composer.lock
         key: ${{ runner.os }}-tests-composer-${{ matrix.env.php-version }}-${{ matrix.env.wordpress-version }}-${{ hashFiles('apps/wp-plugin/tests/composer.lock') }}
 
+    # .turboディレクトリ
+    - name: Restore turbo cache
+      id: turbo-cache
+      uses: actions/cache@v4
+      with:
+        path: .turbo
+        key: turbo-${{ runner.os }}-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}-${{ matrix.env.database || env.default-database }}
+
     # devcontainerのpostCreateCommandに相当するスクリプトを実行
     - name: run scripts/post-create-devcontainer.sh
       run: bash -e scripts/post-create-devcontainer.sh
