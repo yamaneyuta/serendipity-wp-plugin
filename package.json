@@ -5,7 +5,14 @@
 	"author": "yamaneyuta",
 	"license": "Split License",
 	"keywords": [],
-	"scripts": {},
+	"scripts": {
+		"build": "turbo run build",
+		"coverage": "turbo run coverage",
+		"dev": "turbo run dev",
+		"lint": "turbo run lint",
+		"test": "turbo run test",
+		"format": "turbo run format"
+	},
 	"devDependencies": {
 		"@types/node": "^24.0.7",
 		"@wordpress/env": "^10.26.0",
