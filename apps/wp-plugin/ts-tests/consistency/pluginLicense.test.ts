@@ -1,4 +1,4 @@
-import { expect } from '@jest/globals';
+import { expect, it } from '@jest/globals';
 import { EntryPhpFile } from '../lib/EntryPhpFile';
 import { ReadmeTxt } from '../lib/ReadmeTxt';
 

@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { expect } from '@jest/globals';
+import { expect, it } from '@jest/globals';
 import { load } from 'js-yaml';
 import { EntryPhpFile } from '../lib/EntryPhpFile';
 import { ReadmeTxt } from '../lib/ReadmeTxt';
@@ -9,12 +9,14 @@ import { ReadmeTxt } from '../lib/ReadmeTxt';
  * プラグインバージョンの整合性チェック
  * PHPに記載の最低限必要なWordPressバージョンがCIの設定に含まれていることを確認する。
  */
-it( '[975682DD] WordPress Requires at latest version is tested', async () => {
+it( '[58A6A23F] WordPress Requires at latest version is tested', async () => {
 	// エントリファイルとなるPHPから最低限必要なWordPressバージョンを取得
 	const requiresAtLeast = EntryPhpFile.getRequiresAtLeast();
 
 	// GitHub Actionsの設定ファイルからテストを実行しているWordPressのバージョン一覧を取得
-	const workflow = load( fs.readFileSync( path.resolve( process.cwd(), '.github/workflows/ci.yml' ), 'utf-8' ) );
+	const workflow = load(
+		fs.readFileSync( path.resolve( process.cwd(), '../../.github/workflows/ci.yml' ), 'utf-8' )
+	);
 	const matrix: { 'wordpress-version': string }[] = ( workflow as any ).jobs.ci.strategy.matrix.env;
 	const versions = matrix.map( ( v ) => v[ 'wordpress-version' ] );
 	const oldestVersion = versions[ 0 ];
@@ -31,13 +33,14 @@ it( '[F4DD3D0A] WordPress Tested up to version is tested', async () => {
 	const testedUpTo = ReadmeTxt.getTestedUpTo();
 
 	// GitHub Actionsの設定ファイルからテストを実行しているWordPressのバージョン一覧を取得
-	const workflow = load( fs.readFileSync( path.resolve( process.cwd(), '.github/workflows/ci.yml' ), 'utf-8' ) );
+	const workflow = load(
+		fs.readFileSync( path.resolve( process.cwd(), '../../.github/workflows/ci.yml' ), 'utf-8' )
+	);
 	const matrix: { 'wordpress-version': string }[] = ( workflow as any ).jobs.ci.strategy.matrix.env;
 	const versions = matrix.map( ( v ) => v[ 'wordpress-version' ] );
-	const latestTestedVersion = versions[ versions.length - 1 ];
 
 	// 取得したWordPressのバージョン一覧に、readme.txtに記載されている最新テスト済みバージョンが含まれていることを確認
-	expect( latestTestedVersion ).toBe( testedUpTo );
+	expect( versions ).toContain( testedUpTo );
 } );
 
 /**

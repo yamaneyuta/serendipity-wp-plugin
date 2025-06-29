@@ -1,6 +1,5 @@
-import { expect } from '@jest/globals';
+import { expect, it } from '@jest/globals';
 import { EntryPhpFile } from '../lib/EntryPhpFile';
-import { ReadmeTxt } from '../lib/ReadmeTxt';
 
 /**
  * プラグイン作者の整合性チェック
