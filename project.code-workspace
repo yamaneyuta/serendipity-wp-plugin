@@ -1,11 +1,11 @@
 {
     "folders": [
         {
-            "name": "/workspaces",
+            "name": "📁 /workspaces",
             "path": "/workspaces"
         },
         {
-            "name": "wp-plugin",
+            "name": "🧩 wp-plugin",
             "path": "/workspaces/apps/wp-plugin"
         }
     ],
