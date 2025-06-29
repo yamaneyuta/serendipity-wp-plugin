@@ -163,6 +163,9 @@ jobs:
     - name: run scripts/post-start-devcontainer.sh
       run: bash -e scripts/post-start-devcontainer.sh
 
+    # テスト実行
+    - run: npm run coverage
+
 
   #   # Playwrightをインストールする時間の間、コンテナの初期化処理が行われるようにここでコンテナを起動する
   #   - run: npm run start:docker
