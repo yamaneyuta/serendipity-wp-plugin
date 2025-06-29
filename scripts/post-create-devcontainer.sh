@@ -45,10 +45,16 @@ main() {
     cd "$PROJECT_ROOT"
 
     fix_permissions
-    install_npm_packages
+    install_npm_packages &
+    NPM_INSTALL_PID=$!
+    
     change_php_version
     install_php_packages
 
+    echo "[$(basename "$0")] Waiting for npm packages installation to complete..."
+    wait $NPM_INSTALL_PID
+    echo "[$(basename "$0")] NPM packages installation completed."
+    
     build
 
     echo "[$(basename "$0")] Post-create script completed successfully."
