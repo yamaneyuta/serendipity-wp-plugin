@@ -1,6 +1,7 @@
 *.bak
 .devcontainer/.env
 .pnpm-store/
+.turbo/
 node_modules/
 
 
