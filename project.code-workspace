@@ -31,7 +31,7 @@
         },
         "git.autorefresh": true,
         // "terminal.integrated.cwd": "${workspaceFolder}"
-        "terminal.integrated.cwd": "/workspaces/apps/wp-plugin",
+        "terminal.integrated.cwd": "/workspaces",
         "cSpell.words": [
             "autorefresh",
             "devcache",
