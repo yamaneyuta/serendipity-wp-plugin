@@ -43,6 +43,8 @@ RUN apt update && \
 		php${PHP_LATEST_VERSION}-zip \
 		php${PHP_OLDEST_VERSION}-mbstring \
 		php${PHP_LATEST_VERSION}-mbstring \
+		php${PHP_OLDEST_VERSION}-gmp \
+		php${PHP_LATEST_VERSION}-gmp \
 		-y && \
     \
     apt clean && rm -rf /var/lib/apt/lists/*
