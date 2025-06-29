@@ -31,6 +31,13 @@ install_php_packages() {
     cd -
 }
 
+build() {
+    # アプリケーションのビルドを実行
+    cd $PROJECT_ROOT
+    npm run build
+    cd -
+}
+
 # メイン関数
 main() {
     echo "[$(basename "$0")] Starting post-create script..."
@@ -41,6 +48,9 @@ main() {
     install_npm_packages
     change_php_version
     install_php_packages
+
+    build
+
     echo "[$(basename "$0")] Post-create script completed successfully."
 }
 
