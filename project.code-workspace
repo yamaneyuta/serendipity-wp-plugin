@@ -27,6 +27,11 @@
         "git.autorefresh": true,
         "jest.runMode": "on-demand",
         // "terminal.integrated.cwd": "${workspaceFolder}"
-        "terminal.integrated.cwd": "/workspaces/apps/wp-plugin"
+        "terminal.integrated.cwd": "/workspaces/apps/wp-plugin",
+        "cSpell.words": [
+            "autorefresh",
+            "devcache",
+            "intelephense"
+        ]
     }
 }
