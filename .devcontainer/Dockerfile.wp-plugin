@@ -22,9 +22,8 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # PHP及び拡張モジュールをインストール
-ARG PHP_OLDEST_VERSION
-ARG PHP_LATEST_VERSION
-
+ARG PHP_VERSION
+ENV PHP_VERSION=${PHP_VERSION}
 
 RUN apt update && \
     apt install software-properties-common -y && \
@@ -33,18 +32,12 @@ RUN apt update && \
     apt install unzip -y && \
     \
     apt install \
-		php${PHP_OLDEST_VERSION} \
-		php${PHP_LATEST_VERSION} \
-		php${PHP_OLDEST_VERSION}-curl \
-		php${PHP_LATEST_VERSION}-curl \
-		php${PHP_OLDEST_VERSION}-dom \
-		php${PHP_LATEST_VERSION}-dom \
-		php${PHP_OLDEST_VERSION}-zip \
-		php${PHP_LATEST_VERSION}-zip \
-		php${PHP_OLDEST_VERSION}-mbstring \
-		php${PHP_LATEST_VERSION}-mbstring \
-		php${PHP_OLDEST_VERSION}-gmp \
-		php${PHP_LATEST_VERSION}-gmp \
+		php${PHP_VERSION} \
+		php${PHP_VERSION}-curl \
+		php${PHP_VERSION}-dom \
+		php${PHP_VERSION}-zip \
+		php${PHP_VERSION}-mbstring \
+		php${PHP_VERSION}-gmp \
 		-y && \
     \
     apt clean && rm -rf /var/lib/apt/lists/*
