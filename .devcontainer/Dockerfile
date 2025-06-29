@@ -46,15 +46,15 @@ RUN apt update && \
 RUN php -r "copy('https://getcomposer.org/download/2.7.6/composer.phar', '/usr/local/bin/composer');" && \
     chmod +x /usr/local/bin/composer
 
-# ubuntuユーザーが存在しない場合は追加
-RUN id ubuntu > /dev/null 2>&1 || useradd -m -s /bin/bash ubuntu
+# vscodeユーザーが存在しない場合は追加
+RUN id vscode > /dev/null 2>&1 || useradd -m -s /bin/bash vscode
 
-# ubuntuはパスワード無しでsudoが実行できるようにする
-RUN echo "ubuntu ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/ubuntu
+# vscodeユーザーはパスワード無しでsudoが実行できるようにする
+RUN echo "vscode ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/vscode
 
-# ここからubuntuユーザーで操作
-USER ubuntu
-WORKDIR /home/ubuntu
+# ここからvscodeユーザーで操作
+USER vscode
+WORKDIR /home/vscode
 
 # `~/.config/composer/vendor/bin`は、`composer global require`でインストールされるディレクトリ
 # (`composer global about`で確認可能)

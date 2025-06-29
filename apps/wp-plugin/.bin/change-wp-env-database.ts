@@ -28,8 +28,8 @@ const rewriteDatabaseImage = ( targetFilePath: string, imageName: string ) => {
 };
 
 // mysqlコンテナのvolumesの書き換えを行います
-// - volumes: [ 'mysql:/var/lib/mysql' ], ⇒ volumes: [ 'mysql:/var/lib/mysql', '/home/ubuntu/my.cnf:/etc/mysql/conf.d/my.cnf' ],
-// - volumes: [ 'mysql-test:/var/lib/mysql' ], ⇒ volumes: [ 'mysql-test:/var/lib/mysql', '/home/ubuntu/my.cnf:/etc/mysql/conf.d/my.cnf' ],
+// - volumes: [ 'mysql:/var/lib/mysql' ], ⇒ volumes: [ 'mysql:/var/lib/mysql', '/home/vscode/my.cnf:/etc/mysql/conf.d/my.cnf' ],
+// - volumes: [ 'mysql-test:/var/lib/mysql' ], ⇒ volumes: [ 'mysql-test:/var/lib/mysql', '/home/vscode/my.cnf:/etc/mysql/conf.d/my.cnf' ],
 const rewriteMySqlVolumes = ( targetFilePath: string, myCnfPath: string ) => {
 	let fileContent = fs.readFileSync( targetFilePath, 'utf8' );
 	// 複数回呼ばれても問題ないように書き換え後の文字列が含まれていない時にだけ処理を実行
