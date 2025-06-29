@@ -31,6 +31,7 @@ jobs:
           # WordPress,PHP,Databaseの組み合わせについては、以下のリンク先を参照
           # https://make.wordpress.org/hosting/handbook/compatibility/
           # https://make.wordpress.org/core/handbook/references/php-compatibility-and-wordpress-versions/
+          # ※ MySQLは8.0以降でwp-cliを使った初期化処理に問題があるためテストを省略
 
           { php-version: "7.4", wordpress-version: "5.4" },   # 本プラグインが使用可能な最低WPバージョン
           { php-version: "7.4", wordpress-version: "6.8.1" }, # PHP7.4 + 最新WP
@@ -53,12 +54,13 @@ jobs:
           { php-version: "8.4", wordpress-version: "6.7" },   # PHP8.4 => WP6.7以降をbetaサポート
           { php-version: "8.4", wordpress-version: "6.8.1" },  # PHP8.4 + 最新WP
 
-          # 以下、データベースバージョンとの組み合わせ
-          { php-version: "7.4", wordpress-version: "5.4", database: "mysql:5.6" },
-          { php-version: "7.4", wordpress-version: "5.4", database: "mariadb:10.2" },
-          { php-version: "8.4", wordpress-version: "6.8.1", database: "mysql:9.1" },
-          { php-version: "8.4", wordpress-version: "6.8.1", database: "mariadb:11.5" },
-          { php-version: "8.4", wordpress-version: "6.8.1", database: "mysql:lts" },
+          # 以下、データベースバージョンを中心とした組み合わせ
+          # MySQL
+          # MySQL5.7は`mariadb-check: Got error: 2026: TLS/SSL error: Certificate verification failure: The certificate is NOT trusted. when trying to connect`のエラーが発生
+          { database: "mysql:5.6", php-version: "7.4", wordpress-version: "5.4" },    # 本プラグインが動作する最低バージョンの組み合わせ(MySQL)
+          # MariaDB
+          { database: "mariadb:10.2", php-version: "7.4", wordpress-version: "5.4" }, # 本プラグインが動作する最低バージョンの組み合わせ(MariaDB)
+          { database: "mariadb:11.5", php-version: "8.4", wordpress-version: "6.8" }, # WordPress6.8時点でのMariaDB最高バージョン
         ]
         # ※1 WP5.9,6.0では`set_current_screen`に空文字を渡すと`Undefined array key "hook_suffix"`のエラーが発生するためマトリクスから除外
 
