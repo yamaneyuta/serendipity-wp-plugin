@@ -86,7 +86,8 @@ wait_http_server() {
     for ((i=1; i<=MAX_RETRIES; i++)); do
     # curl で HTTP ステータスコードを確認
     status=$(curl -s -o /dev/null -w "%{http_code}" "$host")
-    if [[ "$status" == "200" ]]; then
+    # ステータスコードが302でもテストは実施可能なので、200と302を許容
+    if [[ "$status" == "200" || "$status" == "302" ]]; then
         echo "✅ [14DC2901] HTTP server is ready! ($host)"
         return 0
     fi
