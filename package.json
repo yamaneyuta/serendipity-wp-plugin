@@ -8,6 +8,7 @@
 	"scripts": {},
 	"devDependencies": {
 		"@types/node": "^24.0.7",
-		"@wordpress/env": "^10.26.0"
+		"@wordpress/env": "^10.26.0",
+		"turbo": "^2.5.4"
 	}
 }
