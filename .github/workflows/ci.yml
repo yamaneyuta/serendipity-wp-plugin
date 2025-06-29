@@ -79,7 +79,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ~/wp-env
-        key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}
+        key: ${{ runner.os }}-wp-env-PHP${{ matrix.env.php-version }}-WP${{ matrix.env.wordpress-version }}-${{ matrix.env.database || env.default-database }}
     - name: Docker build if wp-env cache is not hit
       # キャッシュからwp-envディレクトリを復元した場合はwp-envが使用するdocker-compose.ymlファイルが存在するため、
       # バックグラウンドでビルドを行っておく
