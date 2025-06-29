@@ -1,5 +1,5 @@
 *.bak
-.devcontainer/.env
+.env
 .pnpm-store/
 .turbo/
 node_modules/
