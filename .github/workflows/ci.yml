@@ -205,16 +205,3 @@ jobs:
   #   - run: npm run clean
   #   # zipファイル生成の過程でエラーが発生しないことを確認。
   #   - run: npm run plugin-zip
-
-  # docker-build:
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - name: Build the Docker image
-  #     run: |
-  #       docker build . \
-  #         --file .devcontainer/Dockerfile.wp-plugin \
-  #         --tag my/development:latest \
-  #         --build-arg PHP_OLDEST_VERSION=7.4 \
-  #         --build-arg PHP_LATEST_VERSION=8.3
