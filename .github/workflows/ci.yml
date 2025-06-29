@@ -16,6 +16,7 @@ concurrency:
 env:
   node-version: 20.x
   pnpm-version: 10.12.2
+  composer-version: 2.7.6
   default-database: mariadb:lts # デフォルトのデータベースイメージ
 
 jobs:
@@ -113,6 +114,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.env.php-version }}
+        tools: composer:${{ env.composer-version }}
 
     # PHPグローバルパッケージのキャッシュ
     - name: Cache PHP global packages
