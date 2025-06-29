@@ -40,8 +40,8 @@
 |:-------------|:---------------------------------------------------------------------------|:----:|:------:|
 | WPユーザー名 | admin                                                                      |  ✓  |   ✓   |
 | WPパスワード | password                                                                   |  ✓  |   ✓   |
-| WPバージョン | [compose.devcontainer.yml](./.devcontainer/compose.devcontainer.yml)で指定 |  ✓  |   ✓   |
-| PHPバージョン| [compose.devcontainer.yml](./.devcontainer/compose.devcontainer.yml)で指定 |  ✓  |   ✓   |
+| WPバージョン | [compose.yml](./.devcontainer/compose.yml)で指定 |  ✓  |   ✓   |
+| PHPバージョン| [compose.yml](./.devcontainer/compose.yml)で指定 |  ✓  |   ✓   |
 
 
 ### 開発用ブロックチェーン環境
