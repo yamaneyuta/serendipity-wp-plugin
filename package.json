@@ -11,7 +11,8 @@
 		"dev": "turbo run dev",
 		"lint": "turbo run lint",
 		"test": "turbo run test",
-		"format": "turbo run format"
+		"format": "turbo run format",
+		"prepare": "turbo telemetry disable > /dev/null 2>&1"
 	},
 	"devDependencies": {
 		"@types/node": "^24.0.7",
