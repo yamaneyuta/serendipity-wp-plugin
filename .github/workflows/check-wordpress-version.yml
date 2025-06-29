@@ -17,7 +17,7 @@ jobs:
       - name: Get tested WordPress version from readme.txt
         id: get-tested-version
         run: |
-          TESTED_VERSION=$(grep -oP 'Tested up to:\s*\K[\d.]+' ./readme.txt)
+          TESTED_VERSION=$(grep -oP 'Tested up to:\s*\K[\d.]+' ./apps/wp-plugin/readme.txt)
           echo "Tested WordPress version in readme.txt: $TESTED_VERSION"
           echo "TESTED_VERSION=$TESTED_VERSION" >> $GITHUB_OUTPUT
 

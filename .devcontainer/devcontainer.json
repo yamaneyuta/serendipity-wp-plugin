@@ -1,23 +1,27 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-docker-compose
 {
-	"name": "serendipity-wp-plugin",
+	"name": "serendipity",
 
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
-		// "compose.yml",
-		"compose.common.yml",
-		"compose.devcontainer.yml"
+		"compose.yml"
 	],
 
-	"postCreateCommand": "bash .devcontainer/.bin/post-create.sh",
-	// コンテナ起動のたびに開発用WordPress環境及びphpMyAdminを含むコンテナを立ち上げる
-	"postStartCommand": "npm run start:docker",
+	// コンテナ作成後に実行するスクリプトを指定
+	"postCreateCommand": "bash -e /workspaces/scripts/post-create-devcontainer.sh",
 
-	// The 'service' property is the name of the service for the container that VS Code should
-	// use. Update this value and .devcontainer/compose.yml to the real service name.
+	// コンテナ起動のたびに実行するスクリプトを指定
+	"postStartCommand": "bash -e /workspaces/scripts/post-start-devcontainer.sh",
+
+	// devcontainerが使用する`compose.yml`内のサービス名
 	"service": "development",
+
+	// Environment variables to set in the container
+	"containerEnv": {
+		"DEVCONTAINER": "true"
+	},
 
 	// The optional 'workspaceFolder' property is the path VS Code should open by default when
 	// connected. This is typically a file mount in .devcontainer/compose.yml
@@ -30,7 +34,6 @@
 				"bmewburn.vscode-intelephense-client",
 				"xdebug.php-debug",
 				"github.vscode-github-actions",
-				"Orta.vscode-jest",
 				"streetsidesoftware.code-spell-checker"
 			]
 		}
@@ -57,5 +60,5 @@
 	// "customizations": {},
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
-	"remoteUser": "ubuntu"
+	"remoteUser": "vscode"
 }

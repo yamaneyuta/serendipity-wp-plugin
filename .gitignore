@@ -1,65 +1,9 @@
-/.devcontainer/development-internal/compose.network.yml
-
-# 別リポジトリのディレクトリをマウントしているため、Git管理対象外
-/i18n
-/public
-
-# graphql-codegenの生成ファイル
-/src/types/gql
-
-.devcontainer/.intelephense-includes
-
-# 翻訳関連ファイル
-# .moファイルは.poファイルをコンパイルしたバイナリファイルのためGit管理対象外
-# ※ ただし、リリースするzipファイルには含める
-*.mo
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 *.bak
-
-# Coverage directory used by tools like istanbul
-coverage
-
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-/build
-
-# Dependency directories
-node_modules/
-.pnpm-store/
-
-/tests/composer.json
-/tests/composer.lock
-/tests/vendor/
-.phpunit.result.cache
-/includes/vendor/
-
-/includes/cache/
-!/includes/cache/.gitkeep
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Output of `npm pack`
-*.tgz
-
-# Output of `wp-scripts plugin-zip`
-*.zip
-
-# dotenv environment variables file
 .env
+.pnpm-store/
+.turbo/
+node_modules/
 
-# `package.json`で`.gitignore`の内容をコピーし
-# prettierの対象外ディレクトリを追加する処理を行っている
-# 動的に生成されるため、Gitの管理対象外とする
-.prettierignore
 
-*storybook.log
-/storybook-static
+# apps/wp-plugin
+apps/wp-plugin/.intelephense/

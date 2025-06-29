@@ -1,0 +1,18 @@
+{
+	"files.exclude": {
+		".nyc_output/": true,
+		".pnpm-store/": true,
+		"coverage/": true,
+		"storybook-static/": true,
+		".phpunit.result.cache": true,
+		"tests/vendor/": true,
+	},
+	"git.autorefresh": true,
+	"intelephense.environment.phpVersion": "7.4",
+	"intelephense.environment.includePaths": [
+		".intelephense/includes/wordpress-develop/tests/phpunit/includes",
+		"tests/vendor"
+	],
+	"jest.runMode": "on-demand",
+	"php.suggest.basic": false
+}
