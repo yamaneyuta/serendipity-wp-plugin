@@ -34,7 +34,6 @@
 				"bmewburn.vscode-intelephense-client",
 				"xdebug.php-debug",
 				"github.vscode-github-actions",
-				"Orta.vscode-jest",
 				"streetsidesoftware.code-spell-checker"
 			]
 		}

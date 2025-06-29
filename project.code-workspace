@@ -9,6 +9,11 @@
             "path": "/workspaces/apps/wp-plugin"
         }
     ],
+    "extensions": {
+        "unwantedRecommendations": [
+            "Orta.vscode-jest"
+        ]
+    },
     "settings": {
         "files.exclude": {
             ".pnpm-store/": true,
@@ -25,7 +30,6 @@
             "**/coverage/**": true,
         },
         "git.autorefresh": true,
-        "jest.runMode": "on-demand",
         // "terminal.integrated.cwd": "${workspaceFolder}"
         "terminal.integrated.cwd": "/workspaces/apps/wp-plugin",
         "cSpell.words": [
