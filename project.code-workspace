@@ -31,7 +31,8 @@
         "cSpell.words": [
             "autorefresh",
             "devcache",
-            "intelephense"
+            "intelephense",
+            "turborepo"
         ]
     }
 }
