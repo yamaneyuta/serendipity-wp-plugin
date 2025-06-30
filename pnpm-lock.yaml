@@ -16,10 +16,13 @@ importers:
         version: 10.26.0(@types/node@24.0.7)
       '@wordpress/eslint-plugin':
         specifier: ^18.1.0
-        version: 18.1.0(@babel/core@7.27.7)(@types/eslint@9.6.1)(eslint@8.57.1)(jest@30.0.3(@types/node@24.0.7)(babel-plugin-macros@3.1.0)(esbuild-register@3.6.0(esbuild@0.25.5)))(prettier@3.6.2)(typescript@5.8.3)
+        version: 18.1.0(@babel/core@7.27.7)(@types/eslint@9.6.1)(eslint@8.57.1)(jest@30.0.3(@types/node@24.0.7)(babel-plugin-macros@3.1.0)(esbuild-register@3.6.0(esbuild@0.25.5)))(typescript@5.8.3)(wp-prettier@3.0.3)
       '@wordpress/prettier-config':
         specifier: ^3.15.0
-        version: 3.15.0(prettier@3.6.2)
+        version: 3.15.0(wp-prettier@3.0.3)
+      prettier:
+        specifier: npm:wp-prettier@^3.0.3
+        version: wp-prettier@3.0.3
       tsx:
         specifier: ^4.20.3
         version: 4.20.3
@@ -7982,11 +7985,6 @@ packages:
     resolution: {integrity: sha512-GbK2cP9nraSSUF9N2XwUwqfzlAFlMNYYl+ShE/V+H8a9uNl/oUqB1w2EL54Jh0OlyRSd8RfWYJ3coVS4TROP2w==}
     engines: {node: '>=6.0.0'}
 
-  prettier@3.6.2:
-    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   pretty-error@4.0.0:
     resolution: {integrity: sha512-AoJ5YMAcXKYxKhuJGdcvse+Voc6v1RgnsR3nWcYU7q4t6z0Q6T86sv5Zq8VIRbOWWFpvdGE83LtdSMNd+6Y0xw==}
 
@@ -14424,14 +14422,14 @@ snapshots:
       - jest
       - supports-color
 
-  '@wordpress/eslint-plugin@18.1.0(@babel/core@7.27.7)(@types/eslint@9.6.1)(eslint@8.57.1)(jest@30.0.3(@types/node@24.0.7)(babel-plugin-macros@3.1.0)(esbuild-register@3.6.0(esbuild@0.25.5)))(prettier@3.6.2)(typescript@5.8.3)':
+  '@wordpress/eslint-plugin@18.1.0(@babel/core@7.27.7)(@types/eslint@9.6.1)(eslint@8.57.1)(jest@30.0.3(@types/node@24.0.7)(babel-plugin-macros@3.1.0)(esbuild-register@3.6.0(esbuild@0.25.5)))(typescript@5.8.3)(wp-prettier@3.0.3)':
     dependencies:
       '@babel/core': 7.27.7
       '@babel/eslint-parser': 7.27.5(@babel/core@7.27.7)(eslint@8.57.1)
       '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3)
       '@typescript-eslint/parser': 6.21.0(eslint@8.57.1)(typescript@5.8.3)
       '@wordpress/babel-preset-default': 7.42.0
-      '@wordpress/prettier-config': 3.15.0(prettier@3.6.2)
+      '@wordpress/prettier-config': 3.15.0(wp-prettier@3.0.3)
       cosmiconfig: 7.1.0
       eslint: 8.57.1
       eslint-config-prettier: 8.10.0(eslint@8.57.1)
@@ -14440,13 +14438,13 @@ snapshots:
       eslint-plugin-jsdoc: 46.10.1(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-playwright: 0.15.3(eslint-plugin-jest@27.9.0(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(jest@30.0.3(@types/node@24.0.7)(babel-plugin-macros@3.1.0)(esbuild-register@3.6.0(esbuild@0.25.5)))(typescript@5.8.3))(eslint@8.57.1)
-      eslint-plugin-prettier: 5.5.1(@types/eslint@9.6.1)(eslint-config-prettier@8.10.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.6.2)
+      eslint-plugin-prettier: 5.5.1(@types/eslint@9.6.1)(eslint-config-prettier@8.10.0(eslint@8.57.1))(eslint@8.57.1)(wp-prettier@3.0.3)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
       globals: 13.24.0
       requireindex: 1.2.0
     optionalDependencies:
-      prettier: 3.6.2
+      prettier: wp-prettier@3.0.3
       typescript: 5.8.3
     transitivePeerDependencies:
       - '@types/eslint'
@@ -14580,10 +14578,6 @@ snapshots:
       - '@emotion/is-prop-valid'
       - '@types/react'
       - supports-color
-
-  '@wordpress/prettier-config@3.15.0(prettier@3.6.2)':
-    dependencies:
-      prettier: 3.6.2
 
   '@wordpress/prettier-config@3.15.0(wp-prettier@3.0.3)':
     dependencies:
@@ -16632,16 +16626,6 @@ snapshots:
       eslint: 8.57.1
     optionalDependencies:
       eslint-plugin-jest: 27.9.0(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(jest@30.0.3(@types/node@24.0.7)(babel-plugin-macros@3.1.0)(esbuild-register@3.6.0(esbuild@0.25.5)))(typescript@5.8.3)
-
-  eslint-plugin-prettier@5.5.1(@types/eslint@9.6.1)(eslint-config-prettier@8.10.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.6.2):
-    dependencies:
-      eslint: 8.57.1
-      prettier: 3.6.2
-      prettier-linter-helpers: 1.0.0
-      synckit: 0.11.8
-    optionalDependencies:
-      '@types/eslint': 9.6.1
-      eslint-config-prettier: 8.10.0(eslint@8.57.1)
 
   eslint-plugin-prettier@5.5.1(@types/eslint@9.6.1)(eslint-config-prettier@8.10.0(eslint@8.57.1))(eslint@8.57.1)(wp-prettier@3.0.3):
     dependencies:
@@ -20058,8 +20042,6 @@ snapshots:
   prettier-linter-helpers@1.0.0:
     dependencies:
       fast-diff: 1.3.0
-
-  prettier@3.6.2: {}
 
   pretty-error@4.0.0:
     dependencies:
