@@ -1,0 +1,18 @@
+{
+  "name": "@serendipity/config",
+  "version": "0.0.1",
+  "description": "Configurations for project",
+  "exports": {
+    "./eslint": "./.eslintrc.js",
+    "./prettier": "./.prettierrc.js"
+  },
+  "files": [
+    ".eslintrc.js",
+    ".prettierrc.js",
+    "package.json"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "format": "eslint --fix . && prettier --write ."
+  }
+}
