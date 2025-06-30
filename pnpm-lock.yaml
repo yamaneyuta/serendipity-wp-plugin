@@ -87,6 +87,9 @@ importers:
       '@jest/globals':
         specifier: ^30.0.3
         version: 30.0.3
+      '@serendipity/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@storybook/addon-coverage':
         specifier: ^1.0.5
         version: 1.0.5
