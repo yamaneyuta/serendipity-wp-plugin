@@ -1,4 +1,4 @@
-const config = require( '@yamaneyuta/serendipity-dev-conf/eslint/.eslintrc.js' );
+const config = require( '@serendipity/config/eslint' );
 config.extends.push('plugin:storybook/recommended');
 
 config.ignorePatterns = [
