@@ -14,6 +14,7 @@
 		"lint": "turbo run lint",
 		"test": "turbo run test",
 		"format": "turbo run format",
+		"plugin-zip": "turbo run plugin-zip",
 		"prepare": "turbo telemetry disable > /dev/null 2>&1"
 	},
 	"devDependencies": {
