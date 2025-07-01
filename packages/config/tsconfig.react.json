@@ -1,0 +1,10 @@
+{
+	"extends": "./tsconfig.base",
+	"compilerOptions": {
+		"moduleResolution": "Bundler",
+		"target": "ESNext",
+		"module": "ESNext",
+		"jsx": "react-jsx",
+		"lib": [ "ESNext", "DOM", "DOM.Iterable" ]
+	}
+}

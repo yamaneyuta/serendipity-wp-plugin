@@ -4,11 +4,13 @@
   "description": "Configurations for project",
   "exports": {
     "./eslint": "./.eslintrc.js",
-    "./prettier": "./.prettierrc.js"
+    "./prettier": "./.prettierrc.js",
+    "./tsconfig-react": "./tsconfig.react.json"
   },
   "files": [
     ".eslintrc.js",
     ".prettierrc.js",
+    "tsconfig.react.json",
     "package.json"
   ],
   "scripts": {
