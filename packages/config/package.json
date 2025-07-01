@@ -1,0 +1,24 @@
+{
+  "name": "@serendipity/config",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Configurations for project",
+  "exports": {
+    "./eslint": "./.eslintrc.js",
+    "./prettier": "./.prettierrc.js",
+    "./jest-config-react": "./jest.config.react.js",
+    "./tsconfig-react": "./tsconfig.react.json"
+  },
+  "files": [
+    ".eslintrc.js",
+    ".prettierrc.js",
+    "jest.config.react.js",
+    "tsconfig.base.json",
+    "tsconfig.react.json",
+    "package.json"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "format": "eslint --fix . && prettier --write ."
+  }
+}

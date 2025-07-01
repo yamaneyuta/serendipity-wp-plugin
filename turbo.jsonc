@@ -9,8 +9,6 @@
         },
         "coverage": {
             "dependsOn": [
-                "^lint",
-                "^format",
                 "^build"
             ],
             "outputs": [

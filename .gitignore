@@ -1,9 +1,26 @@
 *.bak
 .env
+# 翻訳関連ファイル
+# .moファイルは.poファイルをコンパイルしたバイナリファイルのためGit管理対象外
+# ※ ただし、リリースするzipファイルには含める
+*.mo
+.phpunit.result.cache
+*.zip
+
 .pnpm-store/
 .turbo/
+build/
+coverage/
+dist/
 node_modules/
-
+storybook-static/
+vendor/
 
 # apps/wp-plugin
 apps/wp-plugin/.intelephense/
+apps/wp-plugin/public/
+apps/wp-plugin/tests/composer.json
+apps/wp-plugin/tests/composer.lock
+apps/wp-plugin/includes/cache/*
+!apps/wp-plugin/includes/cache/.gitkeep
+apps/wp-plugin/src/types/gql/generated.ts

@@ -1,0 +1,13 @@
+*.md
+*.graphql
+*.lock
+pnpm-lock.yaml
+
+# graphql-codegenで生成されるファイル
+generated.ts
+
+build/
+coverage/
+node_modules/
+vendor/
+storybook-static/

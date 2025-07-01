@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"strict": true,
+
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+
+		// `skipLibCheck`が有効な場合、`*.d.ts`ファイルに対する型チェックが行われない。
+		// 型が誤っていてもビルド可能なため、プロジェクト毎にこの設定を無効にするかどうかを検討する。
+		// ※ この設定を無効化した場合、型チェックのエラーが発生したり、ビルドが遅くなる可能性があることに注意。
+		"skipLibCheck": true
+	},
+	"watchOptions": {
+		// wsl2環境で動作させるために付与
+		"watchFile": "dynamicPriorityPolling"
+	}
+}

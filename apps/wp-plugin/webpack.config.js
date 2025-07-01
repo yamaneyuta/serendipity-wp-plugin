@@ -1,25 +1,25 @@
-const webpack = require('webpack');
+const webpack = require( 'webpack' );
 const config = require( '@wordpress/scripts/config/webpack.config' );
 
-if( [ 'true', '1' ].includes( process.env.CHOKIDAR_USEPOLLING ) ) {
+if ( [ 'true', '1' ].includes( process.env.CHOKIDAR_USEPOLLING ) ) {
 	config.watchOptions = {
 		poll: Number( process.env.CHOKIDAR_INTERVAL ),
-		ignored: [ 'node_modules' ]
+		ignored: [ 'node_modules' ],
 	};
 }
 
 module.exports = {
 	...config,
 	cache: {
-		type: 'filesystem',  // ファイルシステムキャッシュを使用
+		type: 'filesystem', // ファイルシステムキャッシュを使用
 	},
 	plugins: [
 		...config.plugins,
 
 		// assertを使うための設定
-		new webpack.ProvidePlugin({
+		new webpack.ProvidePlugin( {
 			process: require.resolve( 'process/browser' ),
-		}),
+		} ),
 	],
 
 	// 各エントリポイントを定義

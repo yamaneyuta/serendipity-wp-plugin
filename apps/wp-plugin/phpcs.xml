@@ -4,14 +4,14 @@
 	<file>.</file>
 	<exclude-pattern>./node_modules/*</exclude-pattern>
 	<exclude-pattern>./vendor/*</exclude-pattern>
-	<exclude-pattern>./.devcontainer/*</exclude-pattern>
-	<exclude-pattern>./.git/*</exclude-pattern>
+	<exclude-pattern>./.intelephense/*</exclude-pattern>
 	<exclude-pattern>./.github/*</exclude-pattern>
 	<exclude-pattern>./.vscode/*</exclude-pattern>
 	<exclude-pattern>./public/*</exclude-pattern>
 	<exclude-pattern>./build/*</exclude-pattern>
 	<exclude-pattern>./includes/assets/*</exclude-pattern>
 	<exclude-pattern>./includes/cache/graphql-schema.php</exclude-pattern><!-- graphql-phpライブラリで使用するキャッシュファイル -->
+	<exclude-pattern>./includes/vendor/*</exclude-pattern>
 
 	<!-- 拡張子は`php`と`inc`が対象 -->
 	<arg name="extensions" value="php,inc" />

@@ -1,8 +1,4 @@
 {
-    "recommendations": [
-        "ms-vscode-remote.remote-containers"
-    ],
-	"unwantedRecommendations": [
-		"ms-azuretools.vscode-docker"
-	]
+	"recommendations": [ "ms-vscode-remote.remote-containers" ],
+	"unwantedRecommendations": [ "ms-azuretools.vscode-docker" ]
 }

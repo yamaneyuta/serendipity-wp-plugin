@@ -1,6 +1,5 @@
 {
-	"extends": "./node_modules/@yamaneyuta/serendipity-dev-conf/typescript/tsconfig.browser.base.json",
-	"compilerOptions": {
-	},
+	"extends": "@serendipity/config/tsconfig-react",
+	"compilerOptions": {},
 	"include": [ "./src/**/*" ]
 }
