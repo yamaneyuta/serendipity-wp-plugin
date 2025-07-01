@@ -6,24 +6,48 @@
 
 version: 2
 updates:
+  # DevContainer configuration updates
   - package-ecosystem: "devcontainers"
     directory: "/"
     schedule:
       interval: monthly
 
+  # Root package.json (pnpm workspace root)
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: monthly
     reviewers:
       - "yamaneyuta"
-    # open-pull-requests-limit: 10
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
+  # wp-plugin app package.json
+  - package-ecosystem: "npm"
+    directory: "/apps/wp-plugin"
+    schedule:
+      interval: monthly
+    reviewers:
+      - "yamaneyuta"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # config package package.json
+  - package-ecosystem: "npm"
+    directory: "/packages/config"
+    schedule:
+      interval: monthly
+    reviewers:
+      - "yamaneyuta"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # wp-plugin PHP dependencies (main composer.json)
   - package-ecosystem: "composer"
-    directory: "/includes"
+    directory: "/apps/wp-plugin/includes"
     schedule:
       interval: monthly
     reviewers:
