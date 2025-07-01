@@ -5,11 +5,13 @@
   "exports": {
     "./eslint": "./.eslintrc.js",
     "./prettier": "./.prettierrc.js",
+    "./jest-config-react": "./jest.config.react.js",
     "./tsconfig-react": "./tsconfig.react.json"
   },
   "files": [
     ".eslintrc.js",
     ".prettierrc.js",
+    "jest.config.react.js",
     "tsconfig.react.json",
     "package.json"
   ],
