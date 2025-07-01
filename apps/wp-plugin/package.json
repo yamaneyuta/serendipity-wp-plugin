@@ -36,7 +36,7 @@
     "export:license:php": "export-license -s includes -o public/license/composer -m public/license/backend.json",
     "format": "run-s format:js format:php",
     "format:js": "eslint --fix . && prettier --write .",
-    "format:php": "phpcbf .",
+    "format:php": "phpcbf . || phpcbf .",
     "// この`i18n`コマンドは間接的に`wp-env run cli wp 18n`コマンドを呼び出します。": "",
     "// そのため、`wp-env start`で起動されるcli実行用のコンテナが立ち上がっていない場合、失敗します。": "",
     "// `prepare`で`i18n`コマンドを実行すると高確率で失敗するので注意してください。": "",
