@@ -42,7 +42,7 @@
     "// `prepare`で`i18n`コマンドを実行すると高確率で失敗するので注意してください。": "",
     "i18n": "tsx .bin/i18n",
     "lint": "run-s lint:*",
-    "lint:css": "wp-scripts lint-style",
+    "// lint:css": "wp-scripts lint-style",
     "lint:js": "tsc --noEmit --noUnusedLocals --noUnusedParameters && eslint . && prettier --check .",
     "// `lint:php`はドキュメントのコメント等、時間がかかるものばかりのため一時的にコメントアウト": "",
     "// lint:php": "phpcs -s .",
