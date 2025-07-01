@@ -24,6 +24,7 @@ export const renderHook = <
 	render: ( initialProps: Props ) => Result,
 	options?: RenderHookOptions< Props, Q, Container, BaseElement >
 ): RenderHookResult< Result, Props > => {
+	// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 	const spy = jest.spyOn( console, 'error' ).mockImplementation( () => {} );
 	try {
 		return _renderHook( render, options );

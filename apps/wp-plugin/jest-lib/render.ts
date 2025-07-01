@@ -10,6 +10,7 @@ import { render as _render, RenderOptions, RenderResult } from '@testing-library
  * @see ./renderHook.ts
  */
 export const render = ( ui: React.ReactNode, options?: Omit< RenderOptions, 'queries' > ): RenderResult => {
+	// eslint-disable-next-line @wordpress/no-unused-vars-before-return
 	const spy = jest.spyOn( console, 'error' ).mockImplementation( () => {} );
 	try {
 		return _render( ui, options );
