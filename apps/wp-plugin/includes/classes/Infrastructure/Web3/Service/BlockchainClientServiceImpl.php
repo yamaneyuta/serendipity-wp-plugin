@@ -20,7 +20,7 @@ use Web3\Methods\EthMethod;
 class BlockchainClientServiceImpl implements BlockchainClientService {
 
 	public function __construct( Chain $chain ) {
-		$this->eth     = new Eth( $chain->rpcURL(), Config::BLOCKCHAIN_REQUEST_TIMEOUT );
+		$this->eth     = new Eth( $chain->rpcURL()->value(), Config::BLOCKCHAIN_REQUEST_TIMEOUT );
 		$this->retryer = new BlockchainRetryer();
 	}
 

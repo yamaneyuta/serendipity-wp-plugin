@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Cornix\Serendipity\Core\Domain\Entity;
 
-use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 
 class Chain {
 	/**
@@ -14,11 +14,11 @@ class Chain {
 	 * @param ChainID           $chain_id
 	 * @param string            $name
 	 * @param NetworkCategoryID $network_category_id
-	 * @param null|string       $rpc_url
+	 * @param null|RpcUrl       $rpc_url
 	 * @param Confirmations     $confirmations
 	 * @param null|string       $block_explorer_url
 	 */
-	protected function __construct( ChainID $chain_id, string $name, NetworkCategoryID $network_category_id, ?string $rpc_url, Confirmations $confirmations, ?string $block_explorer_url ) {
+	protected function __construct( ChainID $chain_id, string $name, NetworkCategoryID $network_category_id, ?RpcUrl $rpc_url, Confirmations $confirmations, ?string $block_explorer_url ) {
 		$this->id                  = $chain_id;
 		$this->name                = $name;
 		$this->network_category_id = $network_category_id;
@@ -30,7 +30,7 @@ class Chain {
 	private ChainID $id;
 	private string $name;
 	private NetworkCategoryID $network_category_id;
-	private ?string $rpc_url;
+	private ?RpcUrl $rpc_url;
 	private Confirmations $confirmations;
 	private ?string $block_explorer_url;
 
@@ -40,10 +40,10 @@ class Chain {
 	public function name(): string {
 		return $this->name;
 	}
-	public function rpcURL(): ?string {
+	public function rpcURL(): ?RpcUrl {
 		return $this->rpc_url;
 	}
-	public function setRpcURL( ?string $rpc_url ): void {
+	public function setRpcURL( ?RpcUrl $rpc_url ): void {
 		$this->rpc_url = $rpc_url;
 	}
 	/**
@@ -69,7 +69,7 @@ class Chain {
 	/** このチェーンに接続可能かどうかを取得します。 */
 	public function connectable(): bool {
 		// RPC URLが設定されている場合は接続可能とする
-		return ! is_null( $this->rpc_url ) && Validate::isUrl( $this->rpc_url );
+		return ! is_null( $this->rpc_url );
 	}
 
 	public function networkCategoryID(): NetworkCategoryID {

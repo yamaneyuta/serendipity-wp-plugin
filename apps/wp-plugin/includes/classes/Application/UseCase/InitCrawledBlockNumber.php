@@ -52,7 +52,7 @@ class GetSafetyCrawledBlockNumber {
 
 	public function handle( ChainID $chain_id ): BlockNumber {
 		$chain  = $this->chain_repository->get( $chain_id );
-		$client = ( new BlockchainClient( $chain->rpcURL() ) );
+		$client = ( new BlockchainClient( $chain->rpcURL()->value() ) );
 
 		// 最新のブロック情報を取得
 		$res                 = $client->getBlockByNumber( 'latest' );

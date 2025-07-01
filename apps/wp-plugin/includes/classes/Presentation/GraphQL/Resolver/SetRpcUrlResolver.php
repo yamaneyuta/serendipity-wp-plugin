@@ -9,6 +9,7 @@ use Cornix\Serendipity\Core\Infrastructure\Format\HexFormat;
 use Cornix\Serendipity\Core\Lib\Security\Validate;
 use Cornix\Serendipity\Core\Infrastructure\Web3\BlockchainClient;
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 
 class SetRpcUrlResolver extends ResolverBase {
 
@@ -52,7 +53,7 @@ class SetRpcUrlResolver extends ResolverBase {
 
 			// リポジトリからチェーン情報を取得、RPC URLを設定して保存
 			$chain = $this->chain_repository->get( $chain_ID );
-			$chain->setRpcURL( $rpc_url );
+			$chain->setRpcURL( $rpc_url ? new RpcUrl( $rpc_url ) : null );
 			$this->chain_repository->save( $chain );
 
 			$wpdb->query( 'COMMIT' );

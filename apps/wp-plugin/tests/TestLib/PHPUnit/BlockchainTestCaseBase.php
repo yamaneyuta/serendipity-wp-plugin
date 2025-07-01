@@ -70,7 +70,9 @@ class HardhatHandler {
 	public function setUp(): void {
 		assert( empty( $this->restore_snapshot_callbacks ), '[5A506A5A] restore_snapshot_callbacks is not empty.' );
 		foreach ( $this->chains as $chain ) {
-			$hardhat                            = new Hardhat( $chain->rpcURL() );
+			$rpc_url = $chain->rpcURL();
+			assert( ! is_null( $rpc_url ) );
+			$hardhat                            = new Hardhat( $rpc_url->value() );
 			$snapshot_id                        = $hardhat->snapshot();
 			$this->restore_snapshot_callbacks[] = fn() => $hardhat->revert( $snapshot_id );
 		}
@@ -86,37 +88,39 @@ class HardhatHandler {
 	public function waitForNetwork(): void {
 		foreach ( $this->chains as $chain ) {
 			$rpc_url = $chain->rpcURL();
+			assert( ! is_null( $rpc_url ) );
 
 			// cURLでステータス200が取得できるまで最大60秒待機
 			for ( $i = 0; $i < 60; $i++ ) {
-				$response = wp_remote_get( $rpc_url );
+				$response = wp_remote_get( $rpc_url->value() );
 				$code     = wp_remote_retrieve_response_code( $response );
 				if ( 200 === $code ) {
 					return;
 				}
-				error_log( "[C215F287] Wait for network. rpc url: $rpc_url, code: $code" );
+				error_log( '[C215F287] Wait for network. rpc url: ' . $rpc_url->value() . ", code: $code" );
 				sleep( 1 );
 			}
-			throw new \RuntimeException( "[BE27EE91] Failed to wait for network ready. rpc url: $rpc_url" );
+			throw new \RuntimeException( '[BE27EE91] Failed to wait for network ready. rpc url: ' . $rpc_url->value() );
 		}
 	}
 
 	public function waitForContractReady(): void {
 		foreach ( $this->chains as $chain ) {
 			$rpc_url = $chain->rpcURL();
+			assert( ! is_null( $rpc_url ) );
 
 			// コントラクトデプロイ後、特定のアドレスの残高が増えるので、それを確認するまで待機
-			$blockchain = new BlockchainClient( $rpc_url );
+			$blockchain = new BlockchainClient( $rpc_url->value() );
 			for ( $i = 0; $i < 60; $i++ ) {
 				$balance_hex = $blockchain->getBalanceHex( ( new HardhatAccount() )->marker() );
 				if ( hexdec( $balance_hex ) > 0 ) {
 					return;
 				}
-				error_log( "[8C4C0262] Wait for contract ready. rpc url: $rpc_url, balance: $balance_hex" );
+				error_log( '[8C4C0262] Wait for contract ready. rpc url: ' . $rpc_url->value() . ", balance: $balance_hex" );
 				sleep( 1 );
 			}
 
-			throw new \RuntimeException( "[764D018F] Failed to wait for contract ready. rpc url: $rpc_url" );
+			throw new \RuntimeException( '[764D018F] Failed to wait for contract ready. rpc url: ' . $rpc_url->value() );
 		}
 	}
 }

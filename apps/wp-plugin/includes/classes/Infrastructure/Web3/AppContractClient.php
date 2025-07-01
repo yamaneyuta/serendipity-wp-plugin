@@ -29,11 +29,11 @@ class AppContractClient {
 		$this->app_contract      = $app_contract;
 		$this->abi               = $app_contract_abi ?? new AppContractAbi();
 		$this->contract          = ( new ContractFactory() )->create(
-			$app_contract->chain()->rpcURL(),
+			$app_contract->chain()->rpcURL()->value(),
 			$this->abi->get(),
 			$app_contract->address()
 		);
-		$this->blockchain_client = new BlockchainClient( $app_contract->chain()->rpcURL() );
+		$this->blockchain_client = new BlockchainClient( $app_contract->chain()->rpcURL()->value() );
 	}
 	private Contract $contract;
 	private AppContractAbi $abi;

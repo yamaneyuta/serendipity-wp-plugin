@@ -8,6 +8,7 @@ use Cornix\Serendipity\Core\Infrastructure\Database\ValueObject\ChainTableRecord
 use Cornix\Serendipity\Core\Domain\ValueObject\ChainID;
 use Cornix\Serendipity\Core\Domain\ValueObject\NetworkCategoryID;
 use Cornix\Serendipity\Core\Domain\ValueObject\Confirmations;
+use Cornix\Serendipity\Core\Domain\ValueObject\RpcUrl;
 
 class ChainImpl extends Chain {
 
@@ -16,7 +17,7 @@ class ChainImpl extends Chain {
 			new ChainID( $record->chainIdValue() ),
 			$record->nameValue(),
 			new NetworkCategoryID( $record->networkCategoryIdValue() ),
-			$record->rpcUrlValue(),
+			RpcUrl::from( $record->rpcUrlValue() ),
 			Confirmations::from( $record->confirmationsValue() ),
 			$record->blockExplorerUrlValue()
 		);

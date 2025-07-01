@@ -15,6 +15,6 @@ class HardhatRpcUrl {
 		$chain           = ( new ChainServiceFactory() )->create()->getChain( $chain_ID );
 		$hardhat_rpc_url = $chain->rpcURL();
 		assert( ! is_null( $hardhat_rpc_url ) );
-		return $hardhat_rpc_url;
+		return $hardhat_rpc_url->value();
 	}
 }

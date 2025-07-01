@@ -17,6 +17,6 @@ class TokenClientFactory {
 		$rpc_url = $chain->rpcURL();
 		assert( ! is_null( $rpc_url ), '[2CF9717C] RPC URL is not found. - ' . $chain_ID );
 
-		return new TokenClient( $rpc_url, $contract_address );
+		return new TokenClient( $rpc_url->value(), $contract_address );
 	}
 }
