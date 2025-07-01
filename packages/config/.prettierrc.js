@@ -1,10 +1,10 @@
-const wpConfig = require( '@wordpress/prettier-config' );
+let config = require( '@wordpress/prettier-config' );
 
-module.exports = {
-	...wpConfig,
+config = {
+	...config,
 	printWidth: 120,
 	overrides: [
-		...wpConfig.overrides,
+		...( config.overrides || [] ),
 		{
 			files: '*.yml',
 			options: {
@@ -22,3 +22,4 @@ module.exports = {
 		},
 	],
 };
+module.exports = config;
