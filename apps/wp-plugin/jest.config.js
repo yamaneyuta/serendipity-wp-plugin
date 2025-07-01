@@ -1,17 +1,12 @@
-const config = require('@yamaneyuta/serendipity-dev-conf/jest/jest.config');
+const config = require('@serendipity/config/jest-config-react');
 
-if (config.testMatch !== undefined) {
-	throw new Error("[0054395A] testMatch is already defined in the config. It will be overwritten.");
-}
 config.testMatch = [
-	"**/ts-tests/**/*.test.[jt]s?(x)",
+	...(config.testMatch || []),
+	"**/ts-tests/**/*.test.[jt]s?(x)",	// ts-testsディレクトリもテスト対象とする
 	"**/src/**/*.test.[jt]s?(x)"
 ];
 
-// .pnpm-store以下のファイルをテスト対象から除外
-config.testPathIgnorePatterns = [
-	...(config.testPathIgnorePatterns || []),
-	"\\.pnpm-store/"
-];
+// PHPのカバレッジも出力されるためサブディレクトリを指定
+config.coverageDirectory = 'coverage/jest';	// default: `coverage`
 
 module.exports = config;
