@@ -12,6 +12,7 @@
     ".eslintrc.js",
     ".prettierrc.js",
     "jest.config.react.js",
+    "tsconfig.base.json",
     "tsconfig.react.json",
     "package.json"
   ],
