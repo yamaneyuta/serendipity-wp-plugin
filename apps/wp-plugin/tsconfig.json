@@ -1,6 +1,5 @@
 {
 	"extends": "@serendipity/config/tsconfig-react",
-	"compilerOptions": {
-	},
+	"compilerOptions": {},
 	"include": [ "./src/**/*" ]
 }

@@ -1,7 +1,5 @@
 {
-	"ignorePaths": [
-		"./phpunit/classes/Lib/Strings/Strings-test.php"
-	],
+	"ignorePaths": [ "./phpunit/classes/Lib/Strings/Strings-test.php" ],
 	"words": [
 		"ABSPATH",
 		"alloptions",

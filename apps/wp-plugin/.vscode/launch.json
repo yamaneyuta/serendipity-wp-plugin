@@ -1,5 +1,5 @@
 {
-    "version": "0.2.0",
+	"version": "0.2.0",
 	"configurations": [
 		{
 			"name": "Listen for XDebug",
@@ -8,7 +8,7 @@
 			"port": 9003,
 			"pathMappings": {
 				"/var/www/html/wp-content/plugins/wp-plugin": "${workspaceFolder}/"
-			},
+			}
 		}
 	]
 }
