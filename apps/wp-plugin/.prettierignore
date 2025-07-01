@@ -1,0 +1,10 @@
+*.md
+*.graphql
+*.lock
+pnpm-lock.yaml
+
+build/
+coverage/
+node_modules/
+vendor/
+storybook-static/
