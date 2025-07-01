@@ -7,6 +7,10 @@
         {
             "name": "🧩 wp-plugin",
             "path": "/workspaces/apps/wp-plugin"
+        },
+        {
+            "name": "⚙️ config",
+            "path": "/workspaces/packages/config"
         }
     ],
     "extensions": {
