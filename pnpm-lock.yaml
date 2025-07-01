@@ -20,6 +20,9 @@ importers:
       '@wordpress/prettier-config':
         specifier: ^3.15.0
         version: 3.15.0(wp-prettier@3.0.3)
+      eslint:
+        specifier: ^8.57.1
+        version: 8.57.1
       prettier:
         specifier: npm:wp-prettier@^3.0.3
         version: wp-prettier@3.0.3
