@@ -16,6 +16,9 @@ node_modules/
 storybook-static/
 vendor/
 
+# /workspaces
+.work-report/
+
 # apps/wp-plugin
 apps/wp-plugin/.intelephense/
 apps/wp-plugin/public/
