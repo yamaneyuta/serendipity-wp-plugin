@@ -6,7 +6,7 @@
 	"author": "yamaneyuta",
 	"license": "Split License",
 	"keywords": [],
-	"packageManager": "pnpm@10.12.2",
+	"packageManager": "pnpm@10.12.4",
 	"scripts": {
 		"build": "turbo run build",
 		"coverage": "turbo run coverage",
