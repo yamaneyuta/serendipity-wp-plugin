@@ -178,6 +178,7 @@ jobs:
     # CI
     - run: npm run lint
     - run: npm run coverage
+    - run: npm run plugin-zip
 
 
   #   # Playwrightをインストールする時間の間、コンテナの初期化処理が行われるようにここでコンテナを起動する
