@@ -4,19 +4,23 @@
 
 # プロジェクトルートはこのスクリプトがあるディレクトリの親ディレクトリとする
 PROJECT_ROOT="$(dirname "$(dirname "$0")")"
+# ワークスペースのルートディレクトリ
+WORKSPACES=/workspaces
 
 # プロジェクトが格納されるディレクトリ以下のパーミッションをログインユーザーに変更します
 fix_permissions() {
     echo "🔑 [6A078A0F] Fixing permissions for current directory..."
-    sudo chown -R "$(whoami):$(whoami)" "$PROJECT_ROOT"
+    sudo chown -R "$(whoami):$(whoami)" "$WORKSPACES"
     echo "✅ [8FC2C6C7] Permissions fixed successfully."
 }
 
 # NPMパッケージをインストールします
 install_npm_packages() {
     echo "📦 [8E678580] Installing npm packages..."
+    cd $WORKSPACES
     pnpm install --frozen-lockfile
     echo "✅ [2B4D55B0] NPM packages installed successfully."
+    cd -
 }
 
 install_php_packages() {
@@ -31,7 +35,7 @@ install_php_packages() {
 build() {
     # アプリケーションのビルドを実行
     echo "🏗️ [562FF5A7] Building application..."
-    cd $PROJECT_ROOT
+    cd $WORKSPACES
     npm run build
     echo "✅ [45DF7646] Application built successfully."
     cd -
