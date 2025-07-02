@@ -15,7 +15,8 @@
 		"test": "turbo run test",
 		"format": "turbo run format",
 		"plugin-zip": "turbo run plugin-zip",
-		"prepare": "husky install && turbo telemetry disable > /dev/null 2>&1"
+		"prepare": "husky install && turbo telemetry disable > /dev/null 2>&1",
+    	"update:package": "pnpm dlx npm-check-updates -u --target minor"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^1.9.0",
