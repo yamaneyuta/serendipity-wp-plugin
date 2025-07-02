@@ -18,7 +18,7 @@ RUN apt update && \
     install lazygit /usr/local/bin && \
     rm -rf lazygit* && \
     \
-	npm install -g pnpm@10.12.2 && \
+	npm install -g pnpm@10.12.4 && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # PHP及び拡張モジュールをインストール
