@@ -1,5 +1,10 @@
 module.exports = {
   extends: ['@commitlint/config-conventional'],
+  ignores: [
+    // fixup! と squash! で始まるコミットメッセージを無視
+    (message) => message.startsWith('fixup!'),
+    (message) => message.startsWith('squash!')
+  ],
   rules: {
     'scope-enum': [
       2,
