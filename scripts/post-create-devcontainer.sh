@@ -19,13 +19,6 @@ install_npm_packages() {
     echo "✅ [2B4D55B0] NPM packages installed successfully."
 }
 
-# 使用するphpのバージョンをdocker-compose.ymlで指定したものに変更します
-change_php_version() {
-    echo "🐘 [B7B93555] Changing PHP version to ${PHP_VERSION}..."
-	sudo update-alternatives --set php /usr/bin/php${PHP_VERSION}
-	echo "✅ [4E7F813E] PHP version changed successfully."
-}
-
 install_php_packages() {
     echo "📦 [E1739CA3] Installing PHP packages..."
     cd "$PROJECT_ROOT/apps/wp-plugin"
@@ -54,7 +47,6 @@ main() {
     install_npm_packages &
     NPM_INSTALL_PID=$!
     
-    change_php_version
     install_php_packages
 
     echo "⏳ [02A68ED0] Waiting for npm packages installation to complete..."
