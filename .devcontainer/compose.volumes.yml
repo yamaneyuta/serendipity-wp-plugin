@@ -1,0 +1,22 @@
+services:
+  development:
+    volumes:
+      - ..:/workspaces
+      # ./
+      - node_modules:/workspaces/node_modules
+      - pnpm_store:/workspaces/.pnpm-store
+      - turbo:/workspaces/.turbo
+      # apps/wp-plugin
+      - wp_plugin__intelephense:/workspaces/apps/wp-plugin/.intelephense
+      - wp_plugin_includes_vendor:/workspaces/apps/wp-plugin/includes/vendor
+      - wp_plugin_tests_vendor:/workspaces/apps/wp-plugin/tests/vendor
+      - wp_plugin_node_modules:/workspaces/apps/wp-plugin/node_modules
+
+volumes:
+  node_modules:
+  pnpm_store:
+  turbo:
+  wp_plugin__intelephense:
+  wp_plugin_includes_vendor:
+  wp_plugin_tests_vendor:
+  wp_plugin_node_modules:
