@@ -26,6 +26,7 @@ module.exports = {
       ]
     ],
     'scope-empty': [2, 'never'],
+    'subject-case': [0, 'never'],
     'type-enum': [
       2,
       'always',
