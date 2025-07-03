@@ -19,6 +19,7 @@ services:
       # Dockerネットワーク名
       # => WordPressとプライベートネットを接続できるようにする
       - DOCKER_NETWORK_NAME=${DOCKER_NETWORK_NAME:-dev_network}
+      - TURBO_TELEMETRY_DISABLED=${TURBO_TELEMETRY_DISABLED:-1} # Turborepoの情報収集無効化
     volumes:
       - ..:/workspaces
       # ./
