@@ -20,6 +20,7 @@ services:
       # => WordPressとプライベートネットを接続できるようにする
       - DOCKER_NETWORK_NAME=${DOCKER_NETWORK_NAME:-dev_network}
       - TURBO_TELEMETRY_DISABLED=${TURBO_TELEMETRY_DISABLED:-1} # Turborepoの情報収集無効化
+      - HARDHAT_DISABLE_TELEMETRY_PROMPT=${HARDHAT_DISABLE_TELEMETRY_PROMPT:-true} # Hardhatの情報収集の許可を訪ねるプロンプトを表示しない
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
     # cap_add:
