@@ -21,6 +21,7 @@
     "settings": {
         "files.exclude": {
             ".pnpm-store/": true,
+            "**/.husky/**": true,
             "**/.turbo/": true,
             "**/node_modules/": true,
         },
@@ -32,6 +33,7 @@
             "**/vendor/**": true,
             "**/build/**": true,
             "**/coverage/**": true,
+            "**/typechain-types/**": true,
         },
         "git.autorefresh": true,
         // "terminal.integrated.cwd": "${workspaceFolder}"
