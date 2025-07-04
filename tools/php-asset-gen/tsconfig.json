@@ -1,0 +1,13 @@
+{
+	"extends": "./node_modules/@yamaneyuta/serendipity-dev-conf/typescript/tsconfig.browser.base.json",
+	"compilerOptions": {
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+		"declaration": true,	// .d.ts を出力する
+		"outDir": "dist",
+		"sourceMap": true,
+	},
+	"include": [
+		"src/**/*.ts"
+	],
+}
