@@ -8,6 +8,9 @@
                 "dist/**"
             ]
         },
+        "clean": {
+            "cache": false
+        },
         "coverage": {
             "dependsOn": [
                 "^build"

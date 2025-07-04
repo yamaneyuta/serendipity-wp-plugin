@@ -9,6 +9,7 @@
 	"packageManager": "pnpm@10.12.4",
 	"scripts": {
 		"build": "turbo run build",
+		"clean": "turbo run clean && rm -rf .turbo/*",
 		"coverage": "turbo run coverage",
 		"dev": "turbo run dev",
 		"lint": "turbo run lint",
