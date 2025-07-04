@@ -17,6 +17,8 @@
 		"format": "turbo run format",
 		"plugin-zip": "turbo run plugin-zip",
 		"prepare": "husky install",
+		"// パッケージ一覧を表示(サードパーティ製を除く)": "",
+		"list-packages": "find . -name package.json -not -path '*/node_modules/*' -exec jq -r '\"\\(.name)@\\(.version)\"' {} \\;",
     	"update:package": "pnpm dlx npm-check-updates -u --target minor"
 	},
 	"devDependencies": {
