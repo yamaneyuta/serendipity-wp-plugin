@@ -99,36 +99,10 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.6",
-    "@graphql-codegen/client-preset": "^4.8.1",
-    "@graphql-codegen/typescript-react-query": "^6.1.1",
-    "@jest/globals": "^30.0.3",
+    "@wordpress/env": "^10.26.0",
     "@serendipity/config": "workspace:*",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/react": "^16.3.0",
-    "@types/assert": "^1.5.11",
-    "@types/async-lock": "^1.4.2",
-    "@types/js-yaml": "^4.0.9",
-    "@types/license-checker": "^25.0.6",
-    "@types/mocha": "^10.0.10",
-    "@types/react": "^18.3.23",
-    "@types/react-dom": "^18.3.7",
-    "@types/wordpress__block-editor": "^11.5.16",
-    "@types/wordpress__blocks": "^12.5.17",
-    "@wordpress/env": "^10.24.0",
-    "@wordpress/scripts": "^27.9.0",
     "@yamaneyuta/serendipity-dev-export-license": "github:yamaneyuta/serendipity-dev-export-license#0.8.6",
-    "@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.10",
-    "concurrently": "^8.2.2",
-    "eslint": "^8.57.1",
-    "glob": "^11.0.3",
-    "jest": "^30.0.3",
-    "js-yaml": "^4.1.0",
-    "license-checker": "^25.0.1",
-    "npm-run-all": "^4.1.5",
-    "prettier": "npm:wp-prettier@^3.0.3",
-    "tsx": "^4.19.4",
-    "typescript": "^5.8.3"
+    "@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.10"
   },
   "turborepo": {
     "pipeline": {
