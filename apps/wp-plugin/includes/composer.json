@@ -9,6 +9,6 @@
 		"webonyx/graphql-php": "^15.12.5",
 		"yamaneyuta/ulid": "^1.0",
 		"simplito/elliptic-php": "^1.0",
-		"php-di/php-di": "^6.4"
+		"php-di/php-di": "^7.0"
 	}
 }
