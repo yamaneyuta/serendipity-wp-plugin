@@ -53,7 +53,7 @@
 		"@types/wordpress__block-editor": "^11.5.17",
 		"@types/wordpress__blocks": "^12.5.17",
 		"@wordpress/eslint-plugin": "^18.1.0",
-		"@wordpress/prettier-config": "^3.15.0",
+		"@wordpress/prettier-config": "^4.26.0",
 		"@wordpress/scripts": "^27.9.0",
 		"concurrently": "^8.2.2",
 		"eslint": "^8.57.1",
