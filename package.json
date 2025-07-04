@@ -22,7 +22,7 @@
 		"update:package": "pnpm dlx npm-check-updates -u --target minor"
 	},
 	"devDependencies": {
-		"@chromatic-com/storybook": "^1.9.0",
+		"@chromatic-com/storybook": "^3.2.7",
 		"@commitlint/cli": "^19.8.1",
 		"@commitlint/config-conventional": "^19.8.1",
 		"@graphql-codegen/cli": "^5.0.7",
