@@ -17,41 +17,25 @@ updates:
     directory: "/"
     schedule:
       interval: monthly
-    reviewers:
-      - "yamaneyuta"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+    versioning-strategy: increase
 
   # wp-plugin app package.json
   - package-ecosystem: "npm"
     directory: "/apps/wp-plugin"
     schedule:
       interval: monthly
-    reviewers:
-      - "yamaneyuta"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+    versioning-strategy: increase
 
   # config package package.json
   - package-ecosystem: "npm"
     directory: "/packages/config"
     schedule:
       interval: monthly
-    reviewers:
-      - "yamaneyuta"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+    versioning-strategy: increase
 
   # wp-plugin PHP dependencies (main composer.json)
   - package-ecosystem: "composer"
     directory: "/apps/wp-plugin/includes"
     schedule:
       interval: monthly
-    reviewers:
-      - "yamaneyuta"
-    ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+    versioning-strategy: increase
