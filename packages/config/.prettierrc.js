@@ -14,6 +14,12 @@ config = {
 			},
 		},
 		{
+			files: '*.sol',
+			options: {
+				singleQuote: false,
+			},
+		},
+		{
 			files: [ 'package.json', 'package-lock.json' ],
 			options: {
 				tabWidth: 2,
