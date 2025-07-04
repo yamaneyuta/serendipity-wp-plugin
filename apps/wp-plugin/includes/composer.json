@@ -6,7 +6,7 @@
 	},
 	"require": {
 		"web3p/web3.php": "dev-master",
-		"webonyx/graphql-php": "^15.12.5",
+		"webonyx/graphql-php": "^15.20.1",
 		"yamaneyuta/ulid": "^1.0",
 		"simplito/elliptic-php": "^1.0",
 		"php-di/php-di": "^6.4"
