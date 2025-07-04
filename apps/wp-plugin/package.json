@@ -84,7 +84,7 @@
     "//       => https://github.com/WordPress/gutenberg/blob/d649865283aff3545f9754a01c92982e37602dc8/packages/scripts/CHANGELOG.md#breaking-changes-2": ""
   },
   "dependencies": {
-    "@tanstack/react-query": "^4.39.1",
+    "@tanstack/react-query": "^5.81.5",
     "@wordpress/block-editor": "^13.4.0",
     "@wordpress/blocks": "^13.10.0",
     "@wordpress/components": "^29.12.0",
