@@ -101,7 +101,7 @@
   "devDependencies": {
     "@wordpress/env": "^10.26.0",
     "@serendipity/config": "workspace:*",
-    "@yamaneyuta/serendipity-dev-export-license": "github:yamaneyuta/serendipity-dev-export-license#0.8.6",
+    "@serendipity/export-license": "workspace:*",
     "@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.10"
   },
   "turborepo": {
