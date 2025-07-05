@@ -1,5 +1,6 @@
 import { main } from './main';
 import { parseCommand } from '../parseCommand';
+import { jest, expect } from '@jest/globals';
 
 jest.mock( '../parseCommand' );
 
@@ -18,11 +19,7 @@ it( 'main() - The license.json file is one level above the destination directory
 	} );
 
 	// main()を実行し、例外が発生しないことを確認
-	try {
-		await main();
-	} catch ( error ) {
-		fail( error );
-	}
+	await expect( main() ).resolves.not.toThrow();
 } );
 
 /**
@@ -40,9 +37,5 @@ it( 'main() - The license.json file is the same as the destination directory', a
 	} );
 
 	// main()を実行し、例外が発生しないことを確認
-	try {
-		await main();
-	} catch ( error ) {
-		fail( error );
-	}
+	await expect( main() ).resolves.not.toThrow();
 } );
