@@ -47,7 +47,7 @@
     "// `lint:php`はドキュメントのコメント等、時間がかかるものばかりのため一時的にコメントアウト": "",
     "// lint:php": "phpcs -s .",
     "packages-update": "wp-scripts packages-update",
-    "prepare": "tsx .bin/change-wp-env-database.ts",
+    "prepare": "graphql-codegen && tsx .bin/change-wp-env-database.ts",
     "preplugin-zip": "run-s clean i18n build",
     "plugin-zip": "wp-scripts plugin-zip",
     "release": "npx release-it",
@@ -101,7 +101,7 @@
   "devDependencies": {
     "@wordpress/env": "^10.26.0",
     "@serendipity/config": "workspace:*",
-    "@yamaneyuta/serendipity-dev-export-license": "github:yamaneyuta/serendipity-dev-export-license#0.8.6",
+    "@serendipity/export-license": "workspace:*",
     "@yamaneyuta/serendipity-lib-frontend": "github:yamaneyuta/serendipity-lib-frontend#0.8.10"
   },
   "turborepo": {

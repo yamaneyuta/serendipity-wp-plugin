@@ -16,6 +16,7 @@ module.exports = {
         'docs',
         'scripts',
         // tools
+        'export-license',
         'php-asset-gen',
         // ルートレベル
         'root',

@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import path from 'node:path';
 import packageJson from '../package.json';
-import { getPackagesComposer } from '@yamaneyuta/serendipity-dev-export-license';
+import { getPackagesComposer } from '@serendipity/export-license';
 
 // package.json内でのlicense-checkerを実行するスクリプト名
 const JS_LICENSE_CHECKER_SCRIPT_NAME = 'check-license:js';

@@ -201,17 +201,30 @@ importers:
       '@serendipity/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@serendipity/export-license':
+        specifier: workspace:*
+        version: link:../../tools/export-license
       '@wordpress/env':
         specifier: ^10.26.0
         version: 10.26.0(@types/node@24.0.10)
-      '@yamaneyuta/serendipity-dev-export-license':
-        specifier: github:yamaneyuta/serendipity-dev-export-license#0.8.6
-        version: https://codeload.github.com/yamaneyuta/serendipity-dev-export-license/tar.gz/713ee0f610176aaaceb14a7ce75aaa2ab5da8df7(glob@11.0.3)(license-checker@25.0.1)
       '@yamaneyuta/serendipity-lib-frontend':
         specifier: github:yamaneyuta/serendipity-lib-frontend#0.8.10
         version: https://codeload.github.com/yamaneyuta/serendipity-lib-frontend/tar.gz/dd2fe1c640b2589f977a33a8ff8a49478d8f4e28(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   packages/config: {}
+
+  tools/export-license:
+    dependencies:
+      glob:
+        specifier: ^11.0.0
+        version: 11.0.3
+      license-checker:
+        specifier: ^25.0.1
+        version: 25.0.1
+    devDependencies:
+      '@serendipity/config':
+        specifier: workspace:*
+        version: link:../../packages/config
 
   tools/php-asset-gen:
     devDependencies:
@@ -3727,14 +3740,6 @@ packages:
 
   '@xtuc/long@4.2.2':
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
-
-  '@yamaneyuta/serendipity-dev-export-license@https://codeload.github.com/yamaneyuta/serendipity-dev-export-license/tar.gz/713ee0f610176aaaceb14a7ce75aaa2ab5da8df7':
-    resolution: {tarball: https://codeload.github.com/yamaneyuta/serendipity-dev-export-license/tar.gz/713ee0f610176aaaceb14a7ce75aaa2ab5da8df7}
-    version: 0.8.6
-    hasBin: true
-    peerDependencies:
-      glob: ^11.0.0
-      license-checker: ^25.0.1
 
   '@yamaneyuta/serendipity-lib-frontend@https://codeload.github.com/yamaneyuta/serendipity-lib-frontend/tar.gz/dd2fe1c640b2589f977a33a8ff8a49478d8f4e28':
     resolution: {tarball: https://codeload.github.com/yamaneyuta/serendipity-lib-frontend/tar.gz/dd2fe1c640b2589f977a33a8ff8a49478d8f4e28}
@@ -14974,11 +14979,6 @@ snapshots:
   '@xtuc/ieee754@1.2.0': {}
 
   '@xtuc/long@4.2.2': {}
-
-  '@yamaneyuta/serendipity-dev-export-license@https://codeload.github.com/yamaneyuta/serendipity-dev-export-license/tar.gz/713ee0f610176aaaceb14a7ce75aaa2ab5da8df7(glob@11.0.3)(license-checker@25.0.1)':
-    dependencies:
-      glob: 11.0.3
-      license-checker: 25.0.1
 
   '@yamaneyuta/serendipity-lib-frontend@https://codeload.github.com/yamaneyuta/serendipity-lib-frontend/tar.gz/dd2fe1c640b2589f977a33a8ff8a49478d8f4e28(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
