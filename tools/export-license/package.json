@@ -27,7 +27,6 @@
     "coverage": "jest --coverage",
     "format": "eslint --fix src && prettier --write src",
     "lint": "eslint src && prettier --check src",
-    "prepare": "npm run build",
     "release": "npx release-it",
     "test": "jest"
   },

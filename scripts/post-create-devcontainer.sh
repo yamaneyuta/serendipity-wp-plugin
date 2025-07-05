@@ -50,7 +50,7 @@ build() {
     # アプリケーションのビルドを実行
     echo "🏗️ [562FF5A7] Building application..."
     cd $REPOSITORY_ROOT
-    npm run build
+    npm run build --force
     echo "✅ [45DF7646] Application built successfully."
     cd -
 }
