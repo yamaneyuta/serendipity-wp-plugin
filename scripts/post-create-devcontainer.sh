@@ -46,6 +46,14 @@ install_php_packages() {
     cd -
 }
 
+# package.jsonのprepare相当
+prepare() {
+    echo "🔧 [094CC97D] Start prepare..."
+    cd "$PUBLIC_MONOREPO_ROOT/apps/wp-plugin"
+    npx tsx .bin/change-wp-env-database.ts
+    echo "✅ [2C50DEB7] Prepare completed successfully."
+}
+
 build() {
     # アプリケーションのビルドを実行
     echo "🏗️ [562FF5A7] Building application..."
@@ -71,6 +79,7 @@ main() {
     wait $NPM_INSTALL_PID
     echo "✅ [D2331850] NPM packages installation completed."
     
+    prepare
     build
 
     echo "🎉 [43A01D28] Post-create script completed successfully."
