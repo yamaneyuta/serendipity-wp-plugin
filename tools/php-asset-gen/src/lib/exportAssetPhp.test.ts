@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import { exportAssetsPhp } from './exportAssetPhp';
+import { it, expect } from '@jest/globals';
 
 /**
  * 対象のjavascriptファイルが存在する場合、.asset.phpファイルが出力されることを確認
