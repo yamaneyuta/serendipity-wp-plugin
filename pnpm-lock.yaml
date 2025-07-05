@@ -160,7 +160,7 @@ importers:
     dependencies:
       '@tanstack/react-query':
         specifier: ^4.39.1
-        version: 4.40.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 4.40.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@wordpress/block-editor':
         specifier: ^13.4.0
         version: 13.4.0(@emotion/is-prop-valid@1.3.1)(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -212,6 +212,15 @@ importers:
         version: https://codeload.github.com/yamaneyuta/serendipity-lib-frontend/tar.gz/dd2fe1c640b2589f977a33a8ff8a49478d8f4e28(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   packages/config: {}
+
+  tools/php-asset-gen:
+    devDependencies:
+      '@serendipity/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+      '@types/license-checker':
+        specifier: ^25.0.6
+        version: 25.0.6
 
 packages:
 
@@ -2704,8 +2713,8 @@ packages:
   '@tanstack/query-core@4.40.0':
     resolution: {integrity: sha512-7MJTtZkCSuehMC7IxMOCGsLvHS3jHx4WjveSrGsG1Nc1UQLjaFwwkpLA2LmPfvOAxnH4mszMOBFD6LlZE+aB+Q==}
 
-  '@tanstack/react-query@4.40.0':
-    resolution: {integrity: sha512-kt1G/wETT/Ad79cac5zJ8tyaMOm4rgyeomW5yDxgOO9qEhOwufgw9kgPpp+T9U0M0lL7EMoc6YXgv4gYhXu9tg==}
+  '@tanstack/react-query@4.40.1':
+    resolution: {integrity: sha512-mgD07S5N8e5v81CArKDWrHE4LM7HxZ9k/KLeD3+NUD9WimGZgKIqojUZf/rXkfAMYZU9p0Chzj2jOXm7xpgHHQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -5587,8 +5596,8 @@ packages:
     resolution: {integrity: sha512-0rnQWcFwZr7eO0513HahrWafsc3CTFioEB7DRiEYCUM/70QXSY8f3mCST17HXLcPvEhzH/Ty/Bxd72ZZsr/yvw==}
     engines: {node: '>=0.10.0'}
 
-  find-process@1.4.10:
-    resolution: {integrity: sha512-ncYFnWEIwL7PzmrK1yZtaccN8GhethD37RzBHG6iOZoFYB4vSmLLXfeWJjeN5nMvCJMjOtBvBBF8OgxEcikiZg==}
+  find-process@1.4.11:
+    resolution: {integrity: sha512-mAOh9gGk9WZ4ip5UjV0o6Vb4SrfnAmtsFNzkMRH9HQiFXVQnDyQFrSHTK5UoG6E+KV+s+cIznbtwpfN41l2nFA==}
     hasBin: true
 
   find-root@1.1.0:
@@ -13299,7 +13308,7 @@ snapshots:
 
   '@tanstack/query-core@4.40.0': {}
 
-  '@tanstack/react-query@4.40.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-query@4.40.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 4.40.0
       react: 18.3.1
@@ -17178,7 +17187,7 @@ snapshots:
     dependencies:
       find-file-up: 0.1.3
 
-  find-process@1.4.10:
+  find-process@1.4.11:
     dependencies:
       chalk: 4.1.2
       commander: 12.1.0
@@ -18353,7 +18362,7 @@ snapshots:
     dependencies:
       chalk: 4.1.2
       cwd: 0.10.0
-      find-process: 1.4.10
+      find-process: 1.4.11
       prompts: 2.4.2
       spawnd: 9.0.2
       tree-kill: 1.2.2
@@ -18563,7 +18572,7 @@ snapshots:
       chalk: 4.1.2
       cwd: 0.10.0
       exit: 0.1.2
-      find-process: 1.4.10
+      find-process: 1.4.11
       prompts: 2.4.2
       signal-exit: 3.0.7
       spawnd: 5.0.0
