@@ -1,1 +1,1 @@
-module.exports = require( '@yamaneyuta/serendipity-dev-conf/prettier/.prettierrc.js' );
+module.exports = require( '@serendipity/config/prettier' );

@@ -1,4 +1,4 @@
-const config = require( '@yamaneyuta/serendipity-dev-conf/eslint/.eslintrc.js' );
+const config = require( '@serendipity/config/eslint' );
 module.exports = {
     ...config,
     rules: {
