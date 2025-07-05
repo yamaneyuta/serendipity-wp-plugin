@@ -1,5 +1,5 @@
 {
-	"extends": "./node_modules/@yamaneyuta/serendipity-dev-conf/typescript/tsconfig.browser.base.json",
+	"extends": "@serendipity/config/tsconfig-cli",
 	"compilerOptions": {
         "module": "CommonJS",
         "moduleResolution": "Node",
