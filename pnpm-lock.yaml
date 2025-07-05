@@ -213,6 +213,19 @@ importers:
 
   packages/config: {}
 
+  tools/export-license:
+    dependencies:
+      glob:
+        specifier: ^11.0.0
+        version: 11.0.3
+      license-checker:
+        specifier: ^25.0.1
+        version: 25.0.1
+    devDependencies:
+      '@serendipity/config':
+        specifier: workspace:*
+        version: link:../../packages/config
+
   tools/php-asset-gen:
     devDependencies:
       '@serendipity/config':
