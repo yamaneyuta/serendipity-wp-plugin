@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { parseCommand } from '../lib/parseCommand';
 import { exportAssetsPhp } from '../lib/exportAssetPhp';
 import { watchFile } from '../lib/watchFile';
