@@ -39,6 +39,16 @@
             "**/coverage/**": true,
             "**/typechain-types/**": true,
         },
+        // "search.useIgnoreFiles": true,
+        "search.exclude": {
+            "pnpm-lock.yaml": true,
+            "**/.intelephense/**": true,
+            "**/build/**": true,
+            "**/coverage/**": true,
+            "**/dist/**": true,
+            "**/vendor/**": true,
+            "**/typechain-types/**": true,
+        },
         "git.autorefresh": true,
         // "terminal.integrated.cwd": "${workspaceFolder}"
         "terminal.integrated.cwd": "/workspaces",
