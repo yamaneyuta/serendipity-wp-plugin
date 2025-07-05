@@ -7,6 +7,7 @@
     "./eslint": "./.eslintrc.js",
     "./prettier": "./.prettierrc.js",
     "./jest-config-react": "./jest.config.react.js",
+    "./tsconfig-cli": "./tsconfig.cli.json",
     "./tsconfig-react": "./tsconfig.react.json"
   },
   "files": [
@@ -15,6 +16,7 @@
     "jest.config.react.js",
     "tsconfig.base.json",
     "tsconfig.react.json",
+    "tsconfig.cli.json",
     "package.json"
   ],
   "scripts": {
