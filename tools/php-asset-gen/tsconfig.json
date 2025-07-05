@@ -1,0 +1,13 @@
+{
+	"extends": "@serendipity/config/tsconfig-cli",
+	"compilerOptions": {
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+		"declaration": true,	// .d.ts を出力する
+		"outDir": "dist",
+		"sourceMap": true,
+	},
+	"include": [
+		"src/**/*.ts"
+	],
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@serendipity/php-asset-gen",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "export-asset-php": "dist/cjs/bin/index.js"
+  },
+  "devDependencies": {
+    "@types/license-checker": "^25.0.6",
+    "@serendipity/config": "workspace:*"
+  },
+  "scripts": {
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "ci:build": "tsc --noEmit --skipLibCheck false && npm run build",
+    "clean": "npm run clean:dist && npm run clean:coverage",
+    "clean:dist": "rm -rf dist/*",
+    "clean:coverage": "rm -rf coverage/*",
+    "coverage": "jest --coverage",
+    "format": "eslint --fix src && prettier --write src",
+    "lint": "eslint src && prettier --check src",
+    "prepare": "npm run build",
+    "release": "npx release-it",
+    "test": "jest"
+  }
+}

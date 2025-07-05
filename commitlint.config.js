@@ -15,6 +15,8 @@ module.exports = {
         'config',
         'docs',
         'scripts',
+        // tools
+        'php-asset-gen',
         // ルートレベル
         'root',
         // インフラ
